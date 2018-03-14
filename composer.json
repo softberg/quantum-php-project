@@ -1,0 +1,22 @@
+{
+    "require": {
+        "j4mie/paris": "^1.5",
+        "curl/curl": "^1.5",
+        "firebase/php-jwt": "^4.0",
+        "wixel/gump": "^1.4",
+        "codeguy/upload": "dev-master",
+        "phpmailer/phpmailer": "^5.2",
+        "donatj/phpuseragentparser": "*"
+    },
+
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Quantum\\": "core/quantum",
+            "Modules\\": "modules",
+            "Hooks\\": "hooks"
+        }
+    }
+}
