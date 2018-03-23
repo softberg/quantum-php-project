@@ -78,10 +78,11 @@ class IdiormDbal implements DbalInterface {
      * 
      * Creates new db record
      * 
+	 * @param array $params
      * @uses ORM Idiorm
      * @return object
      */
-    public static function create() {
+    public static function create(params) {
         return ORM::for_table($params['table'])->create();
     }
     

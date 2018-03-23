@@ -56,7 +56,9 @@ interface DbalInterface {
      * Create
      * 
      * Should be implemented in classes for creating new db record
+	 *
+	 * @param array $params
      */
-    public static function create();
+    public static function create($params);
     
 }
