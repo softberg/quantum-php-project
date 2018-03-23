@@ -77,8 +77,9 @@ abstract class Qt_Model {
         }
 
         $this->currentRoute = $currentRoute;
-
-        (new Database($currentRoute))->connect();
+		
+		if (!Database::connected())
+			(new Database($currentRoute))->connect();
         
         $this->ormPath = Database::getORM();
     }

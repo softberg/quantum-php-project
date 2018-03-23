@@ -49,7 +49,7 @@ class Database {
      * 
      * @var mixed 
      */
-    private static $dbConnections;
+    private static $dbConnections = NULL;
 
     /**
      * Class constructor 
@@ -60,6 +60,20 @@ class Database {
     public function __construct($currentRoute) {
         $this->currentRoute = $currentRoute;
         return $this;
+    }
+	
+	/**
+     * Connected
+     * 
+     * Checks the connection with database
+     * 
+     * @return bool
+     */
+    public function connected() {
+        if(self::$dbConnections == NULL)
+            return false;
+        
+        return true;
     }
 
     /**
