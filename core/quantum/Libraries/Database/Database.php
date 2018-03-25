@@ -61,12 +61,13 @@ class Database {
         $this->currentRoute = $currentRoute;
         return $this;
     }
-	
-	/**
+    
+    /**
      * Connected
      * 
      * Checks the connection with database
      * 
+     * @uses HookManager::call
      * @return bool
      */
     public function connected() {

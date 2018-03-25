@@ -33,7 +33,7 @@ interface DbalInterface {
      * @param mixed $connectionString
      */
     public static function dbConnect($connectionString);
-    
+
     /**
      * Find One
      * 
@@ -42,7 +42,7 @@ interface DbalInterface {
      * @param mixed $params
      */
     public static function findOne($params);
-    
+
     /**
      * FindOneBy
      * 
@@ -51,14 +51,58 @@ interface DbalInterface {
      * @param mixed $params
      */
     public static function findOneBy($params);
+
+    /**
+     * Criterias
+     * 
+     * Should be implemented in classes to add where criterias 
+     * 
+     * @param mixed $params
+     */
+    public static function criterias($params);
     
+    /**
+     * First
+     * 
+     * Should be implemented in classes to get the first item
+     * 
+     * @param mixed $params
+     */
+    public function first($params);
+    
+    /**
+     * asArray
+     * 
+     * Should be implemented in classes to cast the orm object to array
+     * 
+     * @param mixed $params
+     */
+    public static function asArray($params);
+
     /**
      * Create
      * 
      * Should be implemented in classes for creating new db record
-	 *
-	 * @param array $params
+     * 
+     * @param array $params
      */
     public static function create($params);
     
+    /**
+     * Save
+     * 
+     * Should be implemented in classes for saving the data into the database
+     * 
+     * @param array $params
+     */
+    public static function save($params);
+    
+    /**
+     * Save
+     * 
+     * Should be implemented in classes for deleting the data from the database
+     * 
+     * @param array $params
+     */
+    public static function delete($params);
 }

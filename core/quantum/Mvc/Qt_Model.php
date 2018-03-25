@@ -77,9 +77,9 @@ abstract class Qt_Model {
         }
 
         $this->currentRoute = $currentRoute;
-		
-		if (!Database::connected())
-			(new Database($currentRoute))->connect();
+        
+        if(!Database::connected())
+            (new Database($currentRoute))->connect();
         
         $this->ormPath = Database::getORM();
     }
@@ -152,25 +152,31 @@ abstract class Qt_Model {
     public function __call($method, $args = NULL) {
         switch ($method) {
             case 'findOne':
-//                $this->orm = ORM::for_table($this->table)->$method($args);
                 $this->orm = HookManager::call($method, array('table' => $this->table, 'args' => $args), $this->ormPath);
                 break;
             case 'findOneBy':
-//                $this->orm = ORM::for_table($this->table)->where($args[0], $args[1])->find_one();
                 $this->orm = HookManager::call($method, array('table' => $this->table, 'args' => $args), $this->ormPath);
                 break;
+            case 'criterias':
+                $this->orm = HookManager::call($method, array('table' => $this->table, 'args' => $args), $this->ormPath);
+                return $this;
+            case 'get':
+                $this->orm = HookManager::call($method, array('args' => $args, 'orm' => $this->orm), $this->ormPath);
+                break;
+             case 'first':
+                $this->orm = HookManager::call($method, $this->orm, $this->ormPath);
+                break;
             case 'asArray':
-                return $this->orm ? $this->orm->as_array() : array();
+                return HookManager::call($method, $this->orm, $this->ormPath);
                 break;
             case 'create':
-//                $this->orm = ORM::for_table($this->table)->create();
                 $this->orm = HookManager::call($method, array('table' => $this->table), $this->ormPath);
                 break;
             case 'save':
-                $this->orm->save();
+                HookManager::call($method, $this->orm, $this->ormPath);
                 break;
             case 'delete':
-                $this->orm->delete();
+                HookManager::call($method, $this->orm, $this->ormPath);
                 break;
         }
     }
