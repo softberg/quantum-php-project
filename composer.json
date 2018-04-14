@@ -1,4 +1,9 @@
 {
+	"name": "quantum/project",
+    "description": "Quantum Project",
+    "keywords": ["framework", "quantum", "project"],
+    "license": "MIT",
+    "type": "project",
     "require": {
         "j4mie/paris": "^1.5",
         "curl/curl": "^1.5",
@@ -6,7 +11,8 @@
         "wixel/gump": "^1.4",
         "codeguy/upload": "dev-master",
         "phpmailer/phpmailer": "^5.2",
-        "donatj/phpuseragentparser": "*"
+        "donatj/phpuseragentparser": "*",
+        "quantum/framework": "@dev"
     },
 
     "require-dev": {
