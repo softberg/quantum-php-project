@@ -5,14 +5,14 @@
     "license": "MIT",
     "type": "project",
     "require": {
+		"quantum/framework": "@dev",
         "j4mie/paris": "^1.5",
         "curl/curl": "^1.5",
         "firebase/php-jwt": "^4.0",
         "wixel/gump": "^1.4",
         "codeguy/upload": "dev-master",
         "phpmailer/phpmailer": "^5.2",
-        "donatj/phpuseragentparser": "*",
-        "quantum/framework": "@dev"
+        "donatj/phpuseragentparser": "*"
     },
 
     "require-dev": {
