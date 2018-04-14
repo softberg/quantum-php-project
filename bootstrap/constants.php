@@ -17,7 +17,8 @@ const DS = DIRECTORY_SEPARATOR;
 /**
  * Base directory of framework.
  */
-const BASE_DIR = __DIR__ . DS . '..' . DS . '..' . DS;
+
+const BASE_DIR = __DIR__ . DS . '..' . DS;
 
 /**
  * Vendor directory.
@@ -27,22 +28,22 @@ const VENDOR_DIR = BASE_DIR . 'vendor';
 /**
  * Framework Core directory.
  */
-const CORE_DIR = BASE_DIR . 'core';
+const CORE_DIR = VENDOR_DIR . DS . 'quantum' . DS . 'framework' . DS . 'src';
+
+/**
+ * Core helpers directory.
+ */
+const HELPERS_DIR = CORE_DIR . DS . 'Helpers';
+
+/**
+ * Libraries directory.
+ */
+const LIBRARIES_DIR = CORE_DIR . DS . 'Libraries';
 
 /**
  * Modules directory.
  */
 const MODULES_DIR = BASE_DIR . 'modules';
-
-/**
- * Helpers directory.
- */
-const HELPERS_DIR = CORE_DIR . DS . 'quantum' . DS . 'Helpers';
-
-/**
- * Libraries directory.
- */
-const LIBRARIES_DIR = CORE_DIR . DS . 'quantum' . DS . 'Libraries';
 
 /**
  * Public directory.

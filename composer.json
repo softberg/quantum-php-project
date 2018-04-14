@@ -14,7 +14,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Quantum\\": "core/quantum",
             "Modules\\": "modules",
             "Hooks\\": "hooks"
         }
