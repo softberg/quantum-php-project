@@ -6,8 +6,8 @@ return array(
     'mysql' => array(
         'driver' => 'mysql',
         'host' => 'localhost',
-        'dbname' => 'quantum_test',
-        'username' => 'root',
+        'dbname' => '',
+        'username' => '',
         'password' => '',
     ),
 );
