@@ -1,22 +1,15 @@
 {
-	"name": "quantum/project",
+    "name": "quantum/project",
     "description": "Quantum Project",
     "keywords": ["framework", "quantum", "project"],
     "license": "MIT",
     "type": "project",
     "require": {
-		"quantum/framework": "@dev",
-        "j4mie/paris": "^1.5",
-        "curl/curl": "^1.5",
+        "quantum/framework": "@dev",
         "firebase/php-jwt": "^4.0",
-        "wixel/gump": "^1.4",
-        "codeguy/upload": "dev-master",
+        "curl/curl": "^1.5",
         "phpmailer/phpmailer": "^5.2",
         "donatj/phpuseragentparser": "*"
-    },
-
-    "require-dev": {
-        "phpdocumentor/phpdocumentor": "2.*"
     },
     "autoload": {
         "psr-4": {
