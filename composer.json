@@ -5,7 +5,10 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "quantum/framework": "@dev",
+        "quantum/framework": "dev-master",
+        "j4mie/paris": "^1.5",
+        "wixel/gump": "^1.4",
+        "codeguy/upload": "dev-master",
         "firebase/php-jwt": "^4.0",
         "curl/curl": "^1.5",
         "phpmailer/phpmailer": "^5.2",
