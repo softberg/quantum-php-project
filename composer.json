@@ -12,7 +12,8 @@
         "firebase/php-jwt": "^4.0",
         "curl/curl": "^1.5",
         "phpmailer/phpmailer": "^5.2",
-        "donatj/phpuseragentparser": "*"
+        "donatj/phpuseragentparser": "*",
+        "symfony/var-dumper": "3.4.8"
     },
     "autoload": {
         "psr-4": {
