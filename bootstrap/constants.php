@@ -18,7 +18,7 @@ const DS = DIRECTORY_SEPARATOR;
  * Base directory of framework.
  */
 
-const BASE_DIR = __DIR__ . DS . '../';
+const BASE_DIR = __DIR__ . DS . '..';
 
 /**
  * Vendor directory.
