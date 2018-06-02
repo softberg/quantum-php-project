@@ -23,12 +23,6 @@ class MainController extends Qt_Controller {
     }
 
     public function indexAction() {
-        $user = $this->modelFactory('User');
-
-        $user->criterias(['email' => 'a.delon@mail.com'])->first();
-        $user->pass = 44444;
-        $user->save();
-        
         $this->render('index');
     }
 
