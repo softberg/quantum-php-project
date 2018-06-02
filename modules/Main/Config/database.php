@@ -3,11 +3,11 @@
 return array(
     'current' => 'mysql',
     'mysql' => array(
-        'driver' => 'mysql',
-        'host' => 'localhost',
-        'dbname' => '',
-        'username' => 'root',
-        'password' => '',
+        'driver' => getenv("DB_DRIVER"),
+        'host' => getenv("DB_HOST"),
+        'dbname' => getenv("DB_NAME"),
+        'username' => getenv("DB_USERNAME"),
+        'password' => getenv("DB_PASSWORD"),
     ),
     'sqlite' => array(
         'driver' => 'sqlite',
