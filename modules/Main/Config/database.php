@@ -3,15 +3,10 @@
 return array(
     'current' => 'mysql',
     'mysql' => array(
-        'driver' => getenv("DB_DRIVER"),
-        'host' => getenv("DB_HOST"),
-        'dbname' => getenv("DB_NAME"),
-        'username' => getenv("DB_USERNAME"),
-        'password' => getenv("DB_PASSWORD"),
-    ),
-    'sqlite' => array(
-        'driver' => 'sqlite',
-        'database' => 'database.sqlite',
-        'prefix' => '',
+        'driver' => env("DB_DRIVER", "mysql"),
+        'host' => env("DB_HOST", "localhost"),
+        'dbname' => env("DB_NAME"),
+        'username' => env("DB_USERNAME", "root"),
+        'password' => env("DB_PASSWORD"),
     ),
 );
