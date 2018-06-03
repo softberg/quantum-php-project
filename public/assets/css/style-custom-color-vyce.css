@@ -1234,9 +1234,7 @@
     background:-moz-radial-gradient(left top,circle cover,rgb(12,180,206),#006cff 100%);
     background:-webkit-radial-gradient(left top,circle cover,rgb(12,180,206),#006cff 100%)
 }
-.text-color-143431-color>*{
-    background:none!important \0/IE9
-}
+
 @media screen and (-ms-high-contrast:active),(-ms-high-contrast:none){
     .text-color-143431-color>*{
         background:0 0!important
@@ -1352,9 +1350,7 @@
     background:-moz-radial-gradient(left top,circle cover,rgb(12,180,206) 9%,#006cff 48%,#6442ff 91%);
     background:-webkit-radial-gradient(left top,circle cover,rgb(12,180,206) 9%,#006cff 48%,#6442ff 91%)
 }
-.text-color-105898-color>*{
-    background:none!important \0/IE9
-}
+
 @media screen and (-ms-high-contrast:active),(-ms-high-contrast:none){
     .text-color-105898-color>*{
         background:0 0!important
@@ -2531,38 +2527,6 @@ body:not(.menu-force-opacity) .style-dark-override:not(.is_stuck):not(.is_mobile
 }
 .tmb-dark.tmb-color-addcart,.tmb-dark.tmb-woocommerce.tmb .t-entry-visual .add-to-cart-overlay a{
     background-color:#fff
-}
-.tmb.tmb-light.tmb-overlay-gradient-bottom .t-entry-visual .t-entry-visual-overlay-in{
-    background-image:url(data:image/svg+xml;
-    base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0ibGVzc2hhdC1nZW5lcmF0ZWQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCIgeTE9IjEwMCUiIHgyPSIwIiB5Mj0iMCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSJyZ2IoMCwgMCwgMCkiIHN0b3Atb3BhY2l0eT0iLjc1Ii8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9InJnYigwLDAsMCkiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+PHBhdGggZD0iTTAgMGgxdjFIMHoiIGZpbGw9InVybCgjbGVzc2hhdC1nZW5lcmF0ZWQpIiAvPjwvc3ZnPg==);
-    background-image:-webkit-linear-gradient(bottom,rgba(0,0,0,.75) 0,transparent 50%);
-    background-image:-moz-linear-gradient(bottom,rgba(0,0,0,.75) 0,transparent 50%);
-    background-image:-o-linear-gradient(bottom,rgba(0,0,0,.75) 0,transparent 50%);
-    background-image:linear-gradient(to top,rgba(0,0,0,.75) 0,transparent 50%)
-}
-.tmb.tmb-dark.tmb-overlay-gradient-bottom .t-entry-visual .t-entry-visual-overlay-in{
-    background-image:url(data:image/svg+xml;
-    base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0ibGVzc2hhdC1nZW5lcmF0ZWQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCIgeTE9IjEwMCUiIHgyPSIwIiB5Mj0iMCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSJyZ2IoMjU1LCAyNTUsIDI1NSkiIHN0b3Atb3BhY2l0eT0iLjUiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiKDAsMCwwKSIgc3RvcC1vcGFjaXR5PSIwIi8+PC9saW5lYXJHcmFkaWVudD48cGF0aCBkPSJNMCAwaDF2MUgweiIgZmlsbD0idXJsKCNsZXNzaGF0LWdlbmVyYXRlZCkiIC8+PC9zdmc+);
-    background-image:-webkit-linear-gradient(bottom,rgba(255,255,255,.5) 0,transparent 50%);
-    background-image:-moz-linear-gradient(bottom,rgba(255,255,255,.5) 0,transparent 50%);
-    background-image:-o-linear-gradient(bottom,rgba(255,255,255,.5) 0,transparent 50%);
-    background-image:linear-gradient(to top,rgba(255,255,255,.5) 0,transparent 50%)
-}
-.tmb.tmb-light.tmb-overlay-gradient-top .t-entry-visual .t-entry-visual-overlay-in{
-    background-image:url(data:image/svg+xml;
-    base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0ibGVzc2hhdC1nZW5lcmF0ZWQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSJyZ2IoMCwgMCwgMCkiIHN0b3Atb3BhY2l0eT0iLjc1Ii8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9InJnYigwLDAsMCkiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+PHBhdGggZD0iTTAgMGgxdjFIMHoiIGZpbGw9InVybCgjbGVzc2hhdC1nZW5lcmF0ZWQpIiAvPjwvc3ZnPg==);
-    background-image:-webkit-linear-gradient(top,rgba(0,0,0,.75) 0,transparent 50%);
-    background-image:-moz-linear-gradient(top,rgba(0,0,0,.75) 0,transparent 50%);
-    background-image:-o-linear-gradient(top,rgba(0,0,0,.75) 0,transparent 50%);
-    background-image:linear-gradient(to bottom,rgba(0,0,0,.75) 0,transparent 50%)
-}
-.tmb.tmb-dark.tmb-overlay-gradient-top .t-entry-visual .t-entry-visual-overlay-in{
-    background-image:url(data:image/svg+xml;
-    base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0ibGVzc2hhdC1nZW5lcmF0ZWQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSJyZ2IoMjU1LCAyNTUsIDI1NSkiIHN0b3Atb3BhY2l0eT0iLjUiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiKDAsMCwwKSIgc3RvcC1vcGFjaXR5PSIwIi8+PC9saW5lYXJHcmFkaWVudD48cGF0aCBkPSJNMCAwaDF2MUgweiIgZmlsbD0idXJsKCNsZXNzaGF0LWdlbmVyYXRlZCkiIC8+PC9zdmc+);
-    background-image:-webkit-linear-gradient(top,rgba(255,255,255,.5) 0,transparent 50%);
-    background-image:-moz-linear-gradient(top,rgba(255,255,255,.5) 0,transparent 50%);
-    background-image:-o-linear-gradient(top,rgba(255,255,255,.5) 0,transparent 50%);
-    background-image:linear-gradient(to bottom,rgba(255,255,255,.5) 0,transparent 50%)
 }
 .tmb-border-width{
     border-width:1px
