@@ -9,8 +9,9 @@ Clone or download from this repository.
 Use [Composer](https://getcomposer.org/) to install Quantum and all required dependencies.
 
 ```bash
-$ composer update"
+$ composer update
 ```
 
 - [Website](https://quantum.softberg.org)
 - Documentation coming soon
+- [Blog](http://blog.softberg.org/category/quantum-php-framework/)
