@@ -24,7 +24,7 @@
                                             <div class="clear"></div>
                                             <div class="empty-space empty-single"><span class="empty-space-inner"></span></div>
                                             <span class="btn-container btn-inline animate_when_almost_visible bottom-t-top" data-delay="600">
-                                                <span style="font-size: 24px; font-family: Poppins!important;">Documentation coming soon</span>
+                                                <span style="font-size: 24px; font-family: Poppins!important;"><a href="https://quantum.softberg.org" target="_blank">Learn More</a></span>
                                             </span>
                                         </div>
                                     </div>
