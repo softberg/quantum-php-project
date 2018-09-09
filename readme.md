@@ -8,10 +8,31 @@ Clone or download from this repository.
 
 Use [Composer](https://getcomposer.org/) to install Quantum and all required dependencies.
 
+
+### Clone from repository
 ```bash
-$ composer update
+$ git clone https://github.com/softberg/quantum-framework-php.git myproject
+```
+
+### Step in to your project directory
+```bash
+$ cd myproject
+```
+
+### Install Quantum framework core and other dependencies
+```bash
+$ composer require quantum/framework
+```
+
+### Now step in to public directory inside your project directory
+```bash
+$ cd public
+```
+
+### Run built-in PHP server
+```bash
+$ php -S localhost:8080
 ```
 
 - [Website](https://quantum.softberg.org)
-- Documentation coming soon
 - [Blog](http://blog.softberg.org/category/quantum-php-framework/)
