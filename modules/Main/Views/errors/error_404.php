@@ -4,10 +4,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>Error Page</title>
 
-        <link rel='stylesheet' href='assets/css/style.css' type='text/css' media='all' />
         <link rel="shortcut icon" href="assets/images/favicon.ico">
         <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-        <link rel='stylesheet' href='assets/css/style-custom-color-vyce.css' type='text/css' media='all' />
+        <link rel='stylesheet' href='<?php echo base_url() ?>/assets/css/style.css' type='text/css' media='all' />
+        <link rel='stylesheet' href='<?php echo base_url() ?>/assets/css/style-custom-color-vyce.css' type='text/css' media='all' />
     </head>
 
     <body class="page-template-default page  page-child style-color-wayh-bg group-blog hmenu hmenu-position-center header-full-width main-center-align menu-mobile-animated menu-mobile-transparent menu-mobile-centered wc-zoom-enabled wpb-js-composer vc_responsive" data-border="0">
