@@ -8,5 +8,6 @@ return array(
         'dbname' => env("DB_NAME"),
         'username' => env("DB_USERNAME", "root"),
         'password' => env("DB_PASSWORD"),
+        'charset' => env("DB_CHARSET", 'utf8'),
     ),
 );
