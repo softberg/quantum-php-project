@@ -15,7 +15,7 @@ class ErrorPage implements HookInterface {
      */
     public static function pageNotFound() {
         $qt = qt_instance();
-        $qt->output('errors/error_404', 'Main');
+        $qt->output('errors/404');
         exit;
     }
 

@@ -16,7 +16,7 @@ class MainController extends Qt_Controller {
     }
 
     public function __before() {
-        $lang = $this->getSegment(1);
+        $lang = Request::getSegment(1);
         Lang::set($lang);
     }
 
