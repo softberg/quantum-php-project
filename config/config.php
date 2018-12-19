@@ -2,5 +2,6 @@
 
 return array(
     'langs' => ['en', 'ru', 'am'],
-    'lang_default' => 'en'
+    'lang_default' => 'en',
+    'debug' => false,
 );
