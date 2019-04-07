@@ -1,8 +1,6 @@
 <?php
 
-return array(
-    
-    array ('', 'GET', 'MainController', 'indexAction'),
-    array ('[:alpha]', 'GET', 'MainController', 'indexAction'),
-       
-);
+return function($route){
+    $route->add('', 'GET', 'MainController', 'indexAction');
+    $route->add('[:alpha]', 'GET', 'MainController', 'indexAction');
+};
