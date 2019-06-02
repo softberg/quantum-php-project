@@ -20,6 +20,9 @@
                                                 <h5 class="h4 fontheight-357766 font-weight-400">
                                                     <span><?php echo _t('common.description') ?></span>
                                                 </h5>
+                                                <p>
+                                                    <a href="<?php base_url() ?>/about"><?php echo _t('common.installation') ?></a>
+                                                </p>
                                             </div>
                                             <div class="clear"></div>
                                             <div class="empty-space empty-single"><span class="empty-space-inner"></span></div>
