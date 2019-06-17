@@ -3,6 +3,7 @@
     "description": "Quantum Project",
     "keywords": ["framework", "quantum", "project"],
     "license": "MIT",
+	"version": "1.0.0",
     "type": "project",
     "require": {
         "quantum/framework": "^1.4",

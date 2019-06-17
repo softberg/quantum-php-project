@@ -18,23 +18,23 @@
                                             <ul class="step-list">
                                                 <li>
                                                     <h5>Clone from repository</h5>
-                                                    <code>git clone https://github.com/softberg/quantum-framework-php.git myproject</code>
+                                                    <code>&gt; git clone https://github.com/softberg/quantum-framework-php.git myproject</code>
                                                 </li>
                                                 <li>
                                                     <h5>Step in to your project directory</h5>
-                                                    <code>cd myproject</code>
+                                                    <code>&gt; cd myproject</code>
                                                 </li>
                                                 <li>
                                                     <h5>Install Quantum framework core and other dependencies</h5>
-                                                    <code>composer require quantum/framework</code>
+                                                    <code>&gt; composer require quantum/framework</code>
                                                 </li>
                                                 <li>
                                                     <h5>Now step in to public directory inside your project directory</h5>
-                                                    <code>cd</span> public</code>
+                                                    <code>&gt; cd</span> public</code>
                                                 </li>
                                                 <li>
                                                     <h5>Run built-in PHP server</h5>
-                                                    <code>php -S localhost:8080</code>
+                                                    <code>&gt; php -S localhost:8080</code>
                                                 </li>
                                             </ul>
                                         </div>
