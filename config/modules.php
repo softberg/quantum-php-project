@@ -1,7 +1,14 @@
 <?php
 
-return array(
-    'modules' => array(
+return [
+    /**
+     * ---------------------------------------------------------
+     * Project modules
+     * ---------------------------------------------------------
+     *
+     * Project modules that will be loaded by framework
+     */
+    'modules' => [
         'Main'
-    )
-);
+    ]
+];
