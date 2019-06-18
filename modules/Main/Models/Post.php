@@ -41,4 +41,8 @@ class Post extends Qt_Model {
         $this->posts[$id] = $post;
     }
 
+    public function deletePost($id) {
+        unset($this->posts[$id]);
+    }
+
 }
