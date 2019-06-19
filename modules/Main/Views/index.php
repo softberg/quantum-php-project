@@ -9,12 +9,15 @@
                                 <div class="uncol style-dark">
                                     <div class="uncont">
                                         <div class="heading-text el-text bottom-t-top animate_when_almost_visible" data-delay="200">
+                                            <img src="<?php echo base_url() ?>/assets/images/quantum-logo-white.png" style="width: 100px" alt="Quantum PHP Framework" />
+                                        </div>
+                                        <div class="heading-text el-text bottom-t-top animate_when_almost_visible" data-delay="400">
                                             <h2 class="font-762333 fontsize-155944 fontheight-179065 fontspace-781688">
-                                                <span>Quantum</span>
+                                                <span>Quantum PHP Framework</span>
                                             </h2>
                                         </div>
                                         <div class="clear"></div>
-                                        <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible" data-delay="400">
+                                        <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible" data-delay="600">
                                             <h5 class="h4 fontheight-357766 font-weight-400">
                                                 <span><?php echo _t('common.description') ?></span>
                                             </h5>
@@ -24,7 +27,7 @@
                                         </div>
                                         <div class="clear"></div>
                                         <div class="empty-space empty-single"><span class="empty-space-inner"></span></div>
-                                        <span class="btn-container btn-inline animate_when_almost_visible bottom-t-top" data-delay="600">
+                                        <span class="btn-container btn-inline animate_when_almost_visible bottom-t-top" data-delay="800">
                                             <span style="font-size: 24px; font-family: Poppins!important;"><a href="https://quantum.softberg.org" target="_blank"><?php echo _t('common.learn_more') ?></a></span>
                                         </span>
                                     </div>
