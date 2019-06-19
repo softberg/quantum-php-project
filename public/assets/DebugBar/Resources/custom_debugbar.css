@@ -1,0 +1,32 @@
+div.phpdebugbar-header, a.phpdebugbar-restore-btn {
+  background: #efefef url(img/quantum_favicon.ico)  no-repeat 5px 4px / 20px 20px;
+}
+
+a.phpdebugbar-tab.phpdebugbar-active {
+  background: rgb(92, 199, 178);
+  color: #fff;
+  background-image: linear-gradient(bottom, rgb(92, 199, 178) 41%, rgb(92, 199, 178) 71%);
+  background-image: -o-linear-gradient(bottom, rgb(92, 199, 178) 41%, rgb(92, 199, 178) 71%);
+  background-image: -moz-linear-gradient(bottom, rgb(92, 199, 178) 41%, rgb(92, 199, 178) 71%);
+  background-image: -webkit-linear-gradient(bottom, rgb(92, 199, 178) 41%, rgb(92, 199, 178) 71%);
+  background-image: -ms-linear-gradient(bottom, rgb(92, 199, 178) 41%, rgb(92, 199, 178) 71%);
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.41, rgb(92, 199, 178)), color-stop(0.71, rgb(92, 199, 178)));
+}
+
+a.phpdebugbar-tab span.phpdebugbar-badge {
+  display: none;
+  margin-left: 5px;
+  font-size: 11px;
+  line-height: 14px;
+  padding: 0 6px;
+  background: rgb(92, 199, 178);
+  border-radius: 4px;
+  color: #fff;
+  font-weight: normal;
+  text-shadow: none;
+  vertical-align: middle;
+}
+a.phpdebugbar-tab.phpdebugbar-active span.phpdebugbar-badge {
+  background: #fff;
+  color: rgb(92, 199, 178);
+}

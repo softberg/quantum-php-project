@@ -29,5 +29,10 @@
             "Hooks\\": "hooks",
             "Base\\": "base"
         }
+    },
+	"scripts": {
+        "post-install-cmd": [
+            "Quantum\\Composer\\ComposerScripts::run"
+        ]
     }
 }
