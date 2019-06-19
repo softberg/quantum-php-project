@@ -1,6 +1,15 @@
 <?php
 
 return [
+    /*
+     * ---------------------------------------------------------
+     * Base URL of the project
+     * ---------------------------------------------------------
+     *
+     * It will be auto-detected in a web environment if set to null
+     */
+    'base_url' => null,
+    
     /**
      * ---------------------------------------------------------
      * Language
