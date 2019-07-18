@@ -19,7 +19,7 @@ class User extends Qt_Model {
 
     public static function isEditor()
     {
-        return true;
+        return false;
     }
 
     public static function isBlogger()
