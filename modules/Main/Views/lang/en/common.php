@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'description' => 'Very fast and extremely lightweight next generation PHP MVC framework with modular structure, easy to start any kind of project.',
+return [
+    'description' => 'Very fast and extremely simple PHP MVC framework of the next generation with a modular structure that allows you to create any projects.',
     'installation' => 'Installation',
     'learn_more' => 'Learn More',
-);
+];

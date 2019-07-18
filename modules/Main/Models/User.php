@@ -16,5 +16,14 @@ class User extends Qt_Model {
         'email',
         'pass',
     ];
-       
+
+    public static function isEditor()
+    {
+        return true;
+    }
+
+    public static function isBlogger()
+    {
+        return false;
+    }
 }

@@ -6,6 +6,8 @@ use Quantum\Mvc\Qt_Model;
 
 class Post extends Qt_Model {
 
+    public $table = 'posts';
+
     private $posts = [
         '1' => [
             'title' => 'Lorem ipsum dolor sit amet',

@@ -18,7 +18,7 @@
                                             <ul class="step-list">
                                                 <?php foreach ($posts as $id => $post): ?>
                                                     <li>
-                                                        <h5>#<?php echo $id ?> <?php echo $post['title'] ?></h5>
+                                                        <h5><a href="<?php echo base_url() . '/post/' .$id ?>">#<?php echo $id ?> <?php echo $post['title'] ?></a></h5>
                                                         <p><?php echo $post['content'] ?></p>
                                                     </li>
                                                 <?php endforeach; ?>

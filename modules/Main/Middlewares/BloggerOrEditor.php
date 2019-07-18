@@ -2,18 +2,17 @@
 
 namespace Modules\Main\Middlewares;
 
+use Modules\Main\Models\User;
 use Quantum\Middleware\Qt_Middleware;
 use Quantum\Http\Request;
 
-class Blogger extends Qt_Middleware {
-    
-    private $role = 'blogger';
+class BloggerOrEditor extends Qt_Middleware {
 
     public function apply(Request $request, \Closure $next) {
-        if($request->get('role') != $this->role && $request->get('role') != 'editor'){
+        if(!User::isEditor() && !User::isBlogger() ){
             redirect(base_url());
         }
-        
+
         return $next($request);
     }
 

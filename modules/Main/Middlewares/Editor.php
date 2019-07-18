@@ -2,15 +2,14 @@
 
 namespace Modules\Main\Middlewares;
 
+use Modules\Main\Models\User;
 use Quantum\Middleware\Qt_Middleware;
 use Quantum\Http\Request;
 
 class Editor extends Qt_Middleware {
-    
-    private $role = 'editor';
-    
+
     public function apply(Request $request, \Closure $next) {
-        if($request->get('role') != $this->role){
+        if(!User::isEditor()){
             redirect(base_url());
         }
         
