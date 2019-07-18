@@ -3,10 +3,10 @@
     "description": "Quantum Project",
     "keywords": ["framework", "quantum", "project"],
     "license": "MIT",
-	"version": "1.0.0",
+	"version": "1.5.0",
     "type": "project",
     "require": {
-        "quantum/framework": "^1.4",
+        "quantum/framework": "^1.5",
         "j4mie/paris": "^1.5",
         "wixel/gump": "^1.4",
         "codeguy/upload": "^1.3",
