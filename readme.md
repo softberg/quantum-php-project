@@ -1,35 +1,20 @@
 ## About Quantum
 
-Very fast and extremely lightweight next generation PHP MVC framework with modular structure, easy to start any kind of project.
+Very fast and extremely simple PHP MVC framework of the next generation with a modular structure that allows you to create any kind of projects.
 
 ## Installation
 
-Clone or download from this repository.
-
-We recommend to use [Composer](https://getcomposer.org/) to install Quantum and all required dependencies.
-
-
-#### Clone from repository
+#### 1. Create project
 ```bash
-$ git clone https://github.com/softberg/quantum-framework-php.git myproject
+composer create-project quantum/project my-project
 ```
 
-#### Step in to your project directory
+#### 2. Step in to your project directory
 ```bash
-$ cd myproject
+$ cd my-project/public
 ```
 
-#### Install Quantum framework core and other dependencies
-```bash
-$ composer require quantum/framework
-```
-
-#### Now step in to public directory inside your project directory
-```bash
-$ cd public
-```
-
-#### Run built-in PHP server
+#### 3. Run built-in PHP server
 ```bash
 $ php -S localhost:8080
 ```
