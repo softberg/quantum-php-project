@@ -1,29 +1,28 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Modules\Main\Services\Post;
+use Quantum\Factory\Factory;
 
-class PostModelTest extends TestCase
+class PostModelTest extends TestCase 
 {
-    public $qt;
+
     public $post = [];
 
     public function setUp() {
-        $this->qt = qt_instance();
-        $this->post = $this->qt->modelFactory('Post', 'Main');
+        $this->post = (new Factory())->getService(Post::class);
     }
 
     public function testGetPosts() {
-        $this->assertInternalType('object', $this->qt);
-        $this->assertInternalType('object',  $this->post);
-        $this->assertInternalType('array',  $this->post->getPosts());
+        $this->assertInternalType('object', $this->post);
+        $this->assertInternalType('array', $this->post->getPosts());
         $this->assertNotEmpty($this->post->getPosts());
     }
 
-
     public function testGetSinglePost() {
         $this->assertInternalType('array', $this->post->getPost(1));
-        $this->assertArrayHasKey('title',  $this->post->getPost(1));
-        $this->assertArrayHasKey('content',  $this->post->getPost(1));
+        $this->assertArrayHasKey('title', $this->post->getPost(1));
+        $this->assertArrayHasKey('content', $this->post->getPost(1));
         $this->assertEquals($this->post->getPost(1)['title'], 'Lorem ipsum dolor sit amet');
     }
 
@@ -52,11 +51,8 @@ class PostModelTest extends TestCase
     public function testDeletePost() {
         $this->post->deletePost(1);
 
-        $this->assertEquals( 2, count($this->post->getPosts()));
+        $this->assertEquals(2, count($this->post->getPosts()));
         $this->assertNull($this->post->getPost(1));
-
     }
-
-
 
 }

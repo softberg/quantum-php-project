@@ -1,12 +1,10 @@
 <?php
 
-namespace Modules\Main\Models;
+namespace Modules\Main\Services;
 
-use Quantum\Mvc\Qt_Model;
+use Quantum\Mvc\Qt_Service;
 
-class Post extends Qt_Model {
-
-    public $table = 'posts';
+class Post extends Qt_Service {
 
     private $posts = [
         '1' => [
@@ -32,7 +30,7 @@ class Post extends Qt_Model {
             return $this->posts[$id];
         }
 
-        return NULL;
+        return null;
     }
 
     public function addPost($post) {

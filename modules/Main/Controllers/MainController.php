@@ -5,12 +5,11 @@ namespace Modules\Main\Controllers;
 use Quantum\Mvc\Qt_Controller;
 use Quantum\Http\Request;
 use Quantum\Http\Response;
+use Quantum\Factory\Factory;
 use Quantum\Libraries\Lang\Lang;
-use Modules\Main\Models\Post;
+use Modules\Main\Services\Post;
 
 class MainController extends Qt_Controller {
-
-    public $postModel;
 
     public $csrfVerification = false;
 
@@ -31,32 +30,32 @@ class MainController extends Qt_Controller {
         $this->render('about');
     }
 
-    public function getPosts() {
-        $this->postModel = $this->modelFactory('Post');
-        $posts = $this->postModel->getPosts();
+    public function getPosts(Factory $factory) {
+        $postModel = $factory->getService(Post::class);
+        $posts = $postModel->getPosts();
         $this->render('post/post', ['posts' => $posts]);
     }
 
-    public function getPost($id) {
-        $this->postModel = $this->modelFactory('Post');
-        $post = $this->postModel->getPost($id);
-        $this->render('post/single', ['id'=> $id, 'post' => $post]);
+    public function getPost(Factory $factory, $id) {
+        $postModel = $factory->getService(Post::class);
+        $post = $postModel->getPost($id);
+        $this->render('post/single', ['id' => $id, 'post' => $post]);
     }
 
-    public function amendPost(Request $request, $id = null) {
-        $this->postModel = $this->modelFactory('Post');
+    public function amendPost(Request $request, Factory $factory, $id = null) {
+        $postModel = $factory->getService(Post::class);
         $post = [
             'title' => 'Mickey Mouse',
             'content' => 'Mickey Mouse is a cartoon character who has become an icon for the Walt Disney Company. Mickey Mouse is short for Mitchell Mouse. It was created in 1928 by Walt Disney and Ub Iwerks and voiced by Walt Disney.'
         ];
-        
-        if($id) {
-            $this->postModel->updatePost($id, $post);
+
+        if ($id) {
+            $postModel->updatePost($id, $post);
         } else {
-            $this->postModel->addPost($post);
+            $postModel->addPost($post);
         }
-        
-        $posts = $this->postModel->getPosts();
+
+        $posts = $postModel->getPosts();
         $this->render('post/post', ['posts' => $posts]);
     }
 
