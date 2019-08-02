@@ -2,20 +2,23 @@
 
 namespace Hooks;
 
+use Quantum\Factory\ViewFactory;
 use Quantum\Hooks\HookInterface;
-use Quantum\Http\Response;
 
-class ErrorPage implements HookInterface {
+class ErrorPage implements HookInterface
+{
 
     /**
      * Page not found
-     * 
+     *
      * @return void
      * @throws RouteException When route not found
      */
-    public static function pageNotFound() {
-        $qt = qt_instance();
-        $qt->output('errors/404');
+    public static function pageNotFound()
+    {
+        $view = new ViewFactory();
+
+        $view->output('errors/404');
         exit;
     }
 

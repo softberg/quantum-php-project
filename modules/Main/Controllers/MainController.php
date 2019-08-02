@@ -4,59 +4,59 @@ namespace Modules\Main\Controllers;
 
 use Quantum\Mvc\Qt_Controller;
 use Quantum\Http\Request;
-use Quantum\Http\Response;
 use Quantum\Factory\ServiceFactory;
 use Quantum\Factory\ViewFactory;
 use Quantum\Libraries\Lang\Lang;
 use Modules\Main\Services\Post;
 
-class MainController extends Qt_Controller {
+class MainController extends Qt_Controller
+{
 
     public $view;
-    
+
     public $service;
 
     public $csrfVerification = false;
-    
-    public function __before(ServiceFactory $service, ViewFactory $view) 
+
+    public function __before(ServiceFactory $service, ViewFactory $view)
     {
         $this->view = $view;
-        
+
         $this->service = $service;
-        
+
         $lang = Request::getSegment(1);
         Lang::init($lang);
-        
+
         $this->view->setLayout('layouts/main');
     }
 
-    public function index() 
+    public function index()
     {
         $this->view->render('index');
     }
 
-    public function about() 
+    public function about()
     {
         $this->view->render('about');
     }
 
-    public function getPosts() 
+    public function getPosts()
     {
         $postService = $this->service->get(Post::class);
         $posts = $postService->getPosts();
-        
+
         $this->view->render('post/post', ['posts' => $posts]);
     }
 
-    public function getPost($id) 
+    public function getPost($id)
     {
         $postService = $this->service->get(Post::class);
         $post = $postService->getPost($id);
-        
+
         $this->view->render('post/single', ['id' => $id, 'post' => $post]);
     }
 
-    public function amendPost(Request $request, $id = null) 
+    public function amendPost($id = null)
     {
         $postService = $this->service->get(Post::class);
         $post = [
