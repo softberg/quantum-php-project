@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Modules\Main\Services\Post;
-use Quantum\Factory\Factory;
+use Quantum\Factory\ServiceFactory;
 
 class PostModelTest extends TestCase 
 {
@@ -10,7 +10,8 @@ class PostModelTest extends TestCase
     public $post = [];
 
     public function setUp() {
-        $this->post = (new Factory())->getService(Post::class);
+
+        $this->post = (new ServiceFactory)->get(Post::class);
     }
 
     public function testGetPosts() {
