@@ -1,17 +1,21 @@
-<?php
+<?php 
 
 /*
 * ---------------------------------------------------------
 * Register the auto loader
 * ---------------------------------------------------------
 */
-require __DIR__ . '/../bootstrap/autoload.php';
+require __DIR__ . '/bootstrap/autoload.php';
 
-use Quantum\Bootstrap;
+use Quantum\Console\Qt_Console;
 
 /*
 * ---------------------------------------------------------
-* Run the project
+* Run the console application
 * ---------------------------------------------------------
 */
-Bootstrap::run();
+$console = new Qt_Console();
+
+$status = $console->init();
+
+exit($status);
