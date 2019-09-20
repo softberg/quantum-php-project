@@ -1,4 +1,5 @@
-vendor
-composer.lock
+/vendor
+/.idea
 /nbproject/private/
+composer.lock
 .env
