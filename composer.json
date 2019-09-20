@@ -20,7 +20,9 @@
     },
 	"scripts": {
         "post-create-project-cmd": [
-            "Quantum\\Composer\\ComposerScripts::run"
+            "@php qt core:env",
+            "@php qt core:debugbar",
+            "@php qt core:key-generate --length=64"
         ]
     }
 }
