@@ -6,7 +6,7 @@
 	"version": "1.6.0",
     "type": "project",
     "require": {
-        "quantum/framework": "^1.5.5"
+        "quantum/framework": "^1.7.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0"
