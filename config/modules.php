@@ -9,6 +9,7 @@ return [
      * Project modules that will be loaded by framework
      */
     'modules' => [
-        'Main'
+        'Web',
+        'Api'
     ]
 ];
