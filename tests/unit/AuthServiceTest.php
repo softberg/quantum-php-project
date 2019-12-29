@@ -62,7 +62,7 @@ class AuthServiceTest extends TestCase
 
         $this->assertEmpty($user['remember_token']);
 
-        $rememberToken = base64_encode(mktime());
+        $rememberToken = base64_encode(time());
 
         $this->authService->update('username', $user['username'], [
             'remember_token' => $rememberToken
