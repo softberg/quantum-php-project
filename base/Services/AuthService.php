@@ -27,35 +27,11 @@ class AuthService extends Qt_Service implements AuthServiceInterface
 {
 
     protected static $users = [];
-
     protected $userRepository = 'base' . DS . 'repositories' . DS . 'users.php';
-
-    protected $fields = [
-        'username',
-        'firstname',
-        'lastname',
-        'role'
-    ];
-
-    protected $keyFields = [
-        'usernameKey' => 'username',
-        'passwordKey' => 'password',
-        'rememberTokenKey' => 'remember_token',
-        'resetTokenKey' => 'reset_token',
-        'accessTokenKey' => 'access_token',
-        'refreshTokenKey' => 'refresh_token',
-    ];
-
-    protected $visibleFields = [
-        'username',
-        'firstname',
-        'lastname',
-        'role'
-    ];
 
     public function __init()
     {
-        $loaderSetup = (object)[
+        $loaderSetup = (object) [
             'module' => current_module(),
             'env' => 'base/repositories',
             'fileName' => 'users',
@@ -67,7 +43,40 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         self::$users = is_array($loader->load()) ? $loader->load() : [];
     }
 
-    public function get($field, $value) : array
+    public function getFields()
+    {
+        return [
+            'username',
+            'firstname',
+            'lastname',
+            'role'
+        ];
+    }
+
+    public function getVisibleFields()
+    {
+        return [
+            'username',
+            'firstname',
+            'lastname',
+            'role'
+        ];
+    }
+
+    public function getDefinedKeys()
+    {
+        return [
+            'usernameKey' => 'username',
+            'passwordKey' => 'password',
+            'activationTokenKey' => 'activation_token',
+            'rememberTokenKey' => 'remember_token',
+            'resetTokenKey' => 'reset_token',
+            'accessTokenKey' => 'access_token',
+            'refreshTokenKey' => 'refresh_token',
+        ];
+    }
+
+    public function get($field, $value): array
     {
         if ($value) {
             foreach (self::$users as $user) {
@@ -82,7 +91,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     public function add($data)
     {
         $user = [];
-        $allFields = array_merge($this->fields, array_values($this->keyFields));
+        $allFields = array_merge($this->getFields(), array_values($this->getDefinedKeys()));
         foreach ($allFields as $field) {
             $user[$field] = $data[$field] ?? '';
         }
@@ -94,12 +103,13 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         }
 
         $this->persist();
-        return (object)$user;
+        
+        return $user;
     }
 
     public function update($field, $value, $data)
     {
-        $allFields = array_merge($this->fields, array_values($this->keyFields));
+        $allFields = array_merge($this->getFields(), array_values($this->getDefinedKeys()));
 
         if ($value) {
             foreach (self::$users as &$user) {
@@ -112,17 +122,8 @@ class AuthService extends Qt_Service implements AuthServiceInterface
                 }
             }
         }
+
         $this->persist();
-    }
-
-    public function getVisibleFields()
-    {
-        return $this->visibleFields ?? [];
-    }
-
-    public function getDefinedKeys()
-    {
-        return $this->keyFields;
     }
 
     private function persist()
