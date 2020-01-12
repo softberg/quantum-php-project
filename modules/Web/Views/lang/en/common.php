@@ -11,6 +11,7 @@ return [
     'run_server' => 'Run PHP server',
     'signin' => 'Sign In',
     'signup' => 'Sign Up',
+    'account_activated' => 'Account is activated',
     'signout' => 'Sign Out',
     'remember_me' => 'Remember Me',
     'forget_password' => 'Forgot password?',

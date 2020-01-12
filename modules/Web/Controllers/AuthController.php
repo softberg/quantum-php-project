@@ -3,8 +3,8 @@
 namespace Modules\Web\Controllers;
 
 use Quantum\Exceptions\ExceptionMessages;
+use Quantum\Exceptions\AuthException;
 use Quantum\Libraries\Mailer\Mailer;
-use Quantum\Libraries\Lang\Lang;
 use Quantum\Factory\ViewFactory;
 use Quantum\Mvc\Qt_Controller;
 use Quantum\Http\Request;
@@ -28,13 +28,15 @@ class AuthController extends Qt_Controller
     public function signin(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            if (auth()->signin($request->get('email'), $request->get('password'), !!$request->get('remember'))) {
-                redirect(base_url() . '/' . current_lang());
+            try {
+                if (auth()->signin($request->get('email'), $request->get('password'), !!$request->get('remember'))) {
+                    redirect(base_url() . '/' . current_lang());
+                }
+            } catch (AuthException $e) {
+                session()->setFlash('error', $e->getMessage());
+                redirect(base_url() . '/' . current_lang() . '/signin');
             }
-            session()->setFlash('error', ExceptionMessages::INCORRECT_AUTH_CREDENTIALS);
-            redirect(base_url() . '/' . current_lang() . '/signin');
         } else {
-            session()->flush();
             $this->view->render($this->signinView);
         }
     }
@@ -48,12 +50,24 @@ class AuthController extends Qt_Controller
     public function signup(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            if (auth()->signup($request->all())) {
+
+            $mailer = new Mailer();
+            $mailer->createSubject(t('common.activate_account'));
+            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
+
+            if (auth()->signup($mailer, $request->all())) {
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
             $this->view->render($this->sigupView);
         }
+    }
+
+    public function activate(Request $request)
+    {
+        auth()->activate($request->get('activation_token'));
+
+        redirect(base_url() . '/' . current_lang() . '/signin');
     }
 
     public function forget(Request $request)
@@ -62,8 +76,7 @@ class AuthController extends Qt_Controller
 
             $mailer = new Mailer();
             $mailer->createSubject(t('common.reset_password'));
-
-            $emailTemplate = base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset';
+            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
 
             auth()->forget($mailer, $request->get('email'), $emailTemplate);
 

@@ -2,7 +2,6 @@
 
 namespace Modules\Web\Controllers;
 
-use Base\Models\AuthModel;
 use Quantum\Factory\ModelFactory;
 use Quantum\Factory\ViewFactory;
 use Quantum\Libraries\Lang\Lang;

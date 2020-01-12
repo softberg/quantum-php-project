@@ -3,6 +3,7 @@
 return function ($route) {
     $route->add('api-signin', 'POST', 'AuthController', 'signin');
     $route->add('api-signup', 'POST', 'AuthController', 'signup')->middlewares(['signup']);
+    $route->add('api-activate/[:any]', 'GET', 'AuthController', 'activate')->middlewares(['activate']);
     $route->add('api-forget', 'POST', 'AuthController', 'forget')->middlewares(['forget']);
     $route->add('api-reset/[:any]', 'POST', 'AuthController', 'reset')->middlewares(['reset']);
 

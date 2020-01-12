@@ -7,6 +7,7 @@ return function ($route) {
     $route->group('guest', function ($route) {
         $route->add('[:alpha:2]?/signin', 'GET|POST', 'AuthController', 'signin');
         $route->add('[:alpha:2]?/signup', 'GET|POST', 'AuthController', 'signup')->middlewares(['signup']);
+        $route->add('[:alpha:2]?/activate/[:any]', 'GET', 'AuthController', 'activate')->middlewares(['activate']);
         $route->add('[:alpha:2]?/forget', 'GET|POST', 'AuthController', 'forget')->middlewares(['forget']);
         $route->add('[:alpha:2]?/reset/[:any]', 'GET|POST', 'AuthController', 'reset')->middlewares(['reset']);
     })->middlewares(['guest']);
