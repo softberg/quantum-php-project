@@ -51,9 +51,9 @@ class AuthServiceTest extends TestCase
             'lastname' => 'User',
         ]);
 
-        $this->assertIsObject($user);
-        $this->assertObjectHasAttribute('username', $user);
-        $this->assertEquals('guest@qt.com', $user->username);
+        $this->assertIsArray($user);
+        $this->assertArrayHasKey('username', $user);
+        $this->assertEquals('guest@qt.com', $user['username']);
     }
 
     public function testUpdate()
