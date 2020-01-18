@@ -19,7 +19,10 @@ class MainController extends Qt_Controller
         Lang::init($lang);
 
         $this->view = $view;
+        
         $this->view->setLayout('layouts/main');
+        
+        $this->view->share(['title' => 'Quantum PHP Framework']);
     }
 
     public function index(ModelFactory $modelFactory)

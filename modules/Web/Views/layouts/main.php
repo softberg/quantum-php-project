@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>Quantum Project</title>
+        <title><?php echo $title ?></title>
 
         <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
         <link rel="shortcut icon" href="<?php echo base_url() ?>/assets/images/favicon.ico">

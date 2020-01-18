@@ -20,7 +20,10 @@ class PostController extends Qt_Controller
         $this->postService = $serviceFactory->get(PostService::class);
 
         $this->view = $view;
+        
         $this->view->setLayout('layouts/main');
+        
+        $this->view->share(['title' => 'Quantum PHP Framework']);
     }
 
     public function getPosts()

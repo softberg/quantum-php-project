@@ -22,7 +22,10 @@ class AuthController extends Qt_Controller
     public function __before(ViewFactory $view)
     {
         $this->view = $view;
+        
         $this->view->setLayout($this->layout);
+        
+        $this->view->share(['title' => 'Quantum PHP Framework']);
     }
 
     public function signin(Request $request)
