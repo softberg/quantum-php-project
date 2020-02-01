@@ -47,7 +47,11 @@ class AuthController extends ApiController
 
     public function signup(Request $request, Response $response)
     {
-        if (auth()->signup(new Mailer, $request->all())) {
+        $mailer = new Mailer();
+        $mailer->createSubject(t('common.activate_account'));
+        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
+
+        if (auth()->signup($mailer, $request->all())) {
             $response->json([
                 'status' => 'success'
             ]);
@@ -68,10 +72,9 @@ class AuthController extends ApiController
     {
         $mailer = new Mailer();
         $mailer->createSubject(t('common.reset_password'));
+        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
 
-        $emailTemplate = base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset';
-
-        auth()->forget($mailer, $request->get('email'), $emailTemplate);
+        auth()->forget($mailer, $request->get('email'));
 
         $response->json([
             'status' => 'success',
