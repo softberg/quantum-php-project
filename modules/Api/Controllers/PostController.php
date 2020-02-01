@@ -3,18 +3,16 @@
 namespace Modules\Api\Controllers;
 
 use Quantum\Factory\ServiceFactory;
-use Quantum\Mvc\Qt_Controller;
 use Base\Services\PostService;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
-class PostController extends Qt_Controller
+class PostController extends ApiController
 {
 
     public $postService;
-    public $csrfVerification = false;
 
-    public function __before()
+    public function __before(ServiceFactory $serviceFactory)
     {
         $this->postService = $serviceFactory->get(PostService::class);
     }
@@ -42,7 +40,6 @@ class PostController extends Qt_Controller
                 'message' => 'Post not found'
             ]);
         }
-
     }
 
     public function amendPost(Request $request, Response $response, $id = null)

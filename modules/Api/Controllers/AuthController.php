@@ -5,14 +5,11 @@ namespace Modules\Api\Controllers;
 use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Exceptions\AuthException;
 use Quantum\Libraries\Mailer\Mailer;
-use Quantum\Mvc\Qt_Controller;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
-class AuthController extends Qt_Controller
+class AuthController extends ApiController
 {
-
-    public $csrfVerification = false;
 
     public function signin(Request $request, Response $response)
     {
@@ -56,11 +53,11 @@ class AuthController extends Qt_Controller
             ]);
         }
     }
-    
-    public function activate(Request $request, Response $response) 
+
+    public function activate(Request $request, Response $response)
     {
         auth()->activate($request->get('activation_token'));
-        
+
         $response->json([
             'status' => 'success',
             'message' => t('common.account_activated')
