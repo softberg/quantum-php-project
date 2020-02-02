@@ -1,6 +1,11 @@
 language: php
 php:
-  - 7.2
-
-before_script: composer update
-script: vendor/bin/phpunit
+    - 7.2
+    - 7.3
+   
+before_script: 
+    - composer self-update
+    - composer update
+    
+script: 
+    - vendor/bin/phpunit
