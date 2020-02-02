@@ -15,7 +15,7 @@ class Editor extends Qt_Middleware
         if (auth()->user()->role != 'admin' && auth()->user()->role != 'editor') {
             $response->json([
                 'status' => 'error',
-                'message' => ExceptionMessages::UUAUTHORIZED_REQUEST
+                'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
             ]);
         }
 

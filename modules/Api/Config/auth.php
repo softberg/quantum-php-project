@@ -17,6 +17,6 @@ return [
         'aud' => 'audience',
         'iat' => time(),
         'nbf' => time() + 1,
-        'exp' => time() + 150
+        'exp' => time() + 300
     ]
 ];

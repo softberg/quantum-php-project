@@ -15,7 +15,7 @@ class Auth extends Qt_Middleware
         if (!auth()->check()) {
             $response->json([
                 'status' => 'error',
-                'message' => ExceptionMessages::UUAUTHORIZED_REQUEST
+                'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
             ]);
         }
 
