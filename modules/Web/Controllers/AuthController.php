@@ -2,7 +2,6 @@
 
 namespace Modules\Web\Controllers;
 
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Exceptions\AuthException;
 use Quantum\Libraries\Mailer\Mailer;
 use Quantum\Factory\ViewFactory;

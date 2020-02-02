@@ -5,7 +5,6 @@ namespace Modules\Api\Middlewares;
 use Quantum\Libraries\Validation\Validation;
 use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Middleware\Qt_Middleware;
-use Quantum\Hooks\HookManager;
 use Quantum\Loader\Loader;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
