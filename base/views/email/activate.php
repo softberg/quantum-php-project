@@ -167,7 +167,7 @@
                                     <![endif]-->
                                     <div style="color:#007089;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;line-height:1.2;padding-top:35px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; line-height: 1.2; font-size: 12px; color: #007089; mso-line-height-alt: 14px;">
-                                            <p style="font-size: 34px; line-height: 1.2; text-align: center; word-break: break-word; font-family: Montserrat,; mso-line-height-alt: 41px; margin: 0;">
+                                            <p style="font-size: 34px; line-height: 1.2; text-align: center; word-break: break-word; font-family: Montserrat; mso-line-height-alt: 41px; margin: 0;">
                                                 <span style="font-size: 34px;">Activate your account by clicking to the button bellow<br/><br/></span>
                                             </p>
                                         </div>
