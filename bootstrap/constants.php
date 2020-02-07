@@ -51,6 +51,11 @@ const MODULES_DIR = BASE_DIR . DS . 'modules';
 const PUBLIC_DIR = BASE_DIR . DS . 'public';
 
 /**
+ * Assets directory.
+ */
+const ASSETS_DIR = PUBLIC_DIR . DS . 'assets';
+
+/**
  * Upload directory.
  */
 const UPLOADS_DIR = PUBLIC_DIR . DS . 'uploads';
