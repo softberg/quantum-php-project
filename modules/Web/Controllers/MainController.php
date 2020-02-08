@@ -4,9 +4,7 @@ namespace Modules\Web\Controllers;
 
 use Quantum\Factory\ModelFactory;
 use Quantum\Factory\ViewFactory;
-use Quantum\Libraries\Lang\Lang;
 use Quantum\Mvc\Qt_Controller;
-use Quantum\Http\Request;
 
 class MainController extends Qt_Controller
 {
@@ -15,9 +13,6 @@ class MainController extends Qt_Controller
 
     public function __before(ViewFactory $view)
     {
-        $lang = Request::getSegment(1);
-        Lang::init($lang);
-
         $this->view = $view;
         
         $this->view->setLayout('layouts/main');
