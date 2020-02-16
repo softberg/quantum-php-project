@@ -16,7 +16,7 @@ require_once VENDOR_DIR . '/autoload.php';
 
 /*
 * ---------------------------------------------------------
-* Includes helper functions
+* Includes core helper functions
 * ---------------------------------------------------------
 */
 require_once HELPERS_DIR . '/functions.php';

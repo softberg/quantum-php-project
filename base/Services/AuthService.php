@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.0
+ * @since 1.9.9
  */
 
 namespace Base\Services;
@@ -21,14 +21,28 @@ use Quantum\Mvc\Qt_Service;
 use Quantum\Loader\Loader;
 
 /**
- *
+ * Class AuthService
+ * @package Base\Services
  */
 class AuthService extends Qt_Service implements AuthServiceInterface
 {
 
+    /**
+     * Users
+     * @var array
+     */
     protected static $users = [];
+
+    /**
+     * Path to users repository
+     * @var string
+     */
     protected $userRepository = 'base' . DS . 'repositories' . DS . 'users.php';
 
+    /**
+     * Init
+     * @throws \Exception
+     */
     public function __init()
     {
         $loaderSetup = (object) [
@@ -43,6 +57,10 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         self::$users = is_array($loader->load()) ? $loader->load() : [];
     }
 
+    /**
+     * Auth object fields
+     * @return array
+     */
     public function getFields()
     {
         return [
@@ -53,6 +71,10 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         ];
     }
 
+    /**
+     * Visible fileds of Auth object
+     * @return array|mixed
+     */
     public function getVisibleFields()
     {
         return [
@@ -63,6 +85,10 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         ];
     }
 
+    /**
+     * Key map
+     * @return array
+     */
     public function getDefinedKeys()
     {
         return [
@@ -76,6 +102,12 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         ];
     }
 
+    /**
+     * Get
+     * @param string $field
+     * @param mixed $value
+     * @return array
+     */
     public function get($field, $value): array
     {
         if ($value) {
@@ -88,6 +120,12 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         return [];
     }
 
+    /**
+     * Add
+     * @param array $data
+     * @return array|mixed
+     * @throws \Exception
+     */
     public function add($data)
     {
         $user = [];
@@ -107,6 +145,14 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         return $user;
     }
 
+    /**
+     * Update
+     * @param string $field
+     * @param mixed $value
+     * @param array $data
+     * @return mixed|void
+     * @throws \Exception
+     */
     public function update($field, $value, $data)
     {
         $allFields = array_merge($this->getFields(), array_values($this->getDefinedKeys()));
@@ -126,6 +172,10 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         $this->persist();
     }
 
+    /**
+     * Persists the changes
+     * @throws \Exception
+     */
     private function persist()
     {
         $fileSystem = new FileSystem();

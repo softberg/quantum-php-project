@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Quantum PHP Framework
+ *
+ * An open source software development framework for PHP
+ *
+ * @package Quantum
+ * @author Arman Ag. <arman.ag@softberg.org>
+ * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
+ * @link http://quantum.softberg.org/
+ * @since 1.9.9
+ */
+
 namespace Modules\Api\Controllers;
 
 use Quantum\Exceptions\ExceptionMessages;
@@ -8,9 +20,17 @@ use Quantum\Libraries\Mailer\Mailer;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
+/**
+ * Class AuthController
+ * @package Modules\Api\Controllers
+ */
 class AuthController extends ApiController
 {
-
+    /**
+     * Sign in
+     * @param Request $request
+     * @param Response $response
+     */
     public function signin(Request $request, Response $response)
     {
         if ($request->getMethod() == 'POST') {
@@ -31,6 +51,11 @@ class AuthController extends ApiController
         }
     }
 
+    /**
+     * Sign out
+     * @param Response $response
+     * @throws \Exception
+     */
     public function signout(Response $response)
     {
         if (auth()->signout()) {
@@ -45,6 +70,11 @@ class AuthController extends ApiController
         }
     }
 
+    /**
+     * Sign up
+     * @param Request $request
+     * @param Response $response
+     */
     public function signup(Request $request, Response $response)
     {
         $mailer = new Mailer();
@@ -58,6 +88,11 @@ class AuthController extends ApiController
         }
     }
 
+    /**
+     * Activate
+     * @param Request $request
+     * @param Response $response
+     */
     public function activate(Request $request, Response $response)
     {
         auth()->activate($request->get('activation_token'));
@@ -68,6 +103,11 @@ class AuthController extends ApiController
         ]);
     }
 
+    /**
+     * Forget
+     * @param Request $request
+     * @param Response $response
+     */
     public function forget(Request $request, Response $response)
     {
         $mailer = new Mailer();
@@ -82,6 +122,11 @@ class AuthController extends ApiController
         ]);
     }
 
+    /**
+     * Reset
+     * @param Request $request
+     * @param Response $response
+     */
     public function reset(Request $request, Response $response)
     {
         auth()->reset($request->get('reset_token'), $request->get('password'));

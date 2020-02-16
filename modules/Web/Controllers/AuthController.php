@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Quantum PHP Framework
+ *
+ * An open source software development framework for PHP
+ *
+ * @package Quantum
+ * @author Arman Ag. <arman.ag@softberg.org>
+ * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
+ * @link http://quantum.softberg.org/
+ * @since 1.9.9
+ */
+
 namespace Modules\Web\Controllers;
 
 use Quantum\Exceptions\AuthException;
@@ -8,16 +20,53 @@ use Quantum\Factory\ViewFactory;
 use Quantum\Mvc\Qt_Controller;
 use Quantum\Http\Request;
 
+/**
+ * Class AuthController
+ * @package Modules\Web\Controllers
+ */
 class AuthController extends Qt_Controller
 {
 
+    /**
+     * Auth layout
+     * @var string
+     */
     private $layout = 'layouts/auth';
+
+    /**
+     * Signin view
+     * @var string
+     */
     private $signinView = 'auth/signin';
+
+    /**
+     * Signup view
+     * @var string
+     */
     private $sigupView = 'auth/signup';
+
+    /**
+     * Forget view
+     * @var string
+     */
     private $forgetView = 'auth/forget';
+
+    /**
+     * Reset view
+     * @var string
+     */
     private $resetView = 'auth/reset';
+
+    /**
+     * View
+     * @var ViewFactory
+     */
     private $view;
 
+    /**
+     * Magic __before
+     * @param ViewFactory $view
+     */
     public function __before(ViewFactory $view)
     {
         $this->view = $view;
@@ -27,6 +76,11 @@ class AuthController extends Qt_Controller
         $this->view->share(['title' => 'Quantum PHP Framework']);
     }
 
+    /**
+     * Sign in
+     * @param Request $request
+     * @throws \Exception
+     */
     public function signin(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -43,12 +97,20 @@ class AuthController extends Qt_Controller
         }
     }
 
+    /**
+     * Sign out
+     * @throws \Exception
+     */
     public function signout()
     {
         auth()->signout();
         redirect(base_url() . '/' . current_lang());
     }
 
+    /**
+     * Sign up
+     * @param Request $request
+     */
     public function signup(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -65,6 +127,10 @@ class AuthController extends Qt_Controller
         }
     }
 
+    /**
+     * Activate
+     * @param Request $request
+     */
     public function activate(Request $request)
     {
         auth()->activate($request->get('activation_token'));
@@ -72,6 +138,11 @@ class AuthController extends Qt_Controller
         redirect(base_url() . '/' . current_lang() . '/signin');
     }
 
+    /**
+     * Forget
+     * @param Request $request
+     * @throws \Exception
+     */
     public function forget(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -89,6 +160,10 @@ class AuthController extends Qt_Controller
         }
     }
 
+    /**
+     * Reset
+     * @param Request $request
+     */
     public function reset(Request $request)
     {
         if ($request->getMethod() == 'POST') {

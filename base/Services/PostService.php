@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.0
+ * @since 1.9.9
  */
 
 namespace Base\Services;
@@ -20,15 +20,28 @@ use Quantum\Mvc\Qt_Service;
 use Quantum\Loader\Loader;
 
 /**
- * 
+ * Class PostService
+ * @package Base\Services
  */
 class PostService extends Qt_Service
 {
 
+    /**
+     * Posts
+     * @var array
+     */
     protected static $posts = [];
-    
+
+    /**
+     * Path to posts repository
+     * @var string
+     */
     protected $postRepository = 'base' . DS . 'repositories' . DS . 'posts.php';
 
+    /**
+     * Init
+     * @throws \Exception
+     */
     public function __init()
     {
         $loaderSetup = (object) [
@@ -43,6 +56,10 @@ class PostService extends Qt_Service
         self::$posts = is_array($loader->load()) ? $loader->load() : [];
     }
 
+    /**
+     * Get posts
+     * @return array
+     */
     public function getPosts()
     {
         $posts = [];
@@ -55,6 +72,11 @@ class PostService extends Qt_Service
         return $posts;
     }
 
+    /**
+     * Get post
+     * @param int $id
+     * @return mixed|null
+     */
     public function getPost($id)
     {
         if (isset(self::$posts[$id])) {
@@ -64,6 +86,11 @@ class PostService extends Qt_Service
         return null;
     }
 
+    /**
+     * Add post
+     * @param array $post
+     * @throws \Exception
+     */
     public function addPost($post)
     {
         if (count(self::$posts) > 0) {
@@ -74,6 +101,12 @@ class PostService extends Qt_Service
         $this->persist();
     }
 
+    /**
+     * Update post
+     * @param int $id
+     * @param array $data
+     * @throws \Exception
+     */
     public function updatePost($id, $data)
     {
         foreach ($data as $key => $value) {
@@ -83,12 +116,21 @@ class PostService extends Qt_Service
         $this->persist();
     }
 
+    /**
+     * Delete post
+     * @param int $id
+     * @throws \Exception
+     */
     public function deletePost($id)
     {
         unset(self::$posts[$id]);
         $this->persist();
     }
 
+    /**
+     * Persists the changes
+     * @throws \Exception
+     */
     private function persist()
     {
         $fileSystem = new FileSystem();

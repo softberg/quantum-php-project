@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Quantum PHP Framework
+ *
+ * An open source software development framework for PHP
+ *
+ * @package Quantum
+ * @author Arman Ag. <arman.ag@softberg.org>
+ * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
+ * @link http://quantum.softberg.org/
+ * @since 1.9.9
+ */
+
 namespace Modules\Api\Controllers;
 
 use Quantum\Factory\ServiceFactory;
@@ -7,16 +19,32 @@ use Base\Services\PostService;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
+/**
+ * Class PostController
+ * @package Modules\Api\Controllers
+ */
 class PostController extends ApiController
 {
-
+    /**
+     * Post service
+     * @var PostService
+     */
     public $postService;
 
+    /**
+     * Magic __before
+     * @param ServiceFactory $serviceFactory
+     * @throws \Exception
+     */
     public function __before(ServiceFactory $serviceFactory)
     {
         $this->postService = $serviceFactory->get(PostService::class);
     }
 
+    /**
+     * Get posts
+     * @param Response $response
+     */
     public function getPosts(Response $response)
     {
         $posts = $this->postService->getPosts();
@@ -26,6 +54,11 @@ class PostController extends ApiController
         ]);
     }
 
+    /**
+     * Get post
+     * @param Response $response
+     * @param int $id
+     */
     public function getPost(Response $response, $id)
     {
         $post = $this->postService->getPost($id);
@@ -42,6 +75,13 @@ class PostController extends ApiController
         }
     }
 
+    /**
+     * Amend post
+     * @param Request $request
+     * @param Response $response
+     * @param int|null $id
+     * @throws \Exception
+     */
     public function amendPost(Request $request, Response $response, $id = null)
     {
         $post = [
@@ -53,23 +93,29 @@ class PostController extends ApiController
             $this->postService->updatePost($id, $post);
             $response->json([
                 'status' => 'success',
-                'message' => 'Updated successfuly'
+                'message' => 'Updated successfully'
             ]);
         } else {
             $this->postService->addPost($post);
             $response->json([
                 'status' => 'success',
-                'message' => 'Created successfuly'
+                'message' => 'Created successfully'
             ]);
         }
     }
 
+    /**
+     * Delete post
+     * @param Response $response
+     * @param int $id
+     * @throws \Exception
+     */
     public function deletePost(Response $response, $id)
     {
         $this->postService->deletePost($id);
         $response->json([
             'status' => 'success',
-            'message' => 'Deleted successfuly'
+            'message' => 'Deleted successfully'
         ]);
     }
 
