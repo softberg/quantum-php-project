@@ -189,7 +189,7 @@
                                                         <v:textbox inset="0,0,0,0">
                                                             <center style="color:#ffffff; font-family:'Trebuchet MS', Tahoma, sans-serif; font-size:18px">
                                         <![endif]-->
-                                        <a href="<?php echo base_url() . '/reset/' . $activationToken ?>"
+                                        <a href="<?php echo base_url() . '/activate/' . $activationToken ?>"
                                            style="text-decoration:none;display:block;color:#ffffff;background-color:#007089;border-radius:25px;-webkit-border-radius:25px;-moz-border-radius:25px;width:35%; width:calc(35% - 2px);;border-top:1px solid #007089;border-right:1px solid #007089;border-bottom:1px solid #007089;border-left:1px solid #007089;padding-top:5px;padding-bottom:5px;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;">
                                             <span style="padding-left:20px;padding-right:20px;font-size:18px;display:inline-block;"><span
                                                         style="font-size: 16px; line-height: 2; word-break: break-word; font-family: Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; mso-line-height-alt: 32px;"><span
