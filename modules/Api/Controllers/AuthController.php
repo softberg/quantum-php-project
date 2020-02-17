@@ -35,13 +35,11 @@ class AuthController extends ApiController
     {
         if ($request->getMethod() == 'POST') {
             try {
-                $tokens = auth()->signin($request->get('username'), $request->get('password'));
-                if ($tokens) {
-                    $response->json([
-                        'status' => 'success',
-                        'data' => $tokens
-                    ]);
-                }
+                auth()->signin($request->get('username'), $request->get('password'));
+
+                $response->json([
+                    'status' => 'success'
+                ]);
             } catch (AuthException $e) {
                 $response->json([
                     'status' => 'error',
