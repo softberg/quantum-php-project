@@ -9,7 +9,7 @@
                                 <div class="uncol style-dark">
                                     <div class="uncont">
                                         <?php render_partial('partials/logo') ?>
-                                        <form method="post" action="<?php echo base_url() . '/'. current_lang() ?>/signup">
+                                        <form method="post" action="<?php echo base_url() . '/' . current_lang() ?>/signup">
                                             <div class="form-container">
                                                 <div class="heading-text el-text bottom-t-top animate_when_almost_visible" data-delay="200">
                                                     <h2 class="font-762333 fontsize-155944 fontheight-179065 fontspace-781688">
@@ -33,7 +33,7 @@
                                                 <div class="clear"></div>
                                                 <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="400">
                                                     <label class="auth-form-label"><?php _t('common.email'); ?></label>
-                                                    <input type="text" name="username" class="form-control" placeholder="<?php _t('common.email'); ?>" />
+                                                    <input type="text" name="username" class="form-control" value="<?php echo old('username') ?>" placeholder="<?php _t('common.email'); ?>" />
                                                 </div>
                                                 <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="500">
                                                     <label class="auth-form-label"><?php _t('common.password'); ?></label>
@@ -41,11 +41,11 @@
                                                 </div>
                                                 <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="600">
                                                     <label class="auth-form-label"><?php _t('common.first_name'); ?></label>
-                                                    <input type="text" name="firstname" class="form-control" placeholder="<?php _t('common.first_name'); ?>" />
+                                                    <input type="text" name="firstname" class="form-control" value="<?php echo old('firstname') ?>" placeholder="<?php _t('common.first_name'); ?>" />
                                                 </div>
                                                 <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="700">
                                                     <label class="auth-form-label"><?php _t('common.last_name'); ?></label>
-                                                    <input type="text" name="lastname" class="form-control" placeholder="<?php _t('common.last_name'); ?>" />
+                                                    <input type="text" name="lastname" class="form-control" value="<?php echo old('lastname') ?>" placeholder="<?php _t('common.last_name'); ?>" />
                                                 </div>
                                                 <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="800">
                                                     <input type="hidden" name="token" value="<?php echo csrf_token() ?>" />

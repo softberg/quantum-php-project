@@ -14,6 +14,7 @@
 
 namespace Modules\Api\Middlewares;
 
+use Quantum\Libraries\Validation\Validation;
 use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Middleware\Qt_Middleware;
 use Quantum\Http\Response;
@@ -25,6 +26,15 @@ use Quantum\Http\Request;
  */
 class Editor extends Qt_Middleware
 {
+
+    /**
+     * Validation rules
+     * @var array
+     */
+    private $ruels = [
+        'title' => 'required|min_len,10',
+        'content' => 'required|min_len,10,max_len,1000'
+    ];
 
     /**
      * @param Request $request
@@ -39,6 +49,15 @@ class Editor extends Qt_Middleware
             $response->json([
                 'status' => 'error',
                 'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
+            ]);
+        }
+
+        $validated = Validation::is_valid($request->all(), $this->ruels);
+
+        if ($validated !== true) {
+            $response->json([
+                'status' => 'error',
+                'message' => $validated
             ]);
         }
 

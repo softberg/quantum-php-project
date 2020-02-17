@@ -14,6 +14,7 @@
 
 namespace Modules\Web\Middlewares;
 
+use Quantum\Libraries\Validation\Validation;
 use Quantum\Middleware\Qt_Middleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
@@ -26,6 +27,15 @@ class Editor extends Qt_Middleware
 {
 
     /**
+     * Validation rules
+     * @var array
+     */
+    private $ruels = [
+        'title' => 'required|min_len,10',
+        'content' => 'required|min_len,10,max_len,1000'
+    ];
+
+    /**
      * @param Request $request
      * @param Response $response
      * @param \Closure $next
@@ -36,6 +46,15 @@ class Editor extends Qt_Middleware
     {
         if (auth()->user()->role != 'admin' && auth()->user()->role != 'editor') {
             redirect(base_url() . '/' . current_lang());
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $validated = Validation::is_valid($request->all(), $this->ruels);
+
+            if ($validated !== true) {
+                session()->setFlash('error', $validated);
+                redirectWith(get_referrer(), $request->all());
+            }
         }
 
         return $next($request, $response);

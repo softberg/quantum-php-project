@@ -52,12 +52,12 @@ class Signup extends Qt_Middleware
 
             if ($validated !== true) {
                 session()->setFlash('error', $validated);
-                redirect(base_url() . '/' . current_lang() . '/signup');
+                redirectWith(base_url() . '/signup', $request->all());
             }
 
             if (!$this->isUnique($request->all())) {
                 session()->setFlash('error', [_message(ExceptionMessages::NON_UNIQUE_VALUE, 'username')]);
-                redirect(base_url() . '/' . current_lang() . '/signup');
+                redirectWith(base_url() . '/signup', $request->all());
             }
         }
 

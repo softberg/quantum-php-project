@@ -9,12 +9,15 @@
                                 <div class="uncol style-dark">
                                     <div class="uncont">
                                         <?php render_partial('partials/logo') ?>
-                                            <form method="post" action="<?php echo base_url() . '/' . current_lang() .'/post/amend/' . $id ?? '' ?>">
+                                        <?php if (session()->has('error')): ?>
+                                            <?php render_partial('partials/messages') ?>
+                                        <?php endif; ?>
+                                        <form method="post" action="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . $id ?? '' ?>">
                                             <div class="heading-text el-text bottom-t-top animate_when_almost_visible pt-30" data-delay="200">
-                                                <input class="form-control" name="title" value="<?php echo $post['title'] ?? '' ?>" placeholder="<?php _t('common.title'); ?>" />
+                                                <input class="form-control" name="title" value="<?php echo $post['title'] ?? old('title') ?>" placeholder="<?php _t('common.title'); ?>" />
                                             </div>
                                             <div class="heading-text el-text bottom-t-top animate_when_almost_visible pt-30" data-delay="300">
-                                                <textarea class="form-control" name="content" style="height: 200px" placeholder="<?php _t('common.content'); ?>"><?php echo $post['content'] ?? '' ?></textarea>
+                                                <textarea class="form-control" name="content" style="height: 200px" placeholder="<?php _t('common.content'); ?>"><?php echo $post['content'] ?? old('content') ?></textarea>
                                             </div>
                                             <div class="heading-text el-text bottom-t-top animate_when_almost_visible pt-30" data-delay="400">
                                                 <input type="hidden" name="token" value="<?php echo csrf_token() ?>" />
