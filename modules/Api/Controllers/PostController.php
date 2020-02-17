@@ -70,7 +70,7 @@ class PostController extends ApiController
         } else {
             $response->json([
                 'status' => 'error',
-                'message' => 'Post not found'
+                'message' => t('common.post_not_found')
             ]);
         }
     }
@@ -93,13 +93,13 @@ class PostController extends ApiController
             $this->postService->updatePost($id, $post);
             $response->json([
                 'status' => 'success',
-                'message' => 'Updated successfully'
+                'message' => t('common.updated_successfully')
             ]);
         } else {
             $this->postService->addPost($post);
             $response->json([
                 'status' => 'success',
-                'message' => 'Created successfully'
+                'message' => t('common.created_successfully')
             ]);
         }
     }
@@ -115,7 +115,7 @@ class PostController extends ApiController
         $this->postService->deletePost($id);
         $response->json([
             'status' => 'success',
-            'message' => 'Deleted successfully'
+            'message' => t('common.deleted_successfully')
         ]);
     }
 
