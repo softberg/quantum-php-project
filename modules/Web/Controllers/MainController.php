@@ -41,7 +41,7 @@ class MainController extends Qt_Controller
         
         $this->view->setLayout('layouts/main');
         
-        $this->view->share(['title' => 'Quantum PHP Framework']);
+        $this->view->share(['title' => get_config('app_name')]);
     }
 
     /**
