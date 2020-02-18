@@ -23,7 +23,7 @@
         "post-create-project-cmd": [
             "@php qt core:env",
             "@php qt core:debugbar",
-            "@php qt core:key-generate --length=64"
+            "@php qt core:key --length=64"
         ]
     }
 }
