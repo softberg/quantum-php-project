@@ -13,13 +13,15 @@
  */
 
 namespace Modules\Main\Models;
+
 use Quantum\Mvc\Qt_Model;
 
 /**
  * Class User
  * @package Modules\Main\Models
  */
-class User extends Qt_Model {
+class User extends Qt_Model
+{
 
     /**
      * ID column of table
@@ -61,4 +63,5 @@ class User extends Qt_Model {
     {
         return true;
     }
+
 }

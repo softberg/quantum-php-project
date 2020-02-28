@@ -1,7 +1,7 @@
 {
     "name": "quantum/project",
     "description": "Quantum Project",
-    "keywords": ["framework", "quantum", "project"],
+    "keywords": ["framework", "php", "quantum", "project"],
     "license": "MIT",
     "version": "1.9.9",
     "type": "project",
