@@ -33,7 +33,7 @@ class User extends Qt_Model
      * The table name
      * @var string
      */
-    public $table = 'user';
+    public $table = 'users';
 
     /**
      * Fillable properties
