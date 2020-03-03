@@ -1,12 +1,12 @@
 {
     "name": "quantum/project",
     "description": "Quantum Project",
-    "keywords": ["framework", "quantum", "project"],
+    "keywords": ["framework", "php", "quantum", "project"],
     "license": "MIT",
-    "version": "1.9.9",
+    "version": "1.9.10",
     "type": "project",
     "require": {
-        "quantum/framework": "^1.9.9"
+        "quantum/framework": "^1.9.10"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",

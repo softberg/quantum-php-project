@@ -11,6 +11,7 @@
  * @link http://quantum.softberg.org/
  * @since 1.9.9
  */
+
 namespace Modules\Web\Models;
 
 use Quantum\Mvc\Qt_Model;
@@ -19,7 +20,8 @@ use Quantum\Mvc\Qt_Model;
  * Class User
  * @package Modules\Web\Models
  */
-class User extends Qt_Model {
+class User extends Qt_Model
+{
 
     /**
      * ID column of table
@@ -31,7 +33,7 @@ class User extends Qt_Model {
      * The table name
      * @var string
      */
-    public $table = 'user';
+    public $table = 'users';
 
     /**
      * Fillable properties
@@ -61,4 +63,5 @@ class User extends Qt_Model {
     {
         return true;
     }
+
 }
