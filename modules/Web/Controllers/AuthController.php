@@ -151,7 +151,7 @@ class AuthController extends Qt_Controller
             $mailer->createSubject(t('common.reset_password'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
 
-            auth()->forget($mailer, $request->get('email'), $emailTemplate);
+            auth()->forget($mailer, $request->get('email'));
 
             session()->setFlash('success', t('common.check_email'));
             redirect(base_url() . '/' . current_lang() . '/forget');
