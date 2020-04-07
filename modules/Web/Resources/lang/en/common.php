@@ -11,12 +11,13 @@ return [
     'run_server' => 'Run PHP server',
     'signin' => 'Sign In',
     'signup' => 'Sign Up',
-	'activate_account' => 'Activate account',
+    'activate_account' => 'Activate account',
     'account_activated' => 'Account is activated',
     'signout' => 'Sign Out',
     'remember_me' => 'Remember Me',
     'forget_password' => 'Forgot password?',
     'reset_password' => 'Reset password',
+    'repeat_password' => 'Repeat password',
     'check_email' => 'Check your email to reset your password',
     'email' => 'Email',
     'password' => 'Password',
@@ -33,5 +34,4 @@ return [
     'save' => 'Save',
     'delete' => 'Delete',
     'no_posts' => 'No posts found :(',
-
 ];

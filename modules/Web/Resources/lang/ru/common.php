@@ -19,6 +19,7 @@ return [
     'email' => 'Эл. адрес',
     'password' => 'Пароль',
     'new_password' => 'Новый пароль',
+    'repeat_password' => 'Повторите пароль',
     'first_name' => 'Имя',
     'last_name' => 'Фамилия',
     'send' => 'Отправить',

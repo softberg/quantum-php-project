@@ -34,9 +34,13 @@
                                                 </div>
 
                                                 <div class="clear"></div>
-                                                <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="400">
+                                                <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="300">
                                                     <label class="auth-form-label"><?php _t('common.new_password'); ?></label>
                                                     <input type="password" name="password" class="form-control" placeholder="<?php _t('common.new_password'); ?>" />
+                                                </div>
+                                                <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="400">
+                                                    <label class="auth-form-label"><?php _t('common.repeat_password'); ?></label>
+                                                    <input type="password" name="repeat_password" class="form-control" placeholder="<?php _t('common.repeat_password'); ?>" />
                                                 </div>
                                                 <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible pt-30" data-delay="500">
                                                     <input type="hidden" name="token" value="<?php echo csrf_token() ?>" />
