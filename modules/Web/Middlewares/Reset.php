@@ -9,58 +9,74 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Web\Middlewares;
 
-use Quantum\Libraries\Validation\Validation;
+use Quantum\Libraries\Validation\Validator;
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Middleware\Qt_Middleware;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Middleware\QtMiddleware;
 use Quantum\Hooks\HookManager;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Closure;
 
 /**
  * Class Reset
  * @package Modules\Web\Middlewares
  */
-class Reset extends Qt_Middleware
+class Reset extends QtMiddleware
 {
 
     /**
-     * Validation rules
-     * @var array
+     * Validator object
+     * @var Validator
      */
-    private $ruels = [
-        'password' => 'required|min_len,6'
-    ];
+    private $validator;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->validator = new Validator();
+
+        $this->validator->addRule('password', [
+            Rule::set('required'),
+            Rule::set('minLen', 6)
+        ]);
+    }
 
     /**
      * @param Request $request
      * @param Response $response
-     * @param \Closure $next
+     * @param Closure $next
      * @return mixed
      * @throws \Exception
      */
-    public function apply(Request $request, Response $response, \Closure $next)
+    public function apply(Request $request, Response $response, Closure $next)
     {
         list($lang, $token) = current_route_args();
 
         if ($request->getMethod() == 'POST') {
             if (!$this->checkToken($token)) {
-                session()->setFlash('error', [_message(ExceptionMessages::NON_EXISTING_RECORD, 'token')]);
+                session()->setFlash('error', ['password' => [
+                        _message(ExceptionMessages::NON_EXISTING_RECORD, 'token')
+                    ]
+                ]);
+
                 redirect(get_referrer());
             }
 
-            $validated = Validation::is_valid($request->all(), $this->ruels);
-            if ($validated !== true) {
-                session()->setFlash('error', $validated);
+            if (!$this->validator->isValid($request->all())) {
+                session()->setFlash('error', $this->validator->getErrors());
                 redirect(get_referrer());
             }
         } elseif ($request->getMethod() == 'GET') {
             if (!$this->checkToken($token)) {
-                HookManager::call('pageNotFound');
+                HookManager::call('pageNotFound', $response);
             }
         }
 
