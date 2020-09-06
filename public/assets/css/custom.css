@@ -1,0 +1,489 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    font-size: 17px;
+}
+
+.wrapper{
+    position: relative;
+    z-index: 2;
+}
+
+.remember-box {
+    text-align: right;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+main > div:first-child {
+    padding-top: 50px;
+}
+
+main > div.posts-container,.posts-container {
+    padding-top: 0
+}
+
+.page-footer {
+    padding-top: 0;
+}
+
+
+
+.teal .input-field label  {
+    color: #fff !important;
+}
+
+.teal .input-field input ,
+.teal .input-field textarea {
+    border-bottom: 1px solid #fff !important;
+    color:#fff !important;
+}
+
+.teal .input-field input:focus + label ,
+.teal .input-field textarea:focus + label {
+    color: #fff !important;
+}
+
+.teal .input-field input:focus ,
+.teal .input-field textarea:focus {
+    border-bottom: 1px solid #fff !important;
+    box-shadow: 0 1px 0 0 #fff !important;
+}
+
+.teal .input-field input.valid ,
+.teal .input-field textarea.valid {
+    border-bottom: 1px solid #fff !important;
+    box-shadow: 0 1px 0 0 #fff !important;
+}
+
+.teal  .input-field input.invalid ,
+.teal  .input-field textarea.invalid {
+    border-bottom: 1px solid #fff !important;
+    box-shadow: 0 1px 0 0 #fff !important;
+}
+
+.input-field .prefix.active {
+    color: #fff !important;
+}
+
+.checkbox-white[type="checkbox"] + label:before{
+    border: 2px solid indigo;
+    background: transparent;
+}
+
+.checkbox-white[type="checkbox"]:checked+span:not(.lever):before{
+    border: 2px solid transparent;
+    border-bottom: 2px solid white;
+    border-right: 2px solid white;
+    background: transparent;
+}
+
+.checkbox-white[type="checkbox"]+span:not(.lever):before, [type="checkbox"]:not(.filled-in)+span:not(.lever):after {
+    border: 2px solid #ffffff;
+}
+
+.material-alert{
+    position: relative;
+    min-width: 150px;
+    padding: 15px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.1s linear;
+    webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.material-alert .material-icons{
+    margin-right: 10px;
+}
+.material-alert .close-alert{
+    -webkit-appearance: none;
+    border: 0;
+    cursor: pointer;
+    color: inherit;
+    background: 0 0;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .7);
+    filter: alpha(opacity=40);
+    margin-bottom: -5px;
+    position: absolute;
+    top: 16px;
+    right: 5px;
+}
+.material-alert.info{
+    background-color: #039be5;
+    color: #fff;
+}
+.material-alert.success{
+    background-color: #43a047;
+    color: #fff;
+}
+.material-alert.error{
+    background-color: #c62828;
+    color: #fff;
+}
+.material-alert.danger{
+    background-color: #c62828;
+    color: #fff;
+}
+.material-alert.warning{
+    background-color: #fbc02d;
+    color: #fff;
+}
+
+.material-alert ul {
+    margin: 0;
+}
+
+.signup-form a {
+    color: #fff;
+}
+
+a:hover {
+    opacity: .9;
+}
+
+.index-links {
+    padding-top: 20px;
+}
+
+a {
+    font-size: 18px;
+}
+
+.index-links a {
+    padding: 0 10px;
+}
+
+.logo-block img {
+    width: 150px;
+    max-width: 100%;
+}
+
+.navbar-logo  {
+    height: 100%;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.navbar-logo img {
+    max-height: 100%;
+    height: 50px;
+    margin-top: 6px;
+}
+
+.post-item{
+    margin-bottom: 15px;
+}
+
+.post-card {
+    margin: 0;
+}
+
+.post-title a {
+    font-weight: 400;
+    font-size: 30px;
+}
+
+.transparent-card.teal {
+    background-color: #00968800 !important;
+} 
+
+/*input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0 30px #00bfa5 inset !important; 
+}*/
+
+/*404 error styles start*/
+svg {
+    display: block;
+    margin: 0 auto;
+    overflow: visible !important;
+}
+svg #robot_1_ {
+    animation-name: verticalAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+}
+svg #light_1_ {
+    animation-name: blinkLight;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: steps(2);
+}
+svg #leftEye_1_, svg #rightEye_1_ {
+    animation-name: blinkEye;
+    animation-duration: 1.8s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+    transform-origin: 50% 50%;
+}
+svg #leftArm_1_ {
+    animation-name: moveLeftArm;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+    transform-origin: 50% 10%;
+    transition: all;
+}
+svg #rightArm_1_ {
+    animation-name: moveRightArm;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+    transform-origin: 50% 10%;
+}
+svg #shadow_1_ {
+    animation-name: shadowAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+    transform-origin: 50%;
+}
+
+@keyframes wave {
+    0% {
+        transform: rotate(120deg);
+    }
+    100% {
+        transform: rotate(170deg);
+    }
+}
+@keyframes moveLeftArm {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(4deg);
+    }
+}
+@keyframes moveRightArm {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(-4deg);
+    }
+}
+@keyframes shadowAnimation {
+    0% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(1.15);
+        opacity: 0.6;
+    }
+}
+@keyframes verticalAnimation {
+    0% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
+@keyframes blinkLight {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes blinkEye {
+    0% {
+        transform: scaleY(0);
+    }
+    4% {
+        transform: scaleY(1);
+    }
+}
+
+/*404 error styles end*/
+
+/*bubbles  animation styles start*/
+
+
+.bg-bubbles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+.bg-bubbles li {
+    position: fixed;
+    list-style: none;
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.15);
+    bottom: -160px;
+    animation: square 25s infinite; 
+    transition-timing-function: linear;
+}
+.bg-bubbles li:nth-child(1) {
+    left: 10%;
+}
+.bg-bubbles li:nth-child(2) {
+    left: 20%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 2s;
+    animation-duration: 17s;
+}
+.bg-bubbles li:nth-child(3) {
+    left: 25%;
+    animation-delay: 4s;
+
+}
+.bg-bubbles li:nth-child(4) {
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-duration: 22s;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+.bg-bubbles li:nth-child(5) {
+    left: 70%;
+}
+.bg-bubbles li:nth-child(6) {
+    left: 80%;
+    width: 120px;
+    height: 120px;
+    animation-delay: 3s;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.bg-bubbles li:nth-child(7) {
+    left: 32%;
+    width: 160px;
+    height: 160px;
+    animation-delay: 7s;
+}
+.bg-bubbles li:nth-child(8) {
+    left: 55%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 15s;
+    animation-duration: 40s;
+}
+.bg-bubbles li:nth-child(9) {
+    left: 25%;
+    width: 10px;
+    height: 10px;
+    animation-delay: 2s;
+    animation-duration: 40s;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+.bg-bubbles li:nth-child(10) {
+    left: 90%;
+    width: 160px;
+    height: 160px;
+    animation-delay: 11s;        
+}
+
+@keyframes square {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-1200px) rotate(600deg);
+    }
+}
+/*bubbles  animation styles end*/
+
+@media only screen and (max-width: 992px) {
+    main > div:first-child {
+        padding-top: 15px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    h4 {
+        font-size: 1.5625rem;
+    }
+
+    h5 {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+
+    h6 {
+        font-size: 1.15rem;
+        line-height: 1.4;
+    }
+    .logo-block img {
+        width: 85px;
+    }
+    .remember-box {
+        text-align: left;
+    }
+
+    .post-title a {
+        font-size: 1.5rem;
+        line-height: 1.2;
+    }
+}
+
+.teal input:-webkit-autofill,
+.teal input:-webkit-autofill:hover, 
+.teal input:-webkit-autofill:active, 
+.teal input:-webkit-autofill:focus,
+.teal input:-webkit-autofill:focus-within,
+.teal textarea:-webkit-autofill,
+.teal textarea:-webkit-autofill:hover,
+.teal textarea:-webkit-autofill:focus,
+.teal textarea:-webkit-autofill:focus-within,
+.teal textarea:-webkit-autofill:active,
+.teal select:-webkit-autofill,
+.teal select:-webkit-autofill:hover,
+.teal select:-webkit-autofill:focus ,
+.teal select:-webkit-autofill:focus-within ,
+.teal select:-webkit-autofill:active ,
+.teal .input-field input.valid, .teal .input-field textarea.valid,
+.teal input:-internal-autofill-selected {
+    appearance: none;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: -internal-light-dark(black, white) !important;
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0px 1000px #00bfa5 inset !important;
+
+}
