@@ -1,8 +1,10 @@
 <?php
 
 return [
-    'description' => 'Very fast and extremely simple PHP MVC framework of the next generation with a modular structure that allows you to create any projects.',
-    'about_framework' => 'Quantum is a free, open-source PHP web framework, specially designed to develop very fast web applications with modular structure. With Quantum it’s easy to start any kind of project, from regular websites to complex API based projects, at the same time keep the code clean, organized through all the development process.',
+    'description' => 'Very fast and extremely simple, next generation PHP MVC framework with modular structure, which allows you to create projects of any complexity.',
+    'about_framework' => 'Quantum is a free, open-source PHP web framework under MIT license, specially designed to develop very fast web applications with modular structure. With Quantum it’s easy to start any kind of project immediately, wather it\'s regular websites or complex API based service, at the same time  it allows to keep the code clean, organized through all the development process.',
+    'version' => 'Version',
+    'current_version' => 'Current version is: {%1}',
     'home' => 'Home',
     'about' => 'About',
     'installation' => 'Installation',
@@ -11,7 +13,7 @@ return [
     'run_server' => 'Run PHP server',
     'signin' => 'Sign In',
     'signup' => 'Sign Up',
-	'activate_account' => 'Activate account',
+    'activate_account' => 'Activate account',
     'account_activated' => 'Account is activated',
     'signout' => 'Sign Out',
     'remember_me' => 'Remember Me',
@@ -25,13 +27,14 @@ return [
     'last_name' => 'Last name',
     'send' => 'Send',
     'reset' => 'Reset',
+    'cancel' => 'Cancel',
     'title' => 'Title',
     'content' => 'Content',
     'posts' => 'Posts',
     'new_post' => 'New Post',
+    'update_post' => 'Update Post',
     'edit' => 'Edit',
     'save' => 'Save',
     'delete' => 'Delete',
     'no_posts' => 'No posts found :(',
-
 ];
