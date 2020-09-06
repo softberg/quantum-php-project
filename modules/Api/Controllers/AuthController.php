@@ -76,7 +76,7 @@ class AuthController extends ApiController
     public function signup(Request $request, Response $response)
     {
         $mailer = new Mailer();
-        $mailer->createSubject(t('common.activate_account'));
+        $mailer->setSubject(t('common.activate_account'));
         $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
 
         if (auth()->signup($mailer, $request->all())) {
@@ -109,7 +109,7 @@ class AuthController extends ApiController
     public function forget(Request $request, Response $response)
     {
         $mailer = new Mailer();
-        $mailer->createSubject(t('common.reset_password'));
+        $mailer->setSubject(t('common.reset_password'));
         $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
 
         auth()->forget($mailer, $request->get('email'));
