@@ -30,5 +30,9 @@ return [
     'edit' => 'Редактировать',
     'save' => 'Сохранить',
     'delete' => 'Удалить',
-    'no_posts' => 'Нет новых публикации  :(',
+    'no_posts' => 'Нет новых публикации',
+    'post_not_found' => 'Такой публикации не было найдено',
+    'created_successfully' => 'Успешно создан',
+    'updated_successfully' => 'Успешно обновлено',
+    'deleted_successfully' => 'Успешно удален',
 ];

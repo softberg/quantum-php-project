@@ -11,7 +11,7 @@ return [
     'run_server' => 'Run PHP server',
     'signin' => 'Sign In',
     'signup' => 'Sign Up',
-	'activate_account' => 'Activate account',
+    'activate_account' => 'Activate account',
     'account_activated' => 'Account is activated',
     'signout' => 'Sign Out',
     'remember_me' => 'Remember Me',
@@ -32,6 +32,9 @@ return [
     'edit' => 'Edit',
     'save' => 'Save',
     'delete' => 'Delete',
-    'no_posts' => 'No posts found :(',
-
+    'no_posts' => 'No posts found',
+    'post_not_found' => 'No such post found',
+    'created_successfully' => 'Created successfully',
+    'updated_successfully' => 'Updated successfully',
+    'deleted_successfully' => 'Deleted successfully',
 ];
