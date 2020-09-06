@@ -31,8 +31,4 @@ return [
     'save' => 'Պահպանել',
     'delete' => 'Ջնջել',
     'no_posts' => 'Չկան նոր հրապարակումներ :(',
-    'post_not_found' => 'Գրառումը չի գտնվել',
-    'created_successfully' => 'Հաջողությամբ ստեղծվեց',
-    'updated_successfully' => 'Հաջողությամբ թարմացվեց',
-    'deleted_successfully' => 'Հաջողությամբ ջնջվեց',
 ];
