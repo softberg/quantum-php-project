@@ -9,13 +9,13 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Api\Middlewares;
 
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Middleware\Qt_Middleware;
+use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
@@ -23,7 +23,7 @@ use Quantum\Http\Request;
  * Class Auth
  * @package Modules\Api\Middlewares
  */
-class Auth extends Qt_Middleware
+class Auth extends QtMiddleware
 {
     
     /**
@@ -39,6 +39,8 @@ class Auth extends Qt_Middleware
                 'status' => 'error',
                 'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
             ]);
+            
+            stop();
         }
 
         return $next($request, $response);

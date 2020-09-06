@@ -9,13 +9,13 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Api\Middlewares;
 
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Middleware\Qt_Middleware;
+use Quantum\Middleware\QtMiddleware;
 use Quantum\Loader\Loader;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
@@ -24,7 +24,7 @@ use Quantum\Http\Request;
  * Class Activate
  * @package Modules\Api\Middlewares
  */
-class Activate extends Qt_Middleware
+class Activate extends QtMiddleware
 {
 
     /**
@@ -43,6 +43,8 @@ class Activate extends Qt_Middleware
                 'status' => 'error',
                 'message' => [_message(ExceptionMessages::NON_EXISTING_RECORD, 'token')]
             ]);
+            
+            stop();
         }
 
         $request->set('activation_token', $token);
@@ -65,9 +67,7 @@ class Activate extends Qt_Middleware
             'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        $loader = new Loader($loaderSetup);
-
-        $users = $loader->load();
+        $users = (new Loader())->setup($loaderSetup)->load();
 
         if (is_array($users) && count($users) > 0) {
 

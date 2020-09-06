@@ -9,14 +9,15 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Libraries\Validation\Validation;
+use Quantum\Libraries\Validation\Validator;
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Middleware\Qt_Middleware;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Loader\Loader;
 use Quantum\Http\Request;
@@ -25,15 +26,27 @@ use Quantum\Http\Request;
  * Class Forget
  * @package Modules\Api\Middlewares
  */
-class Forget extends Qt_Middleware
+class Forget extends QtMiddleware
 {
+
     /**
-     * Validation rules
-     * @var array
+     * Validator object
+     * @var Validator
      */
-    private $ruels = [
-        'email' => 'required|valid_email'
-    ];
+    private $validator;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->validator = new Validator();
+
+        $this->validator->addRule('email', [
+            Rule::set('required'),
+            Rule::set('email')
+        ]);
+    }
 
     /**
      * @param Request $request
@@ -45,13 +58,13 @@ class Forget extends Qt_Middleware
     public function apply(Request $request, Response $response, \Closure $next)
     {
         if ($request->getMethod() == 'POST') {
-            $validated = Validation::is_valid($request->all(), $this->ruels);
-
-            if ($validated !== true) {
+            if (!$this->validator->isValid($request->all())) {
                 $response->json([
                     'status' => 'error',
-                    'message' => $validated
+                    'message' => $this->validator->getErrors()
                 ]);
+                
+                stop();
             }
 
             if (!$this->emailExists($request->get('email'))) {
@@ -59,6 +72,8 @@ class Forget extends Qt_Middleware
                     'status' => 'error',
                     'message' => [_message(ExceptionMessages::NON_EXISTING_RECORD, $request->get('email'))]
                 ]);
+                
+                stop();
             }
         }
 
@@ -66,27 +81,18 @@ class Forget extends Qt_Middleware
     }
 
     /**
-     * Checks email for existence
+     * Check for email existence
      * @param string $email
      * @return bool
      * @throws \Exception
      */
     private function emailExists($email)
     {
-        $loaderSetup = (object)[
-            'module' => current_module(),
-            'env' => 'base/repositories',
-            'fileName' => 'users',
-            'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
-        ];
-
-        $loader = new Loader($loaderSetup);
-
-        $users = $loader->load();
+        $users = $users = loadUsers();
 
         if (is_array($users) && count($users) > 0) {
             foreach ($users as $user) {
-                if ($user['username'] == $email) {
+                if ($user['email'] == $email) {
                     return true;
                 }
             }

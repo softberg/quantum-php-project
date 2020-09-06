@@ -9,31 +9,67 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Libraries\Validation\Validation;
+use Quantum\Libraries\Validation\Validator;
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Middleware\Qt_Middleware;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Loader\Loader;
 use Quantum\Http\Request;
 
-class Signup extends Qt_Middleware
+class Signup extends QtMiddleware
 {
 
     /**
-     * Validation rules
-     * @var array
+     * Validator object
+     * @var Validator
      */
-    private $ruels = [
-        'username' => 'required|valid_email',
-        'password' => 'required|min_len,6',
-        'firstname' => 'required',
-        'lastname' => 'required',
-    ];
+    private $validator;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->validator = new Validator();
+
+        $users = loadUsers();
+
+        $this->validator->addValidation('uniqueUser', function ($value, $users) {
+            if (is_array($users) && count($users) > 0) {
+                foreach ($users as $user) {
+                    if ($user['email'] == $value) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        });
+
+        $this->validator->addRules([
+            'email' => [
+                Rule::set('required'),
+                Rule::set('email'),
+                Rule::set('uniqueUser', $users)
+            ],
+            'password' => [
+                Rule::set('required'),
+                Rule::set('minLen', 6)
+            ],
+            'firstname' => [
+                Rule::set('required')
+            ],
+            'lastname' => [
+                Rule::set('required')
+            ],
+        ]);
+    }
 
     /**
      * @param Request $request
@@ -44,53 +80,16 @@ class Signup extends Qt_Middleware
      */
     public function apply(Request $request, Response $response, \Closure $next)
     {
-        $validated = Validation::is_valid($request->all(), $this->ruels);
-
-        if ($validated !== true) {
+        if (!$this->validator->isValid($request->all())) {
             $response->json([
                 'status' => 'error',
-                'message' => $validated
+                'message' => $this->validator->getErrors()
             ]);
-        }
 
-        if (!$this->isUnique($request->all())) {
-            $response->json([
-                'status' => 'error',
-                'message' => [_message(ExceptionMessages::NON_UNIQUE_VALUE, 'username')]
-            ]);
+            stop();
         }
 
         return $next($request, $response);
-    }
-
-    /**
-     * Check for uniqueness
-     * @param array $userData
-     * @return bool
-     * @throws \Exception
-     */
-    private function isUnique($userData)
-    {
-        $loaderSetup = (object)[
-            'module' => current_module(),
-            'env' => 'base/repositories',
-            'fileName' => 'users',
-            'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
-        ];
-
-        $loader = new Loader($loaderSetup);
-
-        $users = $loader->load();
-
-        if (is_array($users) && count($users) > 0) {
-            foreach ($users as $user) {
-                if ($user['username'] == $userData['username']) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 
 }
