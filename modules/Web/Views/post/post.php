@@ -32,7 +32,7 @@
             <?php endforeach; ?>
         </div>
     <?php else: ?>
-        <h3><?php _t('common.no_posts') ?></h3>
+    <h4 class="center-align"><?php _t('common.no_posts') ?>... <?php  _t('common.try_creating') ?></h4>
     <?php endif; ?>
 
     <?php if (auth()->user()->role == 'admin'): ?>

@@ -36,5 +36,6 @@ return [
     'edit' => 'Edit',
     'save' => 'Save',
     'delete' => 'Delete',
-    'no_posts' => 'No posts found :(',
+    'no_posts' => 'No posts found',
+    'try_creating' => 'Try creating new one',
 ];
