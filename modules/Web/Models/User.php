@@ -9,18 +9,18 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Web\Models;
 
-use Quantum\Mvc\Qt_Model;
+use Quantum\Mvc\QtModel;
 
 /**
  * Class User
  * @package Modules\Web\Models
  */
-class User extends Qt_Model
+class User extends QtModel
 {
 
     /**
