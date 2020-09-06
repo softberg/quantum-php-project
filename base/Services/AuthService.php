@@ -17,14 +17,14 @@ namespace Base\Services;
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Mvc\Qt_Service;
+use Quantum\Mvc\QtService;
 use Quantum\Loader\Loader;
 
 /**
  * Class AuthService
  * @package Base\Services
  */
-class AuthService extends Qt_Service implements AuthServiceInterface
+class AuthService extends QtService implements AuthServiceInterface
 {
 
     /**
@@ -52,9 +52,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
             'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        $loader = new Loader($loaderSetup);
-
-        self::$users = is_array($loader->load()) ? $loader->load() : [];
+        self::$users = (new Loader())->setup($loaderSetup)->load();
     }
 
     /**
@@ -64,7 +62,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     public function getFields()
     {
         return [
-            'username',
+            'email',
             'firstname',
             'lastname',
             'role'
@@ -78,7 +76,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     public function getVisibleFields()
     {
         return [
-            'username',
+            'email',
             'firstname',
             'lastname',
             'role'
@@ -92,7 +90,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     public function getDefinedKeys()
     {
         return [
-            'usernameKey' => 'username',
+            'usernameKey' => 'email',
             'passwordKey' => 'password',
             'activationTokenKey' => 'activation_token',
             'rememberTokenKey' => 'remember_token',
