@@ -1,23 +1,20 @@
-<ul class="navbar">
-    <li>
-        <a class="<?php echo current_action() == 'index' ? 'active' : '' ?>"
-           href="<?php echo base_url() . '/' . current_lang() ?>"><?php _t('common.home'); ?></a>
-    </li>
-    <li>
-        <a class="<?php echo current_action() == 'getPosts' || current_action() == 'getPost' ? 'active' : '' ?>"
-           href="<?php echo base_url() . '/' . current_lang() ?>/posts"><?php _t('common.posts'); ?></a>
-    </li>
-    <?php if (auth()->user()->role == 'admin' || auth()->user()->role == 'editor'): ?>
-        <li>
-            <a class="<?php echo current_action() == 'amendPost' ? 'active' : '' ?>"
-               href="<?php echo base_url() . '/' . current_lang() ?>/post/amend"><?php _t('common.new_post'); ?></a>
-        </li>
-    <?php endif; ?>
-    <li style="float:right">
-        <a href="<?php echo base_url() . '/' . current_lang() ?>/signout"><?php _t('common.signout'); ?></a>
-    </li>
-    <li style="float:right">
-        <a href="javascript:;"
-           class="static"><?php echo auth()->user()->firstname . ' ' . auth()->user()->lastname ?></a>
-    </li>
-</ul>
+<nav>
+    <div class="nav-wrapper teal accent-4 row">
+        <span class="navbar-logo">
+            <?php echo partial('partials/logo') ?>
+        </span>
+        <ul class="right">
+            <li>
+                <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+                    <?php echo auth()->user()->firstname . ' ' . auth()->user()->lastname ?> 
+                    <i class="material-icons right">arrow_drop_down</i>
+                </a>
+                <ul id="dropdown1" class="dropdown-content">
+                    <li>
+                        <a href="<?php echo base_url() . '/' . current_lang() ?>/signout"><?php _t('common.signout'); ?></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

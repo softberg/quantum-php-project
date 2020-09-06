@@ -1,49 +1,43 @@
-<div class="main-wrapper">
-    <div class="main-container">
-        <div class="page-wrapper main-onepage">
-            <div class="sections-container">
-                <div id="page-header">
-                    <div class="header-wrapper header-uncode-block">
-                        <div class="vc_row style-color-143431-bg row-container with-parallax onepage-section boomapps_vcrow">
-                            <div class="pos-middle pos-left align_left align_center_tablet align_center_mobile column_child col-lg-6 boomapps_vccolumn col-md-100 single-internal-gutter">
-                                <div class="uncol style-dark">
-                                    <div class="uncont">
-                                        <?php render_partial('partials/logo') ?>
-                                        <div class="heading-text el-text bottom-t-top animate_when_almost_visible" data-delay="200">
-                                            <h2 class="font-762333 fontsize-155944 fontheight-179065 fontspace-781688">
-                                                <span><?php _t('common.posts'); ?></span>
-                                            </h2>
-                                        </div>
-                                        <div class="clear"></div>
-                                        <div class="heading-text el-text mobile-hidden bottom-t-top animate_when_almost_visible" data-delay="400">
-                                            <ul class="step-list">
-                                                <?php if (count($posts) > 0): ?>
-                                                    <?php foreach ($posts as $id => $post): ?>
-                                                        <li>
-                                                            <h5>
-                                                                <a href="<?php echo base_url() .  '/' . current_lang() . '/post/' . $id ?>">#<?php echo $id ?> <?php echo $post['title'] ?></a>
-                                                                <?php if (auth()->user()->role == 'admin'): ?>
-                                                                    <span class="edit-post">[&nbsp;<a href="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . $id ?>"><?php _t('common.edit'); ?></a>&nbsp;]</span>
-                                                                    <span class="edit-post">[&nbsp;<a href="<?php echo base_url() . '/' . current_lang() . '/post/delete/' . $id ?>" class="delete-post"><?php _t('common.delete'); ?></a>&nbsp;]</span>
-                                                                <?php endif; ?>
-                                                            </h5>
-                                                            <p><?php echo $post['content'] ?></p>
-                                                        </li>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <h3><?php _t('common.no_posts'); ?></h3>
-                                                <?php endif; ?>
-                                            </ul>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                </div>
+<div class="posts-container">
+    <h2 class="center-align teal-text"><?php _t('common.posts') ?></h2>
+    <div class="row">
+        <?php if (count($posts) > 0): ?>
+            <?php foreach ($posts as $id => $post): ?>
+                <div class="col s12 l6 post-item">
+                    <div class="col s12">
+                        <div class="card post-card hoverable">
+                            <div class="card-content white teal-text text-darken-4">
+                                <span class="card-title post-title">
+                                    <a class="teal-text" href="<?php echo base_url() . '/' . current_lang() . '/post/' . $id ?>"><?php echo $post['title'] ?></a>
+                                </span>
+                                <p class="truncate"><?php echo $post['content'] ?></p>
                             </div>
+                            <?php if (auth()->user()->role == 'admin'): ?>
+                                <div class="card-action   teal accent-4 right-align">
+                                    <span class="edit-post">
+                                        <a href="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . $id ?>" class="white-text" title="<?php _t('common.edit') ?>">
+                                            <i class="material-icons dp48">edit</i>
+                                        </a>
+                                    </span>
+                                    <span class="edit-post">
+                                        <a href="<?php echo base_url() . '/' . current_lang() . '/post/delete/' . $id ?>" class="delete-post white-text" title="<?php _t('common.delete') ?>">
+                                            <i class="material-icons dp48">delete</i>
+                                        </a>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-    </div>
-</div>
+    <?php else: ?>
+        <h3><?php _t('common.no_posts') ?></h3>
+    <?php endif; ?>
 
+    <?php if (auth()->user()->role == 'admin'): ?>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large waves-effect waves-light blue-grey darken-1 hoverable" href="<?php echo base_url() . '/' . current_lang() ?>/post/amend"><i class="material-icons">add</i></a>
+        </div>
+    <?php endif; ?>
+</div>
