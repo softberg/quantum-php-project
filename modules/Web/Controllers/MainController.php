@@ -9,27 +9,21 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Web\Controllers;
 
-use Quantum\Factory\ModelFactory;
 use Quantum\Factory\ViewFactory;
-use Quantum\Mvc\Qt_Controller;
+use Quantum\Mvc\QtController;
+use Quantum\Http\Response;
 
 /**
  * Class MainController
  * @package Modules\Web\Controllers
  */
-class MainController extends Qt_Controller
+class MainController extends QtController
 {
-
-    /**
-     * View
-     * @var ViewFactory
-     */
-    public $view;
 
     /**
      * Magic __before
@@ -37,30 +31,29 @@ class MainController extends Qt_Controller
      */
     public function __before(ViewFactory $view)
     {
-        $this->view = $view;
-        
-        $this->view->setLayout('layouts/main');
-        
-        $this->view->share(['title' => get_config('app_name')]);
+        $view->setLayout('layouts/landing');
     }
 
     /**
      * Default index page
-     * @param ModelFactory $modelFactory
+     * @param Response $response
+     * @param ViewFactory $view
      */
-    public function index(ModelFactory $modelFactory)
+    public function index(Response $response, ViewFactory $view)
     {
-        $this->view->render('index');
+        $view->setParam('title', 'Welcome | ' . config()->get('app_name'));
+        $response->html($view->render('index'));
     }
 
     /**
      * About page
-     * @throws \Exception
+     * @param Response $response
+     * @param ViewFactory $view
      */
-    public function about()
+    public function about(Response $response, ViewFactory $view)
     {
-        session()->delete('auth_user');
-        $this->view->render('about');
+        $view->setParam('title', 'About | ' . config()->get('app_name'));
+        $response->html($view->render('about'));
     }
 
 }
