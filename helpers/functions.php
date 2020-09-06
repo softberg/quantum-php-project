@@ -30,8 +30,6 @@ if (!function_exists('loadUsers')) {
             'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        $loader = new Loader($loaderSetup);
-
-        return $loader->load();
+        return (new Loader())->setup($loaderSetup)->load();
     }
 }
