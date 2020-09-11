@@ -21,6 +21,7 @@ return [
     'email' => 'Էլ. հասցե',
     'password' => 'Գաղտնաբառ',
     'new_password' => 'Նոր գաղտնաբառ',
+    'repeat_password' => 'Կրկնեք գաղտնաբառը',
     'first_name' => 'Անուն',
     'last_name' => 'Ազգանուն',
     'send' => 'Ուղարկել',

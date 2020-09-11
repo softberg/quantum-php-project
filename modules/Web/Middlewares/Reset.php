@@ -60,7 +60,7 @@ class Reset extends QtMiddleware
     {
         list($lang, $token) = current_route_args();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') { 
             if (!$this->checkToken($token)) {
                 session()->setFlash('error', ['password' => [
                         _message(ExceptionMessages::NON_EXISTING_RECORD, 'token')
@@ -74,6 +74,12 @@ class Reset extends QtMiddleware
                 session()->setFlash('error', $this->validator->getErrors());
                 redirect(get_referrer());
             }
+
+            if (!$this->confirmPassword($request->get('password'), $request->get('repeat_password'))) {
+                session()->setFlash('error', [ExceptionMessages::NON_EQUAL_VALUES]);
+                redirect(get_referrer());
+            }
+            
         } elseif ($request->getMethod() == 'GET') {
             if (!$this->checkToken($token)) {
                 HookManager::call('pageNotFound', $response);
@@ -105,6 +111,17 @@ class Reset extends QtMiddleware
         }
 
         return false;
+    }
+
+    /**
+     * Checks the password and repeat password 
+     * @param string $newPassword
+     * @param string $repeatPassword
+     * @return bool
+     */
+    private function confirmPassword($newPassword, $repeatPassword)
+    {
+        return $newPassword == $repeatPassword;
     }
 
 }

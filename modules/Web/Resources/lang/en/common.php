@@ -19,6 +19,7 @@ return [
     'remember_me' => 'Remember Me',
     'forget_password' => 'Forgot password?',
     'reset_password' => 'Reset password',
+    'repeat_password' => 'Repeat password',
     'check_email' => 'Check your email to reset your password',
     'email' => 'Email',
     'password' => 'Password',
