@@ -9,14 +9,15 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Libraries\Validation\Validation;
+use Quantum\Libraries\Validation\Validator;
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Middleware\Qt_Middleware;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Middleware\QtMiddleware;
 use Quantum\Loader\Loader;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
@@ -25,16 +26,27 @@ use Quantum\Http\Request;
  * Class Reset
  * @package Modules\Api\Middlewares
  */
-class Reset extends Qt_Middleware
+class Reset extends QtMiddleware
 {
 
     /**
-     * Validation rules
-     * @var array
+     * Validator object
+     * @var Validator
      */
-    private $ruels = [
-        'password' => 'required|min_len,6'
-    ];
+    private $validator;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->validator = new Validator();
+
+        $this->validator->addRule('password', [
+            Rule::set('required'),
+            Rule::set('minLen', 6)
+        ]);
+    }
 
     /**
      * @param Request $request
@@ -52,14 +64,17 @@ class Reset extends Qt_Middleware
                 'status' => 'error',
                 'message' => [_message(ExceptionMessages::NON_EXISTING_RECORD, 'token')]
             ]);
+            
+            stop();
         }
 
-        $validated = Validation::is_valid($request->all(), $this->ruels);
-        if ($validated !== true) {
+        if (!$this->validator->isValid($request->all())) {
             $response->json([
                 'status' => 'error',
-                'message' => $validated
+                'message' => $this->validator->getErrors()
             ]);
+            
+            stop();
         }
 
         $request->set('reset_token', $token);
@@ -67,24 +82,16 @@ class Reset extends Qt_Middleware
         return $next($request, $response);
     }
 
+    
     /**
-     * Cjeck token
+     * Check token
      * @param string $token
      * @return bool
      * @throws \Exception
      */
     private function checkToken($token)
     {
-        $loaderSetup = (object)[
-            'module' => current_module(),
-            'env' => 'base/repositories',
-            'fileName' => 'users',
-            'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
-        ];
-
-        $loader = new Loader($loaderSetup);
-
-        $users = $loader->load();
+        $users = loadUsers();
 
         if (is_array($users) && count($users) > 0) {
 

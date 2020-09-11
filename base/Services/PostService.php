@@ -9,21 +9,21 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Base\Services;
 
 use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Mvc\Qt_Service;
+use Quantum\Mvc\QtService;
 use Quantum\Loader\Loader;
 
 /**
  * Class PostService
  * @package Base\Services
  */
-class PostService extends Qt_Service
+class PostService extends QtService
 {
 
     /**
@@ -51,9 +51,7 @@ class PostService extends Qt_Service
                     'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        $loader = new Loader($loaderSetup);
-
-        self::$posts = is_array($loader->load()) ? $loader->load() : [];
+        self::$posts = (new Loader())->setup($loaderSetup)->load();
     }
 
     /**

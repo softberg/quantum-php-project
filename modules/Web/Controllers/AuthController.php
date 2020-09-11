@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Web\Controllers;
@@ -17,14 +17,15 @@ namespace Modules\Web\Controllers;
 use Quantum\Exceptions\AuthException;
 use Quantum\Libraries\Mailer\Mailer;
 use Quantum\Factory\ViewFactory;
-use Quantum\Mvc\Qt_Controller;
+use Quantum\Mvc\QtController;
+use Quantum\Http\Response;
 use Quantum\Http\Request;
 
 /**
  * Class AuthController
  * @package Modules\Web\Controllers
  */
-class AuthController extends Qt_Controller
+class AuthController extends QtController
 {
 
     /**
@@ -58,22 +59,12 @@ class AuthController extends Qt_Controller
     private $resetView = 'auth/reset';
 
     /**
-     * View
-     * @var ViewFactory
-     */
-    private $view;
-
-    /**
      * Magic __before
      * @param ViewFactory $view
      */
     public function __before(ViewFactory $view)
     {
-        $this->view = $view;
-        
-        $this->view->setLayout($this->layout);
-        
-        $this->view->share(['title' => get_config('app_name')]);
+        $view->setLayout($this->layout);
     }
 
     /**
@@ -81,7 +72,7 @@ class AuthController extends Qt_Controller
      * @param Request $request
      * @throws \Exception
      */
-    public function signin(Request $request)
+    public function signin(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
             try {
@@ -93,7 +84,8 @@ class AuthController extends Qt_Controller
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
-            $this->view->render($this->signinView);
+            $view->setParam('title', 'Sign In | ' . config()->get('app_name'));
+            $response->html($view->render($this->signinView));
         }
     }
 
@@ -110,20 +102,23 @@ class AuthController extends Qt_Controller
     /**
      * Sign up
      * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
      */
-    public function signup(Request $request)
+    public function signup(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
 
             $mailer = new Mailer();
-            $mailer->createSubject(t('common.activate_account'));
+            $mailer->setSubject(t('common.activate_account'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
 
             if (auth()->signup($mailer, $request->all())) {
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
-            $this->view->render($this->sigupView);
+            $view->setParam('title', 'Sign Up | ' . config()->get('app_name'));
+            $response->html($view->render($this->sigupView));
         }
     }
 
@@ -134,7 +129,6 @@ class AuthController extends Qt_Controller
     public function activate(Request $request)
     {
         auth()->activate($request->get('activation_token'));
-
         redirect(base_url() . '/' . current_lang() . '/signin');
     }
 
@@ -143,12 +137,12 @@ class AuthController extends Qt_Controller
      * @param Request $request
      * @throws \Exception
      */
-    public function forget(Request $request)
+    public function forget(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
 
             $mailer = new Mailer();
-            $mailer->createSubject(t('common.reset_password'));
+            $mailer->setSubject(t('common.reset_password'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
 
             auth()->forget($mailer, $request->get('email'));
@@ -156,7 +150,8 @@ class AuthController extends Qt_Controller
             session()->setFlash('success', t('common.check_email'));
             redirect(base_url() . '/' . current_lang() . '/forget');
         } else {
-            $this->view->render($this->forgetView);
+            $view->setParam('title', 'Forgot | ' . config()->get('app_name'));
+            $response->html($view->render($this->forgetView));
         }
     }
 
@@ -164,13 +159,18 @@ class AuthController extends Qt_Controller
      * Reset
      * @param Request $request
      */
-    public function reset(Request $request)
+    public function reset(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
             auth()->reset($request->get('reset_token'), $request->get('password'));
             redirect(base_url() . '/' . current_lang() . '/signin');
         } else {
-            $this->view->render($this->resetView, ['reset_token' => $request->get('reset_token')]);
+            $view->setParams([
+                'title' => 'Reset | ' . config()->get('app_name'),
+                'reset_token' => $request->get('reset_token')
+            ]);
+
+            $response->html($view->render($this->resetView));
         }
     }
 

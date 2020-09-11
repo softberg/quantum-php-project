@@ -9,14 +9,15 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Libraries\Validation\Validation;
+use Quantum\Libraries\Validation\Validator;
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Middleware\Qt_Middleware;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
@@ -24,17 +25,34 @@ use Quantum\Http\Request;
  * Class Editor
  * @package Modules\Api\Middlewares
  */
-class Editor extends Qt_Middleware
+class Editor extends QtMiddleware
 {
 
     /**
-     * Validation rules
-     * @var array
+     * Validator object
+     * @var Validator
      */
-    private $ruels = [
-        'title' => 'required|min_len,10',
-        'content' => 'required|min_len,10,max_len,1000'
-    ];
+    private $validator;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->validator = new Validator();
+
+        $this->validator->addRules([
+            'title' => [
+                Rule::set('required'),
+                Rule::set('minLen', 10)
+            ],
+            'content' => [
+                Rule::set('required'),
+                Rule::set('minLen', 10),
+                Rule::set('maxLen', 100),
+            ]
+        ]);
+    }
 
     /**
      * @param Request $request
@@ -50,15 +68,19 @@ class Editor extends Qt_Middleware
                 'status' => 'error',
                 'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
             ]);
+
+            stop();
         }
 
-        $validated = Validation::is_valid($request->all(), $this->ruels);
+        if ($request->getMethod() == 'POST') {
+            if (!$this->validator->isValid($request->all())) {
+                $response->json([
+                    'status' => 'error',
+                    'message' => $this->validator->getErrors()
+                ]);
 
-        if ($validated !== true) {
-            $response->json([
-                'status' => 'error',
-                'message' => $validated
-            ]);
+                stop();
+            }
         }
 
         return $next($request, $response);

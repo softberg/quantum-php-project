@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Base\Services;
@@ -17,14 +17,14 @@ namespace Base\Services;
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Mvc\Qt_Service;
+use Quantum\Mvc\QtService;
 use Quantum\Loader\Loader;
 
 /**
  * Class AuthService
  * @package Base\Services
  */
-class AuthService extends Qt_Service implements AuthServiceInterface
+class AuthService extends QtService implements AuthServiceInterface
 {
 
     /**
@@ -46,15 +46,13 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     public function __init()
     {
         $loaderSetup = (object) [
-            'module' => current_module(),
-            'env' => 'base/repositories',
-            'fileName' => 'users',
-            'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
+                    'module' => current_module(),
+                    'env' => 'base' . DS . 'repositories',
+                    'fileName' => 'users',
+                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        $loader = new Loader($loaderSetup);
-
-        self::$users = is_array($loader->load()) ? $loader->load() : [];
+        self::$users = (new Loader())->setup($loaderSetup)->load();
     }
 
     /**
@@ -64,7 +62,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     public function getFields()
     {
         return [
-            'username',
+            'email',
             'firstname',
             'lastname',
             'role'
@@ -72,13 +70,13 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     }
 
     /**
-     * Visible fileds of Auth object
+     * Visible fields of Auth object
      * @return array|mixed
      */
     public function getVisibleFields()
     {
         return [
-            'username',
+            'email',
             'firstname',
             'lastname',
             'role'
@@ -92,7 +90,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
     public function getDefinedKeys()
     {
         return [
-            'usernameKey' => 'username',
+            'usernameKey' => 'email',
             'passwordKey' => 'password',
             'activationTokenKey' => 'activation_token',
             'rememberTokenKey' => 'remember_token',
@@ -141,7 +139,7 @@ class AuthService extends Qt_Service implements AuthServiceInterface
         }
 
         $this->persist();
-        
+
         return $user;
     }
 

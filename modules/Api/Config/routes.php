@@ -12,6 +12,10 @@ return function ($route) {
         $route->add('api-posts', 'GET', 'PostController', 'getPosts');
         $route->add('api-post/[:num]', 'GET', 'PostController', 'getPost');
         $route->add('api-post/amend/[:num]?', 'POST|PUT', 'PostController', 'amendPost')->middlewares(['editor']);
-        $route->add('api-post/delete/[:num]', 'GET', 'PostController', 'deletePost')->middlewares(['editor']);
+        $route->add('api-post/delete/[:num]', 'DELETE', 'PostController', 'deletePost')->middlewares(['editor']);
     })->middlewares(['auth']);
+    
+    $route->group('guest', function ($route) {
+        $route->add('api-signout-test', 'GET', 'AuthController', 'signout');
+    })->middlewares(['guest']);
 };

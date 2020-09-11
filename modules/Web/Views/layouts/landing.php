@@ -12,15 +12,26 @@
     </head>
 
     <body>
-        
+
         <main class="teal accent-4">
-            <div class="container">
+            <div class="container wrapper">
                 <div class="row">
-                    <div class="col s12 l8 offset-l2">
-                        <?php echo view() ?>
-                    </div>
+                    <?php echo view() ?>
                 </div>
             </div>
+
+            <ul class="bg-bubbles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
         </main>
 
         <?php echo debugbar() ?>

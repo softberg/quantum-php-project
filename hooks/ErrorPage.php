@@ -9,13 +9,14 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Hooks;
 
 use Quantum\Factory\ViewFactory;
 use Quantum\Hooks\HookInterface;
+use Quantum\Http\Response;
 
 /**
  * Class ErrorPage
@@ -27,15 +28,13 @@ class ErrorPage implements HookInterface
     /**
      * Page not found
      *
-     * @return void
-     * @throws RouteException When route not found
+     * @throws \Exception
      */
-    public static function pageNotFound()
+    public static function pageNotFound(Response $response)
     {
-        $view = new ViewFactory();
-
-        $view->output('errors/404');
-        exit;
+        $view = (new ViewFactory())->renderPartial('errors/404');
+        $response->html($view);
+        stop();
     }
 
 }

@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $title ?></title>
 
-        <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="shortcut icon" href="<?php echo base_url() ?>/assets/images/favicon.ico">
-        <link rel='stylesheet' href='<?php echo base_url() ?>/assets/css/style.css' type='text/css' media='all' />
-        <link rel='stylesheet' href='<?php echo base_url() ?>/assets/css/style-custom-color-vyce.css' type='text/css' media='all' />
+        <link rel='stylesheet' href='<?php echo asset('css/materialize.min.css') ?>' type='text/css' media='screen,projection' />
+        <link rel='stylesheet' href='<?php echo asset('css/custom.css') ?>' type='text/css' />
     </head>
 
     <body>
-        <?php if (auth()->check()): ?>
-            <?php render_partial('partials/navbar') ?>
-        <?php endif; ?>
-        <?php echo view() ?>
 
-        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-        <script type='text/javascript' src='<?php echo base_url() ?>/assets/js/plugins.js'></script>
-        <script type='text/javascript' src='<?php echo base_url() ?>/assets/js/app.js'></script>
+        <header>
+            <?php if (auth()->check()): ?>
+                <?php echo partial('partials/navbar') ?>
+            <?php endif; ?>
+        </header>
+
+        <main>
+            <?php echo view() ?>
+        </main>
+
+        <footer class="page-footer">
+            <?php echo partial('partials/footer') ?>
+        </footer>
+
+        <?php echo debugbar() ?>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type='text/javascript' src='<?php echo asset('js/materialize.min.js') ?>'></script>
+        <script>
+            jQuery(document).ready(function ($) {
+                $(".dropdown-trigger").dropdown();
+            });
+        </script>
     </body>
 </html>
