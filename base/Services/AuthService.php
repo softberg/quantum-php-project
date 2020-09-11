@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Base\Services;
@@ -46,10 +46,10 @@ class AuthService extends QtService implements AuthServiceInterface
     public function __init()
     {
         $loaderSetup = (object) [
-            'module' => current_module(),
-            'env' => 'base/repositories',
-            'fileName' => 'users',
-            'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
+                    'module' => current_module(),
+                    'env' => 'base' . DS . 'repositories',
+                    'fileName' => 'users',
+                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
         self::$users = (new Loader())->setup($loaderSetup)->load();
@@ -70,7 +70,7 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
-     * Visible fileds of Auth object
+     * Visible fields of Auth object
      * @return array|mixed
      */
     public function getVisibleFields()
@@ -139,7 +139,7 @@ class AuthService extends QtService implements AuthServiceInterface
         }
 
         $this->persist();
-        
+
         return $user;
     }
 
