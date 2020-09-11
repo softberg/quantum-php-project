@@ -7,14 +7,14 @@
 */
 require __DIR__ . '/bootstrap/autoload.php';
 
-use Quantum\Console\Qt_Console;
+use Quantum\Console\QtConsole;
 
 /*
 * ---------------------------------------------------------
 * Run the console application
 * ---------------------------------------------------------
 */
-$console = new Qt_Console();
+$console = new QtConsole();
 
 $status = $console->init();
 
