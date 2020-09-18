@@ -76,7 +76,7 @@ class Reset extends QtMiddleware
             }
 
             if (!$this->confirmPassword($request->get('password'), $request->get('repeat_password'))) {
-                session()->setFlash('error', [ExceptionMessages::NON_EQUAL_VALUES]);
+                session()->setFlash('error', ExceptionMessages::NON_EQUAL_VALUES);
                 redirect(get_referrer());
             }
             

@@ -6,17 +6,17 @@ return function ($route) {
 
     $route->group('guest', function ($route) {
         $route->add('[:alpha:2]?/signin', 'GET|POST', 'AuthController', 'signin');
-        $route->add('[:alpha:2]?/signup', 'GET|POST', 'AuthController', 'signup')->middlewares(['signup']);
-        $route->add('[:alpha:2]?/activate/[:any]', 'GET', 'AuthController', 'activate')->middlewares(['activate']);
-        $route->add('[:alpha:2]?/forget', 'GET|POST', 'AuthController', 'forget')->middlewares(['forget']);
-        $route->add('[:alpha:2]?/reset/[:any]', 'GET|POST', 'AuthController', 'reset')->middlewares(['reset']);
-    })->middlewares(['guest']);
+        $route->add('[:alpha:2]?/signup', 'GET|POST', 'AuthController', 'signup')->middlewares(['Signup']);
+        $route->add('[:alpha:2]?/activate/[:any]', 'GET', 'AuthController', 'activate')->middlewares(['Activate']);
+        $route->add('[:alpha:2]?/forget', 'GET|POST', 'AuthController', 'forget')->middlewares(['Forget']);
+        $route->add('[:alpha:2]?/reset/[:any]', 'GET|POST', 'AuthController', 'reset')->middlewares(['Reset']);
+    })->middlewares(['Guest']);
 
     $route->group('auth', function ($route) {
         $route->add('[:alpha:2]?/signout', 'GET', 'AuthController', 'signout');
         $route->add('[:alpha:2]?/posts', 'GET', 'PostController', 'getPosts');
         $route->add('[:alpha:2]?/post/[:num]', 'GET', 'PostController', 'getPost');
-        $route->add('[:alpha:2]?/post/amend/[:num]?', 'GET|POST|PUT', 'PostController', 'amendPost')->middlewares(['editor']);
-        $route->add('[:alpha:2]?/post/delete/[:num]', 'GET', 'PostController', 'deletePost')->middlewares(['editor']);
-    })->middlewares(['auth']);
+        $route->add('[:alpha:2]?/post/amend/[:num]?', 'GET|POST|PUT', 'PostController', 'amendPost')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/post/delete/[:num]', 'GET', 'PostController', 'deletePost')->middlewares(['Editor']);
+    })->middlewares(['Auth']);
 };
