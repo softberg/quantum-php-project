@@ -12,7 +12,17 @@
     </head>
 
     <body>
-        
+
+        <header class="teal accent-4 high-z">
+            <div class="container wrapper">
+                <nav class="transparent no-box">
+                    <div class="nav-wrapper teal accent-4 row">
+                        <?php echo partial('partials/language') ?>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
         <main class="teal accent-4">
             <div class="container">
                 <div class="row">
@@ -25,6 +35,8 @@
 
         <?php echo debugbar() ?>
 
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type='text/javascript' src='<?php echo asset('js/materialize.min.js') ?>'></script>
+        <script type='text/javascript' src='<?php echo asset('js/custom.js') ?>'></script>
     </body>
 </html>

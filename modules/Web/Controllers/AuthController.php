@@ -85,6 +85,7 @@ class AuthController extends QtController
             }
         } else {
             $view->setParam('title', 'Sign In | ' . config()->get('app_name'));
+            $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->signinView));
         }
     }
@@ -118,6 +119,7 @@ class AuthController extends QtController
             }
         } else {
             $view->setParam('title', 'Sign Up | ' . config()->get('app_name'));
+            $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->sigupView));
         }
     }
@@ -151,6 +153,7 @@ class AuthController extends QtController
             redirect(base_url() . '/' . current_lang() . '/forget');
         } else {
             $view->setParam('title', 'Forgot | ' . config()->get('app_name'));
+            $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->forgetView));
         }
     }
@@ -167,6 +170,7 @@ class AuthController extends QtController
         } else {
             $view->setParams([
                 'title' => 'Reset | ' . config()->get('app_name'),
+                'langs' => config()->get('langs'),
                 'reset_token' => $request->get('reset_token')
             ]);
 
