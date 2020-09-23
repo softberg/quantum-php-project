@@ -30,7 +30,29 @@ main > div.posts-container,.posts-container {
     padding-top: 0;
 }
 
+#dropdown2{
+    width: auto !important;
+}
 
+.transparent.no-box{
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.back-btn{
+    position: absolute;
+    top:30px;
+    padding-left: 15px;
+}
+
+.back-btn i{
+    color: #00bfa5;
+    font-size: 24px;
+}
+
+.high-z{
+    z-index: 300000 !important;
+}
 
 .teal .input-field label  {
     color: #fff !important;

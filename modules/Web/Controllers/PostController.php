@@ -56,6 +56,7 @@ class PostController extends QtController
 
         $view->setParam('title', 'Posts | ' . config()->get('app_name'));
         $view->setParam('posts', $posts);
+        $view->setParam('langs', config()->get('langs'));
 
         $response->html($view->render('post/post'));
     }
@@ -81,6 +82,7 @@ class PostController extends QtController
         $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
         $view->setParam('post', $post);
         $view->setParam('id', $id);
+        $view->setParam('langs', config()->get('langs'));
 
         $response->html($view->render('post/single'));
     }
@@ -104,6 +106,8 @@ class PostController extends QtController
             }
 
             $view->setParam('title', ($post ? $post['title'] : 'New post') . ' | ' . config()->get('app_name'));
+            $view->setParam('langs', config()->get('langs'));
+
             $response->html($view->render('post/form', ['id' => $id, 'post' => $post]));
         } else {
             $post = [
