@@ -68,6 +68,15 @@ class Reset extends QtMiddleware
             stop();
         }
 
+        if (!$this->confirmPassword($request->get('password'), $request->get('repeat_password'))) {
+            $response->json([
+                'status' => 'error',
+                'message' => ExceptionMessages::NON_EQUAL_VALUES
+            ]);
+
+            stop();
+        }
+
         if (!$this->validator->isValid($request->all())) {
             $response->json([
                 'status' => 'error',
@@ -103,6 +112,17 @@ class Reset extends QtMiddleware
         }
 
         return false;
+    }
+
+    /**
+     * Checks the password and repeat password 
+     * @param string $newPassword
+     * @param string $repeatPassword
+     * @return bool
+     */
+    private function confirmPassword($newPassword, $repeatPassword)
+    {
+        return $newPassword == $repeatPassword;
     }
 
 }

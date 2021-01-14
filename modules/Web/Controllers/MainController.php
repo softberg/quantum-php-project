@@ -42,6 +42,7 @@ class MainController extends QtController
     public function index(Response $response, ViewFactory $view)
     {
         $view->setParam('title', 'Welcome | ' . config()->get('app_name'));
+        $view->setParam('langs', config()->get('langs'));
         $response->html($view->render('index'));
     }
 
@@ -53,6 +54,7 @@ class MainController extends QtController
     public function about(Response $response, ViewFactory $view)
     {
         $view->setParam('title', 'About | ' . config()->get('app_name'));
+        $view->setParam('langs', config()->get('langs'));
         $response->html($view->render('about'));
     }
 

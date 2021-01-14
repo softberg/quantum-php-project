@@ -1,3 +1,6 @@
+<div class="back-btn">
+    <a title="Back" href="<?php echo base_url() . '/' . current_lang() . '/posts'; ?>"><i class="material-icons">arrow_back</i></a>
+</div>
 <div class="post-form">
     <div class="row">
         <div class="col s12 l8 offset-l2">

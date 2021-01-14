@@ -3,6 +3,7 @@
         <span class="navbar-logo">
             <?php echo partial('partials/logo') ?>
         </span>
+
         <ul class="right">
             <li>
                 <a class="dropdown-trigger" href="#!" data-target="dropdown1">
@@ -16,5 +17,7 @@
                 </ul>
             </li>
         </ul>
+
+        <?php echo partial('partials/language') ?>
     </div>
 </nav>

@@ -39,4 +39,7 @@ return [
     'delete' => 'Delete',
     'no_posts' => 'No posts found',
     'try_creating' => 'Try creating new one',
+    'en' => 'English',
+    'ru' => 'Russian',
+    'am' => 'Armenian',
 ];
