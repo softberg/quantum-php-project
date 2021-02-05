@@ -43,6 +43,15 @@ class Auth extends QtMiddleware
             stop();
         }
 
+        if (auth()->checkVerification() && (current_controller() != 'AuthController' && current_action() != 'verify')) {
+
+            $response->json([
+                'status' => 'error',
+                'message' => 'Please verify your account.'
+            ]);
+
+            stop();
+        }
         return $next($request, $response);
     }
 

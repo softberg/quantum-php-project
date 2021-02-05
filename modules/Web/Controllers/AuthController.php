@@ -59,6 +59,12 @@ class AuthController extends QtController
     private $resetView = 'auth/reset';
 
     /**
+     * Reset view
+     * @var string
+     */
+    private $verifyView = 'auth/verify';
+
+    /**
      * Magic __before
      * @param ViewFactory $view
      */
@@ -70,14 +76,27 @@ class AuthController extends QtController
     /**
      * Sign in
      * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
      * @throws \Exception
      */
     public function signin(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
             try {
-                if (auth()->signin($request->get('email'), $request->get('password'), !!$request->get('remember'))) {
-                    redirect(base_url() . '/' . current_lang());
+                $mailer = new Mailer();
+                $mailer->setSubject('Verification code');
+                $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+
+                if (auth()->signin($mailer, $request->get('email'), $request->get('password'), !!$request->get('remember'))) {
+
+                    if (config()->get('two_step_verification')) {
+
+                        redirect(base_url() . '/' . current_lang()  .'/verify');
+                    } else {
+
+                        redirect(base_url() . '/' . current_lang());
+                    }
                 }
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
@@ -178,4 +197,32 @@ class AuthController extends QtController
         }
     }
 
+    /**
+     * Verify
+     * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
+     */
+    public function verify(Request $request, Response $response, ViewFactory $view)
+    {
+        if ($request->getMethod() == 'POST') {
+
+            try {
+
+                auth()->verify($request->get('verify_code'));
+                redirect(base_url() . '/' . current_lang());
+            } catch (AuthException $e) {
+
+                session()->setFlash('error', $e->getMessage());
+                redirect(base_url() . '/' . current_lang() . '/verify');
+            }
+        } else {
+            $view->setParams([
+                'title' => 'Verification | ' . config()->get('app_name'),
+                'langs' => config()->get('langs'),
+            ]);
+
+            $response->html($view->render($this->verifyView));
+        }
+    }
 }

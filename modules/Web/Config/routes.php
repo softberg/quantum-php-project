@@ -14,6 +14,7 @@ return function ($route) {
 
     $route->group('auth', function ($route) {
         $route->add('[:alpha:2]?/signout', 'GET', 'AuthController', 'signout');
+        $route->add('[:alpha:2]?/verify', 'GET|POST', 'AuthController', 'verify')->middlewares(['Verify']);
         $route->add('[:alpha:2]?/posts', 'GET', 'PostController', 'getPosts');
         $route->add('[:alpha:2]?/post/[:num]', 'GET', 'PostController', 'getPost');
         $route->add('[:alpha:2]?/post/amend/[:num]?', 'GET|POST|PUT', 'PostController', 'amendPost')->middlewares(['Editor']);
