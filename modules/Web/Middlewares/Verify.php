@@ -41,7 +41,7 @@ class Verify extends QtMiddleware
         $this->validator = new Validator();
 
         $this->validator->addRules([
-            'verify_code' => [
+            'otp' => [
                 Rule::set('required')
             ],
         ]);

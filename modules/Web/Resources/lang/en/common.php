@@ -42,6 +42,6 @@ return [
     'en' => 'English',
     'ru' => 'Russian',
     'am' => 'Armenian',
-    'verify' => 'Verification',
-    'verify_code' => 'Verification Code',
+    'otp' => 'One Time Password', 
+    '2sv' => '2 Step Verification',
 ];

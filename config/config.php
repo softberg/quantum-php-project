@@ -45,6 +45,13 @@ return [
     'debug' => env('DEBUG', true),
 
 
-    'two_step_verification' => true
+    /**
+     * ---------------------------------------------------------
+     * Two step verification
+     * ---------------------------------------------------------
+     * 
+     * Enables or disables 
+     */
+    '2SV' => env('2SV', true)
 
 ];
