@@ -61,6 +61,7 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function getFields()
     {
+
         return [
             'email',
             'firstname',
@@ -79,7 +80,8 @@ class AuthService extends QtService implements AuthServiceInterface
             'email',
             'firstname',
             'lastname',
-            'role'
+            'role',
+            'verification_code'
         ];
     }
 
@@ -97,6 +99,7 @@ class AuthService extends QtService implements AuthServiceInterface
             'resetTokenKey' => 'reset_token',
             'accessTokenKey' => 'access_token',
             'refreshTokenKey' => 'refresh_token',
+            'verificationCode' => 'verification_code',
         ];
     }
 

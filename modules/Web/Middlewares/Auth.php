@@ -38,6 +38,10 @@ class Auth extends QtMiddleware
             redirect(base_url() . '/' . current_lang() . '/signin');
         }
 
+        if (auth()->checkVerification() && (current_controller() != 'AuthController' && current_action() != 'verify')) {
+            redirect(base_url() . '/' . current_lang() . '/verify');
+        }
+
         return $next($request, $response);
     }
 

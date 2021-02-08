@@ -44,4 +44,7 @@ return [
      */
     'debug' => env('DEBUG', true),
 
+
+    'two_step_verification' => true
+
 ];

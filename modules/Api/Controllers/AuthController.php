@@ -35,11 +35,17 @@ class AuthController extends ApiController
     {
         if ($request->getMethod() == 'POST') {
             try {
-                auth()->signin($request->get('username'), $request->get('password'));
+
+                $mailer = new Mailer();
+                $mailer->setSubject('Verification code');
+                $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+
+                auth()->signin($mailer, $request->get('username'), $request->get('password'));
 
                 $response->json([
                     'status' => 'success'
                 ]);
+
             } catch (AuthException $e) {
                 $response->json([
                     'status' => 'error',
@@ -133,4 +139,26 @@ class AuthController extends ApiController
         ]);
     }
 
+    /**
+     * Verify
+     * @param Request $request
+     * @param Response $response
+     */
+
+    public function verify(Request $request, Response $response)
+    {
+        try {
+
+            auth()->verify($request->get('verify_code'));
+
+            $response->json([
+                'status' => 'success'
+            ]);
+        } catch (AuthException $e) {
+            $response->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }
