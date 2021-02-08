@@ -85,16 +85,13 @@ class AuthController extends QtController
         if ($request->getMethod() == 'POST') {
             try {
                 $mailer = new Mailer();
-                $mailer->setSubject('Verification code');
+                $mailer->setSubject(t('common.otp'));
                 $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
 
                 if (auth()->signin($mailer, $request->get('email'), $request->get('password'), !!$request->get('remember'))) {
-
-                    if (config()->get('two_step_verification')) {
-
-                        redirect(base_url() . '/' . current_lang()  .'/verify');
+                    if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
+                        redirect(base_url() . '/' . current_lang() . '/verify');
                     } else {
-
                         redirect(base_url() . '/' . current_lang());
                     }
                 }
@@ -103,7 +100,7 @@ class AuthController extends QtController
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
-            $view->setParam('title', 'Sign In | ' . config()->get('app_name'));
+            $view->setParam('title', t('common.signin') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->signinView));
         }
@@ -137,7 +134,7 @@ class AuthController extends QtController
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
-            $view->setParam('title', 'Sign Up | ' . config()->get('app_name'));
+            $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->sigupView));
         }
@@ -171,7 +168,7 @@ class AuthController extends QtController
             session()->setFlash('success', t('common.check_email'));
             redirect(base_url() . '/' . current_lang() . '/forget');
         } else {
-            $view->setParam('title', 'Forgot | ' . config()->get('app_name'));
+            $view->setParam('title', t('common.forget_password') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->forgetView));
         }
@@ -188,7 +185,7 @@ class AuthController extends QtController
             redirect(base_url() . '/' . current_lang() . '/signin');
         } else {
             $view->setParams([
-                'title' => 'Reset | ' . config()->get('app_name'),
+                'title' => t('common.reset_password') . ' | ' . config()->get('app_name'),
                 'langs' => config()->get('langs'),
                 'reset_token' => $request->get('reset_token')
             ]);
@@ -206,23 +203,21 @@ class AuthController extends QtController
     public function verify(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
-
             try {
-
-                auth()->verify($request->get('verify_code'));
+                auth()->verify($request->get('otp'));
                 redirect(base_url() . '/' . current_lang());
             } catch (AuthException $e) {
-
                 session()->setFlash('error', $e->getMessage());
                 redirect(base_url() . '/' . current_lang() . '/verify');
             }
         } else {
             $view->setParams([
-                'title' => 'Verification | ' . config()->get('app_name'),
+                'title' => t('common.verify') . ' | ' . config()->get('app_name'),
                 'langs' => config()->get('langs'),
             ]);
 
             $response->html($view->render($this->verifyView));
         }
     }
+
 }

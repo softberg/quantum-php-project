@@ -4,7 +4,7 @@
             <?php  echo partial('partials/logo') ?>
         </div>
 
-        <h2><?php _t('common.verify'); ?></h2>
+        <h2><?php _t('common.2sv'); ?></h2>
 
         <?php if (session()->has('error')): ?>
             <?php echo partial('partials/messages/error') ?>
@@ -19,8 +19,8 @@
                 <form method="post" action="<?php echo base_url() . '/' . current_lang() . '/verify' ?>">
                     <div class="form-container">
                         <div class="input-field">
-                            <label class="auth-form-label"><?php _t('common.verify_code'); ?></label>
-                            <input type="text" name="verify_code" />
+                            <label class="auth-form-label"><?php _t('common.otp'); ?></label>
+                            <input type="text" name="otp" />
                         </div>
 
                         <div>
