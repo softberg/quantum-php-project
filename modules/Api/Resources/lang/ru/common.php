@@ -35,4 +35,6 @@ return [
     'created_successfully' => 'Успешно создан',
     'updated_successfully' => 'Успешно обновлено',
     'deleted_successfully' => 'Успешно удален',
+    'otp' => 'Одноразовый пароль',
+    '2sv' => 'Двухэтапная верификация',
 ];

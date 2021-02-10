@@ -80,8 +80,7 @@ class AuthService extends QtService implements AuthServiceInterface
             'email',
             'firstname',
             'lastname',
-            'role',
-            'otp'
+            'role'
         ];
     }
 
@@ -100,6 +99,8 @@ class AuthService extends QtService implements AuthServiceInterface
             'accessTokenKey' => 'access_token',
             'refreshTokenKey' => 'refresh_token',
             'otpKey' => 'otp',
+            'otpExpiryIn' => 'otp_expiry_in',
+            'otpToken' => 'otp_token'
         ];
     }
 

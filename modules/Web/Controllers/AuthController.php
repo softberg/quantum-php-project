@@ -88,12 +88,12 @@ class AuthController extends QtController
                 $mailer->setSubject(t('common.otp'));
                 $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
 
-                if (auth()->signin($mailer, $request->get('email'), $request->get('password'), !!$request->get('remember'))) {
-                    if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
-                        redirect(base_url() . '/' . current_lang() . '/verify');
-                    } else {
-                        redirect(base_url() . '/' . current_lang());
-                    }
+                $code = auth()->signin($mailer, $request->get('email'), $request->get('password'), !!$request->get('remember'));
+
+                if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
+                    redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
+                } else {
+                    redirect(base_url() . '/' . current_lang());
                 }
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
@@ -204,20 +204,47 @@ class AuthController extends QtController
     {
         if ($request->getMethod() == 'POST') {
             try {
-                auth()->verify($request->get('otp'));
+
+                auth()->verify($request->get('otp'),$request->get('hash'));
                 redirect(base_url() . '/' . current_lang());
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
                 redirect(base_url() . '/' . current_lang() . '/verify');
             }
         } else {
+
             $view->setParams([
                 'title' => t('common.verify') . ' | ' . config()->get('app_name'),
                 'langs' => config()->get('langs'),
+                'hash' => $request->getSegment(3)
             ]);
+
 
             $response->html($view->render($this->verifyView));
         }
     }
 
+    /**
+     * Resend
+     * @param Request $request
+     */
+
+    public function resend(Request $request)
+    {
+        if ($request->getSegment(3)){
+
+            $mailer = new Mailer();
+            $mailer->setSubject(t('common.otp'));
+            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+
+            $code = auth()->resendOtp($mailer, $request->getSegment(3));
+
+            if ($code){
+                redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
+            }
+        } else {
+
+            redirect(base_url() . '/' . current_lang() . '/signin');
+        }
+    }
 }

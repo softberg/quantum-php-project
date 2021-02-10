@@ -40,11 +40,19 @@ class AuthController extends ApiController
                 $mailer->setSubject('Verification code');
                 $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
 
-                auth()->signin($mailer, $request->get('username'), $request->get('password'));
+                $code = auth()->signin($mailer, $request->get('username'), $request->get('password'));
 
-                $response->json([
-                    'status' => 'success'
-                ]);
+                if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
+                    $response->json([
+                        'status' => 'success',
+                        'otp_token' => $code
+                    ]);
+                } else {
+                    $response->json([
+                        'status' => 'success'
+                    ]);
+                }
+
 
             } catch (AuthException $e) {
                 $response->json([
@@ -149,7 +157,7 @@ class AuthController extends ApiController
     {
         try {
 
-            auth()->verify($request->get('verify_code'));
+            auth()->verify($request->get('otp'), $request->get('otp_token'));
 
             $response->json([
                 'status' => 'success'
@@ -160,5 +168,34 @@ class AuthController extends ApiController
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    /**
+     * Resend
+     * @param Request $request
+     */
+
+    public function resend(Request $request, Response $response)
+    {
+
+        try {
+
+            $mailer = new Mailer();
+            $mailer->setSubject(t('common.otp'));
+            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+            $code = auth()->resendOtp($mailer, $request->get('otp_token'));
+            $response->json([
+                'status' => 'success',
+                'otp_token' => $code
+
+            ]);
+
+        } catch (AuthException $e) {
+            $response->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+            ]);
+        }
+
     }
 }

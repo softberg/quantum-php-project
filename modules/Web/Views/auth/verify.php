@@ -21,13 +21,21 @@
                         <div class="input-field">
                             <label class="auth-form-label"><?php _t('common.otp'); ?></label>
                             <input type="text" name="otp" />
+                            <input type="hidden" name="hash" value="<?php echo $hash; ?>"/>
+                            <a style="color: white; font-size: 14px" href="<?php echo base_url() . '/' . current_lang() . '/resend/' . $hash ?>">
+                                <?php _t('common.resend_otp') ?>
+                            </a>
                         </div>
 
+                        <div>
+
+                        </div>
                         <div>
                             <input type="hidden" name="token" value="<?php echo csrf_token() ?>" />
                             <button class="btn btn-large waves-effect waves-light" type="submit">
                                 <?php _t('common.send') ?>
                             </button>
+
                         </div>
                     </div>
                 </form>

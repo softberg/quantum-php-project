@@ -41,7 +41,10 @@ class Verify extends QtMiddleware
         $this->validator = new Validator();
 
         $this->validator->addRules([
-            'verify_code' => [
+            'otp' => [
+                Rule::set('required')
+            ],
+            'otp_token' => [
                 Rule::set('required')
             ],
         ]);
@@ -58,9 +61,10 @@ class Verify extends QtMiddleware
     {
         if ($request->getMethod() == 'POST') {
             if (!$this->validator->isValid($request->all())) {
+
                 $response->json([
                     'status' => 'error',
-                    'message' => 'Verify code is wrong.'
+                    'message' => $this->validator->getErrors()
                 ]);
 
                 stop();
