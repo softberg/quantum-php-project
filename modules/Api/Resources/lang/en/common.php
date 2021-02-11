@@ -37,4 +37,7 @@ return [
     'created_successfully' => 'Created successfully',
     'updated_successfully' => 'Updated successfully',
     'deleted_successfully' => 'Deleted successfully',
+    'otp' => 'One Time Password',
+    '2sv' => '2 Step Verification',
+    'resend_otp' => 'Resend otp',
 ];

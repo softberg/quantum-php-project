@@ -52,6 +52,15 @@ return [
      * 
      * Enables or disables 
      */
-    '2SV' => env('2SV', true)
+    '2SV' => env('2SV', true),
+
+      /**
+       * ---------------------------------------------------------
+       * Two step verification
+       * ---------------------------------------------------------
+       *
+       * Enables or disables
+       */
+    'otp_expiry_time' => 2
 
 ];
