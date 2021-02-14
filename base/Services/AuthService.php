@@ -99,8 +99,8 @@ class AuthService extends QtService implements AuthServiceInterface
             'accessTokenKey' => 'access_token',
             'refreshTokenKey' => 'refresh_token',
             'otpKey' => 'otp',
-            'otpExpiryIn' => 'otp_expiry_in',
-            'otpToken' => 'otp_token'
+            'otpExpiryKey' => 'otp_expires',
+            'otpTokenKey' => 'otp_token'
         ];
     }
 

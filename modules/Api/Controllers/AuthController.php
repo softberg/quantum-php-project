@@ -26,6 +26,7 @@ use Quantum\Http\Request;
  */
 class AuthController extends ApiController
 {
+
     /**
      * Sign in
      * @param Request $request
@@ -35,7 +36,6 @@ class AuthController extends ApiController
     {
         if ($request->getMethod() == 'POST') {
             try {
-
                 $mailer = new Mailer();
                 $mailer->setSubject('Verification code');
                 $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
@@ -45,15 +45,13 @@ class AuthController extends ApiController
                 if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
                     $response->json([
                         'status' => 'success',
-                        'otp_token' => $code
+                        'code' => $code
                     ]);
                 } else {
                     $response->json([
                         'status' => 'success'
                     ]);
                 }
-
-
             } catch (AuthException $e) {
                 $response->json([
                     'status' => 'error',
@@ -152,12 +150,10 @@ class AuthController extends ApiController
      * @param Request $request
      * @param Response $response
      */
-
     public function verify(Request $request, Response $response)
     {
         try {
-
-            auth()->verify($request->get('otp'), $request->get('otp_token'));
+            auth()->verifyOtp($request->get('otp'), $request->get('code'));
 
             $response->json([
                 'status' => 'success'
@@ -174,28 +170,25 @@ class AuthController extends ApiController
      * Resend
      * @param Request $request
      */
-
     public function resend(Request $request, Response $response)
     {
-
+        $mailer = new Mailer();
+        $mailer->setSubject(t('common.otp'));
+        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+        
         try {
+            $code = auth()->resendOtp($mailer, $request->get('code'));
 
-            $mailer = new Mailer();
-            $mailer->setSubject(t('common.otp'));
-            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
-            $code = auth()->resendOtp($mailer, $request->get('otp_token'));
             $response->json([
                 'status' => 'success',
-                'otp_token' => $code
-
+                'code' => $code
             ]);
-
         } catch (AuthException $e) {
             $response->json([
-            'status' => 'error',
-            'message' => $e->getMessage()
+                'status' => 'error',
+                'message' => $e->getMessage()
             ]);
         }
-
     }
+
 }
