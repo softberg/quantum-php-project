@@ -14,7 +14,7 @@ return array (
     'access_token' => '',
     'refresh_token' => '',
     'otp' => '',
-    'otp_expiry_in' => '',
+    'otp_expires' => '',
     'otp_token' => '',
-  )
+  ),
 );

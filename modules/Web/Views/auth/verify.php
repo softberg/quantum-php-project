@@ -21,8 +21,8 @@
                         <div class="input-field">
                             <label class="auth-form-label"><?php _t('common.otp'); ?></label>
                             <input type="text" name="otp" />
-                            <input type="hidden" name="hash" value="<?php echo $hash; ?>"/>
-                            <a style="color: white; font-size: 14px" href="<?php echo base_url() . '/' . current_lang() . '/resend/' . $hash ?>">
+                            <input type="hidden" name="code" value="<?php echo $code; ?>"/>
+                            <a style="color: white; font-size: 14px" href="<?php echo base_url() . '/' . current_lang() . '/resend/' . $code ?>">
                                 <?php _t('common.resend_otp') ?>
                             </a>
                         </div>

@@ -83,11 +83,11 @@ class AuthController extends QtController
     public function signin(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
-            try {
-                $mailer = new Mailer();
-                $mailer->setSubject(t('common.otp'));
-                $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+            $mailer = new Mailer();
+            $mailer->setSubject(t('common.otp'));
+            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
 
+            try {
                 $code = auth()->signin($mailer, $request->get('email'), $request->get('password'), !!$request->get('remember'));
 
                 if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
@@ -125,7 +125,6 @@ class AuthController extends QtController
     public function signup(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
-
             $mailer = new Mailer();
             $mailer->setSubject(t('common.activate_account'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
@@ -158,7 +157,6 @@ class AuthController extends QtController
     public function forget(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->getMethod() == 'POST') {
-
             $mailer = new Mailer();
             $mailer->setSubject(t('common.reset_password'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
@@ -195,7 +193,7 @@ class AuthController extends QtController
     }
 
     /**
-     * Verify
+     * Verify OTP
      * @param Request $request
      * @param Response $response
      * @param ViewFactory $view
@@ -204,47 +202,43 @@ class AuthController extends QtController
     {
         if ($request->getMethod() == 'POST') {
             try {
-
-                auth()->verify($request->get('otp'),$request->get('hash'));
+                auth()->verifyOtp($request->get('otp'), $request->get('code'));
                 redirect(base_url() . '/' . current_lang());
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
                 redirect(base_url() . '/' . current_lang() . '/verify');
             }
         } else {
-
             $view->setParams([
-                'title' => t('common.verify') . ' | ' . config()->get('app_name'),
+                'title' => t('common.2sv') . ' | ' . config()->get('app_name'),
                 'langs' => config()->get('langs'),
-                'hash' => $request->getSegment(3)
+                'code' => $request->getSegment(3)
             ]);
-
 
             $response->html($view->render($this->verifyView));
         }
     }
 
     /**
-     * Resend
+     * Resend OTP
      * @param Request $request
      */
-
     public function resend(Request $request)
     {
-        if ($request->getSegment(3)){
+        if (!$request->getSegment(3)) {
+            redirect(base_url() . '/' . current_lang() . '/signin');
+        }
 
-            $mailer = new Mailer();
-            $mailer->setSubject(t('common.otp'));
-            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+        $mailer = new Mailer();
+        $mailer->setSubject(t('common.otp'));
+        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
 
+        try {
             $code = auth()->resendOtp($mailer, $request->getSegment(3));
-
-            if ($code){
-                redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
-            }
-        } else {
-
+            redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
+        } catch (AuthException $e) {
             redirect(base_url() . '/' . current_lang() . '/signin');
         }
     }
+
 }
