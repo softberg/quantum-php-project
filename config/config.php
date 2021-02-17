@@ -58,7 +58,7 @@ return [
        * OTP expiration
        * ---------------------------------------------------------
        *
-       * OTP expires after seconds defined
+       * OTP expires after minutes defined
        */
     'otp_expires' => 2
 
