@@ -82,7 +82,8 @@ class AuthController extends QtController
      */
     public function signin(Request $request, Response $response, ViewFactory $view)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
+
             $mailer = new Mailer();
             $mailer->setSubject(t('common.otp'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
@@ -124,7 +125,7 @@ class AuthController extends QtController
      */
     public function signup(Request $request, Response $response, ViewFactory $view)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             $mailer = new Mailer();
             $mailer->setSubject(t('common.activate_account'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
@@ -156,7 +157,7 @@ class AuthController extends QtController
      */
     public function forget(Request $request, Response $response, ViewFactory $view)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             $mailer = new Mailer();
             $mailer->setSubject(t('common.reset_password'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
@@ -178,7 +179,7 @@ class AuthController extends QtController
      */
     public function reset(Request $request, Response $response, ViewFactory $view)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             auth()->reset($request->get('reset_token'), $request->get('password'));
             redirect(base_url() . '/' . current_lang() . '/signin');
         } else {
@@ -200,7 +201,7 @@ class AuthController extends QtController
      */
     public function verify(Request $request, Response $response, ViewFactory $view)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             try {
                 auth()->verifyOtp($request->get('otp'), $request->get('code'));
                 redirect(base_url() . '/' . current_lang());

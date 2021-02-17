@@ -96,7 +96,7 @@ class PostController extends QtController
      */
     public function amendPost(Request $request, Response $response, ViewFactory $view, $lang, $id = null)
     {
-        if ($request->getMethod() == 'GET') {
+        if ($request->isMethod('GET')) {
             $post = [];
             if ($id) {
                 $post = $this->postService->getPost($id);

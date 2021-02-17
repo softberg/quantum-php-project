@@ -34,7 +34,7 @@ class AuthController extends ApiController
      */
     public function signin(Request $request, Response $response)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             try {
                 $mailer = new Mailer();
                 $mailer->setSubject('Verification code');
