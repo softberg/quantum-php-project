@@ -44,7 +44,7 @@ class Verify extends QtMiddleware
             'otp' => [
                 Rule::set('required')
             ],
-            'otp_token' => [
+            'code' => [
                 Rule::set('required')
             ],
         ]);
