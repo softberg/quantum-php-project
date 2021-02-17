@@ -206,7 +206,7 @@ class AuthController extends QtController
                 redirect(base_url() . '/' . current_lang());
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
-                redirect(base_url() . '/' . current_lang() . '/verify');
+                redirect(base_url() . '/' . current_lang() . '/verify/' . $request->get('code'));
             }
         } else {
             $view->setParams([
