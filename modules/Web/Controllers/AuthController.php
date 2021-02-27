@@ -78,12 +78,12 @@ class AuthController extends QtController
      * @param Request $request
      * @param Response $response
      * @param ViewFactory $view
+     * @param Mailer $mailer
      * @throws \Exception
      */
-    public function signin(Request $request, Response $response, ViewFactory $view)
+    public function signin(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
     {
         if ($request->isMethod('post')) {
-            $mailer = new Mailer();
             $mailer->setSubject(t('common.otp'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
 
@@ -121,11 +121,11 @@ class AuthController extends QtController
      * @param Request $request
      * @param Response $response
      * @param ViewFactory $view
+     * @param Mailer $mailer
      */
-    public function signup(Request $request, Response $response, ViewFactory $view)
+    public function signup(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
     {
         if ($request->isMethod('post')) {
-            $mailer = new Mailer();
             $mailer->setSubject(t('common.activate_account'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
 
@@ -152,12 +152,12 @@ class AuthController extends QtController
     /**
      * Forget
      * @param Request $request
+     * @param Mailer $mailer
      * @throws \Exception
      */
-    public function forget(Request $request, Response $response, ViewFactory $view)
+    public function forget(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
     {
         if ($request->isMethod('post')) {
-            $mailer = new Mailer();
             $mailer->setSubject(t('common.reset_password'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
 
@@ -222,14 +222,14 @@ class AuthController extends QtController
     /**
      * Resend OTP
      * @param Request $request
+     * @param Mailer $mailer
      */
-    public function resend(Request $request)
+    public function resend(Request $request, Mailer $mailer)
     {
         if (!$request->getSegment(3)) {
             redirect(base_url() . '/' . current_lang() . '/signin');
         }
 
-        $mailer = new Mailer();
         $mailer->setSubject(t('common.otp'));
         $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
 
