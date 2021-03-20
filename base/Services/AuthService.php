@@ -41,9 +41,10 @@ class AuthService extends QtService implements AuthServiceInterface
 
     /**
      * Init
+     * @param Loader $loader
      * @throws \Exception
      */
-    public function __init()
+    public function __init(Loader $loader)
     {
         $loaderSetup = (object) [
                     'module' => current_module(),
@@ -52,7 +53,7 @@ class AuthService extends QtService implements AuthServiceInterface
                     'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        self::$users = (new Loader())->setup($loaderSetup)->load();
+        self::$users = $loader->setup($loaderSetup)->load();
     }
 
     /**
