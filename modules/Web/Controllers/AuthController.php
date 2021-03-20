@@ -59,6 +59,12 @@ class AuthController extends QtController
     private $resetView = 'auth/reset';
 
     /**
+     * Reset view
+     * @var string
+     */
+    private $verifyView = 'auth/verify';
+
+    /**
      * Magic __before
      * @param ViewFactory $view
      */
@@ -70,13 +76,23 @@ class AuthController extends QtController
     /**
      * Sign in
      * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
+     * @param Mailer $mailer
      * @throws \Exception
      */
-    public function signin(Request $request, Response $response, ViewFactory $view)
+    public function signin(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('post')) {
+            $mailer->setSubject(t('common.otp'));
+            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+
             try {
-                if (auth()->signin($request->get('email'), $request->get('password'), !!$request->get('remember'))) {
+                $code = auth()->signin($mailer, $request->get('email'), $request->get('password'), !!$request->get('remember'));
+
+                if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
+                    redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
+                } else {
                     redirect(base_url() . '/' . current_lang());
                 }
             } catch (AuthException $e) {
@@ -84,7 +100,7 @@ class AuthController extends QtController
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
-            $view->setParam('title', 'Sign In | ' . config()->get('app_name'));
+            $view->setParam('title', t('common.signin') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->signinView));
         }
@@ -105,12 +121,11 @@ class AuthController extends QtController
      * @param Request $request
      * @param Response $response
      * @param ViewFactory $view
+     * @param Mailer $mailer
      */
-    public function signup(Request $request, Response $response, ViewFactory $view)
+    public function signup(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
     {
-        if ($request->getMethod() == 'POST') {
-
-            $mailer = new Mailer();
+        if ($request->isMethod('post')) {
             $mailer->setSubject(t('common.activate_account'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
 
@@ -118,7 +133,7 @@ class AuthController extends QtController
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
-            $view->setParam('title', 'Sign Up | ' . config()->get('app_name'));
+            $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->sigupView));
         }
@@ -137,13 +152,12 @@ class AuthController extends QtController
     /**
      * Forget
      * @param Request $request
+     * @param Mailer $mailer
      * @throws \Exception
      */
-    public function forget(Request $request, Response $response, ViewFactory $view)
+    public function forget(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
     {
-        if ($request->getMethod() == 'POST') {
-
-            $mailer = new Mailer();
+        if ($request->isMethod('post')) {
             $mailer->setSubject(t('common.reset_password'));
             $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
 
@@ -152,7 +166,7 @@ class AuthController extends QtController
             session()->setFlash('success', t('common.check_email'));
             redirect(base_url() . '/' . current_lang() . '/forget');
         } else {
-            $view->setParam('title', 'Forgot | ' . config()->get('app_name'));
+            $view->setParam('title', t('common.forget_password') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
             $response->html($view->render($this->forgetView));
         }
@@ -164,17 +178,66 @@ class AuthController extends QtController
      */
     public function reset(Request $request, Response $response, ViewFactory $view)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('post')) {
             auth()->reset($request->get('reset_token'), $request->get('password'));
             redirect(base_url() . '/' . current_lang() . '/signin');
         } else {
             $view->setParams([
-                'title' => 'Reset | ' . config()->get('app_name'),
+                'title' => t('common.reset_password') . ' | ' . config()->get('app_name'),
                 'langs' => config()->get('langs'),
                 'reset_token' => $request->get('reset_token')
             ]);
 
             $response->html($view->render($this->resetView));
+        }
+    }
+
+    /**
+     * Verify OTP
+     * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
+     */
+    public function verify(Request $request, Response $response, ViewFactory $view)
+    {
+        if ($request->isMethod('post')) {
+            try {
+                auth()->verifyOtp($request->get('otp'), $request->get('code'));
+                redirect(base_url() . '/' . current_lang());
+            } catch (AuthException $e) {
+                session()->setFlash('error', $e->getMessage());
+                redirect(base_url() . '/' . current_lang() . '/verify/' . $request->get('code'));
+            }
+        } else {
+            $view->setParams([
+                'title' => t('common.2sv') . ' | ' . config()->get('app_name'),
+                'langs' => config()->get('langs'),
+                'code' => $request->getSegment(3)
+            ]);
+
+            $response->html($view->render($this->verifyView));
+        }
+    }
+
+    /**
+     * Resend OTP
+     * @param Request $request
+     * @param Mailer $mailer
+     */
+    public function resend(Request $request, Mailer $mailer)
+    {
+        if (!$request->getSegment(3)) {
+            redirect(base_url() . '/' . current_lang() . '/signin');
+        }
+
+        $mailer->setSubject(t('common.otp'));
+        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
+
+        try {
+            $code = auth()->resendOtp($mailer, $request->getSegment(3));
+            redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
+        } catch (AuthException $e) {
+            redirect(base_url() . '/' . current_lang() . '/signin');
         }
     }
 

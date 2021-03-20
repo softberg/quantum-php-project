@@ -40,9 +40,10 @@ class PostService extends QtService
 
     /**
      * Init
+     * @param Loader $loader
      * @throws \Exception
      */
-    public function __init()
+    public function __init(Loader $loader)
     {
         $loaderSetup = (object) [
                     'module' => current_module(),
@@ -51,7 +52,7 @@ class PostService extends QtService
                     'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        self::$posts = (new Loader())->setup($loaderSetup)->load();
+        self::$posts = $loader->setup($loaderSetup)->load();
     }
 
     /**

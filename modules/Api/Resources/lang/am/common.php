@@ -35,4 +35,7 @@ return [
     'created_successfully' => 'Հաջողությամբ ստեղծվեց',
     'updated_successfully' => 'Հաջողությամբ թարմացվեց',
     'deleted_successfully' => 'Հաջողությամբ ջնջվեց',
+    'otp' => 'Մեկանգամյա գաղտնաբառ',
+    '2sv' => '2 քայլ հաստատում',
+    'resend_otp' => 'Կրկին ուղարկել',
 ];

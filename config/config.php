@@ -44,4 +44,22 @@ return [
      */
     'debug' => env('DEBUG', true),
 
+    /**
+     * ---------------------------------------------------------
+     * Two step verification
+     * ---------------------------------------------------------
+     * 
+     * Enables or disables 2 step verification
+     */
+    '2SV' => env('2SV', true),
+
+      /**
+       * ---------------------------------------------------------
+       * OTP expiration
+       * ---------------------------------------------------------
+       *
+       * OTP expires after minutes defined
+       */
+    'otp_expires' => 2
+
 ];

@@ -42,4 +42,7 @@ return [
     'en' => 'English',
     'ru' => 'Russian',
     'am' => 'Armenian',
+    'otp' => 'One Time Password',
+    '2sv' => '2 Step Verification',
+    'resend_otp' => 'Resend otp',
 ];
