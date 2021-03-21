@@ -15,6 +15,7 @@
 namespace Modules\Web\Middlewares;
 
 use Quantum\Exceptions\ExceptionMessages;
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Hooks\HookManager;
 use Quantum\Loader\Loader;
@@ -57,14 +58,15 @@ class Activate extends QtMiddleware
      */
     private function checkToken($token)
     {
-        $loaderSetup = (object)[
-            'module' => current_module(),
-            'env' => 'base/repositories',
-            'fileName' => 'users',
-            'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
+        $loaderSetup = (object) [
+                    'module' => null,
+                    'hierarchical' => true,
+                    'env' => 'base' . DS . 'repositories',
+                    'fileName' => 'users',
+                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        $users = (new Loader())->setup($loaderSetup)->load();
+        $users = (new Loader(new FileSystem))->setup($loaderSetup)->load();
 
         if (is_array($users) && count($users) > 0) {
 

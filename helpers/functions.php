@@ -13,6 +13,7 @@
  */
 
 use Quantum\Exceptions\ExceptionMessages;
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Loader\Loader;
 
 if (!function_exists('loadUsers')) {
@@ -24,12 +25,13 @@ if (!function_exists('loadUsers')) {
     function loadUsers()
     {
         $loaderSetup = (object)[
-            'module' => current_module(),
-            'env' => 'base/repositories',
+            'module' => null,
+            'hierarchical' => true,
+            'env' => 'base' . DS . 'repositories',
             'fileName' => 'users',
             'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        return (new Loader())->setup($loaderSetup)->load();
+        return (new Loader(new FileSystem))->setup($loaderSetup)->load();
     }
 }

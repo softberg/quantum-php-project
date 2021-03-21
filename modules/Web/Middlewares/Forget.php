@@ -57,7 +57,7 @@ class Forget extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {
                 session()->setFlash('error', $this->validator->getErrors());
                 redirect(base_url() . '/' . current_lang() . '/forget');

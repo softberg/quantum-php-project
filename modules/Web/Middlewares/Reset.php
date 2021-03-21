@@ -60,7 +60,7 @@ class Reset extends QtMiddleware
     {
         list($lang, $token) = current_route_args();
 
-        if ($request->getMethod() == 'POST') { 
+        if ($request->isMethod('post')) { 
             if (!$this->checkToken($token)) {
                 session()->setFlash('error', ['password' => [
                         _message(ExceptionMessages::NON_EXISTING_RECORD, 'token')
@@ -80,7 +80,7 @@ class Reset extends QtMiddleware
                 redirect(get_referrer());
             }
             
-        } elseif ($request->getMethod() == 'GET') {
+        } elseif ($request->isMethod('get')) {
             if (!$this->checkToken($token)) {
                 HookManager::call('pageNotFound', $response);
             }
