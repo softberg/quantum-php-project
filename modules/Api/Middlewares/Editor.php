@@ -72,7 +72,7 @@ class Editor extends QtMiddleware
             stop();
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {
                 $response->json([
                     'status' => 'error',

@@ -15,7 +15,6 @@
 namespace Modules\Web\Controllers;
 
 use Quantum\Exceptions\AuthException;
-use Quantum\Libraries\Mailer\Mailer;
 use Quantum\Factory\ViewFactory;
 use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
@@ -78,17 +77,13 @@ class AuthController extends QtController
      * @param Request $request
      * @param Response $response
      * @param ViewFactory $view
-     * @param Mailer $mailer
      * @throws \Exception
      */
-    public function signin(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
+    public function signin(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->isMethod('post')) {
-            $mailer->setSubject(t('common.otp'));
-            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
-
             try {
-                $code = auth()->signin($mailer, $request->get('email'), $request->get('password'), !!$request->get('remember'));
+                $code = auth()->signin($request->get('email'), $request->get('password'), !!$request->get('remember'));
 
                 if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
                     redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
@@ -121,15 +116,11 @@ class AuthController extends QtController
      * @param Request $request
      * @param Response $response
      * @param ViewFactory $view
-     * @param Mailer $mailer
      */
-    public function signup(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
+    public function signup(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->isMethod('post')) {
-            $mailer->setSubject(t('common.activate_account'));
-            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
-
-            if (auth()->signup($mailer, $request->all())) {
+            if (auth()->signup($request->all())) {
                 redirect(base_url() . '/' . current_lang() . '/signin');
             }
         } else {
@@ -152,16 +143,14 @@ class AuthController extends QtController
     /**
      * Forget
      * @param Request $request
-     * @param Mailer $mailer
+     * @param Response $response
+     * @param ViewFactory $view
      * @throws \Exception
      */
-    public function forget(Request $request, Response $response, ViewFactory $view, Mailer $mailer)
+    public function forget(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->isMethod('post')) {
-            $mailer->setSubject(t('common.reset_password'));
-            $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
-
-            auth()->forget($mailer, $request->get('email'));
+            auth()->forget($request->get('email'));
 
             session()->setFlash('success', t('common.check_email'));
             redirect(base_url() . '/' . current_lang() . '/forget');
@@ -175,6 +164,8 @@ class AuthController extends QtController
     /**
      * Reset
      * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
      */
     public function reset(Request $request, Response $response, ViewFactory $view)
     {
@@ -222,19 +213,15 @@ class AuthController extends QtController
     /**
      * Resend OTP
      * @param Request $request
-     * @param Mailer $mailer
      */
-    public function resend(Request $request, Mailer $mailer)
+    public function resend(Request $request)
     {
         if (!$request->getSegment(3)) {
             redirect(base_url() . '/' . current_lang() . '/signin');
         }
 
-        $mailer->setSubject(t('common.otp'));
-        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
-
         try {
-            $code = auth()->resendOtp($mailer, $request->getSegment(3));
+            $code = auth()->resendOtp($request->getSegment(3));
             redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
         } catch (AuthException $e) {
             redirect(base_url() . '/' . current_lang() . '/signin');

@@ -47,7 +47,8 @@ class AuthService extends QtService implements AuthServiceInterface
     public function __init(Loader $loader)
     {
         $loaderSetup = (object) [
-                    'module' => current_module(),
+                    'module' => null,
+                    'hierarchical' => true,
                     'env' => 'base' . DS . 'repositories',
                     'fileName' => 'users',
                     'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND

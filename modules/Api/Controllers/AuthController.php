@@ -41,16 +41,12 @@ class AuthController extends ApiController
      * Sign in
      * @param Request $request
      * @param Response $response
-     * @param Mailer $mailer
      */
-    public function signin(Request $request, Response $response, Mailer $mailer)
+    public function signin(Request $request, Response $response)
     {
         if ($request->isMethod('post')) {
             try {
-                $mailer->setSubject(t('common.otp'));
-                $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
-
-                $code = auth()->signin($mailer, $request->get('username'), $request->get('password'));
+                $code = auth()->signin($request->get('username'), $request->get('password'));
 
                 if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
                     $response->json([
@@ -94,14 +90,10 @@ class AuthController extends ApiController
      * Sign up
      * @param Request $request
      * @param Response $response
-     * @param Mailer $mailer
      */
-    public function signup(Request $request, Response $response, Mailer $mailer)
+    public function signup(Request $request, Response $response)
     {
-        $mailer->setSubject(t('common.activate_account'));
-        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'activate');
-
-        if (auth()->signup($mailer, $request->all())) {
+        if (auth()->signup($request->all())) {
             $response->json([
                 'status' => self::STATUS_SUCCESS
             ]);
@@ -129,12 +121,9 @@ class AuthController extends ApiController
      * @param Response $response
      * @param Mailer $mailer
      */
-    public function forget(Request $request, Response $response, Mailer $mailer)
+    public function forget(Request $request, Response $response)
     {
-        $mailer->setSubject(t('common.reset_password'));
-        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'reset');
-
-        auth()->forget($mailer, $request->get('email'));
+        auth()->forget($request->get('email'));
 
         $response->json([
             'status' => self::STATUS_SUCCESS,
@@ -181,13 +170,10 @@ class AuthController extends ApiController
      * @param Request $request
      * @param Mailer $mailer
      */
-    public function resend(Request $request, Response $response, Mailer $mailer)
+    public function resend(Request $request, Response $response)
     {
-        $mailer->setSubject(t('common.otp'));
-        $mailer->setTemplate(base_dir() . DS . 'base' . DS . 'views' . DS . 'email' . DS . 'verification');
-        
         try {
-            $code = auth()->resendOtp($mailer, $request->get('code'));
+            $code = auth()->resendOtp($request->get('code'));
 
             $response->json([
                 'status' => self::STATUS_SUCCESS,

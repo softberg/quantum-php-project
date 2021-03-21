@@ -46,8 +46,9 @@ class PostService extends QtService
     public function __init(Loader $loader)
     {
         $loaderSetup = (object) [
-                    'module' => current_module(),
-                    'env' => 'base/repositories',
+                    'module' => null,
+                    'hierarchical' => true,
+                    'env' => 'base' . DS . 'repositories',
                     'fileName' => 'posts',
                     'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
@@ -63,7 +64,7 @@ class PostService extends QtService
     {
         $posts = [];
 
-        foreach(self::$posts as $id => $post) {
+        foreach (self::$posts as $id => $post) {
             $post['id'] = $id;
             $posts[$id] = $post;
         }

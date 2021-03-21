@@ -67,7 +67,7 @@ class Editor extends QtMiddleware
             redirect(base_url() . '/' . current_lang());
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {
                 session()->setFlash('error', $this->validator->getErrors());
                 redirectWith(get_referrer(), $request->all());
