@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     /**
      * ---------------------------------------------------------
      * Project environment setup
@@ -9,4 +9,4 @@ return array(
      * Project environment configuration to use (local, staging, production, etc.).
      */
     'app_env' => 'production'
-);
+];
