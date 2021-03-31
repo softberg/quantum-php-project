@@ -15,15 +15,13 @@
 namespace Base\Services;
 
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Mvc\QtService;
 use Quantum\Loader\Loader;
 
 /**
  * Class PostService
  * @package Base\Services
  */
-class PostService extends QtService
+class PostService extends BaseService
 {
 
     /**
@@ -98,7 +96,7 @@ class PostService extends QtService
         } else {
             self::$posts[1] = $post;
         }
-        $this->persist();
+        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
     }
 
     /**
@@ -113,7 +111,7 @@ class PostService extends QtService
             self::$posts[$id][$key] = $value;
         }
 
-        $this->persist();
+        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
     }
 
     /**
@@ -124,23 +122,7 @@ class PostService extends QtService
     public function deletePost($id)
     {
         unset(self::$posts[$id]);
-        $this->persist();
-    }
-
-    /**
-     * Persists the changes
-     * @throws \Exception
-     */
-    private function persist()
-    {
-        $fileSystem = new FileSystem();
-        $file = base_dir() . DS . $this->postRepository;
-        if ($fileSystem->exists($file)) {
-            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export(self::$posts, true) . ';';
-            $fileSystem->put($file, $content);
-        } else {
-            throw new \Exception(_message(ExceptionMessages::CONFIG_FILE_NOT_FOUND, $file));
-        }
+        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
     }
 
 }
