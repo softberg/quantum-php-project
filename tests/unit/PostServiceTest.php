@@ -3,6 +3,9 @@
 use PHPUnit\Framework\TestCase;
 use Base\Services\PostService;
 use Quantum\Factory\ServiceFactory;
+use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Loader\Loader;
+use Quantum\Di\Di;
 
 class PostServiceTest extends TestCase
 {
@@ -15,6 +18,25 @@ class PostServiceTest extends TestCase
 
     public function setUp(): void
     {
+        if (!defined('DS')) {
+            define('DS', DIRECTORY_SEPARATOR);
+        }
+
+        $loader = new Loader(new FileSystem);
+
+        $loader->loadFile(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'constants.php');
+
+        $loader->loadDir(HELPERS_DIR . DS . 'functions');
+
+        Di::loadDefinitions();
+
+        $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(Di::class, [
+            \Quantum\Loader\Loader::class,
+            \Quantum\Libraries\Storage\FileSystem::class,
+        ]);
+
         $this->postService = (new ServiceFactory)->get(PostService::class);
 
         $reflectionProperty = new \ReflectionProperty($this->postService, 'posts');
