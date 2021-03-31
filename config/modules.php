@@ -6,7 +6,7 @@ return [
      * Project modules
      * ---------------------------------------------------------
      *
-     * Project modules that will be loaded by framework
+     * Project modules which will be loaded by framework
      */
     'modules' => [
         'Web',

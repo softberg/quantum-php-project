@@ -84,7 +84,7 @@ class Forget extends QtMiddleware
      */
     private function emailExists($email)
     {
-        $users = $users = loadUsers();
+        $users = $users = load_users();
 
         if (is_array($users) && count($users) > 0) {
             foreach ($users as $user) {

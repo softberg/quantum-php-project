@@ -15,11 +15,12 @@
 namespace Modules\Api\Middlewares;
 
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Loader\Loader;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Quantum\Di\Di;
+use Closure;
 
 /**
  * Class Activate
@@ -31,11 +32,11 @@ class Activate extends QtMiddleware
     /**
      * @param Request $request
      * @param Response $response
-     * @param \Closure $next
+     * @param Closure $next
      * @return mixed
      * @throws \Exception
      */
-    public function apply(Request $request, Response $response, \Closure $next)
+    public function apply(Request $request, Response $response, Closure $next)
     {
         list($token) = current_route_args();
 
@@ -69,7 +70,7 @@ class Activate extends QtMiddleware
                     'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
         ];
 
-        $users = (new Loader(new FileSystem))->setup($loaderSetup)->load();
+        $users = Di::get(Loader::class)->setup($loaderSetup)->load();
 
         if (is_array($users) && count($users) > 0) {
 

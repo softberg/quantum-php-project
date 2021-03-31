@@ -100,7 +100,7 @@ class Reset extends QtMiddleware
      */
     private function checkToken($token)
     {
-        $users = loadUsers();
+        $users = load_users();
 
         if (is_array($users) && count($users) > 0) {
 

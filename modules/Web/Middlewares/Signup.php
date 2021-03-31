@@ -41,7 +41,7 @@ class Signup extends QtMiddleware
     {
         $this->validator = new Validator();
 
-        $users = loadUsers();
+        $users = load_users();
 
         $this->validator->addValidation('uniqueUser', function ($value, $users) {
             if (is_array($users) && count($users) > 0) {

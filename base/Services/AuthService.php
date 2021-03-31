@@ -16,15 +16,13 @@ namespace Base\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Exceptions\ExceptionMessages;
-use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Mvc\QtService;
 use Quantum\Loader\Loader;
 
 /**
  * Class AuthService
  * @package Base\Services
  */
-class AuthService extends QtService implements AuthServiceInterface
+class AuthService extends BaseService implements AuthServiceInterface
 {
 
     /**
@@ -144,7 +142,7 @@ class AuthService extends QtService implements AuthServiceInterface
             self::$users[1] = $user;
         }
 
-        $this->persist();
+        $this->persist(base_dir() . DS . $this->userRepository, self::$users);
 
         return $user;
     }
@@ -173,23 +171,7 @@ class AuthService extends QtService implements AuthServiceInterface
             }
         }
 
-        $this->persist();
-    }
-
-    /**
-     * Persists the changes
-     * @throws \Exception
-     */
-    private function persist()
-    {
-        $fileSystem = new FileSystem();
-        $file = base_dir() . DS . $this->userRepository;
-        if ($fileSystem->exists($file)) {
-            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export(self::$users, true) . ';';
-            $fileSystem->put($file, $content);
-        } else {
-            throw new \Exception(_message(ExceptionMessages::CONFIG_FILE_NOT_FOUND, $file));
-        }
+        $this->persist(base_dir() . DS . $this->userRepository, self::$users);
     }
 
 }

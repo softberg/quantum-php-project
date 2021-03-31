@@ -1,8 +1,30 @@
 <?php
 
+use Quantum\Factory\ViewFactory;
+use Quantum\Http\Response;
+
 return function ($route) {
-    $route->get('[:alpha:2]?', 'MainController', 'index');
-    $route->get('[:alpha:2]?/about', 'MainController', 'about');
+    $route->get('[:alpha:2]?', function (Response $response, ViewFactory $view) {
+        $view->setLayout('layouts/landing');
+
+        $view->setParams([
+            'title' => 'Welcome | ' . config()->get('app_name'),
+            'langs' => config()->get('langs')
+        ]);
+
+        $response->html($view->render('index'));
+    });
+
+    $route->get('[:alpha:2]?/about', function (Response $response, ViewFactory $view) {
+        $view->setLayout('layouts/landing');
+
+        $view->setParams([
+            'title' => 'About | ' . config()->get('app_name'),
+            'langs' => config()->get('langs')
+        ]);
+
+        $response->html($view->render('about'));
+    });
 
     $route->group('guest', function ($route) {
         $route->add('[:alpha:2]?/signin', 'GET|POST', 'AuthController', 'signin');
