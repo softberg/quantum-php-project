@@ -14,6 +14,7 @@
 
 namespace Base\Services;
 
+use Quantum\Exceptions\ConfigException;
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Mvc\QtService;
 use Quantum\Di\Di;
@@ -34,10 +35,10 @@ class BaseService extends QtService
         $fs = Di::get(FileSystem::class);
 
         if ($fs->exists($file)) {
-            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($entity, true) . ';';
+            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export($entity) . ';';
             $fs->put($file, $content);
         } else {
-            throw new \Exception(_message(ExceptionMessages::CONFIG_FILE_NOT_FOUND, $file));
+            throw new \Exception(_message(ConfigException::CONFIG_FILE_NOT_FOUND, $file));
         }
     }
 
