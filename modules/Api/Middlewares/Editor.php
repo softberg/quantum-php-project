@@ -15,7 +15,6 @@
 namespace Modules\Api\Middlewares;
 
 use Quantum\Libraries\Validation\Validator;
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
@@ -66,7 +65,7 @@ class Editor extends QtMiddleware
         if (auth()->user()->role != 'admin' && auth()->user()->role != 'editor') {
             $response->json([
                 'status' => 'error',
-                'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
+                'message' => t('validation.unauthorizedRequest')
             ]);
 
             stop();

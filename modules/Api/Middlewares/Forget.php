@@ -15,11 +15,9 @@
 namespace Modules\Api\Middlewares;
 
 use Quantum\Libraries\Validation\Validator;
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
-use Quantum\Loader\Loader;
 use Quantum\Http\Request;
 
 /**
@@ -70,7 +68,7 @@ class Forget extends QtMiddleware
             if (!$this->emailExists($request->get('email'))) {
                 $response->json([
                     'status' => 'error',
-                    'message' => [_message(ExceptionMessages::NON_EXISTING_RECORD, $request->get('email'))]
+                    'message' => [t('validation.nonExistingRecord', $request->get('email'))]
                 ]);
                 
                 stop();

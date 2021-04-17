@@ -14,7 +14,7 @@
 
 namespace Modules\Web\Middlewares;
 
-use Quantum\Exceptions\ExceptionMessages;
+use Quantum\Exceptions\ConfigException;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Hooks\HookManager;
 use Quantum\Loader\Loader;
@@ -63,7 +63,7 @@ class Activate extends QtMiddleware
                     'hierarchical' => true,
                     'env' => 'base' . DS . 'repositories',
                     'fileName' => 'users',
-                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
+                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
         ];
 
         $users = Di::get(Loader::class)->setup($loaderSetup)->load();

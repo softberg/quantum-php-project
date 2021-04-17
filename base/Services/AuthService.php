@@ -15,7 +15,7 @@
 namespace Base\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
-use Quantum\Exceptions\ExceptionMessages;
+use Quantum\Exceptions\ConfigException;
 use Quantum\Loader\Loader;
 
 /**
@@ -49,7 +49,7 @@ class AuthService extends BaseService implements AuthServiceInterface
                     'hierarchical' => true,
                     'env' => 'base' . DS . 'repositories',
                     'fileName' => 'users',
-                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
+                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
         ];
 
         self::$users = $loader->setup($loaderSetup)->load();

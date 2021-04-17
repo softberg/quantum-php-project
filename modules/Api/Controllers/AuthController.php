@@ -14,7 +14,6 @@
 
 namespace Modules\Api\Controllers;
 
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Exceptions\AuthException;
 use Quantum\Libraries\Mailer\Mailer;
 use Quantum\Http\Response;
@@ -81,7 +80,7 @@ class AuthController extends ApiController
         } else {
             $response->json([
                 'status' => self::STATUS_ERROR,
-                'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
+                'message' => t('validation.unauthorizedRequest')
             ]);
         }
     }

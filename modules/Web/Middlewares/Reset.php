@@ -15,7 +15,6 @@
 namespace Modules\Web\Middlewares;
 
 use Quantum\Libraries\Validation\Validator;
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Hooks\HookManager;
@@ -63,7 +62,7 @@ class Reset extends QtMiddleware
         if ($request->isMethod('post')) { 
             if (!$this->checkToken($token)) {
                 session()->setFlash('error', ['password' => [
-                        _message(ExceptionMessages::NON_EXISTING_RECORD, 'token')
+                        t('validation.nonExistingRecord', 'token')
                     ]
                 ]);
 
@@ -76,7 +75,7 @@ class Reset extends QtMiddleware
             }
 
             if (!$this->confirmPassword($request->get('password'), $request->get('repeat_password'))) {
-                session()->setFlash('error', ExceptionMessages::NON_EQUAL_VALUES);
+                session()->setFlash('error', t('validation.nonEqualValues'));
                 redirect(get_referrer());
             }
             

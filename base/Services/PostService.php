@@ -14,7 +14,7 @@
 
 namespace Base\Services;
 
-use Quantum\Exceptions\ExceptionMessages;
+use Quantum\Exceptions\ConfigException;
 use Quantum\Loader\Loader;
 
 /**
@@ -48,7 +48,7 @@ class PostService extends BaseService
                     'hierarchical' => true,
                     'env' => 'base' . DS . 'repositories',
                     'fileName' => 'posts',
-                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
+                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
         ];
 
         self::$posts = $loader->setup($loaderSetup)->load();
