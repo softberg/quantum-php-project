@@ -11,7 +11,8 @@
  * @link http://quantum.softberg.org/
  * @since 1.9.9
  */
-use Quantum\Exceptions\ExceptionMessages;
+
+use Quantum\Exceptions\ConfigException;
 use Quantum\Loader\Loader;
 use Quantum\Di\Di;
 
@@ -29,7 +30,7 @@ if (!function_exists('load_users')) {
                     'hierarchical' => true,
                     'env' => 'base' . DS . 'repositories',
                     'fileName' => 'users',
-                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
+                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
         ];
 
         return Di::get(Loader::class)->setup($loaderSetup)->load();
