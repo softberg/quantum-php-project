@@ -39,4 +39,7 @@ return [
     'fileMimeType' => 'The file mimetype should correspond to {%1}',
     'fileExtension' => 'The file extension should correspond to {%1}',
     'imageDimensions' => 'The image dimensions should correspond to {%1}',
+    'nonExistingRecord' => 'There is no record matched to {%1}',
+    'nonEqualValues' => 'Values are not equal',
+    'unauthorizedRequest' => 'Unauthorized request',
 ];
