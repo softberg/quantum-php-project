@@ -15,11 +15,9 @@
 namespace Modules\Api\Middlewares;
 
 use Quantum\Libraries\Validation\Validator;
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
-use Quantum\Loader\Loader;
 use Quantum\Http\Request;
 
 class Signup extends QtMiddleware
@@ -47,9 +45,9 @@ class Signup extends QtMiddleware
                         return false;
                     }
                 }
-
-                return true;
             }
+
+            return true;
         });
 
         $this->validator->addRules([
