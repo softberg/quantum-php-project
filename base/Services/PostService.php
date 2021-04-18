@@ -43,12 +43,12 @@ class PostService extends BaseService
      */
     public function __init(Loader $loader)
     {
-        $loaderSetup = (object) [
-                    'module' => null,
-                    'hierarchical' => true,
-                    'env' => 'base' . DS . 'repositories',
-                    'fileName' => 'posts',
-                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
+        $loaderSetup = (object)[
+            'module' => null,
+            'hierarchical' => true,
+            'env' => 'base' . DS . 'repositories',
+            'fileName' => 'posts',
+            'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
         ];
 
         self::$posts = $loader->setup($loaderSetup)->load();
@@ -94,7 +94,7 @@ class PostService extends BaseService
         if (count(self::$posts) > 0) {
             array_push(self::$posts, $post);
         } else {
-            self::$posts[1] = $post;
+            self::$posts[] = $post;
         }
         $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
     }
@@ -103,26 +103,38 @@ class PostService extends BaseService
      * Update post
      * @param int $id
      * @param array $data
+     * @return bool
      * @throws \Exception
      */
     public function updatePost($id, $data)
     {
-        foreach ($data as $key => $value) {
-            self::$posts[$id][$key] = $value;
+        if (isset(self::$posts[$id])) {
+            foreach ($data as $key => $value) {
+                self::$posts[$id][$key] = $value;
+            }
+
+            $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+            return true;
         }
 
-        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+        return false;
     }
 
     /**
      * Delete post
      * @param int $id
+     * @return bool
      * @throws \Exception
      */
     public function deletePost($id)
     {
-        unset(self::$posts[$id]);
-        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+        if (isset(self::$posts[$id])) {
+            unset(self::$posts[$id]);
+            $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
