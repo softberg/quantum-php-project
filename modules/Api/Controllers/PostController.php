@@ -56,12 +56,18 @@ class PostController extends ApiController
 
     /**
      * Get post
-     * @param Response $response
+     * @param string $lang
      * @param int $id
+     * @param Response $response
      */
-    public function getPost(Response $response, $id)
+    public function getPost($lang, $id, Response $response)
     {
+        if (!$id && $lang) {
+            $id = $lang;
+        }
+
         $post = $this->postService->getPost($id);
+
         if ($post) {
             $response->json([
                 'status' => 'success',
@@ -90,11 +96,17 @@ class PostController extends ApiController
         ];
 
         if ($id) {
-            $this->postService->updatePost($id, $post);
-            $response->json([
-                'status' => 'success',
-                'message' => t('common.updated_successfully')
-            ]);
+            if($this->postService->updatePost($id, $post)) {
+                $response->json([
+                    'status' => 'success',
+                    'message' => t('common.updated_successfully')
+                ]);
+            } else {
+                $response->json([
+                    'status' => 'error',
+                    'message' => t('common.post_not_found')
+                ]);
+            }
         } else {
             $this->postService->addPost($post);
             $response->json([
@@ -112,11 +124,17 @@ class PostController extends ApiController
      */
     public function deletePost(Response $response, $id)
     {
-        $this->postService->deletePost($id);
-        $response->json([
-            'status' => 'success',
-            'message' => t('common.deleted_successfully')
-        ]);
+        if($this->postService->deletePost($id)) {
+            $response->json([
+                'status' => 'success',
+                'message' => t('common.deleted_successfully')
+            ]);
+        } else {
+            $response->json([
+                'status' => 'error',
+                'message' => t('common.post_not_found')
+            ]);
+        }
     }
 
 }

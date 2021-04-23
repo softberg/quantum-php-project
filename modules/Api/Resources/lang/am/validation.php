@@ -39,4 +39,7 @@ return [
     'fileMimeType' => 'Ֆայլի mimetype-ը պետք է համապատասխանի {%1}',
     'fileExtension' => 'Ֆայլի ընդլայնումը պետք է համապատասխանի {%1}',
     'imageDimensions' => 'Պատկերի չափերը պետք է համապատասխանեն {%1}',
+    'nonExistingRecord' => 'Նման գրառում չի գտնվել, որը կհամապատասղանի {%1}',
+    'nonEqualValues' => 'Արժեքները հավասար չեն',
+    'unauthorizedRequest' => 'Չարտոնված հարցում',
 ];

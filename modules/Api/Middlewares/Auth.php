@@ -14,7 +14,6 @@
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
@@ -38,7 +37,7 @@ class Auth extends QtMiddleware
         if (!auth()->check()) {
             $response->json([
                 'status' => 'error',
-                'message' => ExceptionMessages::UNAUTHORIZED_REQUEST
+                'message' => t('validation.unauthorizedRequest')
             ]);
             
             stop();

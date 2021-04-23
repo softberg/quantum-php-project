@@ -50,9 +50,9 @@ class Signup extends QtMiddleware
                         return false;
                     }
                 }
-
-                return true;
             }
+
+            return true;
         });
 
         $this->validator->addRules([

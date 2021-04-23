@@ -14,8 +14,8 @@
 
 namespace Base\Services;
 
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Loader\Loader;
+use Quantum\Loader\Setup;
 
 /**
  * Class PostService
@@ -43,15 +43,7 @@ class PostService extends BaseService
      */
     public function __init(Loader $loader)
     {
-        $loaderSetup = (object) [
-                    'module' => null,
-                    'hierarchical' => true,
-                    'env' => 'base' . DS . 'repositories',
-                    'fileName' => 'posts',
-                    'exceptionMessage' => ExceptionMessages::CONFIG_FILE_NOT_FOUND
-        ];
-
-        self::$posts = $loader->setup($loaderSetup)->load();
+        self::$posts = $loader->setup(new Setup('base' . DS . 'repositories', 'posts', true))->load();
     }
 
     /**
@@ -92,10 +84,11 @@ class PostService extends BaseService
     public function addPost($post)
     {
         if (count(self::$posts) > 0) {
-            array_push(self::$posts, $post);
+            self::$posts[count(self::$posts) + 1] =  $post;
         } else {
             self::$posts[1] = $post;
         }
+
         $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
     }
 
@@ -103,26 +96,38 @@ class PostService extends BaseService
      * Update post
      * @param int $id
      * @param array $data
+     * @return bool
      * @throws \Exception
      */
     public function updatePost($id, $data)
     {
-        foreach ($data as $key => $value) {
-            self::$posts[$id][$key] = $value;
+        if (isset(self::$posts[$id])) {
+            foreach ($data as $key => $value) {
+                self::$posts[$id][$key] = $value;
+            }
+
+            $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+            return true;
         }
 
-        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+        return false;
     }
 
     /**
      * Delete post
      * @param int $id
+     * @return bool
      * @throws \Exception
      */
     public function deletePost($id)
     {
-        unset(self::$posts[$id]);
-        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+        if (isset(self::$posts[$id])) {
+            unset(self::$posts[$id]);
+            $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

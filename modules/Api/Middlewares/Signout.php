@@ -13,7 +13,6 @@
  */
 namespace Modules\Api\Middlewares;
 
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
@@ -35,7 +34,7 @@ class Signout extends QtMiddleware
         if (!Request::hasHeader('refresh_token')) {
             $response->json([
                 'status' => 'error',
-                'message' => [_message(ExceptionMessages::NON_EXISTING_RECORD, 'token')]
+                'message' => [t('validation.nonExistingRecord', 'token')]
             ]);
             
             stop();

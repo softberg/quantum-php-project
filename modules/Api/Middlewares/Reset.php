@@ -15,10 +15,8 @@
 namespace Modules\Api\Middlewares;
 
 use Quantum\Libraries\Validation\Validator;
-use Quantum\Exceptions\ExceptionMessages;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
-use Quantum\Loader\Loader;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
@@ -62,7 +60,7 @@ class Reset extends QtMiddleware
         if (!$this->checkToken($token)) {
             $response->json([
                 'status' => 'error',
-                'message' => [_message(ExceptionMessages::NON_EXISTING_RECORD, 'token')]
+                'message' => [t('validation.nonExistingRecord', 'token')]
             ]);
             
             stop();
@@ -71,7 +69,7 @@ class Reset extends QtMiddleware
         if (!$this->confirmPassword($request->get('password'), $request->get('repeat_password'))) {
             $response->json([
                 'status' => 'error',
-                'message' => ExceptionMessages::NON_EQUAL_VALUES
+                'message' => t('validation.nonEqualValues')
             ]);
 
             stop();
