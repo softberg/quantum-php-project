@@ -14,6 +14,7 @@
 
 use Quantum\Exceptions\ConfigException;
 use Quantum\Loader\Loader;
+use Quantum\Loader\Setup;
 use Quantum\Di\Di;
 
 if (!function_exists('load_users')) {
@@ -25,15 +26,7 @@ if (!function_exists('load_users')) {
      */
     function load_users()
     {
-        $loaderSetup = (object) [
-                    'module' => null,
-                    'hierarchical' => true,
-                    'env' => 'base' . DS . 'repositories',
-                    'fileName' => 'users',
-                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
-        ];
-
-        return Di::get(Loader::class)->setup($loaderSetup)->load();
+        return Di::get(Loader::class)->setup(new Setup('base' . DS . 'repositories', 'users', true))->load();
     }
 
 }

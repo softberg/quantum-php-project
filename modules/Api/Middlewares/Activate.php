@@ -14,12 +14,9 @@
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Exceptions\ConfigException;
 use Quantum\Middleware\QtMiddleware;
-use Quantum\Loader\Loader;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Quantum\Di\Di;
 use Closure;
 
 /**
@@ -62,18 +59,9 @@ class Activate extends QtMiddleware
      */
     private function checkToken($token)
     {
-        $loaderSetup = (object) [
-                    'module' => null,
-                    'hierarchical' => true,
-                    'env' => 'base' . DS . 'repositories',
-                    'fileName' => 'users',
-                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
-        ];
-
-        $users = Di::get(Loader::class)->setup($loaderSetup)->load();
+        $users = load_users();
 
         if (is_array($users) && count($users) > 0) {
-
             foreach ($users as $user) {
                 if (isset($user['activation_token']) && $user['activation_token'] == $token) {
                     return true;

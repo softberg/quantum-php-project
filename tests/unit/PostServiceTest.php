@@ -11,9 +11,15 @@ class PostServiceTest extends TestCase
 {
 
     public $postService;
-    private $initialPost = [
-        'title' => 'Lorem ipsum dolor sit amet',
-        'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean condimentum condimentum nibh.',
+    private $initialPosts = [
+        1 => [
+            'title' => 'Walt Disney',
+            'content' => 'The way to get started is to quit talking and begin doing.',
+        ],
+        [
+            'title' => 'James Cameron',
+            'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.'
+        ]
     ];
 
     public function setUp(): void
@@ -43,7 +49,9 @@ class PostServiceTest extends TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->postService, []);
 
-        $this->postService->addPost($this->initialPost);
+        foreach ($this->initialPosts as $post) {
+            $this->postService->addPost($post);
+        }
     }
 
     public function testGetPosts()
@@ -51,48 +59,54 @@ class PostServiceTest extends TestCase
         $this->assertIsObject($this->postService);
         $this->assertIsArray($this->postService->getPosts());
         $this->assertNotEmpty($this->postService->getPosts());
-        $this->assertSame(1, count($this->postService->getPosts()));
+        $this->assertCount(2, $this->postService->getPosts());
     }
 
     public function testGetSinglePost()
     {
         $post = $this->postService->getPost(1);
         $this->assertIsArray($post);
-        $this->assertArrayHasKey('content', $post);
         $this->assertArrayHasKey('title', $post);
-        $this->assertEquals($post['title'], 'Lorem ipsum dolor sit amet');
+        $this->assertArrayHasKey('content', $post);
+        $this->assertEquals($post['title'], 'Walt Disney');
+        $this->assertEquals($post['content'], 'The way to get started is to quit talking and begin doing.');
     }
 
     public function testAddNewPost()
     {
         $this->postService->addPost([
-            'title' => 'Vestibulum lacus purus',
-            'content' => 'Vestibulum lacus purus, bibendum non nunc ac, fermentum eleifend augue.'
+            'title' => 'Just another post',
+            'content' => 'Content of just another post'
         ]);
 
-        $this->assertSame(2, count($this->postService->getPosts()));
-        $this->assertEquals($this->postService->getPost(2)['title'], 'Vestibulum lacus purus');
-        $this->assertEquals($this->postService->getPost(2)['content'], 'Vestibulum lacus purus, bibendum non nunc ac, fermentum eleifend augue.');
+        $this->assertCount(3, $this->postService->getPosts());
+        $this->assertEquals($this->postService->getPost(3)['title'], 'Just another post');
+        $this->assertEquals($this->postService->getPost(3)['content'], 'Content of just another post');
     }
 
     public function testUpdatePost()
     {
         $this->postService->updatePost(1, [
-            'title' => 'Modified post title',
-            'content' => 'Modified post content',
+            'title' => 'Walt Disney Jr.',
+            'content' => 'The best way to get started is to quit talking and begin doing.',
         ]);
 
         $this->assertNotEquals('Lorem ipsum dolor sit amet', $this->postService->getPost(1)['title']);
-        $this->assertEquals('Modified post title', $this->postService->getPost(1)['title']);
-        $this->assertEquals('Modified post content', $this->postService->getPost(1)['content']);
+        $this->assertEquals('Walt Disney Jr.', $this->postService->getPost(1)['title']);
+        $this->assertEquals('The best way to get started is to quit talking and begin doing.', $this->postService->getPost(1)['content']);
     }
 
     public function testDeletePost()
     {
-        $this->postService->deletePost(1);
+        $this->postService->addPost([
+            'title' => 'Just another post',
+            'content' => 'Content of just another post'
+        ]);
 
-        $this->assertEquals(0, count($this->postService->getPosts()));
-        $this->assertNull($this->postService->getPost(1));
+        $this->assertCount(3, $this->postService->getPosts());
+        $this->postService->deletePost(3);
+        $this->assertCount(2, $this->postService->getPosts());
+        $this->assertNull($this->postService->getPost(3));
     }
 
 }

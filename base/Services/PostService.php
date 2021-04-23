@@ -14,8 +14,8 @@
 
 namespace Base\Services;
 
-use Quantum\Exceptions\ConfigException;
 use Quantum\Loader\Loader;
+use Quantum\Loader\Setup;
 
 /**
  * Class PostService
@@ -43,15 +43,7 @@ class PostService extends BaseService
      */
     public function __init(Loader $loader)
     {
-        $loaderSetup = (object)[
-            'module' => null,
-            'hierarchical' => true,
-            'env' => 'base' . DS . 'repositories',
-            'fileName' => 'posts',
-            'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
-        ];
-
-        self::$posts = $loader->setup($loaderSetup)->load();
+        self::$posts = $loader->setup(new Setup('base' . DS . 'repositories', 'posts', true))->load();
     }
 
     /**
@@ -92,10 +84,11 @@ class PostService extends BaseService
     public function addPost($post)
     {
         if (count(self::$posts) > 0) {
-            array_push(self::$posts, $post);
+            self::$posts[count(self::$posts) + 1] =  $post;
         } else {
-            self::$posts[] = $post;
+            self::$posts[1] = $post;
         }
+
         $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
     }
 

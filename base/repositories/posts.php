@@ -7,6 +7,6 @@ return [
     ],
     [
         'title' => 'James Cameron',
-        'content' => 'If you set your goals ridiculously high and it&#39;s a failure, you will fail above everyone else&#39;s success.',
+        'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
     ],
 ];

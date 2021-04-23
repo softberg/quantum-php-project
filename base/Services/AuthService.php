@@ -15,8 +15,8 @@
 namespace Base\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
-use Quantum\Exceptions\ConfigException;
 use Quantum\Loader\Loader;
+use Quantum\Loader\Setup;
 
 /**
  * Class AuthService
@@ -44,15 +44,7 @@ class AuthService extends BaseService implements AuthServiceInterface
      */
     public function __init(Loader $loader)
     {
-        $loaderSetup = (object) [
-                    'module' => null,
-                    'hierarchical' => true,
-                    'env' => 'base' . DS . 'repositories',
-                    'fileName' => 'users',
-                    'exceptionMessage' => ConfigException::CONFIG_FILE_NOT_FOUND
-        ];
-
-        self::$users = $loader->setup($loaderSetup)->load();
+        self::$users = $loader->setup(new Setup('base' . DS . 'repositories', 'users', true))->load();
     }
 
     /**
@@ -72,7 +64,7 @@ class AuthService extends BaseService implements AuthServiceInterface
 
     /**
      * Visible fields of Auth object
-     * @return array|mixed
+     * @return array
      */
     public function getVisibleFields()
     {
@@ -119,6 +111,7 @@ class AuthService extends BaseService implements AuthServiceInterface
                 }
             }
         }
+
         return [];
     }
 
@@ -137,7 +130,7 @@ class AuthService extends BaseService implements AuthServiceInterface
         }
 
         if (count(self::$users) > 0) {
-            array_push(self::$users, $user);
+            self::$users[count(self::$users) + 1] =  $user;
         } else {
             self::$users[1] = $user;
         }
@@ -152,7 +145,6 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param string $field
      * @param mixed $value
      * @param array $data
-     * @return mixed|void
      * @throws \Exception
      */
     public function update($field, $value, $data)
@@ -164,7 +156,7 @@ class AuthService extends BaseService implements AuthServiceInterface
                 if (in_array($value, $user)) {
                     foreach ($data as $key => $val) {
                         if (in_array($key, $allFields)) {
-                            $user[$key] = $data[$key] ?? '';
+                            $user[$key] = $val ?? '';
                         }
                     }
                 }
