@@ -30,16 +30,16 @@ class AuthController extends ApiController
      * Status error
      */
     const STATUS_ERROR = 'error';
-    
+
     /**
      * Status success
      */
     const STATUS_SUCCESS = 'success';
-    
+
     /**
      * Sign in
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      */
     public function signin(Request $request, Response $response)
     {
@@ -68,8 +68,7 @@ class AuthController extends ApiController
 
     /**
      * Sign out
-     * @param Response $response
-     * @throws \Exception
+     * @param \Quantum\Http\Response $response
      */
     public function signout(Response $response)
     {
@@ -87,8 +86,8 @@ class AuthController extends ApiController
 
     /**
      * Sign up
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      */
     public function signup(Request $request, Response $response)
     {
@@ -101,8 +100,8 @@ class AuthController extends ApiController
 
     /**
      * Activate
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      */
     public function activate(Request $request, Response $response)
     {
@@ -116,9 +115,8 @@ class AuthController extends ApiController
 
     /**
      * Forget
-     * @param Request $request
-     * @param Response $response
-     * @param Mailer $mailer
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      */
     public function forget(Request $request, Response $response)
     {
@@ -132,8 +130,8 @@ class AuthController extends ApiController
 
     /**
      * Reset
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      */
     public function reset(Request $request, Response $response)
     {
@@ -145,8 +143,8 @@ class AuthController extends ApiController
 
     /**
      * Verify
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      */
     public function verify(Request $request, Response $response)
     {
@@ -166,8 +164,8 @@ class AuthController extends ApiController
 
     /**
      * Resend
-     * @param Request $request
-     * @param Mailer $mailer
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      */
     public function resend(Request $request, Response $response)
     {

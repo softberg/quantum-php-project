@@ -36,6 +36,7 @@ class Signup extends QtMiddleware
 
     /**
      * Class constructor
+     * @throws \Exception
      */
     public function __construct()
     {

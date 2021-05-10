@@ -66,7 +66,9 @@ class PostCreateCommand extends QtCommand
 
         $post = [
             'title' => $this->getOption('title'),
-            'content' => $this->getOption('description')
+            'content' => $this->getOption('description'),
+            'author' => 'anonymous@qt.com',
+            'updated_at' => date('m/d/Y H:i')
         ];
 
         $postService->addPost($post);

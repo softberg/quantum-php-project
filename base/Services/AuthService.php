@@ -9,12 +9,13 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.4.0
  */
 
 namespace Base\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
+use Quantum\Libraries\Auth\User;
 use Quantum\Loader\Loader;
 use Quantum\Loader\Setup;
 
@@ -39,8 +40,8 @@ class AuthService extends BaseService implements AuthServiceInterface
 
     /**
      * Init
-     * @param Loader $loader
-     * @throws \Exception
+     * @param \Quantum\Loader\Loader $loader
+     * @throws \Quantum\Exceptions\LoaderException
      */
     public function __init(Loader $loader)
     {
@@ -48,92 +49,74 @@ class AuthService extends BaseService implements AuthServiceInterface
     }
 
     /**
-     * Auth object fields
+     * User Schema
      * @return array
      */
-    public function getFields()
-    {
-
-        return [
-            'email',
-            'firstname',
-            'lastname',
-            'role'
-        ];
-    }
-
-    /**
-     * Visible fields of Auth object
-     * @return array
-     */
-    public function getVisibleFields()
+    public function userSchema(): array
     {
         return [
-            'email',
-            'firstname',
-            'lastname',
-            'role'
-        ];
-    }
-
-    /**
-     * Key map
-     * @return array
-     */
-    public function getDefinedKeys()
-    {
-        return [
-            'usernameKey' => 'email',
-            'passwordKey' => 'password',
-            'activationTokenKey' => 'activation_token',
-            'rememberTokenKey' => 'remember_token',
-            'resetTokenKey' => 'reset_token',
-            'accessTokenKey' => 'access_token',
-            'refreshTokenKey' => 'refresh_token',
-            'otpKey' => 'otp',
-            'otpExpiryKey' => 'otp_expires',
-            'otpTokenKey' => 'otp_token'
+            'id' => ['name' => 'id', 'visible' => false],
+            'firstname' => ['name' => 'firstname', 'visible' => true],
+            'lastname' => ['name' => 'lastname', 'visible' => true],
+            'role' => ['name' => 'role', 'visible' => true],
+            'username' => ['name' => 'email', 'visible' => true],
+            'password' => ['name' => 'password', 'visible' => false],
+            'activationToken' => ['name' => 'activation_token', 'visible' => false],
+            'rememberToken' => ['name' => 'remember_token', 'visible' => false],
+            'resetToken' => ['name' => 'reset_token', 'visible' => false],
+            'accessToken' => ['name' => 'access_token', 'visible' => false],
+            'refreshToken' => ['name' => 'refresh_token', 'visible' => false],
+            'otp' => ['name' => 'otp', 'visible' => false],
+            'otpExpiry' => ['name' => 'otp_expires', 'visible' => false],
+            'otpToken' => ['name' => 'otp_token', 'visible' => false],
         ];
     }
 
     /**
      * Get
      * @param string $field
-     * @param mixed $value
-     * @return array
+     * @param string $value
+     * @return \Quantum\Libraries\Auth\User|null
      */
-    public function get($field, $value): array
+    public function get(string $field, string $value): ?User
     {
-        if ($value) {
-            foreach (self::$users as $user) {
-                if (in_array($value, $user)) {
-                    return $user;
-                }
+        foreach (self::$users as $userData) {
+            if (in_array($value, $userData)) {
+                return (new User())->setData($userData);
             }
         }
 
-        return [];
+        return null;
     }
 
     /**
      * Add
      * @param array $data
-     * @return array|mixed
-     * @throws \Exception
+     * @return \Quantum\Libraries\Auth\User
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function add($data)
+    public function add(array $data): User
     {
-        $user = [];
-        $allFields = array_merge($this->getFields(), array_values($this->getDefinedKeys()));
-        foreach ($allFields as $field) {
-            $user[$field] = $data[$field] ?? '';
+        $user = new User();
+
+        $user->setFields($this->userSchema());
+
+        foreach ($data as $key => $val) {
+            foreach ($this->userSchema() as $field) {
+                if (isset($field['name'])) {
+                    if ($field['name'] == 'id') {
+                        $user->setFieldValue('id', auto_increment(self::$users, 'id'));
+                    }
+
+                    if ($field['name'] == $key) {
+                        $user->setFieldValue($key, $val ?? '');
+                    }
+                }
+            }
         }
 
-        if (count(self::$users) > 0) {
-            self::$users[count(self::$users) + 1] =  $user;
-        } else {
-            self::$users[1] = $user;
-        }
+        self::$users[] = $user->getData();
 
         $this->persist(base_dir() . DS . $this->userRepository, self::$users);
 
@@ -143,27 +126,35 @@ class AuthService extends BaseService implements AuthServiceInterface
     /**
      * Update
      * @param string $field
-     * @param mixed $value
+     * @param string $value
      * @param array $data
-     * @throws \Exception
+     * @return \Quantum\Libraries\Auth\User|null
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function update($field, $value, $data)
+    public function update(string $field, string $value, array $data): ?User
     {
-        $allFields = array_merge($this->getFields(), array_values($this->getDefinedKeys()));
+        $user = $this->get($field, $value);
 
-        if ($value) {
-            foreach (self::$users as &$user) {
-                if (in_array($value, $user)) {
-                    foreach ($data as $key => $val) {
-                        if (in_array($key, $allFields)) {
-                            $user[$key] = $val ?? '';
-                        }
-                    }
-                }
+        if (!$user) {
+            return null;
+        }
+
+        foreach ($data as $key => $val) {
+            if ($user->hasField($key)) {
+                $user->setFieldValue($key, $val ?? '');
+            }
+        }
+
+        foreach (self::$users as &$userData) {
+            if (in_array($user->getFieldValue('id'), $userData)) {
+                $userData = $user->getData();
             }
         }
 
         $this->persist(base_dir() . DS . $this->userRepository, self::$users);
+
+        return $user;
     }
 
 }

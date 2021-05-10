@@ -5,7 +5,7 @@ body {
     font-size: 17px;
 }
 
-.wrapper{
+.wrapper {
     position: relative;
     z-index: 2;
 }
@@ -22,7 +22,7 @@ main > div:first-child {
     padding-top: 50px;
 }
 
-main > div.posts-container,.posts-container {
+main > div.posts-container, .posts-container {
     padding-top: 0
 }
 
@@ -30,59 +30,59 @@ main > div.posts-container,.posts-container {
     padding-top: 0;
 }
 
-#dropdown2{
+#dropdown2 {
     width: auto !important;
 }
 
-.transparent.no-box{
+.transparent.no-box {
     background-color: transparent;
     box-shadow: none;
 }
 
-.back-btn{
+.back-btn {
     position: absolute;
-    top:30px;
+    top: 30px;
     padding-left: 15px;
 }
 
-.back-btn i{
+.back-btn i {
     color: #00bfa5;
     font-size: 24px;
 }
 
-.high-z{
+.high-z {
     z-index: 300000 !important;
 }
 
-.teal .input-field label  {
+.teal .input-field label {
     color: #fff !important;
 }
 
-.teal .input-field input ,
+.teal .input-field input,
 .teal .input-field textarea {
     border-bottom: 1px solid #fff !important;
-    color:#fff !important;
+    color: #fff !important;
 }
 
-.teal .input-field input:focus + label ,
+.teal .input-field input:focus + label,
 .teal .input-field textarea:focus + label {
     color: #fff !important;
 }
 
-.teal .input-field input:focus ,
+.teal .input-field input:focus,
 .teal .input-field textarea:focus {
     border-bottom: 1px solid #fff !important;
     box-shadow: 0 1px 0 0 #fff !important;
 }
 
-.teal .input-field input.valid ,
+.teal .input-field input.valid,
 .teal .input-field textarea.valid {
     border-bottom: 1px solid #fff !important;
     box-shadow: 0 1px 0 0 #fff !important;
 }
 
-.teal  .input-field input.invalid ,
-.teal  .input-field textarea.invalid {
+.teal .input-field input.invalid,
+.teal .input-field textarea.invalid {
     border-bottom: 1px solid #fff !important;
     box-shadow: 0 1px 0 0 #fff !important;
 }
@@ -91,23 +91,23 @@ main > div.posts-container,.posts-container {
     color: #fff !important;
 }
 
-.checkbox-white[type="checkbox"] + label:before{
+.checkbox-white[type="checkbox"] + label:before {
     border: 2px solid indigo;
     background: transparent;
 }
 
-.checkbox-white[type="checkbox"]:checked+span:not(.lever):before{
+.checkbox-white[type="checkbox"]:checked + span:not(.lever):before {
     border: 2px solid transparent;
     border-bottom: 2px solid white;
     border-right: 2px solid white;
     background: transparent;
 }
 
-.checkbox-white[type="checkbox"]+span:not(.lever):before, [type="checkbox"]:not(.filled-in)+span:not(.lever):after {
+.checkbox-white[type="checkbox"] + span:not(.lever):before, [type="checkbox"]:not(.filled-in) + span:not(.lever):after {
     border: 2px solid #ffffff;
 }
 
-.material-alert{
+.material-alert {
     position: relative;
     min-width: 150px;
     padding: 15px;
@@ -116,8 +116,8 @@ main > div.posts-container,.posts-container {
     border: 1px solid transparent;
     border-radius: 4px;
     transition: all 0.1s linear;
-    webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -127,10 +127,12 @@ main > div.posts-container,.posts-container {
     -ms-flex-align: center;
     align-items: center;
 }
-.material-alert .material-icons{
+
+.material-alert .material-icons {
     margin-right: 10px;
 }
-.material-alert .close-alert{
+
+.material-alert .close-alert {
     -webkit-appearance: none;
     border: 0;
     cursor: pointer;
@@ -146,23 +148,28 @@ main > div.posts-container,.posts-container {
     top: 16px;
     right: 5px;
 }
-.material-alert.info{
+
+.material-alert.info {
     background-color: #039be5;
     color: #fff;
 }
-.material-alert.success{
+
+.material-alert.success {
     background-color: #43a047;
     color: #fff;
 }
-.material-alert.error{
+
+.material-alert.error {
     background-color: #c62828;
     color: #fff;
 }
-.material-alert.danger{
+
+.material-alert.danger {
     background-color: #c62828;
     color: #fff;
 }
-.material-alert.warning{
+
+.material-alert.warning {
     background-color: #fbc02d;
     color: #fff;
 }
@@ -196,7 +203,7 @@ a {
     max-width: 100%;
 }
 
-.navbar-logo  {
+.navbar-logo {
     height: 100%;
     display: inline-block;
     margin-left: 10px;
@@ -208,8 +215,12 @@ a {
     margin-top: 6px;
 }
 
-.post-item{
+.post-item {
     margin-bottom: 15px;
+}
+
+.post-item .row {
+    margin-bottom: 0px !important;
 }
 
 .post-card {
@@ -221,9 +232,19 @@ a {
     font-size: 30px;
 }
 
+.post-author {
+    color: white;
+    font-size: 12px;
+}
+
+.post-date {
+    color: white;
+    font-size: 14px;
+}
+
 .transparent-card.teal {
     background-color: #00968800 !important;
-} 
+}
 
 /*input:-webkit-autofill,
 input:-webkit-autofill:hover, 
@@ -244,6 +265,7 @@ svg {
     margin: 0 auto;
     overflow: visible !important;
 }
+
 svg #robot_1_ {
     animation-name: verticalAnimation;
     animation-duration: 1s;
@@ -251,6 +273,7 @@ svg #robot_1_ {
     animation-direction: alternate;
     animation-timing-function: ease-in-out;
 }
+
 svg #light_1_ {
     animation-name: blinkLight;
     animation-duration: 0.5s;
@@ -258,6 +281,7 @@ svg #light_1_ {
     animation-direction: alternate;
     animation-timing-function: steps(2);
 }
+
 svg #leftEye_1_, svg #rightEye_1_ {
     animation-name: blinkEye;
     animation-duration: 1.8s;
@@ -266,6 +290,7 @@ svg #leftEye_1_, svg #rightEye_1_ {
     animation-timing-function: linear;
     transform-origin: 50% 50%;
 }
+
 svg #leftArm_1_ {
     animation-name: moveLeftArm;
     animation-duration: 1s;
@@ -275,6 +300,7 @@ svg #leftArm_1_ {
     transform-origin: 50% 10%;
     transition: all;
 }
+
 svg #rightArm_1_ {
     animation-name: moveRightArm;
     animation-duration: 1s;
@@ -283,6 +309,7 @@ svg #rightArm_1_ {
     animation-timing-function: ease-in-out;
     transform-origin: 50% 10%;
 }
+
 svg #shadow_1_ {
     animation-name: shadowAnimation;
     animation-duration: 1s;
@@ -300,6 +327,7 @@ svg #shadow_1_ {
         transform: rotate(170deg);
     }
 }
+
 @keyframes moveLeftArm {
     0% {
         transform: rotate(0);
@@ -308,6 +336,7 @@ svg #shadow_1_ {
         transform: rotate(4deg);
     }
 }
+
 @keyframes moveRightArm {
     0% {
         transform: rotate(0);
@@ -316,6 +345,7 @@ svg #shadow_1_ {
         transform: rotate(-4deg);
     }
 }
+
 @keyframes shadowAnimation {
     0% {
         transform: scale(1);
@@ -326,6 +356,7 @@ svg #shadow_1_ {
         opacity: 0.6;
     }
 }
+
 @keyframes verticalAnimation {
     0% {
         transform: translateY(-10px);
@@ -334,6 +365,7 @@ svg #shadow_1_ {
         transform: translateY(10px);
     }
 }
+
 @keyframes blinkLight {
     0% {
         opacity: 0;
@@ -342,6 +374,7 @@ svg #shadow_1_ {
         opacity: 1;
     }
 }
+
 @keyframes blinkEye {
     0% {
         transform: scaleY(0);
@@ -364,6 +397,7 @@ svg #shadow_1_ {
     height: 100%;
     margin: 0;
 }
+
 .bg-bubbles li {
     position: fixed;
     list-style: none;
@@ -372,12 +406,14 @@ svg #shadow_1_ {
     height: 40px;
     background-color: rgba(255, 255, 255, 0.15);
     bottom: -160px;
-    animation: square 25s infinite; 
+    animation: square 25s infinite;
     transition-timing-function: linear;
 }
+
 .bg-bubbles li:nth-child(1) {
     left: 10%;
 }
+
 .bg-bubbles li:nth-child(2) {
     left: 20%;
     width: 80px;
@@ -385,11 +421,13 @@ svg #shadow_1_ {
     animation-delay: 2s;
     animation-duration: 17s;
 }
+
 .bg-bubbles li:nth-child(3) {
     left: 25%;
     animation-delay: 4s;
 
 }
+
 .bg-bubbles li:nth-child(4) {
     left: 40%;
     width: 60px;
@@ -397,9 +435,11 @@ svg #shadow_1_ {
     animation-duration: 22s;
     background-color: rgba(255, 255, 255, 0.25);
 }
+
 .bg-bubbles li:nth-child(5) {
     left: 70%;
 }
+
 .bg-bubbles li:nth-child(6) {
     left: 80%;
     width: 120px;
@@ -407,12 +447,14 @@ svg #shadow_1_ {
     animation-delay: 3s;
     background-color: rgba(255, 255, 255, 0.2);
 }
+
 .bg-bubbles li:nth-child(7) {
     left: 32%;
     width: 160px;
     height: 160px;
     animation-delay: 7s;
 }
+
 .bg-bubbles li:nth-child(8) {
     left: 55%;
     width: 20px;
@@ -420,6 +462,7 @@ svg #shadow_1_ {
     animation-delay: 15s;
     animation-duration: 40s;
 }
+
 .bg-bubbles li:nth-child(9) {
     left: 25%;
     width: 10px;
@@ -428,11 +471,12 @@ svg #shadow_1_ {
     animation-duration: 40s;
     background-color: rgba(255, 255, 255, 0.3);
 }
+
 .bg-bubbles li:nth-child(10) {
     left: 90%;
     width: 160px;
     height: 160px;
-    animation-delay: 11s;        
+    animation-delay: 11s;
 }
 
 @keyframes square {
@@ -443,6 +487,7 @@ svg #shadow_1_ {
         transform: translateY(-1200px) rotate(600deg);
     }
 }
+
 /*bubbles  animation styles end*/
 
 @media only screen and (max-width: 992px) {
@@ -471,9 +516,11 @@ svg #shadow_1_ {
         font-size: 1.15rem;
         line-height: 1.4;
     }
+
     .logo-block img {
         width: 85px;
     }
+
     .remember-box {
         text-align: left;
     }
@@ -484,9 +531,13 @@ svg #shadow_1_ {
     }
 }
 
+h5 {
+    line-height: 1.5;
+}
+
 .teal input:-webkit-autofill,
-.teal input:-webkit-autofill:hover, 
-.teal input:-webkit-autofill:active, 
+.teal input:-webkit-autofill:hover,
+.teal input:-webkit-autofill:active,
 .teal input:-webkit-autofill:focus,
 .teal input:-webkit-autofill:focus-within,
 .teal textarea:-webkit-autofill,
@@ -496,9 +547,9 @@ svg #shadow_1_ {
 .teal textarea:-webkit-autofill:active,
 .teal select:-webkit-autofill,
 .teal select:-webkit-autofill:hover,
-.teal select:-webkit-autofill:focus ,
-.teal select:-webkit-autofill:focus-within ,
-.teal select:-webkit-autofill:active ,
+.teal select:-webkit-autofill:focus,
+.teal select:-webkit-autofill:focus-within,
+.teal select:-webkit-autofill:active,
 .teal .input-field input.valid, .teal .input-field textarea.valid,
 .teal input:-internal-autofill-selected {
     appearance: none;

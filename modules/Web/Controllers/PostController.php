@@ -31,24 +31,26 @@ class PostController extends QtController
 
     /**
      * Post service
-     * @var PostService
+     * @var \Base\Services\PostService
      */
     public $postService;
 
     /**
      * Magic __before
-     * @param ServiceFactory $serviceFactory
-     * @throws \Exception
+     * @param \Quantum\Factory\ServiceFactory $serviceFactory
+     * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\ServiceException
      */
     public function __before(ServiceFactory $serviceFactory, ViewFactory $view)
     {
         $this->postService = $serviceFactory->get(PostService::class);
-
         $view->setLayout('layouts/main');
     }
 
     /**
      * Get posts
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
      */
     public function getPosts(Response $response, ViewFactory $view)
     {
@@ -63,9 +65,11 @@ class PostController extends QtController
 
     /**
      * Get post
-     * @param  string $lang
-     * @param int $id
-     * @throws \Exception
+     * @param $lang
+     * @param $id
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\HookException
      */
     public function getPost($lang, $id, Response $response, ViewFactory $view)
     {
@@ -89,15 +93,35 @@ class PostController extends QtController
 
     /**
      * Amend post
-     * @param Request $request
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
      * @param string $lang
      * @param int|null $id
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\HookException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function amendPost(Request $request, Response $response, ViewFactory $view, $lang, $id = null)
+    public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, int $id = null)
     {
-        if ($request->isMethod('get')) {
+        if ($request->isMethod('post')) {
+            $post = [
+                'title' => $request->get('title'),
+                'content' => $request->get('content'),
+                'author' => auth()->user()->getFieldValue('email'),
+                'updated_at' => date('m/d/Y H:i')
+            ];
+
+            if ($id) {
+                $this->postService->updatePost($id, $post);
+            } else {
+                $this->postService->addPost($post);
+            }
+
+            redirect(base_url() . '/' . current_lang() . '/posts');
+        } else {
             $post = [];
+
             if ($id) {
                 $post = $this->postService->getPost($id);
                 if (!$post) {
@@ -109,19 +133,6 @@ class PostController extends QtController
             $view->setParam('langs', config()->get('langs'));
 
             $response->html($view->render('post/form', ['id' => $id, 'post' => $post]));
-        } else {
-            $post = [
-                'title' => $request->get('title'),
-                'content' => $request->get('content'),
-            ];
-
-            if ($id) {
-                $this->postService->updatePost($id, $post);
-            } else {
-                $this->postService->addPost($post);
-            }
-
-            redirect(base_url() . '/' . current_lang() . '/posts');
         }
     }
 
@@ -129,9 +140,10 @@ class PostController extends QtController
      * Delete post
      * @param string $lang
      * @param int $id
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function deletePost($lang, $id)
+    public function deletePost(string $lang, int $id)
     {
         $this->postService->deletePost($id);
         redirect(base_url() . '/' . current_lang() . '/posts');

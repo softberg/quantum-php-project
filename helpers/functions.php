@@ -31,6 +31,25 @@ if (!function_exists('load_users')) {
 
 }
 
+
+if (!function_exists('auto_increment')) {
+
+    /**
+     * Auto increment
+     * @param array $collection
+     * @param string $field
+     * @return int|mixed
+     */
+    function auto_increment(array $collection, string $field)
+    {
+        $max = 0;
+        foreach ($collection as $item) {
+            $max = max($max, $item[$field]);
+        }
+        return ++$max;
+    }
+}
+
 if (!function_exists('url_with_lang')) {
 
     /**
@@ -40,14 +59,14 @@ if (!function_exists('url_with_lang')) {
      */
     function url_with_lang($lang)
     {
-        $url =  base_url();
-        
+        $url = base_url();
+
         if (trim(current_route_uri()) == '/') {
             $url .= '/' . $lang;
         } else {
             $url .= '/' . preg_replace("/" . preg_quote("/" . current_lang(), '/') . "/", $lang, current_route_uri(), 1);
         }
-        
+
         return $url;
     }
 

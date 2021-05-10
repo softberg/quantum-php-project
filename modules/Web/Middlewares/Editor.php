@@ -63,7 +63,7 @@ class Editor extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        if (auth()->user()->role != 'admin' && auth()->user()->role != 'editor') {
+        if (auth()->user()->getFieldValue('role') != 'admin' && auth()->user()->getFieldValue('role') != 'editor') {
             redirect(base_url() . '/' . current_lang());
         }
 

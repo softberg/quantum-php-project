@@ -65,7 +65,7 @@ class AuthController extends QtController
 
     /**
      * Magic __before
-     * @param ViewFactory $view
+     * @param \Quantum\Factory\ViewFactory $view
      */
     public function __before(ViewFactory $view)
     {
@@ -74,10 +74,9 @@ class AuthController extends QtController
 
     /**
      * Sign in
-     * @param Request $request
-     * @param Response $response
-     * @param ViewFactory $view
-     * @throws \Exception
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
      */
     public function signin(Request $request, Response $response, ViewFactory $view)
     {
@@ -103,7 +102,6 @@ class AuthController extends QtController
 
     /**
      * Sign out
-     * @throws \Exception
      */
     public function signout()
     {
@@ -113,9 +111,9 @@ class AuthController extends QtController
 
     /**
      * Sign up
-     * @param Request $request
-     * @param Response $response
-     * @param ViewFactory $view
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
      */
     public function signup(Request $request, Response $response, ViewFactory $view)
     {
@@ -132,7 +130,7 @@ class AuthController extends QtController
 
     /**
      * Activate
-     * @param Request $request
+     * @param \Quantum\Http\Request $request
      */
     public function activate(Request $request)
     {
@@ -142,10 +140,9 @@ class AuthController extends QtController
 
     /**
      * Forget
-     * @param Request $request
-     * @param Response $response
-     * @param ViewFactory $view
-     * @throws \Exception
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
      */
     public function forget(Request $request, Response $response, ViewFactory $view)
     {
@@ -163,9 +160,9 @@ class AuthController extends QtController
 
     /**
      * Reset
-     * @param Request $request
-     * @param Response $response
-     * @param ViewFactory $view
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
      */
     public function reset(Request $request, Response $response, ViewFactory $view)
     {
@@ -185,9 +182,9 @@ class AuthController extends QtController
 
     /**
      * Verify OTP
-     * @param Request $request
-     * @param Response $response
-     * @param ViewFactory $view
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
      */
     public function verify(Request $request, Response $response, ViewFactory $view)
     {
@@ -212,7 +209,7 @@ class AuthController extends QtController
 
     /**
      * Resend OTP
-     * @param Request $request
+     * @param \Quantum\Http\Request $request
      */
     public function resend(Request $request)
     {

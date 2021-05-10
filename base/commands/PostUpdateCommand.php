@@ -80,7 +80,9 @@ class PostUpdateCommand extends QtCommand
         if($title && $description) {
             $post = [
                 'title' => $title,
-                'content' => $description
+                'content' => $description,
+                'author' => 'anonymous@qt.com',
+                'updated_at' => date('m/d/Y H:i')
             ];
 
             $postService->updatePost($id, $post);

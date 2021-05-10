@@ -38,8 +38,8 @@ class PostService extends BaseService
 
     /**
      * Init
-     * @param Loader $loader
-     * @throws \Exception
+     * @param \Quantum\Loader\Loader $loader
+     * @throws \Quantum\Exceptions\LoaderException
      */
     public function __init(Loader $loader)
     {
@@ -52,14 +52,7 @@ class PostService extends BaseService
      */
     public function getPosts()
     {
-        $posts = [];
-
-        foreach (self::$posts as $id => $post) {
-            $post['id'] = $id;
-            $posts[$id] = $post;
-        }
-
-        return $posts;
+        return self::$posts;
     }
 
     /**
@@ -67,10 +60,12 @@ class PostService extends BaseService
      * @param int $id
      * @return mixed|null
      */
-    public function getPost($id)
+    public function getPost(int $id)
     {
-        if (isset(self::$posts[$id])) {
-            return self::$posts[$id];
+        foreach (self::$posts as $post) {
+            if ($post['id'] == $id) {
+                return $post;
+            }
         }
 
         return null;
@@ -79,16 +74,12 @@ class PostService extends BaseService
     /**
      * Add post
      * @param array $post
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function addPost($post)
+    public function addPost(array $post)
     {
-        if (count(self::$posts) > 0) {
-            self::$posts[count(self::$posts) + 1] =  $post;
-        } else {
-            self::$posts[1] = $post;
-        }
-
+        self::$posts[] = array_merge(['id' => auto_increment(self::$posts, 'id')], $post);
         $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
     }
 
@@ -97,37 +88,50 @@ class PostService extends BaseService
      * @param int $id
      * @param array $data
      * @return bool
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function updatePost($id, $data)
+    public function updatePost(int $id, array $data): bool
     {
-        if (isset(self::$posts[$id])) {
-            foreach ($data as $key => $value) {
-                self::$posts[$id][$key] = $value;
-            }
+        $post = $this->getPost($id);
 
-            $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
-            return true;
+        if (empty($post)) {
+            return false;
         }
 
-        return false;
+        foreach ($data as $key => $value) {
+            $post[$key] = $value;
+        }
+
+        foreach (self::$posts as &$postData) {
+            if (in_array($id, $postData)) {
+                $postData = $post;
+            }
+        }
+
+        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+        return true;
+
     }
 
     /**
      * Delete post
      * @param int $id
      * @return bool
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function deletePost($id)
+    public function deletePost(int $id): bool
     {
-        if (isset(self::$posts[$id])) {
-            unset(self::$posts[$id]);
-            $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
-            return true;
-        } else {
-            return false;
+        foreach (self::$posts as $key => $post) {
+            if (in_array($id, $post)) {
+                unset(self::$posts[$key]);
+                $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+                return true;
+            }
         }
+
+        return false;
     }
 
 }
