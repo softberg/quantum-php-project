@@ -28,6 +28,7 @@ class Signout extends QtMiddleware
      * @param Response $response
      * @param \Closure $next
      * @return mixed
+     * @throws \Quantum\Exceptions\StopExecutionException
      */
     public function apply(Request $request, Response $response, \Closure $next)
     {

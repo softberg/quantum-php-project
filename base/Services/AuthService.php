@@ -75,10 +75,10 @@ class AuthService extends BaseService implements AuthServiceInterface
     /**
      * Get
      * @param string $field
-     * @param string $value
+     * @param string|null $value
      * @return \Quantum\Libraries\Auth\User|null
      */
-    public function get(string $field, string $value): ?User
+    public function get(string $field, ?string $value): ?User
     {
         foreach (self::$users as $userData) {
             if (in_array($value, $userData)) {
@@ -126,13 +126,13 @@ class AuthService extends BaseService implements AuthServiceInterface
     /**
      * Update
      * @param string $field
-     * @param string $value
+     * @param string|null $value
      * @param array $data
      * @return \Quantum\Libraries\Auth\User|null
      * @throws \Quantum\Exceptions\DiException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function update(string $field, string $value, array $data): ?User
+    public function update(string $field, ?string $value, array $data): ?User
     {
         $user = $this->get($field, $value);
 
