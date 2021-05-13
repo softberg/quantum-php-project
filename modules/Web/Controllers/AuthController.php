@@ -73,10 +73,11 @@ class AuthController extends QtController
     }
 
     /**
-     * Sign in
+     * Signin
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\CryptorException
      */
     public function signin(Request $request, Response $response, ViewFactory $view)
     {
@@ -143,6 +144,7 @@ class AuthController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\CryptorException
      */
     public function forget(Request $request, Response $response, ViewFactory $view)
     {
@@ -185,6 +187,7 @@ class AuthController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\CryptorException
      */
     public function verify(Request $request, Response $response, ViewFactory $view)
     {
@@ -210,6 +213,7 @@ class AuthController extends QtController
     /**
      * Resend OTP
      * @param \Quantum\Http\Request $request
+     * @throws \Exception
      */
     public function resend(Request $request)
     {

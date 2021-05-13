@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.0.0
  */
 
 namespace Modules\Api\Controllers;
@@ -163,9 +163,9 @@ class AuthController extends ApiController
     }
 
     /**
-     * Resend
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
+     * @throws \Exception
      */
     public function resend(Request $request, Response $response)
     {

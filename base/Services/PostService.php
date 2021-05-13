@@ -124,7 +124,7 @@ class PostService extends BaseService
     public function deletePost(int $id): bool
     {
         foreach (self::$posts as $key => $post) {
-            if (in_array($id, $post)) {
+            if ($post['id'] == $id) {
                 unset(self::$posts[$key]);
                 $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
                 return true;
