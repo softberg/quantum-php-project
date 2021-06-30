@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Error Page 400</title>
+    <title>Error Page 500</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="shortcut icon" href='<?php echo base_url() ?>/assets/images/favicon.ico'>
-    <link rel='stylesheet' href='<?php echo asset('css/materialize.min.css') ?>' type='text/css'
-          media='screen,projection'/>
-    <link rel='stylesheet' href='<?php echo asset('css/custom.css') ?>' type='text/css'/>
-    <link rel='stylesheet' href='<?php echo asset('css/robot.css') ?>' type='text/css'/>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel='stylesheet' href='/assets/css/materialize.min.css' type='text/css' media='screen,projection'/>
+    <link rel='stylesheet' href='/assets/css/custom.css' type='text/css'/>
 </head>
 
 <body>
@@ -26,7 +24,7 @@
                         }
                     </style>
 
-                <g id="robot_1_">
+                    <g id="robot_1_">
                     <path class="st0" d="M152.7,89.2h-0.1v21.4h19.6V89.8c6.8-3.4,11.4-10.4,11.4-18.5c0-11.5-9.2-20.8-20.6-20.8
                           c-11.4,0-20.6,9.3-20.6,20.8C142.4,79,146.6,85.6,152.7,89.2z"></path>
                     <path class="st0"
@@ -56,25 +54,17 @@
 
                     <circle class="st0" cx="163.1" cy="71.5" r="19.5"></circle>
 
-                    <ellipse id="rightEye_1_" class="st0" cx="215.5" cy="206.9" rx="11.2" ry="16"></ellipse>
-                    <ellipse id="leftEye_1_" class="st0" cx="108.7" cy="206.9" rx="11.2" ry="16"></ellipse>
+                    <ellipse id="rightEye_1_" class="st0" cx="215.5" cy="206.9" rx="25" ry="25"></ellipse>
+                    <ellipse id="leftEye_1_" class="st0" cx="108.7" cy="206.9" rx="25" ry="25"></ellipse>
+
                     <circle class="st0" cx="42.8" cy="294.2" r="32.4"></circle>
                     <circle class="st0" cx="283.8" cy="294.2" r="32.4"></circle>
-
-                    <path id="leftArm_1_" class="st0" d="M32.8,388.4v-95.1c0-5-4-9-9-9H19c-5,0-9,4-9,9v95.1c-6,3.8-10,10.5-10,18.1
-                          c0,11.8,9.6,21.4,21.4,21.4s21.4-9.6,21.4-21.4C42.8,398.8,38.8,392.2,32.8,388.4z"></path>
-                    <path id="rightArm_1_" class="st0" d="M316.6,388.4v-95.1c0-5-4-9-9-9h-4.8c-5,0-9,4-9,9v95.1c-6,3.8-10,10.5-10,18.1
-                          c0,11.8,9.6,21.4,21.4,21.4s21.4-9.6,21.4-21.4C326.5,398.8,322.6,392.2,316.6,388.4z"></path>
                 </g>
             </svg>
-
-            <h1>404</h1>
-            <h3>ERROR PAGE</h3>
-            <a class="white-text" href="<?php echo base_url() ?>">Back to Home</a>
+            <h1>500</h1>
+            <h3>SERVER ERROR</h3>
         </div>
     </div>
 </main>
-
-<script type='text/javascript' src='<?php echo asset('js/materialize.min.js') ?>'></script>
 </body>
 </html>
