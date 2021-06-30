@@ -21,37 +21,29 @@ use Quantum\Di\Di;
 
 
 /**
- * Class PostUpdateCommand
+ * Class PostCreateCommand
  * @package Base\Commands
  */
-class PostUpdateCommand extends QtCommand
+class PostCreateCommand extends QtCommand
 {
 
     /**
      * Command name
      * @var string
      */
-    protected $name = 'post:update';
+    protected $name = 'post:create';
 
     /**
      * Command description
      * @var string
      */
-    protected $description = 'Allows to update a post record';
+    protected $description = 'Allows to create a post record';
 
     /**
      * Command help text
      * @var string
      */
-    protected $help = 'Find post by ID and update the title or description of post';
-
-    /**
-     * Command arguments
-     * @var array
-     */
-    protected $args = [
-        ['id', 'required', 'Post ID']
-    ];
+    protected $help = 'Add title and description to create a post';
 
     /**
      * Command options
@@ -72,23 +64,16 @@ class PostUpdateCommand extends QtCommand
 
         $postService = $serviceFactory->get(PostService::class);
 
-        $id = $this->getArgument('id');
+        $post = [
+            'title' => $this->getOption('title'),
+            'content' => $this->getOption('description'),
+            'author' => 'anonymous@qt.com',
+            'updated_at' => date('m/d/Y H:i')
+        ];
 
-        $title = $this->getOption('title');
-        $description = $this->getOption('description');
+        $postService->addPost($post);
 
-        if($title && $description) {
-            $post = [
-                'title' => $title,
-                'content' => $description
-            ];
-
-            $postService->updatePost($id, $post);
-
-            $this->info('Post updated successfully');
-        } else {
-            $this->error('Missing post title or description');
-        }
+        $this->info('Post create successfully');
     }
 
 }

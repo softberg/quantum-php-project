@@ -8,7 +8,7 @@ return function ($route) {
     $route->post('[:alpha:2]?/api-forget', 'AuthController', 'forget')->middlewares(['Forget']);
     $route->post('[:alpha:2]?/api-reset/[:any]', 'AuthController', 'reset')->middlewares(['Reset']);
     $route->post('[:alpha:2]?/api-verify', 'AuthController', 'verify')->middlewares(['Verify']);
-    $route->post('[:alpha:2]?/api-resend', 'AuthController', 'resend');
+    $route->post('[:alpha:2]?/api-resend', 'AuthController', 'resend')->middlewares(['Resend']);
 
     $route->group('auth', function ($route) {
         $route->get('[:alpha:2]?/api-signout', 'AuthController', 'signout');

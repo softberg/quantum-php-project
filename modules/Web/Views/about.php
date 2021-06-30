@@ -9,11 +9,11 @@
         <div class="card-content">
             <h6><?php _t('common.about_framework'); ?></h6>
             
-            <h4><?php _t('common.version'); ?></h3>
+            <h4><?php _t('common.version'); ?></h4>
             <h6><?php _t('common.current_version', env('APP_VERSION')); ?></h6>
 
 
-            <h4><?php _t('common.installation'); ?></h3>
+            <h4><?php _t('common.installation'); ?></h4>
             <ul class="step-list">
                 <li>
                     <h6><?php _t('common.create_project'); ?></h6>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Quantum PHP Framework
  *
@@ -12,7 +11,7 @@
  * @since 2.0.0
  */
 
-namespace Modules\Web\Middlewares;
+namespace Modules\Api\Middlewares;
 
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
@@ -22,12 +21,12 @@ use Quantum\Http\Request;
 use Closure;
 
 /**
- * Class Signup
+ * Class Resend
  * @package Modules\Web\Middlewares
  */
-class Signup extends QtMiddleware
-{
 
+class Resend extends QtMiddleware
+{
     /**
      * Validator object
      * @var Validator
@@ -36,40 +35,13 @@ class Signup extends QtMiddleware
 
     /**
      * Class constructor
-     * @throws \Exception
      */
     public function __construct()
     {
         $this->validator = new Validator();
 
-        $users = load_users();
-
-        $this->validator->addValidation('uniqueUser', function ($value, $users) {
-            if (is_array($users) && count($users) > 0) {
-                foreach ($users as $user) {
-                    if ($user['email'] == $value) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        });
-
         $this->validator->addRules([
-            'email' => [
-                Rule::set('required'),
-                Rule::set('email'),
-                Rule::set('uniqueUser', $users)
-            ],
-            'password' => [
-                Rule::set('required'),
-                Rule::set('minLen', 6)
-            ],
-            'firstname' => [
-                Rule::set('required')
-            ],
-            'lastname' => [
+            'code' => [
                 Rule::set('required')
             ],
         ]);
@@ -85,14 +57,17 @@ class Signup extends QtMiddleware
     public function apply(Request $request, Response $response, Closure $next)
     {
         if ($request->isMethod('post')) {
-
             if (!$this->validator->isValid($request->all())) {
-                session()->setFlash('error', $this->validator->getErrors());
-                redirectWith(base_url() . '/' . current_lang() . '/signup', $request->all());
+
+                $response->json([
+                    'status' => 'error',
+                    'message' => $this->validator->getErrors()
+                ]);
+
+                stop();
             }
         }
 
         return $next($request, $response);
     }
-
 }

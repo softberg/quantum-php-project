@@ -40,10 +40,17 @@ class Reset extends QtMiddleware
     {
         $this->validator = new Validator();
 
-        $this->validator->addRule('password', [
-            Rule::set('required'),
-            Rule::set('minLen', 6)
+        $this->validator->addRules([
+            'password' => [
+                Rule::set('required'),
+                Rule::set('minLen', 6)
+            ],
+            'repeat_password' => [
+                Rule::set('required'),
+                Rule::set('minLen', 6)
+            ]
         ]);
+
     }
 
     /**
@@ -57,15 +64,25 @@ class Reset extends QtMiddleware
     {
         list($token) = current_route_args();
 
+        if (!$this->validator->isValid($request->all())) {
+            $response->json([
+                'status' => 'error',
+                'message' => $this->validator->getErrors()
+            ]);
+
+            stop();
+        }
+
         if (!$this->checkToken($token)) {
             $response->json([
                 'status' => 'error',
                 'message' => [t('validation.nonExistingRecord', 'token')]
             ]);
-            
+
             stop();
         }
 
+        
         if (!$this->confirmPassword($request->get('password'), $request->get('repeat_password'))) {
             $response->json([
                 'status' => 'error',
@@ -75,21 +92,13 @@ class Reset extends QtMiddleware
             stop();
         }
 
-        if (!$this->validator->isValid($request->all())) {
-            $response->json([
-                'status' => 'error',
-                'message' => $this->validator->getErrors()
-            ]);
-            
-            stop();
-        }
 
         $request->set('reset_token', $token);
 
         return $next($request, $response);
     }
 
-    
+
     /**
      * Check token
      * @param string $token
@@ -113,7 +122,7 @@ class Reset extends QtMiddleware
     }
 
     /**
-     * Checks the password and repeat password 
+     * Checks the password and repeat password
      * @param string $newPassword
      * @param string $repeatPassword
      * @return bool

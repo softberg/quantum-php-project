@@ -73,19 +73,19 @@ class PostShowCommand extends QtCommand
         if ($id) {
             foreach ($posts as $post) {
                 if ($post['id'] == $id) {
-                    $rows[] = [$post['id'], $post['title'], $post['content']];
+                    $rows[] = [$post['id'], $post['title'], $post['content'], $post['author'], $post['updated_at']];
                 }
             }
         } else {
             foreach ($posts as $post) {
-                $rows[] = [$post['id'], $post['title'], $post['content']];
+                $rows[] = [$post['id'], $post['title'], $post['content'], $post['author'], $post['updated_at']];
             }
         }
 
         $table = new Table($this->output);
 
         $table->setHeaderTitle('Posts')
-            ->setHeaders(['ID', 'Title', 'Description'])
+            ->setHeaders(['ID', 'Title', 'Description', 'Author', 'Date'])
             ->setRows($rows)
             ->render();
 

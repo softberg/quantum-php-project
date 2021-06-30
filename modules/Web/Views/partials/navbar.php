@@ -7,7 +7,7 @@
         <ul class="right">
             <li>
                 <a class="dropdown-trigger" href="#!" data-target="dropdown1">
-                    <?php echo auth()->user()->firstname . ' ' . auth()->user()->lastname ?> 
+                    <?php echo auth()->user()->getFieldValue('firstname') . ' ' . auth()->user()->getFieldValue('lastname') ?>
                     <i class="material-icons right">arrow_drop_down</i>
                 </a>
                 <ul id="dropdown1" class="dropdown-content">

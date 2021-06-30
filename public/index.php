@@ -7,11 +7,12 @@
 */
 require __DIR__ . '/../bootstrap/autoload.php';
 
-use Quantum\Bootstrap;
+use Quantum\App;
 
 /*
 * ---------------------------------------------------------
-* Run the project
+* Start the app
 * ---------------------------------------------------------
 */
-Bootstrap::run();
+
+App::start();

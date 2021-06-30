@@ -28,14 +28,17 @@ class BaseService extends QtService
 
     /**
      * Persists the changes
-     * @throws \Exception
+     * @param string $file
+     * @param array $collection
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    protected function persist(string $file, array $entity)
+    protected function persist(string $file, array $collection)
     {
         $fs = Di::get(FileSystem::class);
 
         if ($fs->exists($file)) {
-            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export($entity) . ';';
+            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export($collection) . ';';
             $fs->put($file, $content);
         } else {
             throw new \Exception(_message(ConfigException::CONFIG_FILE_NOT_FOUND, $file));

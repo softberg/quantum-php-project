@@ -1,0 +1,48 @@
+.d-flex {
+    display: flex;
+    width: 100%;
+}
+
+ol {
+    text-align: left;
+    flex: 0 0 100%;
+}
+
+ol li {
+    padding-left: 10px;
+    color: #5c5d4f;
+}
+
+ol li pre {
+    margin: 5px 0;
+}
+
+ol li::marker {
+    color: #a9a9a9;
+}
+
+li.active .collapsible-header,
+.keyboard-focused  .collapsible-header:focus{
+    background-color: #ceceaf;
+}
+
+.collapsible .collapsible-header {
+    background-color: #f7f7cf;
+    font-weight: bold;
+    color: #5a5a4e;
+}
+
+.collapsible .collapsible-body {
+    background-color: #fdfde8;
+    overflow-x: auto;
+}
+
+.switch-line {
+    background-color: #0f9d58;
+    color: #eae1e1;
+}
+
+.error-line {
+    background-color: #bf360c;
+    color: #eae1e1;
+}
