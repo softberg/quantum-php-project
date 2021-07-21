@@ -433,3 +433,48 @@ h5 {
     -webkit-box-shadow: 0 0 0px 1000px #00bfa5 inset !important;
 
 }
+
+.content_img{
+    height:350px !important;
+}
+
+.single_page_img{
+    width:30% !important;
+    box-shadow: 10px 10px 10px;
+   
+}
+.single_page_no_img{
+    width:23% !important;
+}
+.update_page_img{
+    width:150px !important;
+    height:90px !important;
+    box-shadow: 10px 10px 10px;
+}
+.content_no_img{
+    height:350px !important;
+    width: 65% !important;
+    margin:auto;
+}
+
+div.polaroid {
+    width: 80%;
+    background-color: white;
+    box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin:50px auto;
+    padding:20px;
+}
+
+.post_image{
+    width:90px; 
+    height:auto;
+    margin:auto; 
+    display:flex;
+}
+
+@media only screen and (max-width: 1500px) {
+    .content_no_img{
+        width: 100% !important;
+    }
+}
+

@@ -1,10 +1,17 @@
 <div class="posts-container">
     <h2 class="center-align teal-text"><?php _t('common.posts') ?></h2>
-    <div class="row">
+    <div class="row post_container">
         <?php if (count($posts) > 0): ?>
         <?php foreach ($posts as $post): ?>
-            <div class="col s12 l6 post-item">
+            <div class="col s12 m4 post-item">
                 <div class="card post-card hoverable">
+                    <div class="card-image">
+                        <?php if ($post['image']): ?>
+                            <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="content_img">
+                        <?php else: ?>
+                            <img src="<?php echo base_url() ?>/assets/images/no-image.png" class="content_no_img">
+                        <?php endif; ?>    
+                    </div>
                     <div class="card-content white teal-text text-darken-4">
                                 <span class="card-title post-title">
                                     <a class="teal-text"

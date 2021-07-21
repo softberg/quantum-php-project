@@ -50,6 +50,11 @@ class Editor extends QtMiddleware
                 Rule::set('required'),
                 Rule::set('minLen', 10),
                 Rule::set('maxLen', 500),
+            ],
+           
+            'image' => [
+                Rule::set('fileSize', 35000),
+                Rule::set('fileExtension',['jpeg','png','jpg','gif']),
             ]
         ]);
     }
