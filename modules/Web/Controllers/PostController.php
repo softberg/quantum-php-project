@@ -128,7 +128,7 @@ class PostController extends QtController
                     $imageName = slugify($post['title']);
                 }
 
-                $post['image'] = $this->saveImage($request->getFile('image'), $imageName);
+                $post['image'] = $this->saveImage($request->getFile('image'), $imageName .'-'. random_number());
             }
 
             if ($id) {
