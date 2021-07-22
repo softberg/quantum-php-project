@@ -33,15 +33,15 @@ class Editor extends QtMiddleware
      * @var Validator
      */
     private $validator;
-    private $request;
+    
     /**
      * Class constructor
      */
     public function __construct()
     {
-        $this->request = new Request();
+        $request = new Request();
         $this->validator = new Validator();
-        if($this->request->hasFile('image')){
+        if($request->hasFile('image')){
             $this->validator->addRules([
                 'image' => [
                     Rule::set('fileSize', 2097152),

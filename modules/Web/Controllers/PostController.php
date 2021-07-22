@@ -123,7 +123,7 @@ class PostController extends QtController
 
                 if ($id) {
                     $post = $this->postService->getPost($id);
-                    $this->deleteImage($id);
+                    $this->deleteImage($post);
 
                     $imageName = slugify($post['title']);
                 }
@@ -170,7 +170,8 @@ class PostController extends QtController
      */
     public function deletePost(string $lang, int $id)
     {
-        $this->deleteImage($id);
+        $post = $this->postService->getPost($id);
+        $this->deleteImage($post);
         $this->postService->deletePost($id);
 
         redirect(base_url() . '/' . current_lang() . '/posts');
@@ -185,9 +186,9 @@ class PostController extends QtController
         return $imageName . '.' . $file->getExtension();
     }
 
-    private function deleteImage($id){
+    private function deleteImage($post){
         $fs = Di::get(FileSystem::class);
-        $post = $this->postService->getPost($id);
+        
         if ($fs->exists(uploads_dir() . DS . $post['image'])) {
             $fs->remove(uploads_dir() . DS . $post['image']);
         }
