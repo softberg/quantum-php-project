@@ -21,6 +21,10 @@ use Quantum\Hooks\HookManager;
 use Base\Services\PostService;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Quantum\Libraries\Upload\File;
+use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Di\Di;
+
 
 /**
  * Class PostController
@@ -59,7 +63,6 @@ class PostController extends QtController
         $view->setParam('title', 'Posts | ' . config()->get('app_name'));
         $view->setParam('posts', $posts);
         $view->setParam('langs', config()->get('langs'));
-
         $response->html($view->render('post/post'));
     }
 
@@ -105,14 +108,39 @@ class PostController extends QtController
     public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, int $id = null)
     {
         if ($request->isMethod('post')) {
+
+            $fs = Di::get(FileSystem::class);
+
             $post = [
                 'title' => $request->get('title'),
                 'content' => $request->get('content'),
+                'image' => null,
                 'author' => auth()->user()->getFieldValue('email'),
-                'updated_at' => date('m/d/Y H:i')
+                'updated_at' => date('m/d/Y H:i'),
             ];
 
+            if ($request->hasFile('image')) {
+
+                $imageName = slugify($request->get('title'));
+
+                if ($id) {
+                    $post = $this->postService->getPost($id);
+
+                    if ($fs->exists(uploads_dir() . DS . $post['image'])) {
+                        $fs->remove(uploads_dir() . DS . $post['image']);
+                    }
+
+                    $imageName = slugify($post['title']);
+                }
+
+                $post['image'] = $this->saveImage($request->getFile('image'), $imageName);
+            }
+
             if ($id) {
+                if (!$request->hasFile('image')) {
+                    unset($post['image']);
+                }
+                
                 $this->postService->updatePost($id, $post);
             } else {
                 $this->postService->addPost($post);
@@ -124,6 +152,8 @@ class PostController extends QtController
 
             if ($id) {
                 $post = $this->postService->getPost($id);
+                $view->setParam('id', $id);
+
                 if (!$post) {
                     HookManager::call('pageNotFound');
                 }
@@ -132,7 +162,7 @@ class PostController extends QtController
             $view->setParam('title', ($post ? $post['title'] : 'New post') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
 
-            $response->html($view->render('post/form', ['id' => $id, 'post' => $post]));
+            $response->html($view->render('post/form', ['post' => $post]));
         }
     }
 
@@ -147,6 +177,15 @@ class PostController extends QtController
     {
         $this->postService->deletePost($id);
         redirect(base_url() . '/' . current_lang() . '/posts');
+    }
+
+    private function saveImage($image, $imageName)
+    {
+        $file = new File($image);
+        $file->setName($imageName);
+        $file->save(uploads_dir());
+
+        return $imageName . '.' . $file->getExtension();
     }
 
 }

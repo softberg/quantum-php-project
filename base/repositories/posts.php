@@ -6,6 +6,7 @@ return [
         'title' => 'Walt Disney',
         'content' => 'The way to get started is to quit talking and begin doing.',
         'author' => 'admin@qt.com',
+        'image' => null,
         'updated_at' => '05/08/2021 23:13',
     ],
     [
@@ -13,6 +14,7 @@ return [
         'title' => 'James Cameron',
         'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
         'author' => 'admin@qt.com',
+        'image' => null,
         'updated_at' => '05/08/2021 23:13',
     ],
 ];
