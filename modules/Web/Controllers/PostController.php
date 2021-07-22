@@ -109,8 +109,6 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
 
-            $fs = Di::get(FileSystem::class);
-           
             $post = [
                 'title' => $request->get('title'),
                 'content' => $request->get('content'),
