@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col s12 l8 offset-l2">
 
-            <h2 class="center-align teal-text"><?php $id ? _t('common.update_post') : _t('common.new_post') ?></h2>
+            <h2 class="center-align teal-text"><?php isset($id) ? _t('common.update_post') : _t('common.new_post') ?></h2>
 
             <?php if (session()->has('error')): ?>
                 <?php echo partial('partials/messages/error') ?>
@@ -13,7 +13,7 @@
 
             <div class="card teal accent-4">
                 <div class="card-content">
-                    <form method="post" action="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . $id ?? '' ?>" enctype="multipart/form-data">
+                    <form method="post" action="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . ($id ?? '') ?>" enctype="multipart/form-data">
                         <div class="row">
                             <div class="input-field col s12">
                                 <input value="<?php echo $post['title'] ?? old('title') ?>" name="title" id="title" type="text" class="validate">
@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         <div class="row">
-                        <?php if($id != 0): ?>   
+                        <?php if(isset($id)): ?>   
                             <?php if ($post['image']): ?>
                                 <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="update_page_img">
                             <?php else: ?>   

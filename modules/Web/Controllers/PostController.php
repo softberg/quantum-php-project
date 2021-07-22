@@ -152,6 +152,8 @@ class PostController extends QtController
 
             if ($id) {
                 $post = $this->postService->getPost($id);
+                $view->setParam('id', $id);
+
                 if (!$post) {
                     HookManager::call('pageNotFound');
                 }
@@ -160,7 +162,7 @@ class PostController extends QtController
             $view->setParam('title', ($post ? $post['title'] : 'New post') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
 
-            $response->html($view->render('post/form', ['id' => $id, 'post' => $post]));
+            $response->html($view->render('post/form', ['post' => $post]));
         }
     }
 
