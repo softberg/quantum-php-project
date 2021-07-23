@@ -109,8 +109,6 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
 
-            $fs = Di::get(FileSystem::class);
-
             $post = [
                 'title' => $request->get('title'),
                 'content' => $request->get('content'),
@@ -125,15 +123,12 @@ class PostController extends QtController
 
                 if ($id) {
                     $post = $this->postService->getPost($id);
-
-                    if ($fs->exists(uploads_dir() . DS . $post['image'])) {
-                        $fs->remove(uploads_dir() . DS . $post['image']);
-                    }
+                    $this->deleteImage($post);
 
                     $imageName = slugify($post['title']);
                 }
 
-                $post['image'] = $this->saveImage($request->getFile('image'), $imageName);
+                $post['image'] = $this->saveImage($request->getFile('image'), $imageName .'-'. random_number());
             }
 
             if ($id) {
@@ -175,7 +170,10 @@ class PostController extends QtController
      */
     public function deletePost(string $lang, int $id)
     {
+        $post = $this->postService->getPost($id);
+        $this->deleteImage($post);
         $this->postService->deletePost($id);
+
         redirect(base_url() . '/' . current_lang() . '/posts');
     }
 
@@ -186,6 +184,14 @@ class PostController extends QtController
         $file->save(uploads_dir());
 
         return $imageName . '.' . $file->getExtension();
+    }
+
+    private function deleteImage($post){
+        $fs = Di::get(FileSystem::class);
+        
+        if ($fs->exists(uploads_dir() . DS . $post['image'])) {
+            $fs->remove(uploads_dir() . DS . $post['image']);
+        }
     }
 
 }

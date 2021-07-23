@@ -32,7 +32,7 @@
                                 <input type="file" name="image">
                             </div>
                             <div class="file-path-wrapper">
-                                <input class="file-path validate" value="<?php echo $post['image'] ?? old('image')?>" type="text">
+                                <input class="file-path validate" type="text">
                             </div>
                         </div>
                         <div class="row">

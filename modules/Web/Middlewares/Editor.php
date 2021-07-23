@@ -33,15 +33,25 @@ class Editor extends QtMiddleware
      * @var Validator
      */
     private $validator;
-
+    
     /**
      * Class constructor
      */
     public function __construct()
     {
+        $request = new Request();
         $this->validator = new Validator();
+        if($request->hasFile('image')){
+            $this->validator->addRules([
+                'image' => [
+                    Rule::set('fileSize', 2097152),
+                    Rule::set('fileExtension',['jpeg','png','jpg','gif']),
+                ]
+            ]);  
+        }
 
         $this->validator->addRules([
+        
             'title' => [
                 Rule::set('required'),
                 Rule::set('minLen', 10)
@@ -52,10 +62,7 @@ class Editor extends QtMiddleware
                 Rule::set('maxLen', 500),
             ],
            
-            'image' => [
-                Rule::set('fileSize', 35000),
-                Rule::set('fileExtension',['jpeg','png','jpg','gif']),
-            ]
+           
         ]);
     }
 
