@@ -15,7 +15,6 @@
 namespace Base\Commands;
 
 use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Libraries\Upload\File;
 use Quantum\Console\QtCommand;
 use Quantum\Di\Di;
 
