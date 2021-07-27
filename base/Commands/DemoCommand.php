@@ -16,7 +16,9 @@ namespace Base\Commands;
 
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Console\QtCommand;
+use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Di\Di;
+use Faker\Factory;
 
 
 /**
@@ -48,37 +50,39 @@ class DemoCommand extends QtCommand
      * @return void
      * @throws \Quantum\Exceptions\DiException
      */
+    
     public function exec()
-    {
-        $postsCollection = ([
-            [
-                'id' => 1,
-                'title' => 'Walt Disney',
-                'content' => 'The way to get started is to quit talking and begin doing.',
-                'author' => 'admin@qt.com',
-                'image' => 'walt-disney-9252507491.jpg',
-                'updated_at' => '07/22/2021 16:31',
-            ],
-            [
-                'id' => 2,
-                'title' => 'James Cameron',
-                'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
-                'author' => 'admin@qt.com',
-                'image' => null,
-                'updated_at' => '05/08/2021 23:13',
-            ],
-        ]);
-
-        $this->renderContent($postsCollection, 'posts');
+    { 
+        $faker = Factory::create();
+        $hasher = new Hasher;
+        $postsCollection = [];
+        $author = '';
+        $id = 0;
 
         $usersCollection = ([
             [
-                'id' => '1',
-                'firstname' => 'Admin',
-                'lastname' => 'Hunter',
+                'id' => ++$id,
+                'firstname' => $faker->name(),
+                'lastname' => $faker->lastName(),
                 'role' => 'admin',
-                'email' => 'admin@qt.com',
-                'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
+                'email' => $faker->email(),
+                'password' => $hasher->hash('123456'),
+                'activation_token' => '',
+                'remember_token' => '',
+                'reset_token' => '',
+                'access_token' => '',
+                'refresh_token' => '',
+                'otp' => '',
+                'otp_expires' => '',
+                'otp_token' => '',
+            ],
+            [
+                'id' => ++$id,
+                'firstname' => $faker->name(),
+                'lastname' =>  $faker->lastName(),
+                'role' => '',
+                'email' =>  $faker->email(),
+                'password' =>  $hasher->hash('678910'),
                 'activation_token' => '',
                 'remember_token' => '',
                 'reset_token' => '',
@@ -91,6 +95,31 @@ class DemoCommand extends QtCommand
         ]);
 
         $this->renderContent($usersCollection, 'users');
+        
+        
+        //----------------------????-------------------
+
+        foreach($usersCollection as $user){
+            if($user['role'] == 'admin'){
+                $author = $user['email'];
+            }
+        }
+        
+        for ($i = 1; $i <= 6; $i++) {
+            $data = 
+                [
+                    'id'      => $i,
+                    'title'   => $faker->realText(30),
+                    'content' => $faker->realText(),
+                    'author'  => $author,   //------------??  $usersCollection[0]['email'],
+                    'image'   => $faker->imageUrl(360, 360, 'animals', true, 'cats'),
+                    'updated_at' => date("d/m/Y  H:i"),
+                ];
+            
+            array_push( $postsCollection, $data);
+        }
+
+        $this->renderContent($postsCollection, 'posts');
       
     }
 

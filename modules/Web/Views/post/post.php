@@ -7,7 +7,11 @@
                 <div class="card post-card hoverable">
                     <div class="card-image">
                         <?php if ($post['image']): ?>
-                            <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="content_img">
+                            <?php if(file_exists('uploads/'.$post['image'])): ?>
+                                <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="content_img">
+                            <?php else: ?>    
+                                <img src="<?php echo $post['image'] ?>" class="content_img">
+                            <?php endif; ?>    
                         <?php else: ?>
                             <img src="<?php echo base_url() ?>/assets/images/no-image.png" class="content_no_img">
                         <?php endif; ?>    

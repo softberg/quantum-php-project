@@ -6,7 +6,8 @@
     "version": "2.4.0",
     "type": "project",
     "require": {
-        "quantum/framework": "^2.4.0"
+        "quantum/framework": "^2.4.0",
+        "fakerphp/faker": "^1.15"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",
