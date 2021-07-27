@@ -96,8 +96,6 @@ class DemoCommand extends QtCommand
 
         $this->renderContent($usersCollection, 'users');
         
-        
-        //----------------------????-------------------
 
         foreach($usersCollection as $user){
             if($user['role'] == 'admin'){
@@ -111,7 +109,7 @@ class DemoCommand extends QtCommand
                     'id'      => $i,
                     'title'   => $faker->realText(30),
                     'content' => $faker->realText(),
-                    'author'  => $author,   //------------??  $usersCollection[0]['email'],
+                    'author'  => $author,   //  $usersCollection[0]['email'],
                     'image'   => $faker->imageUrl(360, 360, 'animals', true, 'cats'),
                     'updated_at' => date("d/m/Y  H:i"),
                 ];
