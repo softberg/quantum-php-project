@@ -5,17 +5,19 @@
         <?php foreach ($posts as $post): ?>
             <div class="col s12 m4 post-item">
                 <div class="card post-card hoverable">
-                    <div class="card-image">
-                        <?php if ($post['image']): ?>
-                            <?php if(file_exists('uploads/'.$post['image'])): ?>
-                                <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="content_img">
-                            <?php else: ?>    
-                                <img src="<?php echo $post['image'] ?>" class="content_img">
+                    <a href="<?php echo base_url() . '/' . current_lang() . '/post/' . $post['id'] ?>">
+                        <div class="card-image">
+                            <?php if ($post['image']): ?>
+                                <?php if(file_exists('uploads/'.$post['image'])): ?>
+                                    <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="content_img">
+                                <?php else: ?>    
+                                    <img src="<?php echo $post['image'] ?>" class="content_img">
+                                <?php endif; ?>    
+                            <?php else: ?>
+                                <img src="<?php echo base_url() ?>/assets/images/no-image.png" class="content_no_img">
                             <?php endif; ?>    
-                        <?php else: ?>
-                            <img src="<?php echo base_url() ?>/assets/images/no-image.png" class="content_no_img">
-                        <?php endif; ?>    
-                    </div>
+                        </div>
+                    </a>
                     <div class="card-content white teal-text text-darken-4">
                                 <span class="card-title post-title">
                                     <a class="teal-text"
