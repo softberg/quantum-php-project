@@ -54,70 +54,20 @@ class DemoCommand extends QtCommand
     public function exec()
     { 
         $faker = Factory::create();
-        $hasher = new Hasher;
-        $postsCollection = [];
-        $author = '';
-        $id = 0;
+        $roles = ['admin', ''];
+        $usersCollectionData = [];
 
-        $usersCollection = ([
-            [
-                'id' => ++$id,
-                'firstname' => $faker->name(),
-                'lastname' => $faker->lastName(),
-                'role' => 'admin',
-                'email' => $faker->email(),
-                'password' => $hasher->hash('123456'),
-                'activation_token' => '',
-                'remember_token' => '',
-                'reset_token' => '',
-                'access_token' => '',
-                'refresh_token' => '',
-                'otp' => '',
-                'otp_expires' => '',
-                'otp_token' => '',
-            ],
-            [
-                'id' => ++$id,
-                'firstname' => $faker->name(),
-                'lastname' =>  $faker->lastName(),
-                'role' => '',
-                'email' =>  $faker->email(),
-                'password' =>  $hasher->hash('678910'),
-                'activation_token' => '',
-                'remember_token' => '',
-                'reset_token' => '',
-                'access_token' => '',
-                'refresh_token' => '',
-                'otp' => '',
-                'otp_expires' => '',
-                'otp_token' => '',
-            ],
-        ]);
-
-        $this->renderContent($usersCollection, 'users');
-        
-
-        foreach($usersCollection as $user){
-            if($user['role'] == 'admin'){
-                $author = $user['email'];
-            }
+        for ($i = 0; $i < 2; $i++) {
+            $data = $this->createUser($faker, $roles, $i);
+            array_push($usersCollectionData, $data);
         }
         
-        for ($i = 1; $i <= 6; $i++) {
-            $data = 
-                [
-                    'id'      => $i,
-                    'title'   => $faker->realText(30),
-                    'content' => $faker->realText(),
-                    'author'  => $author,   //  $usersCollection[0]['email'],
-                    'image'   => $faker->imageUrl(360, 360, 'animals', true, 'cats'),
-                    'updated_at' => date("d/m/Y  H:i"),
-                ];
-            
-            array_push( $postsCollection, $data);
-        }
+        $this->renderContent($usersCollectionData, 'users');
 
-        $this->renderContent($postsCollection, 'posts');
+        $author =  $usersCollectionData[0]['email'];
+
+        $postCollectionData = $this->createPosts($faker, $author);
+        $this->renderContent($postCollectionData, 'posts');
       
     }
 
@@ -132,4 +82,51 @@ class DemoCommand extends QtCommand
 
         $this->info(ucfirst($file). ' successfully generated');
     }
+
+
+    private function createUser($faker, $roles, $i){
+        $hasher = new Hasher;
+        
+            $data = 
+            [
+                'id' => $i+1,
+                'firstname' => $faker->name(),
+                'lastname' => $faker->lastName(),
+                'role' => $roles[$i],
+                'email' => $faker->email(),
+                'password' => $hasher->hash('password'),
+                'activation_token' => '',
+                'remember_token' => '',
+                'reset_token' => '',
+                'access_token' => '',
+                'refresh_token' => '',
+                'otp' => '',
+                'otp_expires' => '',
+                'otp_token' => '',
+            ];
+            
+        return $data;
+    }
+
+
+    private function createPosts($faker, $author){
+        $postsCollection = [];
+
+        for ($i = 1; $i <= 6; $i++) {
+            $data = 
+                [
+                    'id'      => $i,
+                    'title'   => $faker->realText(30),
+                    'content' => $faker->realText(),
+                    'author'  => $author,  
+                    'image'   => $faker->imageUrl(360, 360, 'animals', true, 'cats'),
+                    'updated_at' => date("d/m/Y  H:i"),
+                ];
+            
+            array_push( $postsCollection, $data);
+        }
+
+        return $postsCollection;
+    }
+
 }
