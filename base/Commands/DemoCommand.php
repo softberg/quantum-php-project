@@ -46,7 +46,7 @@ class DemoCommand extends QtCommand
      */
     protected $help = 'The command will generate new posts.php and users.php files';
 
-   
+
     public function __construct()
     {
         parent::__construct();
@@ -58,26 +58,25 @@ class DemoCommand extends QtCommand
      * @throws \Quantum\Exceptions\DiException
      */
     public function exec()
-    { 
-        $usersCollectionData = [];
+    {
+        $usersCollection = [];
         $postsCollection = [];
 
         $adminData = $this->createUser(1, 'admin');
         $guestData = $this->createUser(2);
-        array_push($usersCollectionData, $adminData, $guestData);
-        
-        $this->persists($usersCollectionData, 'users');
+        array_push($usersCollection, $adminData, $guestData);
 
-        
+        $this->persists($usersCollection, 'users');
+
+
         $author =  $adminData['email'];
 
         for ($i = 1; $i <= 6; $i++) {
             $data = $this->createPost($author, $i);
-            array_push( $postsCollection, $data);
+            array_push($postsCollection, $data);
         }
 
         $this->persists($postsCollection, 'posts');
-      
     }
 
 
@@ -87,16 +86,17 @@ class DemoCommand extends QtCommand
         $repositoryDir = BASE_DIR . DS . 'base' . DS . 'repositories';
         $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' .  export($collection) . ';';
 
-        $fs->put($repositoryDir . DS . $file .'.php', $content);
+        $fs->put($repositoryDir . DS . $file . '.php', $content);
 
-        $this->info(ucfirst($file). ' successfully generated');
+        $this->info(ucfirst($file) . ' successfully generated');
     }
 
 
-    private function createUser($id, $role=''){
+    private function createUser($id, $role = '')
+    {
         $hasher = new Hasher;
-        
-            $data = 
+
+        $data =
             [
                 'id' => $id,
                 'firstname' => $this->faker->name(),
@@ -113,24 +113,24 @@ class DemoCommand extends QtCommand
                 'otp_expires' => '',
                 'otp_token' => '',
             ];
-            
+
         return $data;
     }
 
 
-    private function createPost($author, $id){
-       
-        $data = 
+    private function createPost($author, $id)
+    {
+
+        $data =
             [
                 'id'      => $id,
                 'title'   => $this->faker->realText(30),
                 'content' => $this->faker->realText(),
-                'author'  => $author,  
+                'author'  => $author,
                 'image'   => $this->faker->imageUrl(360, 360, 'animals', true, 'cats'),
                 'updated_at' => date("d/m/Y  H:i"),
             ];
-        
+
         return $data;
     }
-
 }
