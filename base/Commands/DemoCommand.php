@@ -54,25 +54,29 @@ class DemoCommand extends QtCommand
     public function exec()
     { 
         $faker = Factory::create();
-        $roles = ['admin', ''];
         $usersCollectionData = [];
+        $postsCollection = [];
 
-        for ($i = 0; $i < 2; $i++) {
-            $data = $this->createUser($faker, $roles, $i);
-            array_push($usersCollectionData, $data);
-        }
+        $adminData = $this->createUser($faker, 'admin', '1');
+        $guestData = $this->createUser($faker,  '', '2');
+        array_push($usersCollectionData, $adminData, $guestData);
         
-        $this->renderContent($usersCollectionData, 'users');
+        $this->persists($usersCollectionData, 'users');
+
 
         $author =  $usersCollectionData[0]['email'];
 
-        $postCollectionData = $this->createPosts($faker, $author);
-        $this->renderContent($postCollectionData, 'posts');
+        for ($i = 1; $i <= 6; $i++) {
+            $data = $this->createPost($faker, $author, $i);
+            array_push( $postsCollection, $data);
+        }
+
+        $this->persists($postsCollection, 'posts');
       
     }
 
 
-    protected function renderContent($collection, $file)
+    protected function persists($collection, $file)
     {
         $fs = Di::get(FileSystem::class);
         $repositoryDir = BASE_DIR . DS . 'base' . DS . 'repositories';
@@ -84,15 +88,15 @@ class DemoCommand extends QtCommand
     }
 
 
-    private function createUser($faker, $roles, $i){
+    private function createUser($faker, $role, $i){
         $hasher = new Hasher;
         
             $data = 
             [
-                'id' => $i+1,
+                'id' => $i,
                 'firstname' => $faker->name(),
                 'lastname' => $faker->lastName(),
-                'role' => $roles[$i],
+                'role' => $role,
                 'email' => $faker->email(),
                 'password' => $hasher->hash('password'),
                 'activation_token' => '',
@@ -109,24 +113,19 @@ class DemoCommand extends QtCommand
     }
 
 
-    private function createPosts($faker, $author){
-        $postsCollection = [];
-
-        for ($i = 1; $i <= 6; $i++) {
-            $data = 
-                [
-                    'id'      => $i,
-                    'title'   => $faker->realText(30),
-                    'content' => $faker->realText(),
-                    'author'  => $author,  
-                    'image'   => $faker->imageUrl(360, 360, 'animals', true, 'cats'),
-                    'updated_at' => date("d/m/Y  H:i"),
-                ];
-            
-            array_push( $postsCollection, $data);
-        }
-
-        return $postsCollection;
+    private function createPost($faker, $author, $i){
+       
+        $data = 
+            [
+                'id'      => $i,
+                'title'   => $faker->realText(30),
+                'content' => $faker->realText(),
+                'author'  => $author,  
+                'image'   => $faker->imageUrl(360, 360, 'animals', true, 'cats'),
+                'updated_at' => date("d/m/Y  H:i"),
+            ];
+        
+        return $data;
     }
 
 }
