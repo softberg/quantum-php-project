@@ -68,6 +68,7 @@ class PostCreateCommand extends QtCommand
             'title' => $this->getOption('title'),
             'content' => $this->getOption('description'),
             'author' => 'anonymous@qt.com',
+            'image' => null,
             'updated_at' => date('m/d/Y H:i')
         ];
 

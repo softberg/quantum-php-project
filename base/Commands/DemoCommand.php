@@ -33,7 +33,7 @@ class DemoCommand extends QtCommand
      * @var string
      */
     protected $name = 'demo:post';
-
+    protected $faker;
     /**
      * Command description
      * @var string
@@ -46,28 +46,33 @@ class DemoCommand extends QtCommand
      */
     protected $help = 'The command will generate new posts.php and users.php files';
 
+   
+    public function __construct()
+    {
+        parent::__construct();
+        $this->faker = Factory::create();
+    }
+
     /**
      * @return void
      * @throws \Quantum\Exceptions\DiException
      */
-    
     public function exec()
     { 
-        $faker = Factory::create();
         $usersCollectionData = [];
         $postsCollection = [];
 
-        $adminData = $this->createUser($faker, 'admin', '1');
-        $guestData = $this->createUser($faker,  '', '2');
+        $adminData = $this->createUser(1, 'admin');
+        $guestData = $this->createUser(2);
         array_push($usersCollectionData, $adminData, $guestData);
         
         $this->persists($usersCollectionData, 'users');
 
-
-        $author =  $usersCollectionData[0]['email'];
+        
+        $author =  $adminData['email'];
 
         for ($i = 1; $i <= 6; $i++) {
-            $data = $this->createPost($faker, $author, $i);
+            $data = $this->createPost($author, $i);
             array_push( $postsCollection, $data);
         }
 
@@ -88,16 +93,16 @@ class DemoCommand extends QtCommand
     }
 
 
-    private function createUser($faker, $role, $i){
+    private function createUser($id, $role=''){
         $hasher = new Hasher;
         
             $data = 
             [
-                'id' => $i,
-                'firstname' => $faker->name(),
-                'lastname' => $faker->lastName(),
+                'id' => $id,
+                'firstname' => $this->faker->name(),
+                'lastname' => $this->faker->lastName(),
                 'role' => $role,
-                'email' => $faker->email(),
+                'email' => $this->faker->email(),
                 'password' => $hasher->hash('password'),
                 'activation_token' => '',
                 'remember_token' => '',
@@ -113,15 +118,15 @@ class DemoCommand extends QtCommand
     }
 
 
-    private function createPost($faker, $author, $i){
+    private function createPost($author, $id){
        
         $data = 
             [
-                'id'      => $i,
-                'title'   => $faker->realText(30),
-                'content' => $faker->realText(),
+                'id'      => $id,
+                'title'   => $this->faker->realText(30),
+                'content' => $this->faker->realText(),
                 'author'  => $author,  
-                'image'   => $faker->imageUrl(360, 360, 'animals', true, 'cats'),
+                'image'   => $this->faker->imageUrl(360, 360, 'animals', true, 'cats'),
                 'updated_at' => date("d/m/Y  H:i"),
             ];
         
