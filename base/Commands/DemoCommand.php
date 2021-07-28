@@ -16,7 +16,9 @@ namespace Base\Commands;
 
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Console\QtCommand;
+use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Di\Di;
+use Faker\Factory;
 
 
 /**
@@ -31,7 +33,7 @@ class DemoCommand extends QtCommand
      * @var string
      */
     protected $name = 'demo:post';
-
+    protected $faker;
     /**
      * Command description
      * @var string
@@ -44,41 +46,64 @@ class DemoCommand extends QtCommand
      */
     protected $help = 'The command will generate new posts.php and users.php files';
 
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->faker = Factory::create();
+    }
+
     /**
      * @return void
      * @throws \Quantum\Exceptions\DiException
      */
     public function exec()
     {
-        $postsCollection = ([
-            [
-                'id' => 1,
-                'title' => 'Walt Disney',
-                'content' => 'The way to get started is to quit talking and begin doing.',
-                'author' => 'admin@qt.com',
-                'image' => 'walt-disney-9252507491.jpg',
-                'updated_at' => '07/22/2021 16:31',
-            ],
-            [
-                'id' => 2,
-                'title' => 'James Cameron',
-                'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
-                'author' => 'admin@qt.com',
-                'image' => null,
-                'updated_at' => '05/08/2021 23:13',
-            ],
-        ]);
+        $usersCollection = [];
+        $postsCollection = [];
 
-        $this->renderContent($postsCollection, 'posts');
+        $adminData = $this->createUser(1, 'admin');
+        $guestData = $this->createUser(2);
+        array_push($usersCollection, $adminData, $guestData);
 
-        $usersCollection = ([
+        $this->persists($usersCollection, 'users');
+
+
+        $author =  $adminData['email'];
+
+        for ($i = 1; $i <= 6; $i++) {
+            $data = $this->createPost($author, $i);
+            array_push($postsCollection, $data);
+        }
+
+        $this->persists($postsCollection, 'posts');
+    }
+
+
+    protected function persists($collection, $file)
+    {
+        $fs = Di::get(FileSystem::class);
+        $repositoryDir = BASE_DIR . DS . 'base' . DS . 'repositories';
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' .  export($collection) . ';';
+
+        $fs->put($repositoryDir . DS . $file . '.php', $content);
+
+        $this->info(ucfirst($file) . ' successfully generated');
+    }
+
+
+    private function createUser($id, $role = '')
+    {
+        $hasher = new Hasher;
+
+        $data =
             [
-                'id' => '1',
-                'firstname' => 'Admin',
-                'lastname' => 'Hunter',
-                'role' => 'admin',
-                'email' => 'admin@qt.com',
-                'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
+                'id' => $id,
+                'firstname' => $this->faker->name(),
+                'lastname' => $this->faker->lastName(),
+                'role' => $role,
+                'email' => $this->faker->email(),
+                'password' => $hasher->hash('password'),
                 'activation_token' => '',
                 'remember_token' => '',
                 'reset_token' => '',
@@ -87,22 +112,25 @@ class DemoCommand extends QtCommand
                 'otp' => '',
                 'otp_expires' => '',
                 'otp_token' => '',
-            ],
-        ]);
+            ];
 
-        $this->renderContent($usersCollection, 'users');
-      
+        return $data;
     }
 
 
-    protected function renderContent($collection, $file)
+    private function createPost($author, $id)
     {
-        $fs = Di::get(FileSystem::class);
-        $repositoryDir = BASE_DIR . DS . 'base' . DS . 'repositories';
-        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' .  export($collection) . ';';
 
-        $fs->put($repositoryDir . DS . $file .'.php', $content);
+        $data =
+            [
+                'id'      => $id,
+                'title'   => $this->faker->realText(30),
+                'content' => $this->faker->realText(),
+                'author'  => $author,
+                'image'   => $this->faker->imageUrl(360, 360, 'animals', true, 'cats'),
+                'updated_at' => date("d/m/Y  H:i"),
+            ];
 
-        $this->info(ucfirst($file). ' successfully generated');
+        return $data;
     }
 }
