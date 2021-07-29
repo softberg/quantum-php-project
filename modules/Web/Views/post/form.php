@@ -38,12 +38,8 @@
                         <div class="row">
                         <?php if(isset($id)): ?>   
                             <?php if ($post['image']): ?>
-                                <?php if(file_exists('uploads/'.$post['image'])): ?>
-                                    <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="update_page_img">
-                                <?php else: ?> 
-                                    <img src="<?php echo $post['image'] ?>" class="update_page_img">    
-                                <?php endif; ?>
-                                <?php else: ?>   
+                                <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="update_page_img">
+                            <?php else: ?>   
                                 <div class="update_page_img"><img src="<?php echo base_url() ?>/assets/images/no-image.png" class="post_image"></div>
                             <?php endif; ?>
                         <?php endif; ?>       

@@ -33,25 +33,24 @@ class Editor extends QtMiddleware
      * @var Validator
      */
     private $validator;
-    
+
     /**
      * Class constructor
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $request = new Request();
         $this->validator = new Validator();
-        if($request->hasFile('image')){
+
+        if ($request->hasFile('image')) {
             $this->validator->addRules([
                 'image' => [
                     Rule::set('fileSize', 2097152),
-                    Rule::set('fileExtension',['jpeg','png','jpg','gif']),
+                    Rule::set('fileExtension', ['jpeg', 'png', 'jpg', 'gif']),
                 ]
-            ]);  
+            ]);
         }
 
         $this->validator->addRules([
-        
             'title' => [
                 Rule::set('required'),
                 Rule::set('minLen', 10)
@@ -61,8 +60,6 @@ class Editor extends QtMiddleware
                 Rule::set('minLen', 10),
                 Rule::set('maxLen', 500),
             ],
-           
-           
         ]);
     }
 
@@ -81,6 +78,7 @@ class Editor extends QtMiddleware
 
         if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {
+                unset($request['image']);
                 session()->setFlash('error', $this->validator->getErrors());
                 redirectWith(get_referrer(), $request->all());
             }
@@ -88,5 +86,4 @@ class Editor extends QtMiddleware
 
         return $next($request, $response);
     }
-
 }

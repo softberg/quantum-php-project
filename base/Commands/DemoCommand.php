@@ -19,6 +19,8 @@ use Quantum\Console\QtCommand;
 use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Di\Di;
 use Faker\Factory;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 
 /**
@@ -59,32 +61,44 @@ class DemoCommand extends QtCommand
      */
     public function exec()
     {
-        $usersCollection = [];
-        $postsCollection = [];
+        $userCommand =  'user:create'; 
+        $postCommand = 'post:create'; 
+       
+        $this->createFile('users');
 
-        $adminData = $this->createUser(1, 'admin');
-        $guestData = $this->createUser(2);
-        array_push($usersCollection, $adminData, $guestData);
+        $adminArguments = $this->createUser('admin');
+        $guestArguments = $this->createUser();
+        
+        $this->runCommand($adminArguments, $userCommand);
+        $this->runCommand($guestArguments, $userCommand);
+      
 
-        $this->persists($usersCollection, 'users');
+        $this->createFile('posts');
 
-
-        $author =  $adminData['email'];
-
+        
         for ($i = 1; $i <= 6; $i++) {
-            $data = $this->createPost($author, $i);
-            array_push($postsCollection, $data);
+            $postArguments = [
+                '-t' => $this->faker->realText(30),
+                '-d' => $this->faker->realText(),
+            ];
+            $this->runCommand($postArguments, $postCommand);
         }
-
-        $this->persists($postsCollection, 'posts');
+         
     }
 
+    protected function runCommand($arguments, $commandName){
+        $command = $this->getApplication()->find($commandName);
+        $greetInput = new ArrayInput($arguments);
+        $output = new NullOutput;
+        $command->run($greetInput, $output);
+    }
 
-    protected function persists($collection, $file)
+    protected function createFile($file)
     {
         $fs = Di::get(FileSystem::class);
+       
         $repositoryDir = BASE_DIR . DS . 'base' . DS . 'repositories';
-        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' .  export($collection) . ';';
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' .  export([]) . ';';
 
         $fs->put($repositoryDir . DS . $file . '.php', $content);
 
@@ -92,45 +106,21 @@ class DemoCommand extends QtCommand
     }
 
 
-    private function createUser($id, $role = '')
+    private function createUser($role = '')
     {
         $hasher = new Hasher;
 
         $data =
             [
-                'id' => $id,
-                'firstname' => $this->faker->name(),
-                'lastname' => $this->faker->lastName(),
-                'role' => $role,
-                'email' => $this->faker->email(),
-                'password' => $hasher->hash('password'),
-                'activation_token' => '',
-                'remember_token' => '',
-                'reset_token' => '',
-                'access_token' => '',
-                'refresh_token' => '',
-                'otp' => '',
-                'otp_expires' => '',
-                'otp_token' => '',
+                '-f' => $this->faker->name(),
+                '-l' => $this->faker->lastName(),
+                '-r' => $role,
+                '-u' => $this->faker->email(),
+                '-p' => '123456',
             ];
 
         return $data;
     }
 
 
-    private function createPost($author, $id)
-    {
-
-        $data =
-            [
-                'id'      => $id,
-                'title'   => $this->faker->realText(30),
-                'content' => $this->faker->realText(),
-                'author'  => $author,
-                'image'   => $this->faker->imageUrl(360, 360, 'animals', true, 'cats'),
-                'updated_at' => date("d/m/Y  H:i"),
-            ];
-
-        return $data;
-    }
 }
