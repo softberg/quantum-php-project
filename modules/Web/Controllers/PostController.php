@@ -108,7 +108,6 @@ class PostController extends QtController
     public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, int $id = null)
     {
         if ($request->isMethod('post')) {
-
             $post = [
                 'title' => $request->get('title'),
                 'content' => $request->get('content'),
@@ -117,8 +116,9 @@ class PostController extends QtController
                 'updated_at' => date('m/d/Y H:i'),
             ];
 
-            if ($request->hasFile('image')) {
+            $hasImage = $request->hasFile('image');
 
+            if ($hasImage) {
                 $imageName = slugify($request->get('title'));
 
                 if ($id) {
@@ -132,7 +132,7 @@ class PostController extends QtController
             }
 
             if ($id) {
-                if (!$request->hasFile('image')) {
+                if (!$hasImage) {
                     unset($post['image']);
                 }
                 
@@ -177,9 +177,8 @@ class PostController extends QtController
         redirect(base_url() . '/' . current_lang() . '/posts');
     }
 
-    private function saveImage($image, $imageName)
+    private function saveImage($file, $imageName)
     {
-        $file = new File($image);
         $file->setName($imageName);
         $file->save(uploads_dir());
 
