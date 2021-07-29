@@ -104,9 +104,11 @@ class PostService extends BaseService
         }
 
         foreach (self::$posts as &$postData) {
-            if (in_array($id, $postData)) {
+            
+            if ($id == $postData['id']) {
                 $postData = $post;
             }
+
         }
 
         $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
