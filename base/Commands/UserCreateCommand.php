@@ -44,18 +44,18 @@ class UserCreateCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Add f, l, e, p, r to create a user';
+    protected $help = 'Add e, p, r, f, l to create a user';
 
     /**
      * Command options
      * @var array
      */
     protected $options = [
-        ['firstname', 'f', 'required', 'User firstname'],
-        ['lastname', 'l', 'required', 'User lastname'],
-        ['email', 'e', 'required', 'User email'],
+        ['email', 'u', 'required', 'User email'],
         ['password', 'p', 'required', 'User password'],
-        ['role', 'r','required', 'User role'],
+        ['role', 'r','optional', 'User role'],
+        ['firstname', 'f', 'optional', 'User firstname'],
+        ['lastname', 'l', 'optional', 'User lastname'],
     ];
 
     /**
