@@ -16,7 +16,6 @@ namespace Base\Commands;
 
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Console\QtCommand;
-use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Di\Di;
 use Faker\Factory;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -80,6 +79,8 @@ class DemoCommand extends QtCommand
             $postArguments = [
                 '-t' => $this->faker->realText(30),
                 '-d' => $this->faker->realText(),
+                '-i' => $this->faker->imageUrl(480, 480, 'animals', true, 'cats'),
+                '-a' => $adminArguments['-u'],
             ];
             $this->runCommand($postArguments, $postCommand);
         }
@@ -108,8 +109,6 @@ class DemoCommand extends QtCommand
 
     private function createUser($role = '')
     {
-        $hasher = new Hasher;
-
         $data =
             [
                 '-f' => $this->faker->name(),

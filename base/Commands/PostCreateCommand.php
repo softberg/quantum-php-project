@@ -52,6 +52,8 @@ class PostCreateCommand extends QtCommand
     protected $options = [
         ['title', 't', 'required', 'Post title'],
         ['description', 'd', 'required', 'Post description'],
+        ['image', 'i', 'optional', 'Post image'],
+        ['author', 'a', 'optional', 'Post author'],
     ];
 
     /**
@@ -67,8 +69,8 @@ class PostCreateCommand extends QtCommand
         $post = [
             'title' => $this->getOption('title'),
             'content' => $this->getOption('description'),
-            'author' => 'anonymous@qt.com',
-            'image' => null,
+            'author' => $this->getOption('author'),
+            'image' => $this->getOption('image'),
             'updated_at' => date('m/d/Y H:i')
         ];
 
