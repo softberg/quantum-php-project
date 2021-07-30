@@ -69,8 +69,8 @@ class PostCreateCommand extends QtCommand
         $post = [
             'title' => $this->getOption('title'),
             'content' => $this->getOption('description'),
-            'author' => $this->getOption('author'),
-            'image' => $this->getOption('image'),
+            'author' => $this->getOption('author') ? $this->getOption('author') : 'anonymous@qt.com',
+            'image' => $this->getOption('image') ? $this->getOption('image') : null,
             'updated_at' => date('m/d/Y H:i')
         ];
 

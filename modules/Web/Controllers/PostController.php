@@ -180,7 +180,6 @@ class PostController extends QtController
     public function deletePostImage(string $lang, int $id)
     {
         $post = $this->postService->getPost($id);
-       
         $this->deleteImage($post);
         $post['image'] = null;
         $this->postService->updatePost($id, $post);

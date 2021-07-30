@@ -44,11 +44,11 @@
                                 <!-- Modal Structure -->
                                 <div id="modal1" class="modal">
                                 <div class="modal-content">
-                                    <!-- <h4>Modal Header</h4> -->
                                     <p>Are you sure you want to delete this image? </p>
                                 </div>
                                 <div class="modal-footer">
                                     <a href="<?php echo base_url() . '/' . current_lang() . '/post/deleteImage/' . $post['id'] ?>" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                                    <a href="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . $id ?>" class="modal-close waves-effect waves-red btn-flat">Disagree</a>
                                 </div>
                                 </div>
                                 <?php if(file_exists('uploads/'.$post['image'])): ?>

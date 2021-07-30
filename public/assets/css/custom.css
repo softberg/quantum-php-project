@@ -484,3 +484,7 @@ div.polaroid {
     padding: 1px 8px;
     background: none !important;
 }
+
+.modal{
+    text-align: center;
+}
