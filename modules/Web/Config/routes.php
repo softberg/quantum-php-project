@@ -42,5 +42,6 @@ return function ($route) {
         $route->get('[:alpha:2]?/post/[:num]', 'PostController', 'getPost');
         $route->add('[:alpha:2]?/post/amend/[:num]?', 'GET|POST|PUT', 'PostController', 'amendPost')->middlewares(['Editor']);
         $route->get('[:alpha:2]?/post/delete/[:num]', 'PostController', 'deletePost')->middlewares(['Editor']);
+        $route->get('[:alpha:2]?/post/deleteImage/[:num]','PostController', 'deletePostImage')->middlewares(['Editor']);
     })->middlewares(['Auth']);
 };
