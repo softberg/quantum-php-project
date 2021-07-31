@@ -8,7 +8,11 @@
                     <a href="<?php echo base_url() . '/' . current_lang() . '/post/' . $post['id'] ?>">
                         <div class="card-image">
                             <?php if ($post['image']): ?>
-                                <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="content_img">
+                                <?php if(file_exists('uploads/'.$post['image'])): ?>
+                                    <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="content_img">
+                                <?php else: ?>
+                                    <img src="<?php echo $post['image'] ?>" class="content_img">
+                                <?php endif; ?> 
                             <?php else: ?>
                                 <img src="<?php echo base_url() ?>/assets/images/no-image.png" class="content_no_img">
                             <?php endif; ?>    
@@ -36,10 +40,21 @@
                                         </a>
                                     </span>
                                     <span class="edit-post">
-                                        <a href="<?php echo base_url() . '/' . current_lang() . '/post/delete/' . $post['id'] ?>"
-                                           class="delete-post white-text" title="<?php _t('common.delete') ?>">
+                                        <a href="#modal1_<?php echo $post['id'] ?>"
+                                            class="modal-trigger white-text">
                                             <i class="material-icons dp48">delete</i>
                                         </a>
+                                         <!-- Modal Structure -->
+                                        <div id="modal1_<?php echo $post['id'] ?>" class="modal">
+                                            <div class="modal-content">
+                                                <p>Are you sure you want to delete this image?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                <a href="<?php echo base_url() . '/' . current_lang() . '/post/delete/' . $post['id'] ?>" class="modal-close waves-effect waves-green btn-flat" title="<?php _t('common.delete') ?>">Agree</a>
+                                                <a href="<?php echo base_url() . '/' . current_lang() . '/posts' ?>" class="modal-close waves-effect waves-red btn-flat">Disagree</a>
+                                            </div>
+                                        </div>
+                                        <!--------end Modal------------------>
                                     </span>
                                 <?php endif; ?>
                             </div>

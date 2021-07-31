@@ -38,7 +38,24 @@
                         <div class="row">
                         <?php if(isset($id)): ?>   
                             <?php if ($post['image']): ?>
-                                <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="update_page_img">
+                                <!-- Modal Trigger -->
+                                <a class="waves-effect waves-light btn modal-trigger image_delete" href="#modal1"><i class="material-icons">close</i></a>
+
+                                <!-- Modal Structure -->
+                                <div id="modal1" class="modal">
+                                <div class="modal-content">
+                                    <p>Are you sure you want to delete this image? </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="<?php echo base_url() . '/' . current_lang() . '/post/deleteImage/' . $post['id'] ?>" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                                    <a href="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . $id ?>" class="modal-close waves-effect waves-red btn-flat">Disagree</a>
+                                </div>
+                                </div>
+                                <?php if(file_exists('uploads/'.$post['image'])): ?>
+                                    <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="update_page_img">
+                                <?php else: ?>
+                                    <img src="<?php echo $post['image'] ?>" class="update_page_img">
+                                <?php endif; ?> 
                             <?php else: ?>   
                                 <div class="update_page_img"><img src="<?php echo base_url() ?>/assets/images/no-image.png" class="post_image"></div>
                             <?php endif; ?>

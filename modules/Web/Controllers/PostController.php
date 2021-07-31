@@ -177,6 +177,15 @@ class PostController extends QtController
         redirect(base_url() . '/' . current_lang() . '/posts');
     }
 
+    public function deletePostImage(string $lang, int $id)
+    {
+        $post = $this->postService->getPost($id);
+        $this->deleteImage($post);
+        $post['image'] = null;
+        $this->postService->updatePost($id, $post);
+        redirect(base_url() . '/' . current_lang() . '/posts');
+    }
+
     private function saveImage($file, $imageName)
     {
         $file->setName($imageName);

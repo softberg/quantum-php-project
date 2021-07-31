@@ -478,3 +478,13 @@ div.polaroid {
     }
 }
 
+.image_delete{
+    position: absolute;
+    left: 126px;
+    padding: 1px 8px;
+    background: none !important;
+}
+
+.modal{
+    text-align: center;
+}

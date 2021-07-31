@@ -78,9 +78,10 @@ class Editor extends QtMiddleware
 
         if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {
-                unset($request['image']);
+                $data = $request->all();
+                unset($data['image']);
                 session()->setFlash('error', $this->validator->getErrors());
-                redirectWith(get_referrer(), $request->all());
+                redirectWith(get_referrer(), $data);
             }
         }
 
