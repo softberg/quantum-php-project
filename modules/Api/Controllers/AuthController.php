@@ -9,13 +9,12 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Api\Controllers;
 
 use Quantum\Exceptions\AuthException;
-use Quantum\Libraries\Mailer\Mailer;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
@@ -37,9 +36,15 @@ class AuthController extends ApiController
     const STATUS_SUCCESS = 'success';
 
     /**
-     * Sign in
+     * Sign in action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function signin(Request $request, Response $response)
     {
@@ -67,8 +72,13 @@ class AuthController extends ApiController
     }
 
     /**
-     * Sign out
+     * Sign out action
      * @param \Quantum\Http\Response $response
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function signout(Response $response)
     {
@@ -85,9 +95,15 @@ class AuthController extends ApiController
     }
 
     /**
-     * Sign up
+     * Sign up action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function signup(Request $request, Response $response)
     {
@@ -99,9 +115,14 @@ class AuthController extends ApiController
     }
 
     /**
-     * Activate
+     * Activate action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function activate(Request $request, Response $response)
     {
@@ -114,9 +135,15 @@ class AuthController extends ApiController
     }
 
     /**
-     * Forget
+     * Forget action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function forget(Request $request, Response $response)
     {
@@ -129,9 +156,14 @@ class AuthController extends ApiController
     }
 
     /**
-     * Reset
+     * Reset action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function reset(Request $request, Response $response)
     {
@@ -142,9 +174,14 @@ class AuthController extends ApiController
     }
 
     /**
-     * Verify
+     * Verify action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function verify(Request $request, Response $response)
     {
@@ -163,9 +200,13 @@ class AuthController extends ApiController
     }
 
     /**
+     * Resend action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function resend(Request $request, Response $response)
     {
