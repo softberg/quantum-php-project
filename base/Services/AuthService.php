@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.4.0
+ * @since 2.5.0
  */
 
 namespace Base\Services;
@@ -33,12 +33,6 @@ class AuthService extends BaseService implements AuthServiceInterface
     protected static $users = [];
 
     /**
-     * Path to users repository
-     * @var string
-     */
-    protected $userRepository = 'base' . DS . 'repositories' . DS . 'users.php';
-
-    /**
      * Init
      * @param \Quantum\Loader\Loader $loader
      * @throws \Quantum\Exceptions\LoaderException
@@ -46,6 +40,8 @@ class AuthService extends BaseService implements AuthServiceInterface
     public function __init(Loader $loader)
     {
         self::$users = $loader->setup(new Setup('base' . DS . 'repositories', 'users', true))->load();
+
+        $this->repository = base_dir() . DS . 'base' . DS . 'repositories' . DS . 'users.php';
     }
 
     /**
@@ -90,10 +86,11 @@ class AuthService extends BaseService implements AuthServiceInterface
     }
 
     /**
-     * Add
+     * Add user
      * @param array $data
      * @return \Quantum\Libraries\Auth\User
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function add(array $data): User
@@ -118,18 +115,19 @@ class AuthService extends BaseService implements AuthServiceInterface
 
         self::$users[] = $user->getData();
 
-        $this->persist(base_dir() . DS . $this->userRepository, self::$users);
+        $this->persist(self::$users);
 
         return $user;
     }
 
     /**
-     * Update
+     * Update user
      * @param string $field
      * @param string|null $value
      * @param array $data
      * @return \Quantum\Libraries\Auth\User|null
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function update(string $field, ?string $value, array $data): ?User
@@ -152,7 +150,7 @@ class AuthService extends BaseService implements AuthServiceInterface
             }
         }
 
-        $this->persist(base_dir() . DS . $this->userRepository, self::$users);
+        $this->persist(self::$users);
 
         return $user;
     }
