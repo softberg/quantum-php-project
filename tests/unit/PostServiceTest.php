@@ -17,6 +17,7 @@ class PostServiceTest extends TestCase
             'title' => 'Walt Disney',
             'content' => 'The way to get started is to quit talking and begin doing.',
             'author' => 'admin@qt.com',
+            'image' => null,
             'updated_at' => '05/08/2021 23:13',
         ],
         [
@@ -24,6 +25,7 @@ class PostServiceTest extends TestCase
             'title' => 'James Cameron',
             'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
             'author' => 'admin@qt.com',
+            'image' => null,
             'updated_at' => '05/08/2021 23:13',
         ]
     ];
@@ -107,6 +109,7 @@ class PostServiceTest extends TestCase
             'title' => 'Walt Disney Jr.',
             'content' => 'The best way to get started is to quit talking and begin doing.',
             'author' => 'james@mail.com',
+            'image' => 'https://somedomain.com/images/image.jpg',
             'updated_at' => $date
         ]);
 
@@ -114,6 +117,7 @@ class PostServiceTest extends TestCase
         $this->assertEquals('Walt Disney Jr.', $this->postService->getPost(1)['title']);
         $this->assertEquals('The best way to get started is to quit talking and begin doing.', $this->postService->getPost(1)['content']);
         $this->assertEquals('james@mail.com', $this->postService->getPost(1)['author']);
+        $this->assertEquals('https://somedomain.com/images/image.jpg', $this->postService->getPost(1)['image']);
         $this->assertEquals($date, $this->postService->getPost(1)['updated_at']);
     }
 
