@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -29,8 +29,7 @@ class Forget extends QtMiddleware
 {
 
     /**
-     * Validator object
-     * @var Validator
+     * @var \Quantum\Libraries\Validation\Validator
      */
     private $validator;
 
@@ -48,11 +47,17 @@ class Forget extends QtMiddleware
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @param \Closure $next
      * @return mixed
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DatabaseException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \Quantum\Exceptions\ModelException
+     * @throws \Quantum\Exceptions\SessionException
+     * @throws \ReflectionException
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
@@ -64,10 +69,10 @@ class Forget extends QtMiddleware
 
             if (!$this->emailExists($request->get('email'))) {
                 session()->setFlash('error', ['email' => [
-                        t('validation.nonExistingRecord', $request->get('email'))
-                    ]
+                    t('validation.nonExistingRecord', $request->get('email'))
+                ]
                 ]);
-                
+
                 redirect(base_url() . '/' . current_lang() . '/forget');
             }
         }
@@ -81,9 +86,9 @@ class Forget extends QtMiddleware
      * @return bool
      * @throws \Exception
      */
-    private function emailExists($email)
+    private function emailExists(string $email): bool
     {
-        $users = $users = load_users();
+        $users = load_users();
 
         if (is_array($users) && count($users) > 0) {
             foreach ($users as $user) {

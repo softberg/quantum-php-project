@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -28,18 +28,20 @@ class Activate extends QtMiddleware
 {
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @param Closure $next
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Closure $next
      * @return mixed
+     * @throws \Quantum\Exceptions\HookException
+     * @throws \ReflectionException
      * @throws \Exception
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        list($lang, $token) = current_route_args();
+        list($lang, $token) = route_args();
 
         if (!$this->checkToken($token)) {
-            HookManager::call('pageNotFound', $response);
+            HookManager::call('pageNotFound');
         }
 
         $request->set('activation_token', $token);
@@ -53,7 +55,7 @@ class Activate extends QtMiddleware
      * @return bool
      * @throws \Exception
      */
-    private function checkToken($token)
+    private function checkToken(string $token): bool
     {
         $users = load_users();
 

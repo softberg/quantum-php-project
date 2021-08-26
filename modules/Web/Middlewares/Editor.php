@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -29,13 +29,13 @@ class Editor extends QtMiddleware
 {
 
     /**
-     * Validator object
-     * @var Validator
+     * @var \Quantum\Libraries\Validation\Validator
      */
     private $validator;
 
     /**
      * Class constructor
+     * @param \Quantum\Http\Request $request
      */
     public function __construct(Request $request)
     {
@@ -44,8 +44,8 @@ class Editor extends QtMiddleware
         if ($request->hasFile('image')) {
             $this->validator->addRules([
                 'image' => [
-                    Rule::set('fileSize', 2097152),
-                    Rule::set('fileExtension', ['jpeg', 'png', 'jpg', 'gif']),
+                    Rule::set('fileSize', 2 * pow(1024, 2)),
+                    Rule::set('fileExtension', ['jpeg', 'jpg', 'png']),
                 ]
             ]);
         }
@@ -53,22 +53,30 @@ class Editor extends QtMiddleware
         $this->validator->addRules([
             'title' => [
                 Rule::set('required'),
-                Rule::set('minLen', 10)
+                Rule::set('minLen', 10),
+                Rule::set('maxLen', 50)
             ],
             'content' => [
                 Rule::set('required'),
                 Rule::set('minLen', 10),
-                Rule::set('maxLen', 500),
             ],
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @param \Closure $next
      * @return mixed
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DatabaseException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \Quantum\Exceptions\ModelException
+     * @throws \Quantum\Exceptions\SessionException
+     * @throws \ReflectionException
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
