@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -24,13 +24,13 @@ class Signup extends QtMiddleware
 {
 
     /**
-     * Validator object
-     * @var Validator
+     * @var \Quantum\Libraries\Validation\Validator
      */
     private $validator;
 
     /**
      * Class constructor
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -70,11 +70,11 @@ class Signup extends QtMiddleware
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @param \Closure $next
      * @return mixed
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\StopExecutionException
      */
     public function apply(Request $request, Response $response, \Closure $next)
     {

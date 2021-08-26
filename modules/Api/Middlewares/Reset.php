@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -28,8 +28,7 @@ class Reset extends QtMiddleware
 {
 
     /**
-     * Validator object
-     * @var Validator
+     * @var \Quantum\Libraries\Validation\Validator
      */
     private $validator;
 
@@ -54,15 +53,16 @@ class Reset extends QtMiddleware
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @param \Closure $next
      * @return mixed
+     * @throws \Quantum\Exceptions\StopExecutionException
      * @throws \Exception
      */
     public function apply(Request $request, Response $response, \Closure $next)
     {
-        list($token) = current_route_args();
+        list($token) = route_args();
 
         if (!$this->validator->isValid($request->all())) {
             $response->json([
@@ -98,14 +98,13 @@ class Reset extends QtMiddleware
         return $next($request, $response);
     }
 
-
     /**
      * Check token
      * @param string $token
      * @return bool
      * @throws \Exception
      */
-    private function checkToken($token)
+    private function checkToken(string $token): bool
     {
         $users = load_users();
 
@@ -127,7 +126,7 @@ class Reset extends QtMiddleware
      * @param string $repeatPassword
      * @return bool
      */
-    private function confirmPassword($newPassword, $repeatPassword)
+    private function confirmPassword(string $newPassword, string $repeatPassword): bool
     {
         return $newPassword == $repeatPassword;
     }
