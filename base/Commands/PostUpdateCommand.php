@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.3.0
+ * @since 2.5.0
  */
 
 namespace Base\Commands;
@@ -43,7 +43,7 @@ class PostUpdateCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Find post by ID and update the title or description of post';
+    protected $help = 'Use the following format to update the post:' . PHP_EOL . 'php qt post:update `[Post Id]` -t `Title` -d `Description` [-i `Image`] [-a `Author`]';
 
     /**
      * Command arguments
@@ -60,11 +60,13 @@ class PostUpdateCommand extends QtCommand
     protected $options = [
         ['title', 't', 'required', 'Post title'],
         ['description', 'd', 'required', 'Post description'],
+        ['image', 'i', 'optional', 'Post image'],
+        ['author', 'a', 'optional', 'Post author'],
     ];
 
     /**
-     * @return void
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      */
     public function exec()
     {
@@ -74,14 +76,19 @@ class PostUpdateCommand extends QtCommand
 
         $id = $this->getArgument('id');
 
+        $post = $postService->getPost($id);
+
         $title = $this->getOption('title');
         $description = $this->getOption('description');
+        $image = $this->getOption('image');
+        $author = $this->getOption('author');
 
         if($title && $description) {
             $post = [
                 'title' => $title,
                 'content' => $description,
-                'author' => 'anonymous@qt.com',
+                'image' => $image ?: $post['image'],
+                'author' => $author ?: $post['author'],
                 'updated_at' => date('m/d/Y H:i')
             ];
 
