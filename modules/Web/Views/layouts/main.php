@@ -10,27 +10,10 @@
         <link rel='stylesheet' href='<?php echo asset('css/materialize.min.css') ?>' type='text/css' media='screen,projection' />
         <link rel='stylesheet' href='<?php echo asset('css/custom.css') ?>' type='text/css' />
     </head>
-
     <body>
-
         <header>
-            <?php if (auth()->check()): ?>
-                <?php echo partial('partials/navbar') ?>
-            <?php endif; ?>
+            <?php echo partial('partials/navbar') ?>
         </header>
-
-        <?php if(!auth()->check()): ?>
-            <header class="teal accent-4 high-z">
-                <div class="container wrapper">
-                    <nav class="transparent no-box">
-                        <div class="nav-wrapper teal accent-4 row">
-                            <?php echo partial('partials/language') ?>
-                        </div>
-                    </nav>
-                </div>
-            </header>
-        <?php endif; ?>
-        
         <main>
             <?php echo view() ?>
         </main>

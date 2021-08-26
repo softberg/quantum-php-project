@@ -1,32 +1,35 @@
-<div class="back-btn">
-    <a title="Back" href="<?php echo base_url() . '/' . current_lang() . '/posts'; ?>"><i class="material-icons">arrow_back</i></a>
-</div>
-<div class="post-form">
+<div class="post-form polaroid">
+    <?php echo partial('post/partials/back') ?>
     <div class="row">
-        <div class="col s12 l8 offset-l2">
-
+        <div class="col s12">
             <h2 class="center-align teal-text"><?php isset($id) ? _t('common.update_post') : _t('common.new_post') ?></h2>
 
             <?php if (session()->has('error')): ?>
                 <?php echo partial('partials/messages/error') ?>
             <?php endif; ?>
 
+            <?php echo partial('post/partials/modal', ['item' => t('common.the_image')]) ?>
+
             <div class="card teal accent-4">
                 <div class="card-content">
-                    <form method="post" action="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . ($id ?? '') ?>" enctype="multipart/form-data">
+                    <form method="post"
+                          action="<?php echo base_url() . '/' . current_lang() . '/post/' . (isset($post) ? 'amend/' . $post['id'] : 'create') ?>"
+                          enctype="multipart/form-data">
                         <div class="row">
                             <div class="input-field col s12">
-                                <input value="<?php echo $post['title'] ?? old('title') ?>" name="title" id="title" type="text" class="validate">
+                                <input value="<?php echo $post['title'] ?? old('title') ?>" name="title" id="title"
+                                       type="text" class="validate">
                                 <label for="title"><?php _t('common.title') ?></label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <textarea name="content" id="content" class="materialize-textarea"><?php echo $post['content'] ?? old('content') ?></textarea>
+                                <textarea name="content" id="content"
+                                          class="materialize-textarea"><?php echo $post['content'] ?? old('content') ?></textarea>
                                 <label for="content"><?php _t('common.content') ?></label>
                             </div>
                         </div>
-                        <div class="file-field input-field">
+                        <div class="file-field input-field upload-btn">
                             <div class="btn">
                                 <span>Image</span>
                                 <input type="file" name="image">
@@ -35,38 +38,26 @@
                                 <input class="file-path validate" type="text">
                             </div>
                         </div>
-                        <div class="row">
-                        <?php if(isset($id)): ?>   
-                            <?php if ($post['image']): ?>
-                                <!-- Modal Trigger -->
-                                <a class="waves-effect waves-light btn modal-trigger image_delete" href="#modal1"><i class="material-icons">close</i></a>
 
-                                <!-- Modal Structure -->
-                                <div id="modal1" class="modal">
-                                <div class="modal-content">
-                                    <p>Are you sure you want to delete this image? </p>
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="<?php echo base_url() . '/' . current_lang() . '/post/deleteImage/' . $post['id'] ?>" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-                                    <a href="<?php echo base_url() . '/' . current_lang() . '/post/amend/' . $id ?>" class="modal-close waves-effect waves-red btn-flat">Disagree</a>
-                                </div>
-                                </div>
-                                <?php if(file_exists('uploads/'.$post['image'])): ?>
-                                    <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="update_page_img">
-                                <?php else: ?>
-                                    <img src="<?php echo $post['image'] ?>" class="update_page_img">
-                                <?php endif; ?> 
-                            <?php else: ?>   
-                                <div class="update_page_img"><img src="<?php echo base_url() ?>/assets/images/no-image.png" class="post_image"></div>
+                        <div class="post-image">
+                            <?php if (isset($post) && $post['image']): ?>
+                                <a class="waves-effect waves-light btn modal-trigger image_delete"
+                                   data-url="<?php echo base_url() . '/' . current_lang() . '/post/delete-image/' . $post['id'] ?>"
+                                   href="#modal-confirm"
+                                   title="<?php _t('common.delete') ?>">
+                                    <i class="material-icons">close</i>
+                                </a>
+                                <img src="<?php echo $post['image'] ?>" class="update_page_img">
                             <?php endif; ?>
-                        <?php endif; ?>       
                         </div>
+
                         <div class="center-align">
-                            <input type="hidden" name="token" value="<?php echo csrf_token() ?>" />
-                            <button class="btn btn-large waves-effect waves-light blue-grey" type="submit">
+                            <input type="hidden" name="token" value="<?php echo csrf_token() ?>"/>
+                            <button class="btn btn-large waves-effect waves-light submit-btn" type="submit">
                                 <?php _t('common.save') ?>
                             </button>
-                            <a href="<?php echo base_url() . '/' . current_lang() ?>/posts" class="btn btn-large waves-effect waves-teal btn-flat white-text">
+                            <a href="<?php echo base_url() . '/' . current_lang() ?>/posts"
+                               class="btn btn-large waves-effect waves-teal btn-flat white-text">
                                 <?php _t('common.cancel') ?>
                             </a>
                         </div>

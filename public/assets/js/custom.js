@@ -1,8 +1,12 @@
 jQuery(document).ready(function ($) {
+
     $(".dropdown-trigger").dropdown();
-});
 
-
-$(document).ready(function(){
     $('.modal').modal();
+
+    $('.modal-trigger').on('click', function () {
+        $('#modal-confirm').attr('href', $(this).data('url'));
+        $('.modal').modal('open');
+    });
+
 });

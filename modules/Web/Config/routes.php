@@ -13,7 +13,7 @@ return function ($route) {
         ]);
 
         $response->html($view->render('index'));
-    });
+    })->name('home');
 
     $route->get('[:alpha:2]?/about', function (Response $response, ViewFactory $view) {
         $view->setLayout('layouts/landing');
@@ -24,11 +24,14 @@ return function ($route) {
         ]);
 
         $response->html($view->render('about'));
-    });
+    })->name('about');
+
+    $route->get('[:alpha:2]?/posts', 'PostController', 'getPosts');
+    $route->get('[:alpha:2]?/post/[:num]', 'PostController', 'getPost');
 
     $route->group('guest', function ($route) {
-        $route->add('[:alpha:2]?/signin', 'GET|POST', 'AuthController', 'signin');
-        $route->add('[:alpha:2]?/signup', 'GET|POST', 'AuthController', 'signup')->middlewares(['Signup']);
+        $route->add('[:alpha:2]?/signin', 'GET|POST', 'AuthController', 'signin')->name('signin');
+        $route->add('[:alpha:2]?/signup', 'GET|POST', 'AuthController', 'signup')->middlewares(['Signup'])->name('signup');
         $route->get('[:alpha:2]?/activate/[:any]', 'AuthController', 'activate')->middlewares(['Activate']);
         $route->add('[:alpha:2]?/forget', 'GET|POST', 'AuthController', 'forget')->middlewares(['Forget']);
         $route->add('[:alpha:2]?/reset/[:any]', 'GET|POST', 'AuthController', 'reset')->middlewares(['Reset']);
@@ -38,10 +41,9 @@ return function ($route) {
 
     $route->group('auth', function ($route) {
         $route->get('[:alpha:2]?/signout', 'AuthController', 'signout');
-        $route->get('[:alpha:2]?/posts', 'PostController', 'getPosts');
-        $route->get('[:alpha:2]?/post/[:num]', 'PostController', 'getPost');
-        $route->add('[:alpha:2]?/post/amend/[:num]?', 'GET|POST|PUT', 'PostController', 'amendPost')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/post/create', 'GET|POST', 'PostController', 'createPost')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/post/amend/[:num]?', 'GET|POST', 'PostController', 'amendPost')->middlewares(['Editor']);
         $route->get('[:alpha:2]?/post/delete/[:num]', 'PostController', 'deletePost')->middlewares(['Editor']);
-        $route->get('[:alpha:2]?/post/deleteImage/[:num]','PostController', 'deletePostImage')->middlewares(['Editor']);
+        $route->get('[:alpha:2]?/post/delete-image/[:num]','PostController', 'deletePostImage')->middlewares(['Editor']);
     })->middlewares(['Auth']);
 };

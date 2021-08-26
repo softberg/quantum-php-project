@@ -1,14 +1,10 @@
 <div class="center-align white-text">
-    <div class="logo-block">
-        <?php echo partial('partials/logo') ?>
-    </div>
-
     <h2><?php _t('common.about'); ?></h2>
-    
+
     <div class="card teal">
         <div class="card-content">
             <h6><?php _t('common.about_framework'); ?></h6>
-            
+
             <h4><?php _t('common.version'); ?></h4>
             <h6><?php _t('common.current_version', env('APP_VERSION')); ?></h6>
 

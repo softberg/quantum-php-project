@@ -12,17 +12,9 @@
     </head>
 
     <body>
-
-        <header class="teal accent-4 high-z">
-            <div class="container wrapper">
-                <nav class="transparent no-box">
-                    <div class="nav-wrapper teal accent-4 row">
-                        <?php echo partial('partials/language') ?>
-                    </div>
-                </nav>
-            </div>
+        <header>
+            <?php echo partial('partials/navbar') ?>
         </header>
-
         <main class="teal accent-4">
             <div class="container">
                 <div class="row">
