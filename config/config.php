@@ -15,7 +15,7 @@ return [
      * App name
      * ---------------------------------------------------------
      */
-    'app_name' => 'Quantum PHP Framework',
+    'app_name' => 'Quantum PHP App',
 
     /**
      * ---------------------------------------------------------
@@ -58,10 +58,10 @@ return [
 
     /**
      * ---------------------------------------------------------
-     * Two step verification
+     * Two-step verification
      * ---------------------------------------------------------
      * 
-     * Enables or disables 2 step verification
+     * Enables or disables 2-step verification
      */
     '2SV' => env('2SV', true),
 
