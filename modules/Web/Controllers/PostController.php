@@ -9,20 +9,20 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Web\Controllers;
 
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
+use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ViewFactory;
-use Quantum\Mvc\QtController;
 use Quantum\Hooks\HookManager;
 use Base\Services\PostService;
+use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Quantum\Libraries\Upload\File;
-use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Di\Di;
 
 
@@ -43,7 +43,9 @@ class PostController extends QtController
      * Magic __before
      * @param \Quantum\Factory\ServiceFactory $serviceFactory
      * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\DiException
      * @throws \Quantum\Exceptions\ServiceException
+     * @throws \ReflectionException
      */
     public function __before(ServiceFactory $serviceFactory, ViewFactory $view)
     {
@@ -52,9 +54,13 @@ class PostController extends QtController
     }
 
     /**
-     * Get posts
+     * Get posts action
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\HookException
+     * @throws \Quantum\Exceptions\ViewException
+     * @throws \ReflectionException
      */
     public function getPosts(Response $response, ViewFactory $view)
     {
@@ -67,14 +73,17 @@ class PostController extends QtController
     }
 
     /**
-     * Get post
-     * @param $lang
-     * @param $id
+     * Get post action
+     * @param string $lang
+     * @param int $id
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
+     * @throws \Quantum\Exceptions\DiException
      * @throws \Quantum\Exceptions\HookException
+     * @throws \Quantum\Exceptions\ViewException
+     * @throws \ReflectionException
      */
-    public function getPost($lang, $id, Response $response, ViewFactory $view)
+    public function getPost(string $lang, int $id, Response $response, ViewFactory $view)
     {
         if (!$id && $lang) {
             $id = $lang;
@@ -83,7 +92,7 @@ class PostController extends QtController
         $post = $this->postService->getPost($id);
 
         if (!$post) {
-            HookManager::call('pageNotFound', $response);
+            HookManager::call('pageNotFound');
         }
 
         $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
@@ -95,20 +104,26 @@ class PostController extends QtController
     }
 
     /**
-     * Amend post
+     * Create post action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @param string $lang
-     * @param int|null $id
+     * @throws \Gumlet\ImageResizeException
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\CryptorException
      * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\FileUploadException
      * @throws \Quantum\Exceptions\HookException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \Quantum\Exceptions\ViewException
+     * @throws \ReflectionException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, int $id = null)
+    public function createPost(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->isMethod('post')) {
-            $post = [
+            $postData = [
                 'title' => $request->get('title'),
                 'content' => $request->get('content'),
                 'image' => null,
@@ -116,45 +131,78 @@ class PostController extends QtController
                 'updated_at' => date('m/d/Y H:i'),
             ];
 
-            $hasImage = $request->hasFile('image');
-
-            if ($hasImage) {
-                $imageName = slugify($request->get('title'));
-
-                if ($id) {
-                    $post = $this->postService->getPost($id);
-                    $this->deleteImage($post);
-
-                    $imageName = slugify($post['title']);
-                }
-
-                $post['image'] = $this->saveImage($request->getFile('image'), $imageName .'-'. random_number());
+            if ($request->hasFile('image')) {
+                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+                $postData['image'] = base_url() . '/uploads/' . $imageName;
             }
 
-            if ($id) {
-                if (!$hasImage) {
-                    unset($post['image']);
-                }
-                
-                $this->postService->updatePost($id, $post);
-            } else {
-                $this->postService->addPost($post);
-            }
-
+            $this->postService->addPost($postData);
             redirect(base_url() . '/' . current_lang() . '/posts');
         } else {
-            $post = [];
+            $view->setParam('title', 'New post | ' . config()->get('app_name'));
+            $view->setParam('langs', config()->get('langs'));
 
-            if ($id) {
-                $post = $this->postService->getPost($id);
-                $view->setParam('id', $id);
+            $response->html($view->render('post/form'));
+        }
 
-                if (!$post) {
-                    HookManager::call('pageNotFound');
-                }
+    }
+
+    /**
+     * Amend post action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
+     * @param string $lang
+     * @param int|null $id
+     * @throws \Gumlet\ImageResizeException
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\FileUploadException
+     * @throws \Quantum\Exceptions\HookException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \Quantum\Exceptions\ViewException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     */
+    public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, int $id = null)
+    {
+        if ($request->isMethod('post')) {
+            $postData = [
+                'title' => $request->get('title'),
+                'content' => $request->get('content'),
+                'author' => auth()->user()->getFieldValue('email'),
+                'updated_at' => date('m/d/Y H:i'),
+            ];
+
+            $post = $this->postService->getPost($id);
+
+            if (!$post) {
+                redirect(base_url() . '/' . current_lang() . '/posts');
             }
 
-            $view->setParam('title', ($post ? $post['title'] : 'New post') . ' | ' . config()->get('app_name'));
+            if ($request->hasFile('image')) {
+                if ($post['image']) {
+                    $this->postService->deleteImage($post['image']);
+                }
+
+                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+                $postData['image'] = base_url() . '/uploads/' . $imageName;
+            }
+
+            $this->postService->updatePost($id, $postData);
+            redirect(base_url() . '/' . current_lang() . '/posts');
+
+        } else {
+            $post = $this->postService->getPost($id);
+            $view->setParam('id', $id);
+
+            if (!$post) {
+                HookManager::call('pageNotFound');
+            }
+
+            $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
 
             $response->html($view->render('post/form', ['post' => $post]));
@@ -162,44 +210,46 @@ class PostController extends QtController
     }
 
     /**
-     * Delete post
+     * Delete post action
      * @param string $lang
      * @param int $id
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function deletePost(string $lang, int $id)
     {
         $post = $this->postService->getPost($id);
-        $this->deleteImage($post);
+
+        if ($post['image']) {
+            $this->postService->deleteImage($post['image']);
+        }
+
         $this->postService->deletePost($id);
 
         redirect(base_url() . '/' . current_lang() . '/posts');
     }
 
+    /**
+     * Delete post image action
+     * @param string $lang
+     * @param int $id
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     */
     public function deletePostImage(string $lang, int $id)
     {
         $post = $this->postService->getPost($id);
-        $this->deleteImage($post);
+
+        if ($post['image']) {
+            $this->postService->deleteImage($post['image']);
+        }
+
         $post['image'] = null;
         $this->postService->updatePost($id, $post);
+
         redirect(base_url() . '/' . current_lang() . '/posts');
-    }
-
-    private function saveImage($file, $imageName)
-    {
-        $file->setName($imageName);
-        $file->save(uploads_dir());
-
-        return $imageName . '.' . $file->getExtension();
-    }
-
-    private function deleteImage($post){
-        $fs = Di::get(FileSystem::class);
-        
-        if ($fs->exists(uploads_dir() . DS . $post['image'])) {
-            $fs->remove(uploads_dir() . DS . $post['image']);
-        }
     }
 
 }
