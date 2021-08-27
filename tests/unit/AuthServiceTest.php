@@ -52,9 +52,13 @@ class AuthServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
-        $fs->put($this->userRepository, $content);
-        sleep(5);
+
+        if(!$fs->exists($this->userRepository)) {
+            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
+            $fs->put($this->userRepository, $content);
+            sleep(5);
+            dump("Created: ". $this->userRepository);
+        }
 
         $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
         $reflectionProperty->setAccessible(true);
@@ -74,8 +78,8 @@ class AuthServiceTest extends TestCase
 
     public function tearDown(): void
     {
-        $fs = new FileSystem();
-        $fs->remove($this->userRepository);
+//        $fs = new FileSystem();
+//        $fs->remove($this->userRepository);
     }
 
     public function testServiceGet()
