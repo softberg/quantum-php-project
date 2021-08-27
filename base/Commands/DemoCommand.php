@@ -116,6 +116,7 @@ class DemoCommand extends QtCommand
     }
 
     /**
+     * Runs the external command
      * @throws \Exception
      */
     protected function runCommand($commandName, $arguments)
@@ -125,6 +126,7 @@ class DemoCommand extends QtCommand
     }
 
     /**
+     * Creates new repo file
      * @throws \ReflectionException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      * @throws \Quantum\Exceptions\DiException
@@ -142,6 +144,7 @@ class DemoCommand extends QtCommand
     }
 
     /**
+     * Creates new user
      * @param string $role
      * @return array
      */

@@ -11,6 +11,7 @@ class PostServiceTest extends TestCase
 {
 
     public $postService;
+    private $postRepository = BASE_DIR . DS . 'base' . DS . 'repositories' . DS . 'posts.php';
     private $initialPosts = [
         [
             'id' => 1,
@@ -30,13 +31,16 @@ class PostServiceTest extends TestCase
         ]
     ];
 
+
     public function setUp(): void
     {
         if (!defined('DS')) {
             define('DS', DIRECTORY_SEPARATOR);
         }
 
-        $loader = new Loader(new FileSystem);
+        $fs = new FileSystem();
+
+        $loader = new Loader($fs);
 
         $loader->loadFile(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'constants.php');
 
@@ -45,6 +49,9 @@ class PostServiceTest extends TestCase
         $loader->loadDir(BASE_DIR . DS . 'helpers');
 
         Di::loadDefinitions();
+
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
+        $fs->put($this->postRepository, $content);
 
         $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
         $reflectionProperty->setAccessible(true);
@@ -62,6 +69,12 @@ class PostServiceTest extends TestCase
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
         }
+    }
+
+    public function tearDown(): void
+    {
+        $fs = new FileSystem();
+        $fs->remove($this->postRepository);
     }
 
     public function testGetPosts()

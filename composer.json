@@ -26,6 +26,7 @@
             "php qt core:env",
             "php qt core:debugbar",
             "php qt core:key --length=64",
+            "php qt install:demo",
             "php qt core:welcome"
         ]
     }

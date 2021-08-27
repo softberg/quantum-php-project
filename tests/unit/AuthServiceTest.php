@@ -11,6 +11,7 @@ class AuthServiceTest extends TestCase
 {
 
     public $authService;
+    private $userRepository = BASE_DIR . DS . 'base' . DS . 'repositories' . DS . 'users.php';
     private $initialUser = [
         'id' => 1,
         'email' => 'admin@qt.com',
@@ -39,7 +40,9 @@ class AuthServiceTest extends TestCase
             define('DS', DIRECTORY_SEPARATOR);
         }
 
-        $loader = new Loader(new FileSystem);
+        $fs = new FileSystem();
+
+        $loader = new Loader($fs);
 
         $loader->loadFile(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'constants.php');
 
@@ -48,6 +51,9 @@ class AuthServiceTest extends TestCase
         $loader->loadDir(BASE_DIR . DS . 'helpers');
 
         Di::loadDefinitions();
+
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
+        $fs->put($this->userRepository, $content);
 
         $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
         $reflectionProperty->setAccessible(true);
@@ -63,6 +69,12 @@ class AuthServiceTest extends TestCase
         $reflectionProperty->setValue($this->authService, []);
 
         $this->authService->add($this->initialUser);
+    }
+
+    public function tearDown(): void
+    {
+        $fs = new FileSystem();
+        $fs->remove($this->userRepository);
     }
 
     public function testServiceGet()
