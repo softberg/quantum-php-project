@@ -52,6 +52,7 @@ class PostServiceTest extends TestCase
 
         $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
         $fs->put($this->postRepository, $content);
+        sleep(5);
 
         $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
         $reflectionProperty->setAccessible(true);
