@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.3.0
+ * @since 2.5.0
  */
 
 namespace Base\Commands;
@@ -44,37 +44,35 @@ class UserCreateCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Add e, p, r, f, l to create a user';
+    protected $help = 'Use the following format to create a user record:' . PHP_EOL . 'php qt user:create `Email` `Password` `[Role]` `[Firstname]` `[Lastname]`';
 
     /**
-     * Command options
-     * @var array
+     * Command arguments
+     * @var \string[][]
      */
-    protected $options = [
-        ['email', 'u', 'required', 'User email'],
-        ['password', 'p', 'required', 'User password'],
-        ['role', 'r','optional', 'User role'],
-        ['firstname', 'f', 'optional', 'User firstname'],
-        ['lastname', 'l', 'optional', 'User lastname'],
+    protected $args = [
+        ['email', 'required', 'User email'],
+        ['password', 'required', 'User password'],
+        ['role', 'optional', 'User role'],
+        ['firstname', 'optional', 'User firstname'],
+        ['lastname', 'optional', 'User lastname'],
     ];
 
     /**
-     * @return void
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      */
     public function exec()
     {
-        $hasher = new Hasher;
         $serviceFactory = Di::get(ServiceFactory::class);
-
         $authService = $serviceFactory->get(AuthService::class);
 
         $user = [
-            'firstname' => $this->getOption('firstname'),
-            'lastname' => $this->getOption('lastname'),
-            'role' => $this->getOption('role'),
-            'email' => $this->getOption('email'),
-            'password' =>  $hasher->hash($this->getOption('password')),
+            'firstname' => $this->getArgument('firstname'),
+            'lastname' => $this->getArgument('lastname'),
+            'role' => $this->getArgument('role'),
+            'email' => $this->getArgument('email'),
+            'password' => (new Hasher())->hash($this->getArgument('password')),
             'activationToken' => '',
             'rememberToken' => '',
             'resetToken' => '',
@@ -88,7 +86,7 @@ class UserCreateCommand extends QtCommand
 
         $authService->add($user);
 
-        $this->info('User create successfully');
+        $this->info('User created successfully');
     }
 
 }

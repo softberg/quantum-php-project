@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.5.0
  */
 
 namespace Modules\Api\Controllers;
@@ -25,16 +25,19 @@ use Quantum\Http\Request;
  */
 class PostController extends ApiController
 {
+
     /**
      * Post service
-     * @var PostService
+     * @var \Base\Services\PostService
      */
     public $postService;
 
     /**
      * Magic __before
-     * @param ServiceFactory $serviceFactory
-     * @throws \Exception
+     * @param \Quantum\Factory\ServiceFactory $serviceFactory
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\ServiceException
+     * @throws \ReflectionException
      */
     public function __before(ServiceFactory $serviceFactory)
     {
@@ -42,8 +45,8 @@ class PostController extends ApiController
     }
 
     /**
-     * Get posts
-     * @param Response $response
+     * Get posts action
+     * @param \Quantum\Http\Response $response
      */
     public function getPosts(Response $response)
     {
@@ -55,12 +58,12 @@ class PostController extends ApiController
     }
 
     /**
-     * Get post
+     * Get post action
      * @param string $lang
      * @param int $id
-     * @param Response $response
+     * @param \Quantum\Http\Response $response
      */
-    public function getPost($lang, $id, Response $response)
+    public function getPost(string $lang, int $id, Response $response)
     {
         if (!$id && $lang) {
             $id = $lang;
@@ -82,49 +85,120 @@ class PostController extends ApiController
     }
 
     /**
-     * Amend post
-     * @param Request $request
-     * @param Response $response
-     * @param int|null $id
-     * @throws \Exception
+     * Create post action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @throws \Gumlet\ImageResizeException
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\FileUploadException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function amendPost(Request $request, Response $response, $id = null)
+    public function createPost(Request $request, Response $response)
     {
-        $post = [
+        $postData = [
             'title' => $request->get('title'),
             'content' => $request->get('content'),
+            'image' => null,
+            'author' => auth()->user()->getFieldValue('email'),
+            'updated_at' => date('m/d/Y H:i'),
         ];
 
-        if ($id) {
-            if($this->postService->updatePost($id, $post)) {
-                $response->json([
-                    'status' => 'success',
-                    'message' => t('common.updated_successfully')
-                ]);
-            } else {
-                $response->json([
-                    'status' => 'error',
-                    'message' => t('common.post_not_found')
-                ]);
-            }
-        } else {
-            $this->postService->addPost($post);
-            $response->json([
-                'status' => 'success',
-                'message' => t('common.created_successfully')
-            ]);
+        if ($request->hasFile('image')) {
+            $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+            $postData['image'] = base_url() . '/uploads/' . $imageName;
         }
+
+        $this->postService->addPost($postData);
+        $response->json([
+            'status' => 'success',
+            'message' => t('common.created_successfully')
+        ]);
     }
 
     /**
-     * Delete post
-     * @param Response $response
+     * Amend post action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @param int $id
-     * @throws \Exception
+     * @throws \Gumlet\ImageResizeException
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\FileUploadException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \Quantum\Exceptions\StopExecutionException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
-    public function deletePost(Response $response, $id)
+    public function amendPost(Request $request, Response $response, int $id)
     {
-        if($this->postService->deletePost($id)) {
+        $postData = [
+            'title' => $request->get('title'),
+            'content' => $request->get('content'),
+            'author' => auth()->user()->getFieldValue('email'),
+            'updated_at' => date('m/d/Y H:i'),
+        ];
+
+        $post = $this->postService->getPost($id);
+
+        if (!$post) {
+            $response->json([
+                'status' => 'error',
+                'message' => t('common.post_not_found')
+            ]);
+
+            stop();
+        }
+
+        if ($request->hasFile('image')) {
+            if ($post['image']) {
+                $this->postService->deleteImage($post['image']);
+            }
+
+            $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+            $postData['image'] = base_url() . '/uploads/' . $imageName;
+        }
+
+        $this->postService->updatePost($id, $postData);
+        $response->json([
+            'status' => 'success',
+            'message' => t('common.updated_successfully')
+        ]);
+    }
+
+    /**
+     * Delete post action
+     * @param \Quantum\Http\Response $response
+     * @param int $id
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\StopExecutionException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     */
+    public function deletePost(Response $response, int $id)
+    {
+        $post = $this->postService->getPost($id);
+
+        if (!$post) {
+            $response->json([
+                'status' => 'error',
+                'message' => t('common.post_not_found')
+            ]);
+
+            stop();
+        }
+
+        if ($post['image']) {
+            $this->postService->deleteImage($post['image']);
+        }
+
+        if ($this->postService->deletePost($id)) {
             $response->json([
                 'status' => 'success',
                 'message' => t('common.deleted_successfully')
@@ -135,6 +209,41 @@ class PostController extends ApiController
                 'message' => t('common.post_not_found')
             ]);
         }
+    }
+
+    /**
+     * Delete post image action
+     * @param \Quantum\Http\Response $response
+     * @param int $id
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\StopExecutionException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     */
+    public function deletePostImage(Response $response, int $id)
+    {
+        $post = $this->postService->getPost($id);
+
+        if (!$post) {
+            $response->json([
+                'status' => 'error',
+                'message' => t('common.post_not_found')
+            ]);
+
+            stop();
+        }
+
+        if ($post['image']) {
+            $this->postService->deleteImage($post['image']);
+        }
+
+        $post['image'] = null;
+        $this->postService->updatePost($id, $post);
+
+        $response->json([
+            'status' => 'success',
+            'message' => t('common.deleted_successfully')
+        ]);
     }
 
 }

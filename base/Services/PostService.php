@@ -9,13 +9,16 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Base\Services;
 
+use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Libraries\Upload\File;
 use Quantum\Loader\Loader;
 use Quantum\Loader\Setup;
+use Quantum\Di\Di;
 
 /**
  * Class PostService
@@ -31,26 +34,24 @@ class PostService extends BaseService
     protected static $posts = [];
 
     /**
-     * Path to posts repository
-     * @var string
-     */
-    protected $postRepository = 'base' . DS . 'repositories' . DS . 'posts.php';
-
-    /**
      * Init
      * @param \Quantum\Loader\Loader $loader
      * @throws \Quantum\Exceptions\LoaderException
      */
     public function __init(Loader $loader)
     {
-        self::$posts = $loader->setup(new Setup('base' . DS . 'repositories', 'posts', true))->load();
+        $loader = $loader->setup(new Setup('base' . DS . 'repositories', 'posts', true));
+
+        $this->repository = $loader->getFilePath();
+
+        self::$posts = $loader->load();
     }
 
     /**
      * Get posts
      * @return array
      */
-    public function getPosts()
+    public function getPosts(): array
     {
         return self::$posts;
     }
@@ -76,11 +77,12 @@ class PostService extends BaseService
      * @param array $post
      * @throws \Quantum\Exceptions\DiException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     * @throws \ReflectionException
      */
     public function addPost(array $post)
     {
         self::$posts[] = array_merge(['id' => auto_increment(self::$posts, 'id')], $post);
-        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+        $this->persist(self::$posts);
     }
 
     /**
@@ -89,6 +91,7 @@ class PostService extends BaseService
      * @param array $data
      * @return bool
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function updatePost(int $id, array $data): bool
@@ -104,16 +107,13 @@ class PostService extends BaseService
         }
 
         foreach (self::$posts as &$postData) {
-            
             if ($id == $postData['id']) {
                 $postData = $post;
             }
-
         }
 
-        $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+        $this->persist(self::$posts);
         return true;
-
     }
 
     /**
@@ -122,18 +122,53 @@ class PostService extends BaseService
      * @return bool
      * @throws \Quantum\Exceptions\DiException
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     * @throws \ReflectionException
      */
     public function deletePost(int $id): bool
     {
         foreach (self::$posts as $key => $post) {
             if ($post['id'] == $id) {
                 unset(self::$posts[$key]);
-                $this->persist(base_dir() . DS . $this->postRepository, self::$posts);
+                $this->persist(self::$posts);
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Saves the post images
+     * @param \Quantum\Libraries\Upload\File $file
+     * @param string $imageName
+     * @return string
+     * @throws \Gumlet\ImageResizeException
+     * @throws \Quantum\Exceptions\FileUploadException
+     */
+    public function saveImage(File $file, string $imageName): string
+    {
+        $file->setName($imageName . '-' . random_number());
+        $file->save(uploads_dir());
+
+        return $file->getNameWithExtension();
+    }
+
+    /**
+     * Deletes the post image
+     * @param string $imageUrl
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
+     */
+    public function deleteImage(string $imageUrl)
+    {
+        $fs = Di::get(FileSystem::class);
+
+        $pathParts = explode('/', $imageUrl);
+        $imageName = end($pathParts);
+
+        if ($fs->exists(uploads_dir() . DS . $imageName)) {
+            $fs->remove(uploads_dir() . DS . $imageName);
+        }
     }
 
 }

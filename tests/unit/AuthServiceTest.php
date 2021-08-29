@@ -11,6 +11,7 @@ class AuthServiceTest extends TestCase
 {
 
     public $authService;
+    private $userRepository = BASE_DIR . DS . 'base' . DS . 'repositories' . DS . 'users.php';
     private $initialUser = [
         'id' => 1,
         'email' => 'admin@qt.com',
@@ -28,18 +29,15 @@ class AuthServiceTest extends TestCase
         'otp_token' => '',
     ];
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ServiceException
-     */
     public function setUp(): void
     {
         if (!defined('DS')) {
             define('DS', DIRECTORY_SEPARATOR);
         }
 
-        $loader = new Loader(new FileSystem);
+        $fs = new FileSystem();
+
+        $loader = new Loader($fs);
 
         $loader->loadFile(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'constants.php');
 
@@ -49,18 +47,16 @@ class AuthServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(Di::class, [
-            \Quantum\Loader\Loader::class,
-            \Quantum\Libraries\Storage\FileSystem::class,
-        ]);
+        if($fs->exists($this->userRepository)) {
+            $fs->remove($this->userRepository);
+        }
+
+        if(!$fs->exists($this->userRepository)) {
+            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
+            $fs->put($this->userRepository, $content);
+        }
 
         $this->authService = (new ServiceFactory)->get(AuthService::class);
-
-        $reflectionProperty = new \ReflectionProperty($this->authService, 'users');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->authService, []);
 
         $this->authService->add($this->initialUser);
     }

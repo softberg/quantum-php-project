@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -27,10 +27,15 @@ class Guest extends QtMiddleware
 {
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @param Closure $next
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Closure $next
      * @return mixed
+     * @throws \Quantum\Exceptions\AuthException
+     * @throws \Quantum\Exceptions\ConfigException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \ReflectionException
      */
     public function apply(Request $request, Response $response, Closure $next)
     {

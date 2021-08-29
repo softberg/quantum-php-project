@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.3.0
+ * @since 2.5.0
  */
 
 namespace Base\Commands;
@@ -38,13 +38,13 @@ class PostShowCommand extends QtCommand
      * Command description
      * @var string
      */
-    protected $description = 'Displays posts';
+    protected $description = 'Displays all posts or a single post';
 
     /**
      * Command help text
      * @var string
      */
-    protected $help = 'Displays all posts or single post on terminal';
+    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post Id]`';
 
     /**
      * Command arguments
@@ -55,8 +55,8 @@ class PostShowCommand extends QtCommand
     ];
 
     /**
-     * @return void
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      */
     public function exec()
     {

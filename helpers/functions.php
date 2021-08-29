@@ -61,10 +61,10 @@ if (!function_exists('url_with_lang')) {
     {
         $url = base_url();
 
-        if (trim(current_route_uri()) == '/') {
+        if (trim(route_uri()) == '/') {
             $url .= '/' . $lang;
         } else {
-            $url .= '/' . preg_replace("/" . preg_quote("/" . current_lang(), '/') . "/", $lang, current_route_uri(), 1);
+            $url .= '/' . preg_replace("/" . preg_quote("/" . current_lang(), '/') . "/", $lang, route_uri(), 1);
         }
 
         return $url;

@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.3.0
+ * @since 2.5.0
  */
 
 namespace Base\Commands;
@@ -43,40 +43,39 @@ class PostCreateCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Add title and description to create a post';
+    protected $help = 'Use the following format to create a post record:' . PHP_EOL . 'php qt post:create `Title` `Description` `[Image]` `[Author]`';
 
     /**
-     * Command options
-     * @var array
+     * Command arguments
+     * @var \string[][]
      */
-    protected $options = [
-        ['title', 't', 'required', 'Post title'],
-        ['description', 'd', 'required', 'Post description'],
-        ['image', 'i', 'optional', 'Post image'],
-        ['author', 'a', 'optional', 'Post author'],
+    protected $args = [
+        ['title', 'required', 'Post title'],
+        ['description', 'required', 'Post description'],
+        ['image', 'optional', 'Post image'],
+        ['author', 'optional', 'Post author'],
     ];
 
     /**
-     * @return void
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      */
     public function exec()
     {
         $serviceFactory = Di::get(ServiceFactory::class);
-
         $postService = $serviceFactory->get(PostService::class);
 
         $post = [
-            'title' => $this->getOption('title'),
-            'content' => $this->getOption('description'),
-            'author' => $this->getOption('author') ? $this->getOption('author') : 'anonymous@qt.com',
-            'image' => $this->getOption('image') ? $this->getOption('image') : null,
+            'title' => $this->getArgument('title'),
+            'content' => $this->getArgument('description'),
+            'author' => $this->getArgument('author') ?: 'anonymous@qt.com',
+            'image' => $this->getArgument('image'),
             'updated_at' => date('m/d/Y H:i')
         ];
 
         $postService->addPost($post);
 
-        $this->info('Post create successfully');
+        $this->info('Post created successfully');
     }
 
 }

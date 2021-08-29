@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.5.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -30,8 +30,7 @@ class Reset extends QtMiddleware
 {
 
     /**
-     * Validator object
-     * @var Validator
+     * @var \Quantum\Libraries\Validation\Validator
      */
     private $validator;
 
@@ -49,15 +48,22 @@ class Reset extends QtMiddleware
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @param Closure $next
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param \Closure $next
      * @return mixed
-     * @throws \Exception
+     * @throws \Quantum\Exceptions\CryptorException
+     * @throws \Quantum\Exceptions\DatabaseException
+     * @throws \Quantum\Exceptions\DiException
+     * @throws \Quantum\Exceptions\HookException
+     * @throws \Quantum\Exceptions\LoaderException
+     * @throws \Quantum\Exceptions\ModelException
+     * @throws \Quantum\Exceptions\SessionException
+     * @throws \ReflectionException
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        list($lang, $token) = current_route_args();
+        list($lang, $token) = route_args();
 
         if ($request->isMethod('post')) { 
             if (!$this->checkToken($token)) {
@@ -81,7 +87,7 @@ class Reset extends QtMiddleware
             
         } elseif ($request->isMethod('get')) {
             if (!$this->checkToken($token)) {
-                HookManager::call('pageNotFound', $response);
+                HookManager::call('pageNotFound');
             }
         }
 
@@ -96,7 +102,7 @@ class Reset extends QtMiddleware
      * @return bool
      * @throws \Exception
      */
-    private function checkToken($token)
+    private function checkToken(string $token): bool
     {
         $users = load_users();
 
@@ -118,7 +124,7 @@ class Reset extends QtMiddleware
      * @param string $repeatPassword
      * @return bool
      */
-    private function confirmPassword($newPassword, $repeatPassword)
+    private function confirmPassword(string $newPassword, string $repeatPassword): bool
     {
         return $newPassword == $repeatPassword;
     }

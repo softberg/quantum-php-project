@@ -9,17 +9,19 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.3.0
+ * @since 2.5.0
  */
 
 namespace Base\Commands;
 
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Quantum\Libraries\Storage\FileSystem;
+use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Console\QtCommand;
+use WW\Faker\Provider\Picture;
 use Quantum\Di\Di;
 use Faker\Factory;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 
 
 /**
@@ -33,92 +35,128 @@ class DemoCommand extends QtCommand
      * Command name
      * @var string
      */
-    protected $name = 'demo:post';
-    protected $faker;
+    protected $name = 'install:demo';
+
     /**
      * Command description
      * @var string
      */
-    protected $description = 'Generates posts.php and users.php files';
+    protected $description = 'Generates demo users and posts';
 
     /**
      * Command help text
      * @var string
      */
-    protected $help = 'The command will generate new posts.php and users.php files';
+    protected $help = 'The command will create 2 new files (users.php and posts.php) and will generate records';
 
+    /**
+     * @var \Faker\Generator
+     */
+    protected $faker;
 
+    /**
+     * How many posts to create
+     */
+    const POST_COUNT = 6;
+
+    /**
+     * Default password for generated users
+     */
+    const DEFAULT_PASSWORD = 'password';
+
+    /**
+     * Command name of create user
+     */
+    const COMMAND_USER_CREATE = 'user:create';
+
+    /**
+     * Command name of create post
+     */
+    const COMMAND_POST_CREATE = 'post:create';
+
+    /**
+     * Command constructor
+     */
     public function __construct()
     {
         parent::__construct();
         $this->faker = Factory::create();
+        $this->faker->addProvider(new PicsumPhotosProvider($this->faker));
     }
 
     /**
-     * @return void
+     * @throws \ReflectionException
      * @throws \Quantum\Exceptions\DiException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     * @throws \Exception
      */
     public function exec()
     {
-        $userCommand =  'user:create'; 
-        $postCommand = 'post:create'; 
-       
         $this->createFile('users');
 
-        $adminArguments = $this->createUser('admin');
-        $guestArguments = $this->createUser();
-        
-        $this->runCommand($adminArguments, $userCommand);
-        $this->runCommand($guestArguments, $userCommand);
-      
+        $adminArguments = $this->newUser('admin');
+        $guestArguments = $this->newUser();
+
+        $this->runCommand(self::COMMAND_USER_CREATE, $adminArguments);
+        $this->runCommand(self::COMMAND_USER_CREATE, $guestArguments);
 
         $this->createFile('posts');
 
-        
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= self::POST_COUNT; $i++) {
             $postArguments = [
-                '-t' => $this->faker->realText(30),
-                '-d' => $this->faker->realText(),
-                '-i' => $this->faker->imageUrl(480, 480, 'animals', true, 'cats'),
-                '-a' => $adminArguments['-u'],
+                'title' => $this->faker->realText(30),
+                'description' => $this->faker->realText(500),
+                'image' => $this->faker->imageUrl(640, 480, true, 0),
+                'author' => $adminArguments['email'],
             ];
-            $this->runCommand($postArguments, $postCommand);
+
+            $this->runCommand(self::COMMAND_POST_CREATE, $postArguments);
         }
-         
+
     }
 
-    protected function runCommand($arguments, $commandName){
+    /**
+     * Runs the external command
+     * @throws \Exception
+     */
+    protected function runCommand($commandName, $arguments)
+    {
         $command = $this->getApplication()->find($commandName);
-        $greetInput = new ArrayInput($arguments);
-        $output = new NullOutput;
-        $command->run($greetInput, $output);
+        $command->run(new ArrayInput($arguments), new NullOutput);
     }
 
+    /**
+     * Creates new repo file
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     * @throws \Quantum\Exceptions\DiException
+     */
     protected function createFile($file)
     {
         $fs = Di::get(FileSystem::class);
-       
+
         $repositoryDir = BASE_DIR . DS . 'base' . DS . 'repositories';
-        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' .  export([]) . ';';
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
 
         $fs->put($repositoryDir . DS . $file . '.php', $content);
 
         $this->info(ucfirst($file) . ' successfully generated');
     }
 
-
-    private function createUser($role = '')
+    /**
+     * Creates new user
+     * @param string $role
+     * @return array
+     */
+    private function newUser(string $role = ''): array
     {
-        $data =
-            [
-                '-f' => $this->faker->name(),
-                '-l' => $this->faker->lastName(),
-                '-r' => $role,
-                '-u' => $this->faker->email(),
-                '-p' => '123456',
-            ];
-
-        return $data;
+        return [
+            'firstname' => $this->faker->name(),
+            'lastname' => $this->faker->lastName(),
+            'role' => $role,
+            'email' => $this->faker->email(),
+            'password' => self::DEFAULT_PASSWORD,
+        ];
     }
 
 

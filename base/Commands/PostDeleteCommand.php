@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.3.0
+ * @since 2.5.0
  */
 
 namespace Base\Commands;
@@ -43,19 +43,19 @@ class PostDeleteCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Provide ID to delete a post';
+    protected $help = 'Use the following format to delete a post:' . PHP_EOL . 'php qt post:delete `Post Id`';
 
     /**
      * Command arguments
-     * @var array
+     * @var \string[][]
      */
     protected $args = [
         ['id', 'required', 'Post ID'],
     ];
 
     /**
-     * @return void
      * @throws \Quantum\Exceptions\DiException
+     * @throws \ReflectionException
      */
     public function exec()
     {

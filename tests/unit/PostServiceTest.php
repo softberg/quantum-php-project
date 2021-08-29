@@ -11,12 +11,14 @@ class PostServiceTest extends TestCase
 {
 
     public $postService;
+    private $postRepository = BASE_DIR . DS . 'base' . DS . 'repositories' . DS . 'posts.php';
     private $initialPosts = [
         [
             'id' => 1,
             'title' => 'Walt Disney',
             'content' => 'The way to get started is to quit talking and begin doing.',
             'author' => 'admin@qt.com',
+            'image' => null,
             'updated_at' => '05/08/2021 23:13',
         ],
         [
@@ -24,9 +26,11 @@ class PostServiceTest extends TestCase
             'title' => 'James Cameron',
             'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
             'author' => 'admin@qt.com',
+            'image' => null,
             'updated_at' => '05/08/2021 23:13',
         ]
     ];
+
 
     public function setUp(): void
     {
@@ -34,7 +38,9 @@ class PostServiceTest extends TestCase
             define('DS', DIRECTORY_SEPARATOR);
         }
 
-        $loader = new Loader(new FileSystem);
+        $fs = new FileSystem();
+
+        $loader = new Loader($fs);
 
         $loader->loadFile(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'constants.php');
 
@@ -44,18 +50,16 @@ class PostServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(Di::class, [
-            \Quantum\Loader\Loader::class,
-            \Quantum\Libraries\Storage\FileSystem::class,
-        ]);
+        if($fs->exists($this->postRepository)) {
+            $fs->remove($this->postRepository);
+        }
+
+        if(!$fs->exists($this->postRepository)) {
+            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
+            $fs->put($this->postRepository, $content);
+        }
 
         $this->postService = (new ServiceFactory)->get(PostService::class);
-
-        $reflectionProperty = new \ReflectionProperty($this->postService, 'posts');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->postService, []);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
@@ -107,6 +111,7 @@ class PostServiceTest extends TestCase
             'title' => 'Walt Disney Jr.',
             'content' => 'The best way to get started is to quit talking and begin doing.',
             'author' => 'james@mail.com',
+            'image' => 'https://somedomain.com/images/image.jpg',
             'updated_at' => $date
         ]);
 
@@ -114,6 +119,7 @@ class PostServiceTest extends TestCase
         $this->assertEquals('Walt Disney Jr.', $this->postService->getPost(1)['title']);
         $this->assertEquals('The best way to get started is to quit talking and begin doing.', $this->postService->getPost(1)['content']);
         $this->assertEquals('james@mail.com', $this->postService->getPost(1)['author']);
+        $this->assertEquals('https://somedomain.com/images/image.jpg', $this->postService->getPost(1)['image']);
         $this->assertEquals($date, $this->postService->getPost(1)['updated_at']);
     }
 

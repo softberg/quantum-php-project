@@ -1,21 +1,15 @@
-<div class="back-btn">
-    <a title="Back" href="<?php echo base_url() . '/' . current_lang() . '/posts'; ?>"><i class="material-icons">arrow_back</i></a>
-</div>
 <div class="center-align posts-container">
     <div class="polaroid">
-        <h2>
-            <span><?php echo $post['title'] ?></span>
-        </h2>
-        
+        <?php echo partial('post/partials/back') ?>
+        <h1 class="single-blog-title"><?php echo $post['title'] ?></h1>
+        <div class="row">
+            <div class="col s12 center-align post-date teal-text text-accent-4"><?php echo $post['updated_at'] ?? '' ?></div>
+            <div class="col s12 center-align post-author teal-text text-accent-4"><?php echo $post['author'] ?? '' ?></div>
+        </div>
         <?php if ($post['image']): ?>
-            <?php if(file_exists('uploads/'.$post['image'])): ?>
-                <img src="<?php echo base_url() ?>/uploads/<?php echo $post['image'] ?>" class="single_page_img">
-            <?php else: ?>
-                <img src="<?php echo $post['image'] ?>" class="single_page_img">
-            <?php endif; ?>     
-        <?php else: ?>
-            <img src="<?php echo base_url() ?>/assets/images/no-image.png" class="single_page_no_img">
-        <?php endif; ?> 
-        <p class="teal-text text-darken-4"><?php echo $post['content'] ?></p> 
+            <img src="<?php echo $post['image'] ?>" class="single_page_img">
+        <?php endif; ?>
+
+        <p class="left-align single-blog-txt"><?php echo nl2br($post['content']) ?></p>
     </div>
 </div>
