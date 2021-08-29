@@ -29,11 +29,6 @@ class AuthServiceTest extends TestCase
         'otp_token' => '',
     ];
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ServiceException
-     */
     public function setUp(): void
     {
         if (!defined('DS')) {
@@ -52,34 +47,18 @@ class AuthServiceTest extends TestCase
 
         Di::loadDefinitions();
 
+        if($fs->exists($this->userRepository)) {
+            $fs->remove($this->userRepository);
+        }
 
         if(!$fs->exists($this->userRepository)) {
             $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
             $fs->put($this->userRepository, $content);
-            sleep(5);
-            dump("Created: ". $this->userRepository);
         }
-
-        $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(Di::class, [
-            \Quantum\Loader\Loader::class,
-            \Quantum\Libraries\Storage\FileSystem::class,
-        ]);
 
         $this->authService = (new ServiceFactory)->get(AuthService::class);
 
-        $reflectionProperty = new \ReflectionProperty($this->authService, 'users');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->authService, []);
-
         $this->authService->add($this->initialUser);
-    }
-
-    public function tearDown(): void
-    {
-//        $fs = new FileSystem();
-//        $fs->remove($this->userRepository);
     }
 
     public function testServiceGet()

@@ -50,35 +50,20 @@ class PostServiceTest extends TestCase
 
         Di::loadDefinitions();
 
+        if($fs->exists($this->postRepository)) {
+            $fs->remove($this->postRepository);
+        }
+
         if(!$fs->exists($this->postRepository)) {
             $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
             $fs->put($this->postRepository, $content);
-            sleep(5);
-            dump("Created: ". $this->postRepository);
         }
 
-        $reflectionProperty = new \ReflectionProperty(Di::class, 'dependencies');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(Di::class, [
-            \Quantum\Loader\Loader::class,
-            \Quantum\Libraries\Storage\FileSystem::class,
-        ]);
-
         $this->postService = (new ServiceFactory)->get(PostService::class);
-
-        $reflectionProperty = new \ReflectionProperty($this->postService, 'posts');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->postService, []);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
         }
-    }
-
-    public function tearDown(): void
-    {
-//        $fs = new FileSystem();
-//        $fs->remove($this->postRepository);
     }
 
     public function testGetPosts()

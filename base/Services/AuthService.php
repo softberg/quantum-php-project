@@ -39,9 +39,11 @@ class AuthService extends BaseService implements AuthServiceInterface
      */
     public function __init(Loader $loader)
     {
-        self::$users = $loader->setup(new Setup('base' . DS . 'repositories', 'users', true))->load();
+        $loader = $loader->setup(new Setup('base' . DS . 'repositories', 'users', true));
 
-        $this->repository = base_dir() . DS . 'base' . DS . 'repositories' . DS . 'users.php';
+        $this->repository = $loader->getFilePath();
+
+        self::$users = $loader->load();
     }
 
     /**

@@ -40,9 +40,11 @@ class PostService extends BaseService
      */
     public function __init(Loader $loader)
     {
-        self::$posts = $loader->setup(new Setup('base' . DS . 'repositories', 'posts', true))->load();
+        $loader = $loader->setup(new Setup('base' . DS . 'repositories', 'posts', true));
 
-        $this->repository = base_dir() . DS . 'base' . DS . 'repositories' . DS . 'posts.php';
+        $this->repository = $loader->getFilePath();
+
+        self::$posts = $loader->load();
     }
 
     /**
