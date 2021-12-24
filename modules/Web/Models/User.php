@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.0.0
+ * @since 2.6.0
  */
 
 namespace Modules\Web\Models;
@@ -27,7 +27,7 @@ class User extends QtModel
      * ID column of table
      * @var string
      */
-    public $idColumn = 'user_id';
+    public $idColumn = 'id';
 
     /**
      * The table name
@@ -50,7 +50,7 @@ class User extends QtModel
      * Is editor
      * @return bool
      */
-    public static function isEditor()
+    public static function isEditor(): bool
     {
         return true;
     }
@@ -59,7 +59,7 @@ class User extends QtModel
      * Is blogger
      * @return bool
      */
-    public static function isBlogger()
+    public static function isBlogger(): bool
     {
         return true;
     }
