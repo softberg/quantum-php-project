@@ -5,7 +5,7 @@
 * Register the auto loader
 * ---------------------------------------------------------
 */
-require __DIR__ . '/bootstrap/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Quantum\Console\QtConsole;
 
@@ -16,6 +16,6 @@ use Quantum\Console\QtConsole;
 */
 $console = new QtConsole();
 
-$status = $console->init();
+$status = $console->init(__DIR__);
 
 exit($status);
