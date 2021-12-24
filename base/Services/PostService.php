@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Base\Services;
@@ -76,8 +76,6 @@ class PostService extends BaseService
      * Add post
      * @param array $post
      * @throws \Quantum\Exceptions\DiException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
-     * @throws \ReflectionException
      */
     public function addPost(array $post)
     {
@@ -91,8 +89,6 @@ class PostService extends BaseService
      * @param array $data
      * @return bool
      * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function updatePost(int $id, array $data): bool
     {
@@ -121,8 +117,6 @@ class PostService extends BaseService
      * @param int $id
      * @return bool
      * @throws \Quantum\Exceptions\DiException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
-     * @throws \ReflectionException
      */
     public function deletePost(int $id): bool
     {
@@ -142,7 +136,6 @@ class PostService extends BaseService
      * @param \Quantum\Libraries\Upload\File $file
      * @param string $imageName
      * @return string
-     * @throws \Gumlet\ImageResizeException
      * @throws \Quantum\Exceptions\FileUploadException
      */
     public function saveImage(File $file, string $imageName): string
@@ -157,7 +150,6 @@ class PostService extends BaseService
      * Deletes the post image
      * @param string $imageUrl
      * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
      */
     public function deleteImage(string $imageUrl)
     {

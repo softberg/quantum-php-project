@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Base\Commands;
@@ -85,10 +85,8 @@ class DemoCommand extends QtCommand
     }
 
     /**
-     * @throws \ReflectionException
+     * Executes the command
      * @throws \Quantum\Exceptions\DiException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
-     * @throws \Exception
      */
     public function exec()
     {
@@ -127,15 +125,13 @@ class DemoCommand extends QtCommand
 
     /**
      * Creates new repo file
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      * @throws \Quantum\Exceptions\DiException
      */
     protected function createFile($file)
     {
         $fs = Di::get(FileSystem::class);
 
-        $repositoryDir = BASE_DIR . DS . 'base' . DS . 'repositories';
+        $repositoryDir = base_dir() . DS . 'base' . DS . 'repositories';
         $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
 
         $fs->put($repositoryDir . DS . $file . '.php', $content);

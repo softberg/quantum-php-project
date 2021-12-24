@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Base\Commands;
@@ -54,8 +54,8 @@ class PostDeleteCommand extends QtCommand
     ];
 
     /**
+     * Executes the command
      * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
      */
     public function exec()
     {

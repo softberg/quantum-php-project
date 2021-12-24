@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Modules\Api\Controllers;
@@ -35,9 +35,6 @@ class PostController extends ApiController
     /**
      * Magic __before
      * @param \Quantum\Factory\ServiceFactory $serviceFactory
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\ServiceException
-     * @throws \ReflectionException
      */
     public function __before(ServiceFactory $serviceFactory)
     {
@@ -88,15 +85,6 @@ class PostController extends ApiController
      * Create post action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
-     * @throws \Gumlet\ImageResizeException
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\FileUploadException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function createPost(Request $request, Response $response)
     {
@@ -125,16 +113,6 @@ class PostController extends ApiController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param int $id
-     * @throws \Gumlet\ImageResizeException
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\FileUploadException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\StopExecutionException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function amendPost(Request $request, Response $response, int $id)
     {
@@ -176,10 +154,6 @@ class PostController extends ApiController
      * Delete post action
      * @param \Quantum\Http\Response $response
      * @param int $id
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\StopExecutionException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function deletePost(Response $response, int $id)
     {
@@ -215,10 +189,6 @@ class PostController extends ApiController
      * Delete post image action
      * @param \Quantum\Http\Response $response
      * @param int $id
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\StopExecutionException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function deletePostImage(Response $response, int $id)
     {
