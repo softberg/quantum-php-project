@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Hooks;
@@ -25,20 +25,21 @@ use Quantum\Di\Di;
  */
 class ErrorPage implements HookInterface
 {
+
     /**
      * Page not found
      * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\StopExecutionException
      * @throws \Quantum\Exceptions\ViewException
      * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public static function pageNotFound()
+    public function apply(): void
     {
         $response = Di::get(Response::class);
         $view = (new ViewFactory())->renderPartial('errors/404');
         $response->html($view);
-        stop();
     }
 
 }
