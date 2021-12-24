@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -31,8 +31,6 @@ class Activate extends QtMiddleware
      * @param \Quantum\Http\Response $response
      * @param \Closure $next
      * @return mixed
-     * @throws \Quantum\Exceptions\StopExecutionException
-     * @throws \Exception
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
@@ -56,7 +54,6 @@ class Activate extends QtMiddleware
      * Check token
      * @param string $token
      * @return bool
-     * @throws \Exception
      */
     private function checkToken(string $token): bool
     {

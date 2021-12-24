@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -51,13 +51,6 @@ class Forget extends QtMiddleware
      * @param \Quantum\Http\Response $response
      * @param \Closure $next
      * @return mixed
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DatabaseException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ModelException
-     * @throws \Quantum\Exceptions\SessionException
-     * @throws \ReflectionException
      */
     public function apply(Request $request, Response $response, Closure $next)
     {

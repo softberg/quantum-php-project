@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -17,7 +17,6 @@ namespace Modules\Web\Middlewares;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
-use Quantum\Hooks\HookManager;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Closure;
@@ -52,14 +51,6 @@ class Reset extends QtMiddleware
      * @param \Quantum\Http\Response $response
      * @param \Closure $next
      * @return mixed
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DatabaseException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ModelException
-     * @throws \Quantum\Exceptions\SessionException
-     * @throws \ReflectionException
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
@@ -87,7 +78,8 @@ class Reset extends QtMiddleware
             
         } elseif ($request->isMethod('get')) {
             if (!$this->checkToken($token)) {
-                HookManager::call('pageNotFound');
+                hook('errorPage');
+                stop();
             }
         }
 
@@ -100,7 +92,6 @@ class Reset extends QtMiddleware
      * Check token
      * @param string $token
      * @return bool
-     * @throws \Exception
      */
     private function checkToken(string $token): bool
     {
