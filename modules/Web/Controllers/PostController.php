@@ -99,8 +99,8 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
             $postData = [
-                'title' => $request->get('title'),
-                'content' => $request->get('content'),
+                'title' => $request->get('title', null, true),
+                'content' => $request->get('content', null, true),
                 'image' => null,
                 'author' => auth()->user()->getFieldValue('email'),
                 'updated_at' => date('m/d/Y H:i'),
@@ -134,8 +134,8 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
             $postData = [
-                'title' => $request->get('title'),
-                'content' => $request->get('content'),
+                'title' => $request->get('title', null, true),
+                'content' => $request->get('content', null, true),
                 'author' => auth()->user()->getFieldValue('email'),
                 'updated_at' => date('m/d/Y H:i'),
             ];
