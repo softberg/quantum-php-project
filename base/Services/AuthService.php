@@ -37,9 +37,21 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param \Quantum\Loader\Loader $loader
      * @throws \Quantum\Exceptions\LoaderException
      */
-    public function __init(Loader $loader)
+
+    /**
+     * Initialise the service
+     * @param \Quantum\Loader\Loader $loader
+     * @param \Quantum\Loader\Setup $setup
+     * @param array $args
+     * @throws \Quantum\Exceptions\LoaderException
+     */
+    public function __init(Loader $loader, Setup $setup, array $args = [])
     {
-        $loader = $loader->setup(new Setup('base' . DS . 'repositories', 'users', true));
+        if ($args) {
+            $loader->setup(new Setup(...$args));
+        } else {
+            $loader->setup(new Setup('base' . DS . 'repositories', 'users'));
+        }
 
         $this->repository = $loader->getFilePath();
 

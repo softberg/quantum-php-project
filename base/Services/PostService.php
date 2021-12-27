@@ -34,13 +34,19 @@ class PostService extends BaseService
     protected static $posts = [];
 
     /**
-     * Init
+     * Initialise the service
      * @param \Quantum\Loader\Loader $loader
+     * @param \Quantum\Loader\Setup $setup
+     * @param array $args
      * @throws \Quantum\Exceptions\LoaderException
      */
-    public function __init(Loader $loader)
+    public function __init(Loader $loader, Setup $setup, array $args = [])
     {
-        $loader = $loader->setup(new Setup('base' . DS . 'repositories', 'posts', true));
+        if ($args) {
+            $loader->setup(new Setup(...$args));
+        } else {
+            $loader->setup(new Setup('base' . DS . 'repositories', 'posts'));
+        }
 
         $this->repository = $loader->getFilePath();
 

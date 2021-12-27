@@ -14,8 +14,8 @@
 
 namespace Base\Services;
 
-use Quantum\Exceptions\ConfigException;
 use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Exceptions\ConfigException;
 use Quantum\Mvc\QtService;
 use Quantum\Di\Di;
 
