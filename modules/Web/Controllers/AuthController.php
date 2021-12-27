@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Modules\Web\Controllers;
@@ -68,21 +68,10 @@ class AuthController extends QtController
     }
 
     /**
-     * Sign in action
+     *  Sign in action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \PHPMailer\PHPMailer\Exception
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DatabaseException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ModelException
-     * @throws \Quantum\Exceptions\SessionException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
      */
     public function signin(Request $request, Response $response, ViewFactory $view)
     {
@@ -120,14 +109,6 @@ class AuthController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \PHPMailer\PHPMailer\Exception
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
      */
     public function signup(Request $request, Response $response, ViewFactory $view)
     {
@@ -145,11 +126,6 @@ class AuthController extends QtController
     /**
      * Activate action
      * @param \Quantum\Http\Request $request
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \ReflectionException
      */
     public function activate(Request $request)
     {
@@ -162,18 +138,6 @@ class AuthController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \PHPMailer\PHPMailer\Exception
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DatabaseException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ModelException
-     * @throws \Quantum\Exceptions\SessionException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
      */
     public function forget(Request $request, Response $response, ViewFactory $view)
     {
@@ -194,13 +158,6 @@ class AuthController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
      */
     public function reset(Request $request, Response $response, ViewFactory $view)
     {
@@ -223,16 +180,6 @@ class AuthController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DatabaseException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ModelException
-     * @throws \Quantum\Exceptions\SessionException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
      */
     public function verify(Request $request, Response $response, ViewFactory $view)
     {
@@ -258,10 +205,6 @@ class AuthController extends QtController
     /**
      * Resend OTP action
      * @param \Quantum\Http\Request $request
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \ReflectionException
      */
     public function resend(Request $request)
     {

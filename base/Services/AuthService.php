@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Base\Services;
@@ -37,9 +37,21 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param \Quantum\Loader\Loader $loader
      * @throws \Quantum\Exceptions\LoaderException
      */
-    public function __init(Loader $loader)
+
+    /**
+     * Initialise the service
+     * @param \Quantum\Loader\Loader $loader
+     * @param \Quantum\Loader\Setup $setup
+     * @param array $args
+     * @throws \Quantum\Exceptions\LoaderException
+     */
+    public function __init(Loader $loader, Setup $setup, array $args = [])
     {
-        $loader = $loader->setup(new Setup('base' . DS . 'repositories', 'users', true));
+        if ($args) {
+            $loader->setup(new Setup(...$args));
+        } else {
+            $loader->setup(new Setup('base' . DS . 'repositories', 'users'));
+        }
 
         $this->repository = $loader->getFilePath();
 
@@ -92,8 +104,6 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param array $data
      * @return \Quantum\Libraries\Auth\User
      * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function add(array $data): User
     {
@@ -129,8 +139,6 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param array $data
      * @return \Quantum\Libraries\Auth\User|null
      * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function update(string $field, ?string $value, array $data): ?User
     {

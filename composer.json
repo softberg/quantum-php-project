@@ -6,7 +6,7 @@
     "version": "2.5.0",
     "type": "project",
     "require": {
-        "quantum/framework": "^2.5.0",
+        "quantum/framework": "dev-master",
         "fakerphp/faker": "^1.15",
         "bluemmb/faker-picsum-photos-provider": "^2.0"
     },

@@ -1,17 +1,20 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Base\Services\PostService;
-use Quantum\Factory\ServiceFactory;
 use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Factory\ServiceFactory;
+use Base\Services\PostService;
 use Quantum\Loader\Loader;
 use Quantum\Di\Di;
+use Quantum\App;
 
 class PostServiceTest extends TestCase
 {
 
     public $postService;
-    private $postRepository = BASE_DIR . DS . 'base' . DS . 'repositories' . DS . 'posts.php';
+
+    private $postRepository;
+
     private $initialPosts = [
         [
             'id' => 1,
@@ -31,38 +34,43 @@ class PostServiceTest extends TestCase
         ]
     ];
 
-
     public function setUp(): void
     {
-        if (!defined('DS')) {
-            define('DS', DIRECTORY_SEPARATOR);
-        }
+        App::loadCoreFunctions(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'Helpers');
 
-        $fs = new FileSystem();
-
-        $loader = new Loader($fs);
-
-        $loader->loadFile(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'constants.php');
-
-        $loader->loadDir(HELPERS_DIR . DS . 'functions');
-
-        $loader->loadDir(BASE_DIR . DS . 'helpers');
+        App::setBaseDir(__DIR__ . DS . '_root');
 
         Di::loadDefinitions();
 
-        if($fs->exists($this->postRepository)) {
-            $fs->remove($this->postRepository);
-        }
+        Di::add(\Quantum\Loader\Setup::class);
+
+        $loader = Di::get(Loader::class);
+
+        $loader->loadDir(dirname(__DIR__, 2) . DS . 'helpers');
+
+        $this->postRepository = base_dir() . DS . 'base' . DS . 'store' . DS . 'posts.php';
+
+        $fs = new FileSystem();
 
         if(!$fs->exists($this->postRepository)) {
             $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
             $fs->put($this->postRepository, $content);
         }
 
-        $this->postService = (new ServiceFactory)->get(PostService::class);
+        $this->postService = (new ServiceFactory)->get(PostService::class, ['base' . DS . 'store', 'posts']);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
+        }
+
+    }
+
+    public function tearDown(): void
+    {
+        $fs = new FileSystem();
+
+        if($fs->exists($this->postRepository)) {
+            $fs->remove($this->postRepository);
         }
     }
 

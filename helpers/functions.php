@@ -9,10 +9,9 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 1.9.9
+ * @since 2.6.0
  */
 
-use Quantum\Exceptions\ConfigException;
 use Quantum\Loader\Loader;
 use Quantum\Loader\Setup;
 use Quantum\Di\Di;
@@ -57,7 +56,7 @@ if (!function_exists('url_with_lang')) {
      * @param string $lang
      * @return string
      */
-    function url_with_lang($lang)
+    function url_with_lang(string $lang): string
     {
         $url = base_url();
 

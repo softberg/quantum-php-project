@@ -6,11 +6,13 @@
     <title>Error Page 400</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="shortcut icon" href='<?php echo base_url() ?>/assets/images/favicon.ico'>
-    <link rel='stylesheet' href='<?php echo asset('css/materialize.min.css') ?>' type='text/css'
-          media='screen,projection'/>
-    <link rel='stylesheet' href='<?php echo asset('css/custom.css') ?>' type='text/css'/>
-    <link rel='stylesheet' href='<?php echo asset('css/robot.css') ?>' type='text/css'/>
+    <link rel="shortcut icon" href="<?php echo asset()->url('images/favicon.ico') ?>">
+    <link rel="stylesheet" href="<?php echo asset()->url('css/materialize.min.css') ?>"
+          type="text/css"
+          media="screen,projection"
+    />
+    <link rel="stylesheet" href="<?php echo asset()->url('css/custom.css') ?>" type="text/css"/>
+    <link rel='stylesheet' href="<?php echo asset()->url('css/robot.css') ?>" type="text/css"/>
 </head>
 
 <body>
@@ -18,7 +20,7 @@
 <main class="grey lighten">
     <div class="container">
         <div class="row center-align white-text">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="206.5px"
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="206.5px"
                  viewBox="0 0 326.5 500" style="enable-background:new 0 0 326.5 500;" xml:space="preserve">
                     <style type="text/css">
                         .st0 {
@@ -75,6 +77,6 @@
     </div>
 </main>
 
-<script type='text/javascript' src='<?php echo asset('js/materialize.min.js') ?>'></script>
+<script type='text/javascript' src="<?php echo asset()->url('js/materialize.min.js') ?>"></script>
 </body>
 </html>

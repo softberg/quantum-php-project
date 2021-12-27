@@ -9,13 +9,13 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Base\Services;
 
-use Quantum\Exceptions\ConfigException;
 use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Exceptions\ConfigException;
 use Quantum\Mvc\QtService;
 use Quantum\Di\Di;
 
@@ -35,9 +35,6 @@ class BaseService extends QtService
      * Persists the changes
      * @param array $collection
      * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
-     * @throws \Exception
      */
     protected function persist(array $collection)
     {

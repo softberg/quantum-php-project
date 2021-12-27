@@ -7,8 +7,11 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="shortcut icon" href="/assets/images/favicon.ico">
-    <link rel='stylesheet' href='/assets/css/materialize.min.css' type='text/css' media='screen,projection'/>
-    <link rel='stylesheet' href='/assets/css/custom.css' type='text/css'/>
+    <link rel='stylesheet' href="/assets/css/materialize.min.css"
+          type="text/css"
+          media="screen,projection"
+    />
+    <link rel="stylesheet" href="/assets/css/custom.css" type="text/css"/>
 </head>
 
 <body>
@@ -16,7 +19,7 @@
 <main class="grey lighten">
     <div class="container">
         <div class="row center-align white-text">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="206.5px"
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="206.5px"
                  viewBox="0 0 326.5 500" style="enable-background:new 0 0 326.5 500;" xml:space="preserve">
                     <style type="text/css">
                         .st0 {
@@ -24,7 +27,7 @@
                         }
                     </style>
 
-                    <g id="robot_1_">
+                <g id="robot_1_">
                     <path class="st0" d="M152.7,89.2h-0.1v21.4h19.6V89.8c6.8-3.4,11.4-10.4,11.4-18.5c0-11.5-9.2-20.8-20.6-20.8
                           c-11.4,0-20.6,9.3-20.6,20.8C142.4,79,146.6,85.6,152.7,89.2z"></path>
                     <path class="st0"

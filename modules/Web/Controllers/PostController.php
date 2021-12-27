@@ -9,14 +9,13 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.5.0
+ * @since 2.6.0
  */
 
 namespace Modules\Web\Controllers;
 
 use Quantum\Factory\ServiceFactory;
 use Quantum\Factory\ViewFactory;
-use Quantum\Hooks\HookManager;
 use Base\Services\PostService;
 use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
@@ -37,12 +36,9 @@ class PostController extends QtController
     public $postService;
 
     /**
-     * Magic __before
+     * Works before an action
      * @param \Quantum\Factory\ServiceFactory $serviceFactory
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\ServiceException
-     * @throws \ReflectionException
      */
     public function __before(ServiceFactory $serviceFactory, ViewFactory $view)
     {
@@ -54,10 +50,6 @@ class PostController extends QtController
      * Get posts action
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
      */
     public function getPosts(Response $response, ViewFactory $view)
     {
@@ -75,10 +67,6 @@ class PostController extends QtController
      * @param int $id
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
      */
     public function getPost(string $lang, int $id, Response $response, ViewFactory $view)
     {
@@ -89,7 +77,8 @@ class PostController extends QtController
         $post = $this->postService->getPost($id);
 
         if (!$post) {
-            HookManager::call('pageNotFound');
+            hook('errorPage');
+            stop();
         }
 
         $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
@@ -105,24 +94,13 @@ class PostController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @throws \Gumlet\ImageResizeException
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\FileUploadException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function createPost(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->isMethod('post')) {
             $postData = [
-                'title' => $request->get('title'),
-                'content' => $request->get('content'),
+                'title' => $request->get('title', null, true),
+                'content' => $request->get('content', null, true),
                 'image' => null,
                 'author' => auth()->user()->getFieldValue('email'),
                 'updated_at' => date('m/d/Y H:i'),
@@ -151,24 +129,13 @@ class PostController extends QtController
      * @param \Quantum\Factory\ViewFactory $view
      * @param string $lang
      * @param int|null $id
-     * @throws \Gumlet\ImageResizeException
-     * @throws \Quantum\Exceptions\AuthException
-     * @throws \Quantum\Exceptions\ConfigException
-     * @throws \Quantum\Exceptions\CryptorException
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \Quantum\Exceptions\FileUploadException
-     * @throws \Quantum\Exceptions\HookException
-     * @throws \Quantum\Exceptions\LoaderException
-     * @throws \Quantum\Exceptions\ViewException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, int $id = null)
     {
         if ($request->isMethod('post')) {
             $postData = [
-                'title' => $request->get('title'),
-                'content' => $request->get('content'),
+                'title' => $request->get('title', null, true),
+                'content' => $request->get('content', null, true),
                 'author' => auth()->user()->getFieldValue('email'),
                 'updated_at' => date('m/d/Y H:i'),
             ];
@@ -196,7 +163,8 @@ class PostController extends QtController
             $view->setParam('id', $id);
 
             if (!$post) {
-                HookManager::call('pageNotFound');
+                hook('errorPage');
+                stop();
             }
 
             $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
@@ -210,9 +178,6 @@ class PostController extends QtController
      * Delete post action
      * @param string $lang
      * @param int $id
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function deletePost(string $lang, int $id)
     {
@@ -231,9 +196,6 @@ class PostController extends QtController
      * Delete post image action
      * @param string $lang
      * @param int $id
-     * @throws \Quantum\Exceptions\DiException
-     * @throws \ReflectionException
-     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      */
     public function deletePostImage(string $lang, int $id)
     {
