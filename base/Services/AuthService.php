@@ -15,9 +15,11 @@
 namespace Base\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
-use Quantum\Libraries\Auth\User;
+use Quantum\Libraries\Auth\User as AuthUser;
+use Quantum\Factory\ModelFactory;
 use Quantum\Loader\Loader;
 use Quantum\Loader\Setup;
+use Base\Models\User;
 
 /**
  * Class AuthService
@@ -25,7 +27,7 @@ use Quantum\Loader\Setup;
  */
 class AuthService extends BaseService implements AuthServiceInterface
 {
-
+    private $userModel;
     /**
      * Users
      * @var array
@@ -45,17 +47,9 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param array $args
      * @throws \Quantum\Exceptions\LoaderException
      */
-    public function __init(Loader $loader, Setup $setup, array $args = [])
+    public function __init(Loader $loader, ModelFactory $modelFactory, Setup $setup, array $args = [])
     {
-        if ($args) {
-            $loader->setup(new Setup(...$args));
-        } else {
-            $loader->setup(new Setup('base' . DS . 'repositories', 'users'));
-        }
-
-        $this->repository = $loader->getFilePath();
-
-        self::$users = $loader->load();
+        $this->userModel = $modelFactory->get(User::class);
     }
 
     /**
@@ -65,7 +59,7 @@ class AuthService extends BaseService implements AuthServiceInterface
     public function userSchema(): array
     {
         return [
-            'id' => ['name' => 'id', 'visible' => false],
+            // 'id' => ['name' => 'id', 'visible' => false],
             'firstname' => ['name' => 'firstname', 'visible' => true],
             'lastname' => ['name' => 'lastname', 'visible' => true],
             'role' => ['name' => 'role', 'visible' => true],
@@ -88,15 +82,10 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param string|null $value
      * @return \Quantum\Libraries\Auth\User|null
      */
-    public function get(string $field, ?string $value): ?User
+    public function get(string $field, ?string $value): ?AuthUser
     {
-        foreach (self::$users as $userData) {
-            if (in_array($value, $userData)) {
-                return (new User())->setData($userData);
-            }
-        }
-
-        return null;
+        $user = $this->userModel->findOneBy($field, $value);
+        return (new AuthUser())->setData($user->asArray());
     }
 
     /**
@@ -105,31 +94,27 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @return \Quantum\Libraries\Auth\User
      * @throws \Quantum\Exceptions\DiException
      */
-    public function add(array $data): User
+    public function add(array $data): AuthUser
     {
-        $user = new User();
+        $authUser = new AuthUser();
 
-        $user->setFields($this->userSchema());
+        $authUser->setFields($this->userSchema());
 
-        foreach ($data as $key => $val) {
+        $user = $this->userModel->create();
+
+        foreach ($data as $key => $value) {
             foreach ($this->userSchema() as $field) {
-                if (isset($field['name'])) {
-                    if ($field['name'] == 'id') {
-                        $user->setFieldValue('id', auto_increment(self::$users, 'id'));
-                    }
-
-                    if ($field['name'] == $key) {
-                        $user->setFieldValue($key, $val ?? '');
-                    }
+                if ($field['name'] == $key) {
+                    $authUser->setFieldValue($key, $value ?? '');
                 }
             }
         }
+        
+        $user->fillObjectProps($authUser->getData());
 
-        self::$users[] = $user->getData();
+        $user->save();
 
-        $this->persist(self::$users);
-
-        return $user;
+        return $authUser;
     }
 
     /**
@@ -140,29 +125,21 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @return \Quantum\Libraries\Auth\User|null
      * @throws \Quantum\Exceptions\DiException
      */
-    public function update(string $field, ?string $value, array $data): ?User
+    public function update(string $field, ?string $value, array $data): ?AuthUser
     {
-        $user = $this->get($field, $value);
+        $user = $this->userModel->findOneBy($field, $value);
 
-        if (!$user) {
+        if (empty($user->asArray())) {
             return null;
         }
 
         foreach ($data as $key => $val) {
-            if ($user->hasField($key)) {
-                $user->setFieldValue($key, $val ?? '');
-            }
+            $user->$key = $val;
         }
+  
+        $user->save();
 
-        foreach (self::$users as &$userData) {
-            if (in_array($user->getFieldValue('id'), $userData)) {
-                $userData = $user->getData();
-            }
-        }
-
-        $this->persist(self::$users);
-
-        return $user;
+        return (new AuthUser())->setData($user->asArray());
     }
 
 }

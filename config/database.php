@@ -8,7 +8,7 @@ return [
      *
      * Current configuration to use.
      */
-    'current' => 'mysql',
+    'current' => 'sleekdb',
 
     /**
      * ---------------------------------------------------------
@@ -38,17 +38,19 @@ return [
         'prefix' => '',
     ],
     'sleekdb' => [
-        'driver' => 'sleekdb',
-        "auto_cache" => true,
-        "cache_lifetime" => null,
-        "timeout" => false,
-        "primary_key" => "_id",
-        "search" => [
-            "min_length" => 2,
-            "mode" => "or",
-            "score_key" => "scoreKey",
-            "algorithm" => Query::SEARCH_ALGORITHM["hits"]
-        ]
+        'config' => [
+            'auto_cache' => true,
+            'cache_lifetime' => null,
+            'timeout' => false,
+            'search' => [
+                'min_length' => 2,
+                'mode' => 'or',
+                'score_key' => 'scoreKey',
+                'algorithm' => 1
+            ],
+        ],
+        'database_dir' => base_dir() . DS . 'base' . DS . 'store',
+        'orm' => \Quantum\Libraries\Database\Sleekdb\SleekDbal::class
     ]
 ];
 
