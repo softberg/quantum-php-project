@@ -12,25 +12,6 @@
  * @since 2.6.0
  */
 
-use Quantum\Loader\Loader;
-use Quantum\Loader\Setup;
-use Quantum\Di\Di;
-
-if (!function_exists('load_users')) {
-
-    /**
-     * Load users
-     * @return mixed
-     * @throws Exception
-     */
-    function load_users()
-    {
-        return Di::get(Loader::class)->setup(new Setup('base' . DS . 'repositories', 'users', true))->load();
-    }
-
-}
-
-
 if (!function_exists('auto_increment')) {
 
     /**
