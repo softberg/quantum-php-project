@@ -1,25 +1,20 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
 use Base\Services\AuthService;
 use Quantum\Di\Di;
 use Quantum\App;
-use Quantum\Loader\Loader;
 
 class AuthServiceTest extends TestCase
 {
 
     public $authService;
 
-    private $userRepository;
-
     private $initialUser = [
-        'id' => 1,
         'email' => 'admin@qt.com',
         'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
-        'firstname' => 'Admin',
+        'firstname' => 'Tom',
         'lastname' => 'Hunter',
         'role' => 'admin',
         'activation_token' => '',
@@ -40,21 +35,6 @@ class AuthServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        Di::add(\Quantum\Loader\Setup::class);
-
-        $loader = Di::get(Loader::class);
-
-        $loader->loadDir(dirname(__DIR__, 2) . DS . 'helpers');
-
-        $this->userRepository = base_dir() . DS . 'base' . DS . 'store' . DS . 'users.php';
-
-        $fs = new FileSystem();
-
-        if(!$fs->exists($this->userRepository)) {
-            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
-            $fs->put($this->userRepository, $content);
-        }
-
         $this->authService = (new ServiceFactory)->get(AuthService::class, ['base' . DS . 'store', 'users']);
 
         $this->authService->add($this->initialUser);
@@ -62,16 +42,13 @@ class AuthServiceTest extends TestCase
 
     public function tearDown(): void
     {
-        $fs = new FileSystem();
-
-        if($fs->exists($this->userRepository)) {
-            $fs->remove($this->userRepository);
-        }
+        $this->authService->deleteTable();
     }
 
-    public function testServiceGet()
+    public function testUserGet()
     {
         $user = $this->authService->get('email', 'admin@qt.com');
+
         $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
         $this->assertArrayHasKey('password', $user->getData());
         $this->assertArrayHasKey('firstname', $user->getData());
@@ -82,7 +59,7 @@ class AuthServiceTest extends TestCase
         $this->assertEquals('admin', $user->getFieldValue('role'));
     }
 
-    public function testServiceAdd()
+    public function testUserAdd()
     {
         $user = $this->authService->add([
             'email' => 'guest@qt.com',
@@ -96,7 +73,7 @@ class AuthServiceTest extends TestCase
         $this->assertEquals('guest@qt.com', $user->getFieldValue('email'));
     }
 
-    public function testServiceUpdate()
+    public function testUserUpdate()
     {
         $user = $this->authService->get('email', 'admin@qt.com');
 

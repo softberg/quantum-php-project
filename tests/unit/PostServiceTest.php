@@ -1,23 +1,17 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
 use Base\Services\PostService;
-use Quantum\Loader\Loader;
 use Quantum\Di\Di;
 use Quantum\App;
 
 class PostServiceTest extends TestCase
 {
-
     public $postService;
-
-    private $postRepository;
 
     private $initialPosts = [
         [
-            'id' => 1,
             'title' => 'Walt Disney',
             'content' => 'The way to get started is to quit talking and begin doing.',
             'author' => 'admin@qt.com',
@@ -25,7 +19,6 @@ class PostServiceTest extends TestCase
             'updated_at' => '05/08/2021 23:13',
         ],
         [
-            'id' => 2,
             'title' => 'James Cameron',
             'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
             'author' => 'admin@qt.com',
@@ -42,36 +35,16 @@ class PostServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        Di::add(\Quantum\Loader\Setup::class);
-
-        $loader = Di::get(Loader::class);
-
-        $loader->loadDir(dirname(__DIR__, 2) . DS . 'helpers');
-
-        $this->postRepository = base_dir() . DS . 'base' . DS . 'store' . DS . 'posts.php';
-
-        $fs = new FileSystem();
-
-        if(!$fs->exists($this->postRepository)) {
-            $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
-            $fs->put($this->postRepository, $content);
-        }
-
         $this->postService = (new ServiceFactory)->get(PostService::class, ['base' . DS . 'store', 'posts']);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
         }
-
     }
 
     public function tearDown(): void
     {
-        $fs = new FileSystem();
-
-        if($fs->exists($this->postRepository)) {
-            $fs->remove($this->postRepository);
-        }
+        $this->postService->deleteTable();
     }
 
     public function testGetPosts()
@@ -141,9 +114,11 @@ class PostServiceTest extends TestCase
         ]);
 
         $this->assertCount(3, $this->postService->getPosts());
-        $this->postService->deletePost(3);
-        $this->assertCount(2, $this->postService->getPosts());
-        $this->assertNull($this->postService->getPost(3));
-    }
 
+        $this->postService->deletePost(3);
+
+        $this->assertCount(2, $this->postService->getPosts());
+
+        $this->assertEmpty($this->postService->getPost(3));
+    }
 }

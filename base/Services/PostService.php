@@ -14,32 +14,26 @@
 
 namespace Base\Services;
 
-use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
-use Quantum\Loader\Loader;
-use Quantum\Loader\Setup;
+use Quantum\Mvc\QtService;
 use Base\Models\Post;
 
 /**
  * Class PostService
  * @package Base\Services
  */
-class PostService extends BaseService
+class PostService extends QtService
 {
-    private $postModel;
+
     /**
-     * Posts
-     * @var array
+     * @var \Quantum\Mvc\QtModel
      */
-    protected static $posts = [];
+    private $postModel;
 
     /**
      * Initialise the service
-     * @param \Quantum\Loader\Loader $loader
-     * @param \Quantum\Loader\Setup $setup
-     * @param array $args
-     * @throws \Quantum\Exceptions\LoaderException
+     * @param \Quantum\Factory\ModelFactory $modelFactory
      */
     public function __init(ModelFactory $modelFactory)
     {
@@ -58,55 +52,52 @@ class PostService extends BaseService
     /**
      * Get post
      * @param int $id
-     * @return mixed|null
+     * @return ?array
      */
-    public function getPost(int $id)
+    public function getPost(int $id): ?array
     {
         return $this->postModel->findOne($id)->asArray();
     }
 
     /**
      * Add post
-     * @param array $post
-     * @throws \Quantum\Exceptions\DiException
+     * @param array $data
      */
-    public function addPost(array $post)
+    public function addPost(array $data)
     {
-        $data = $this->postModel->create();
-
-        foreach ($post as $key => $value) {
-            $data->$key = $value ?? "";
-        }
-
-        $data->save();
+        $post = $this->postModel->create();
+        $post->fillObjectProps($data);
+        $post->save();
     }
 
     /**
      * Update post
      * @param int $id
      * @param array $data
-     * @throws \Quantum\Exceptions\DiException
      */
     public function updatePost(int $id, array $data)
     {
         $post = $this->postModel->findOne($id);
-        foreach ($data as $key => $value) {
-            $post->$key = $value;
-        }
-
+        $post->fillObjectProps($data);
         $post->save();
     }
 
     /**
-     * Delete post
+     * Deletes the post
      * @param int $id
-     * @return void
-     * @throws \Quantum\Exceptions\DiException
      */
-    public function deletePost(int $id):void
+    public function deletePost(int $id)
     {
         $post = $this->postModel->findOne($id);
-        $post->delete();    
+        $post->delete();
+    }
+
+    /**
+     * Delete posts table
+     */
+    public function deleteTable()
+    {
+        $this->postModel->deleteTable();
     }
 
     /**
@@ -114,7 +105,6 @@ class PostService extends BaseService
      * @param \Quantum\Libraries\Upload\File $file
      * @param string $imageName
      * @return string
-     * @throws \Quantum\Exceptions\FileUploadException
      */
     public function saveImage(File $file, string $imageName): string
     {
@@ -127,13 +117,12 @@ class PostService extends BaseService
     /**
      * Deletes the post image
      * @param string $imageUrl
-     * @throws \Quantum\Exceptions\DiException
      */
     public function deleteImage(string $imageUrl)
     {
         $postImage = $this->postModel->findOneBy('image', $imageUrl);
 
-        if($postImage){
+        if ($postImage) {
             $postImage->image = "";
         }
 
