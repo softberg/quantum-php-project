@@ -16,9 +16,10 @@ namespace Base\Services;
 
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Libraries\Upload\File;
+use Quantum\Factory\ModelFactory;
 use Quantum\Loader\Loader;
 use Quantum\Loader\Setup;
-use Quantum\Di\Di;
+use Base\Models\Post;
 
 /**
  * Class PostService
@@ -26,7 +27,7 @@ use Quantum\Di\Di;
  */
 class PostService extends BaseService
 {
-
+    private $postModel;
     /**
      * Posts
      * @var array
@@ -40,17 +41,9 @@ class PostService extends BaseService
      * @param array $args
      * @throws \Quantum\Exceptions\LoaderException
      */
-    public function __init(Loader $loader, Setup $setup, array $args = [])
+    public function __init(ModelFactory $modelFactory)
     {
-        if ($args) {
-            $loader->setup(new Setup(...$args));
-        } else {
-            $loader->setup(new Setup('base' . DS . 'repositories', 'posts'));
-        }
-
-        $this->repository = $loader->getFilePath();
-
-        self::$posts = $loader->load();
+        $this->postModel = $modelFactory->get(Post::class);
     }
 
     /**
@@ -59,7 +52,7 @@ class PostService extends BaseService
      */
     public function getPosts(): array
     {
-        return self::$posts;
+        return $this->postModel->get();
     }
 
     /**
@@ -69,13 +62,7 @@ class PostService extends BaseService
      */
     public function getPost(int $id)
     {
-        foreach (self::$posts as $post) {
-            if ($post['id'] == $id) {
-                return $post;
-            }
-        }
-
-        return null;
+        return $this->postModel->findOne($id)->asArray();
     }
 
     /**
@@ -85,56 +72,41 @@ class PostService extends BaseService
      */
     public function addPost(array $post)
     {
-        self::$posts[] = array_merge(['id' => auto_increment(self::$posts, 'id')], $post);
-        $this->persist(self::$posts);
+        $data = $this->postModel->create();
+
+        foreach ($post as $key => $value) {
+            $data->$key = $value ?? "";
+        }
+
+        $data->save();
     }
 
     /**
      * Update post
      * @param int $id
      * @param array $data
-     * @return bool
      * @throws \Quantum\Exceptions\DiException
      */
-    public function updatePost(int $id, array $data): bool
+    public function updatePost(int $id, array $data)
     {
-        $post = $this->getPost($id);
-
-        if (empty($post)) {
-            return false;
-        }
-
+        $post = $this->postModel->findOne($id);
         foreach ($data as $key => $value) {
-            $post[$key] = $value;
+            $post->$key = $value;
         }
 
-        foreach (self::$posts as &$postData) {
-            if ($id == $postData['id']) {
-                $postData = $post;
-            }
-        }
-
-        $this->persist(self::$posts);
-        return true;
+        $post->save();
     }
 
     /**
      * Delete post
      * @param int $id
-     * @return bool
+     * @return void
      * @throws \Quantum\Exceptions\DiException
      */
-    public function deletePost(int $id): bool
+    public function deletePost(int $id):void
     {
-        foreach (self::$posts as $key => $post) {
-            if ($post['id'] == $id) {
-                unset(self::$posts[$key]);
-                $this->persist(self::$posts);
-                return true;
-            }
-        }
-
-        return false;
+        $post = $this->postModel->findOne($id);
+        $post->delete();    
     }
 
     /**
@@ -159,14 +131,13 @@ class PostService extends BaseService
      */
     public function deleteImage(string $imageUrl)
     {
-        $fs = Di::get(FileSystem::class);
+        $postImage = $this->postModel->findOneBy('image', $imageUrl);
 
-        $pathParts = explode('/', $imageUrl);
-        $imageName = end($pathParts);
-
-        if ($fs->exists(uploads_dir() . DS . $imageName)) {
-            $fs->remove(uploads_dir() . DS . $imageName);
+        if($postImage){
+            $postImage->image = "";
         }
+
+        $postImage->save();
     }
 
 }
