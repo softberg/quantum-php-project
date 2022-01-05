@@ -89,9 +89,9 @@ class PostController extends ApiController
     public function createPost(Request $request, Response $response)
     {
         $postData = [
-            'title' => $request->get('title'),
-            'content' => $request->get('content'),
-            'image' => null,
+            'title' => $request->get('title', null, true),
+            'content' => $request->get('content', null, true),
+            'image' => '',
             'author' => auth()->user()->getFieldValue('email'),
             'updated_at' => date('m/d/Y H:i'),
         ];
@@ -117,8 +117,8 @@ class PostController extends ApiController
     public function amendPost(Request $request, Response $response, int $id)
     {
         $postData = [
-            'title' => $request->get('title'),
-            'content' => $request->get('content'),
+            'title' => $request->get('title', null, true),
+            'content' => $request->get('content', null, true),
             'author' => auth()->user()->getFieldValue('email'),
             'updated_at' => date('m/d/Y H:i'),
         ];
@@ -207,7 +207,7 @@ class PostController extends ApiController
             $this->postService->deleteImage($post['image']);
         }
 
-        $post['image'] = null;
+        $post['image'] = '';
         $this->postService->updatePost($id, $post);
 
         $response->json([

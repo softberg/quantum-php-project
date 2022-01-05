@@ -14,11 +14,14 @@
 
 namespace Modules\Api\Middlewares;
 
+use Quantum\Factory\ModelFactory;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Base\Models\User;
+use Quantum\Di\Di;
 
 /**
  * Class Forget
@@ -83,17 +86,10 @@ class Forget extends QtMiddleware
      */
     private function emailExists(string $email): bool
     {
-        $users = load_users();
+        $modelFactory = Di::get(ModelFactory::class);
+        $userModel = $modelFactory->get(User::class);
 
-        if (is_array($users) && count($users) > 0) {
-            foreach ($users as $user) {
-                if ($user['email'] == $email) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return !empty($userModel->findOneBy('email', $email)->asArray());
     }
 
 }

@@ -42,4 +42,5 @@ return [
     'nonExistingRecord' => 'There is no record matched to {%1}',
     'nonEqualValues' => 'Values are not equal',
     'unauthorizedRequest' => 'Unauthorized request',
+    'uniqueUser' => 'The value of {%1} field is already exists in our database',
 ];

@@ -56,9 +56,8 @@ class Activate extends QtMiddleware
      */
     private function checkToken(string $token): bool
     {
-        $modelFactorty = Di::get(ModelFactory::class);
-
-        $userModel = $modelFactorty->get(User::class);
+        $modelFactory = Di::get(ModelFactory::class);
+        $userModel = $modelFactory->get(User::class);
 
         return !empty($userModel->findOneBy('activation_token', $token)->asArray());
     }

@@ -17,8 +17,11 @@ namespace Modules\Api\Middlewares;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
+use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Base\Models\User;
+use Quantum\Di\Di;
 
 class Signup extends QtMiddleware
 {
@@ -36,25 +39,18 @@ class Signup extends QtMiddleware
     {
         $this->validator = new Validator();
 
-        $users = load_users();
+        $this->validator->addValidation('uniqueUser', function ($value) {
+            $modelFactory = Di::get(ModelFactory::class);
+            $userModel = $modelFactory->get(User::class);
 
-        $this->validator->addValidation('uniqueUser', function ($value, $users) {
-            if (is_array($users) && count($users) > 0) {
-                foreach ($users as $user) {
-                    if ($user['email'] == $value) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+            return empty($userModel->findOneBy('email', $value)->asArray());
         });
 
         $this->validator->addRules([
             'email' => [
                 Rule::set('required'),
                 Rule::set('email'),
-                Rule::set('uniqueUser', $users)
+                Rule::set('uniqueUser')
             ],
             'password' => [
                 Rule::set('required'),

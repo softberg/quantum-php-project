@@ -29,9 +29,8 @@ class AuthController extends QtController
 
     /**
      * Auth layout
-     * @var string
      */
-    private $layout = 'layouts/auth';
+    const LAYOUT = 'layouts/auth';
 
     /**
      * Signin view
@@ -64,7 +63,7 @@ class AuthController extends QtController
      */
     public function __before(ViewFactory $view)
     {
-        $view->setLayout($this->layout);
+        $view->setLayout(self::LAYOUT);
     }
 
     /**

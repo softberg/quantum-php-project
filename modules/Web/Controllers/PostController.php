@@ -101,7 +101,7 @@ class PostController extends QtController
             $postData = [
                 'title' => $request->get('title', null, true),
                 'content' => $request->get('content', null, true),
-                'image' => null,
+                'image' => '',
                 'author' => auth()->user()->getFieldValue('email'),
                 'updated_at' => date('m/d/Y H:i'),
             ];
@@ -119,7 +119,6 @@ class PostController extends QtController
 
             $response->html($view->render('post/form'));
         }
-
     }
 
     /**
@@ -205,7 +204,8 @@ class PostController extends QtController
             $this->postService->deleteImage($post['image']);
         }
 
-        $post['image'] = null;
+        $post['image'] = '';
+
         $this->postService->updatePost($id, $post);
 
         redirect(base_url() . '/' . current_lang() . '/posts');

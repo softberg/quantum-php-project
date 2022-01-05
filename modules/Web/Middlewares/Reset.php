@@ -17,8 +17,11 @@ namespace Modules\Web\Middlewares;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
+use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Base\Models\User;
+use Quantum\Di\Di;
 use Closure;
 
 /**
@@ -56,9 +59,10 @@ class Reset extends QtMiddleware
     {
         list($lang, $token) = route_args();
 
-        if ($request->isMethod('post')) { 
+        if ($request->isMethod('post')) {
             if (!$this->checkToken($token)) {
-                session()->setFlash('error', ['password' => [
+                session()->setFlash('error', [
+                    'password' => [
                         t('validation.nonExistingRecord', 'token')
                     ]
                 ]);
@@ -75,7 +79,7 @@ class Reset extends QtMiddleware
                 session()->setFlash('error', t('validation.nonEqualValues'));
                 redirect(get_referrer());
             }
-            
+
         } elseif ($request->isMethod('get')) {
             if (!$this->checkToken($token)) {
                 hook('errorPage');
@@ -95,22 +99,14 @@ class Reset extends QtMiddleware
      */
     private function checkToken(string $token): bool
     {
-        $users = load_users();
+        $modelFactory = Di::get(ModelFactory::class);
+        $userModel = $modelFactory->get(User::class);
 
-        if (is_array($users) && count($users) > 0) {
-
-            foreach ($users as $user) {
-                if (isset($user['reset_token']) && $user['reset_token'] == $token) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return !empty($userModel->findOneBy('reset_token', $token)->asArray());
     }
 
     /**
-     * Checks the password and repeat password 
+     * Checks the password and repeat password
      * @param string $newPassword
      * @param string $repeatPassword
      * @return bool
