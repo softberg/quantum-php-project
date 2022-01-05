@@ -12,24 +12,6 @@
  * @since 2.6.0
  */
 
-if (!function_exists('auto_increment')) {
-
-    /**
-     * Auto increment
-     * @param array $collection
-     * @param string $field
-     * @return int|mixed
-     */
-    function auto_increment(array $collection, string $field)
-    {
-        $max = 0;
-        foreach ($collection as $item) {
-            $max = max($max, $item[$field]);
-        }
-        return ++$max;
-    }
-}
-
 if (!function_exists('url_with_lang')) {
 
     /**
