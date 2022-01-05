@@ -119,7 +119,6 @@ class PostController extends QtController
 
             $response->html($view->render('post/form'));
         }
-
     }
 
     /**
