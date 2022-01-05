@@ -89,7 +89,6 @@ class Forget extends QtMiddleware
         $userModel = $modelFactory->get(User::class);
 
         return !empty($userModel->findOneBy('email', $email)->asArray());
-
     }
 
 }

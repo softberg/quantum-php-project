@@ -14,9 +14,12 @@
 
 namespace Modules\Api\Middlewares;
 
+use Quantum\Factory\ModelFactory;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Base\Models\User;
+use Quantum\Di\Di;
 use Closure;
 
 /**
@@ -57,17 +60,10 @@ class Activate extends QtMiddleware
      */
     private function checkToken(string $token): bool
     {
-        $users = load_users();
+        $modelFactory = Di::get(ModelFactory::class);
+        $userModel = $modelFactory->get(User::class);
 
-        if (is_array($users) && count($users) > 0) {
-            foreach ($users as $user) {
-                if (isset($user['activation_token']) && $user['activation_token'] == $token) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return !empty($userModel->findOneBy('activation_token', $token)->asArray());
     }
 
 }
