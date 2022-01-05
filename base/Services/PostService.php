@@ -85,11 +85,12 @@ class PostService extends QtService
     /**
      * Deletes the post
      * @param int $id
+     * @return bool
      */
-    public function deletePost(int $id)
+    public function deletePost(int $id): bool
     {
         $post = $this->postModel->findOne($id);
-        $post->delete();
+        return $post->delete();
     }
 
     /**

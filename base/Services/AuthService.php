@@ -72,7 +72,13 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function get(string $field, ?string $value): ?AuthUser
     {
-        return (new AuthUser())->setData($this->userModel->findOneBy($field, $value)->asArray());
+        $user = $this->userModel->findOneBy($field, $value);
+
+        if (empty($user->asArray())) {
+            return null;
+        }
+
+        return (new AuthUser())->setData($user->asArray());
     }
 
     /**
