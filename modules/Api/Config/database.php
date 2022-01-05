@@ -8,7 +8,7 @@ return [
      *
      * Current configuration to use.
      */
-    'current' => 'mysql',
+    'current' => 'sleekdb',
     
     /**
      * ---------------------------------------------------------
@@ -24,12 +24,27 @@ return [
      * password   : Password of the database server
      * charset    : Default charset
      */
-    'mysql' => array(
+    'mysql' => [
         'driver' => env("DB_DRIVER", "mysql"),
         'host' => env("DB_HOST", "localhost"),
         'dbname' => env("DB_NAME"),
         'username' => env("DB_USERNAME", "root"),
         'password' => env("DB_PASSWORD"),
         'charset' => env("DB_CHARSET", 'utf8'),
-    ),
+    ],
+    'sleekdb' => [
+        'config' => [
+            'auto_cache' => true,
+            'cache_lifetime' => null,
+            'timeout' => false,
+            'search' => [
+                'min_length' => 2,
+                'mode' => 'or',
+                'score_key' => 'scoreKey',
+                'algorithm' => 1
+            ],
+        ],
+        'database_dir' => base_dir() . DS . 'base' . DS . 'store',
+        'orm' => \Quantum\Libraries\Database\Sleekdb\SleekDbal::class
+    ],
 ];
