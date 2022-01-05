@@ -26,7 +26,11 @@ if (!function_exists('url_with_lang')) {
         if (trim(route_uri()) == '/') {
             $url .= '/' . $lang;
         } else {
-            $url .= '/' . preg_replace("/" . preg_quote("/" . current_lang(), '/') . "/", $lang, route_uri(), 1);
+            if (preg_match("/" . preg_quote(current_lang()) . "/", route_uri())) {
+                $url .= '/' . preg_replace("/" . preg_quote("/" . current_lang(), '/') . "/", $lang, route_uri(), 1);
+            } else {
+                $url .= '/' . $lang . route_uri();
+            }
         }
 
         return $url;
