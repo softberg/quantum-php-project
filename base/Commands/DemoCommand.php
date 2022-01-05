@@ -16,11 +16,8 @@ namespace Base\Commands;
 
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
-use Quantum\Libraries\Storage\FileSystem;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Console\QtCommand;
-use WW\Faker\Provider\Picture;
-use Quantum\Di\Di;
 use Faker\Factory;
 
 
@@ -90,26 +87,24 @@ class DemoCommand extends QtCommand
      */
     public function exec()
     {
-        $this->createFile('users');
-
         $adminArguments = $this->newUser('admin');
         $guestArguments = $this->newUser();
 
         $this->runCommand(self::COMMAND_USER_CREATE, $adminArguments);
         $this->runCommand(self::COMMAND_USER_CREATE, $guestArguments);
 
-        $this->createFile('posts');
-
         for ($i = 1; $i <= self::POST_COUNT; $i++) {
             $postArguments = [
-                'title' => $this->faker->realText(30),
-                'description' => $this->faker->realText(500),
+                'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
+                'description' => str_replace(['"', '\'', '-'], '', $this->faker->realText(1000)),
                 'image' => $this->faker->imageUrl(640, 480, true, 0),
                 'author' => $adminArguments['email'],
             ];
 
             $this->runCommand(self::COMMAND_POST_CREATE, $postArguments);
         }
+
+        $this->info('Demo installed successfully');
 
     }
 
@@ -121,22 +116,6 @@ class DemoCommand extends QtCommand
     {
         $command = $this->getApplication()->find($commandName);
         $command->run(new ArrayInput($arguments), new NullOutput);
-    }
-
-    /**
-     * Creates new repo file
-     * @throws \Quantum\Exceptions\DiException
-     */
-    protected function createFile($file)
-    {
-        $fs = Di::get(FileSystem::class);
-
-        $repositoryDir = base_dir() . DS . 'base' . DS . 'repositories';
-        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . export([]) . ';';
-
-        $fs->put($repositoryDir . DS . $file . '.php', $content);
-
-        $this->info(ucfirst($file) . ' successfully generated');
     }
 
     /**
