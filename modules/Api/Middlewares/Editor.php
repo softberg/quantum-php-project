@@ -63,6 +63,7 @@ class Editor extends QtMiddleware
             'content' => [
                 Rule::set('required'),
                 Rule::set('minLen', 10),
+                Rule::set('maxLen', 1000),
             ]
         ]);
     }
