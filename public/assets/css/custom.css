@@ -94,8 +94,8 @@ main > div.posts-container, .posts-container {
 
 .teal .input-field input,
 .teal .input-field textarea {
-    border-bottom: 1px solid #fff !important;
-    color: #fff !important;
+    border-bottom: 1px solid #fff;
+    color: #fff;
 }
 
 .teal .input-field input:focus + label,
@@ -105,8 +105,15 @@ main > div.posts-container, .posts-container {
 
 .teal .input-field input:focus,
 .teal .input-field textarea:focus {
-    border-bottom: 1px solid #fff !important;
-    box-shadow: 0 1px 0 0 #fff !important;
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 1px 0 0 #fff ;
+}
+
+.teal .input-field input.invalid,
+.teal .input-field textarea.invalid {
+    border-bottom: 1px solid #F44336;
+    -webkit-box-shadow: 0 1px 0 0 #f44336;
+    box-shadow: 0 1px 0 0 #f44336;
 }
 
 .teal .input-field input.valid,
@@ -115,11 +122,13 @@ main > div.posts-container, .posts-container {
     box-shadow: 0 1px 0 0 #fff !important;
 }
 
-.teal .input-field input.invalid,
-.teal .input-field textarea.invalid {
+.teal input[type=text]:not(.browser-defalt):focus:not([readonly]) {
     border-bottom: 1px solid #fff !important;
     box-shadow: 0 1px 0 0 #fff !important;
 }
+
+
+
 
 .input-field .prefix.active {
     color: #fff !important;
@@ -150,7 +159,7 @@ main > div.posts-container, .posts-container {
     border: 1px solid transparent;
     border-radius: 4px;
     transition: all 0.1s linear;
-    webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
     display: -webkit-box;
     display: -webkit-flex;
@@ -249,6 +258,7 @@ a {
     margin-top: 6px;
 }
 
+
 .post-item {
     margin-bottom: 15px;
 }
@@ -277,9 +287,13 @@ a {
     object-fit: cover;
 }
 
+.card-image-box  .content_no_img {
+    object-fit: contain;
+}
+
 .post-title a {
     font-weight: 400;
-    font-size: 30px;
+    font-size: 22px;
 }
 
 .post-author {
@@ -296,22 +310,34 @@ a {
     background-color: #00968800 !important;
 }
 
-/*input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-    -webkit-text-fill-color: white;
-    -webkit-box-shadow: 0 0 0 30px #00bfa5 inset !important; 
-}*/
+.posts-container .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    margin-right: 10px;
+}
+
+.p-rel {
+    position: relative;
+}
+
+.visibility-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;  
+    cursor: pointer;
+}
+.visibility-icon::selection {
+    background: transparent;
+}
+.col >  .visibility-icon {
+    right: 15px;
+}
+
+input[type=password] {
+    padding-right: 20px!important;
+    box-sizing: border-box!important;
+}
 
 /*bubbles  animation styles start*/
-
-
 .bg-bubbles {
     position: fixed;
     top: 0;
@@ -527,6 +553,7 @@ h5 {
 }
 .single-blog-txt{
     line-height: 1.7;
+    word-break: break-word;
 }
 
 .post-image {
@@ -581,6 +608,10 @@ div.polaroid {
 
 .modal-footer .modal-close {
     margin-right: 0 !important;
+}
+
+.character-counter {
+    color: #fff;
 }
 
 @media only screen and (max-width: 1500px) {

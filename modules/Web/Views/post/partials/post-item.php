@@ -1,4 +1,4 @@
-<div class="col s12 m4 post-item">
+<div class="col s12 m3 post-item">
     <div class="card post-card hoverable">
         <a href="<?php echo base_url() . '/' . current_lang() . '/post/' . $post['id'] ?>">
             <div class="card-image card-image-box">

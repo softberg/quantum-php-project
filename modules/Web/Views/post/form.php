@@ -24,7 +24,7 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <textarea name="content" id="content"
+                                <textarea name="content" id="content"  data-length="1000"
                                           class="materialize-textarea"><?php echo $post['content'] ?? old('content') ?></textarea>
                                 <label for="content"><?php _t('common.content') ?></label>
                             </div>
