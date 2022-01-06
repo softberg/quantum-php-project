@@ -58,8 +58,8 @@ class PostUpdateCommand extends QtCommand
      * @var array
      */
     protected $options = [
-        ['title', 't', 'required', 'Post title'],
-        ['description', 'd', 'required', 'Post description'],
+        ['title', 't', 'optional', 'Post title'],
+        ['description', 'd', 'optional', 'Post description'],
         ['image', 'i', 'optional', 'Post image'],
         ['author', 'a', 'optional', 'Post author'],
     ];
@@ -78,26 +78,27 @@ class PostUpdateCommand extends QtCommand
 
         $post = $postService->getPost($id);
 
+        if (!$post) {
+            $this->error('The post is not found');
+            return;
+        }
+
         $title = $this->getOption('title');
         $description = $this->getOption('description');
         $image = $this->getOption('image');
         $author = $this->getOption('author');
 
-        if($title && $description) {
-            $post = [
-                'title' => $title,
-                'content' => $description,
-                'image' => $image ?: $post['image'],
-                'author' => $author ?: $post['author'],
-                'updated_at' => date('m/d/Y H:i')
-            ];
+        $postData = [
+            'title' => $title ?: $post['title'],
+            'content' => $description ?: $post['content'],
+            'image' => $image ?: $post['image'] ?? '',
+            'author' => $author ?: $post['author'],
+            'updated_at' => date('m/d/Y H:i')
+        ];
 
-            $postService->updatePost($id, $post);
+        $postService->updatePost($id, $postData);
 
-            $this->info('Post updated successfully');
-        } else {
-            $this->error('Missing post title or description');
-        }
+        $this->info('Post updated successfully');
     }
 
 }

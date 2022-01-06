@@ -64,21 +64,36 @@ class PostShowCommand extends QtCommand
 
         $postService = $serviceFactory->get(PostService::class);
 
-        $posts = $postService->getPosts();
-
         $id = $this->getArgument('id');
 
         $rows = [];
 
         if ($id) {
-            foreach ($posts as $post) {
-                if ($post['id'] == $id) {
-                    $rows[] = [$post['id'], $post['title'], $post['content'], $post['author'], $post['updated_at']];
-                }
+            $post = $postService->getPost($id);
+
+            if (!empty($post)) {
+                $rows[] = [
+                    $post['id'],
+                    $post['title'],
+                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...',
+                    $post['author'],
+                    $post['updated_at']
+                ];
+            } else {
+                $this->error('The post is not found');
+                return;
             }
         } else {
+            $posts = $postService->getPosts();
+
             foreach ($posts as $post) {
-                $rows[] = [$post['id'], $post['title'], $post['content'], $post['author'], $post['updated_at']];
+                $rows[] = [
+                    $post['id'],
+                    $post['title'],
+                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...',
+                    $post['author'],
+                    $post['updated_at']
+                ];
             }
         }
 
