@@ -65,11 +65,17 @@ class PostDeleteCommand extends QtCommand
 
         $id = $this->getArgument('id');
 
-        if($postService->deletePost($id)) {
-            $this->info('Post deleted successfully');
-        } else {
-            $this->error('No such post found');
+        $post = $postService->getPost($id);
+
+        if (!$post) {
+            $this->error('The post is not found');
+            return;
         }
+
+        $postService->deletePost($id);
+
+        $this->info('Post deleted successfully');
+
     }
 
 }
