@@ -148,7 +148,7 @@ class AuthController extends ApiController
     public function verify(Request $request, Response $response)
     {
         try {
-            auth()->verifyOtp($request->get('otp'), $request->get('code'));
+            auth()->verifyOtp((int)$request->get('otp'), $request->get('code'));
 
             $response->json([
                 'status' => self::STATUS_SUCCESS

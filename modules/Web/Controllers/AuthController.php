@@ -184,7 +184,7 @@ class AuthController extends QtController
     {
         if ($request->isMethod('post')) {
             try {
-                auth()->verifyOtp($request->get('otp'), $request->get('code'));
+                auth()->verifyOtp((int)$request->get('otp'), $request->get('code'));
                 redirect(base_url() . '/' . current_lang());
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());

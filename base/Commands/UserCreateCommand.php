@@ -73,14 +73,6 @@ class UserCreateCommand extends QtCommand
             'role' => $this->getArgument('role'),
             'email' => $this->getArgument('email'),
             'password' => (new Hasher())->hash($this->getArgument('password')),
-            'activation_token' => '',
-            'remember_token' => '',
-            'reset_token' => '',
-            'access_token' => '',
-            'refresh_token' => '',
-            'otp' => '',
-            'otp_expires' => '',
-            'otp_token' => '',
         ];
 
         $authService->add($user);
