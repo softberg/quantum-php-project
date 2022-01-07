@@ -54,7 +54,7 @@ class DemoCommand extends QtCommand
     /**
      * How many posts to create
      */
-    const POST_COUNT = 6;
+    const POST_COUNT = 12;
 
     /**
      * Default password for generated users
