@@ -19,6 +19,8 @@
                         <div class="input-field col s12">
                             <input name="password" id='password' type="password"/>
                             <label for="password" class="active"><?php _t('common.password') ?></label>
+                            <i class="material-icons visibility-icon on hide">visibility</i>
+                            <i class="material-icons visibility-icon off">visibility_off</i>
                         </div>
                     </div>
                     <div class="row">

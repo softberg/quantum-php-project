@@ -17,10 +17,14 @@
                         <div class="input-field">
                             <label class="auth-form-label"><?php _t('common.new_password'); ?></label>
                             <input type="password" name="password"/>
+                            <i class="material-icons visibility-icon on hide">visibility</i>
+                            <i class="material-icons visibility-icon off">visibility_off</i>
                         </div>
                         <div class="input-field">
                             <label class="auth-form-label"><?php _t('common.repeat_password'); ?></label>
                             <input type="password" name="repeat_password"/>
+                            <i class="material-icons visibility-icon on hide">visibility</i>
+                            <i class="material-icons visibility-icon off">visibility_off</i>
                         </div>
                         <div>
                             <input type="hidden" name="token" value="<?php echo csrf_token() ?>"/>

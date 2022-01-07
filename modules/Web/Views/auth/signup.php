@@ -14,9 +14,11 @@
                             <label class="auth-form-label"><?php _t('common.email'); ?></label>
                             <input type="text" name="email" autocomplete="off" value="<?php echo old('username') ?>"/>
                         </div>
-                        <div class="input-field">
+                        <div class="input-field p-rel">
                             <label class="auth-form-label"><?php _t('common.password'); ?></label>
                             <input type="password" name="password"/>
+                            <i class="material-icons visibility-icon on hide">visibility</i>
+                            <i class="material-icons visibility-icon off">visibility_off</i>
                         </div>
                         <div class="input-field">
                             <label class="auth-form-label"><?php _t('common.first_name'); ?></label>
