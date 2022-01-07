@@ -94,8 +94,8 @@ main > div.posts-container, .posts-container {
 
 .teal .input-field input,
 .teal .input-field textarea {
-    border-bottom: 1px solid #fff;
-    color: #fff;
+    border-bottom: 1px solid #fff !important;
+    color: #fff !important;
 }
 
 .teal .input-field input:focus + label,
@@ -106,14 +106,14 @@ main > div.posts-container, .posts-container {
 .teal .input-field input:focus,
 .teal .input-field textarea:focus {
     border-bottom: 1px solid #fff;
-    box-shadow: 0 1px 0 0 #fff ;
+    box-shadow: 0 1px 0 0 #fff !important;
 }
 
 .teal .input-field input.invalid,
 .teal .input-field textarea.invalid {
-    border-bottom: 1px solid #F44336;
-    -webkit-box-shadow: 0 1px 0 0 #f44336;
-    box-shadow: 0 1px 0 0 #f44336;
+    border-bottom: 1px solid #F44336 !important;
+    -webkit-box-shadow: 0 1px 0 0 #f44336 !important;
+    box-shadow: 0 1px 0 0 #f44336 !important;
 }
 
 .teal .input-field input.valid,
@@ -122,13 +122,10 @@ main > div.posts-container, .posts-container {
     box-shadow: 0 1px 0 0 #fff !important;
 }
 
-.teal input[type=text]:not(.browser-defalt):focus:not([readonly]) {
-    border-bottom: 1px solid #fff !important;
-    box-shadow: 0 1px 0 0 #fff !important;
+.teal input:focus {
+    border-bottom: 1px solid #fff ;
+    box-shadow: 0 1px 0 0 #fff ;
 }
-
-
-
 
 .input-field .prefix.active {
     color: #fff !important;
@@ -504,7 +501,7 @@ h5 {
     appearance: none;
     background-color: transparent !important;
     background-image: none !important;
-    color: -internal-light-dark(black, white) !important;
+    color: -internal-light-dark(black, white) ;
     -webkit-text-fill-color: #fff;
     -webkit-box-shadow: 0 0 0px 1000px #00bfa5 inset !important;
 
