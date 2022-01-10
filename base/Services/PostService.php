@@ -14,10 +14,12 @@
 
 namespace Base\Services;
 
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
 use Base\Models\Post;
+use Quantum\Di\Di;
 
 /**
  * Class PostService
@@ -121,13 +123,13 @@ class PostService extends QtService
      */
     public function deleteImage(string $imageUrl)
     {
-        $postImage = $this->postModel->findOneBy('image', $imageUrl);
+        $fs = Di::get(FileSystem::class);
+        $pathParts = explode('/', $imageUrl);
+        $imageName = end($pathParts);
 
-        if ($postImage) {
-            $postImage->image = "";
+        if ($fs->exists(uploads_dir() . DS . $imageName)) {
+            $fs->remove(uploads_dir() . DS . $imageName);
         }
-
-        $postImage->save();
     }
 
 }
