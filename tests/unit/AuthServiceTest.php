@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Quantum\Factory\ServiceFactory;
-use Base\Services\AuthService;
+use Shared\Services\AuthService;
 use Quantum\Di\Di;
 use Quantum\App;
 
@@ -35,7 +35,7 @@ class AuthServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        $this->authService = (new ServiceFactory)->get(AuthService::class, ['base' . DS . 'store', 'users']);
+        $this->authService = (new ServiceFactory)->get(AuthService::class, ['shared' . DS . 'store', 'users']);
 
         $this->authService->add($this->initialUser);
     }
@@ -48,7 +48,7 @@ class AuthServiceTest extends TestCase
     public function testUserGet()
     {
         $user = $this->authService->get('email', 'admin@qt.com');
-
+        
         $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
         $this->assertArrayHasKey('password', $user->getData());
         $this->assertArrayHasKey('firstname', $user->getData());

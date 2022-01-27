@@ -44,7 +44,7 @@ return [
                 'algorithm' => 1
             ],
         ],
-        'database_dir' => base_dir() . DS . 'base' . DS . 'store',
+        'database_dir' => base_dir() . DS . 'shared' . DS . 'store',
         'orm' => \Quantum\Libraries\Database\Sleekdb\SleekDbal::class
     ],
 ];

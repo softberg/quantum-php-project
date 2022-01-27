@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Quantum\Factory\ServiceFactory;
-use Base\Services\PostService;
+use Shared\Services\PostService;
 use Quantum\Di\Di;
 use Quantum\App;
 
@@ -35,7 +35,7 @@ class PostServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        $this->postService = (new ServiceFactory)->get(PostService::class, ['base' . DS . 'store', 'posts']);
+        $this->postService = (new ServiceFactory)->get(PostService::class, ['shared' . DS . 'store', 'posts']);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);

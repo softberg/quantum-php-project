@@ -15,7 +15,7 @@
 namespace Modules\Api\Controllers;
 
 use Quantum\Factory\ServiceFactory;
-use Base\Services\PostService;
+use Shared\Services\PostService;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
@@ -28,7 +28,7 @@ class PostController extends ApiController
 
     /**
      * Post service
-     * @var \Base\Services\PostService
+     * @var \Shared\Services\PostService
      */
     public $postService;
 

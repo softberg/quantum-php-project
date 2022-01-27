@@ -10,5 +10,5 @@ return [
      * Service identifies the Auth service to use
      */
     'type' => 'web',
-    'service' => Base\Services\AuthService::class
+    'service' => Shared\Services\AuthService::class
 ];
