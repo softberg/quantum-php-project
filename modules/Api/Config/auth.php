@@ -10,7 +10,7 @@ return [
      * Service identifies the Auth service to use
      */
     'type' => 'api',
-    'service' => Base\Services\AuthService::class,
+    'service' => Shared\Services\AuthService::class,
     'claims' => [
         'jti' => uniqid(),
         'iss' => 'issuer',

@@ -12,7 +12,7 @@
  * @since 2.6.0
  */
 
-namespace Base\Commands;
+namespace Shared\Commands;
 
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -23,7 +23,7 @@ use Faker\Factory;
 
 /**
  * Class PostCreateCommand
- * @package Base\Commands
+ * @package Shared\Commands
  */
 class DemoCommand extends QtCommand
 {

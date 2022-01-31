@@ -12,18 +12,18 @@
  * @since 2.6.0
  */
 
-namespace Base\Services;
+namespace Shared\Services;
 
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
-use Base\Models\Post;
+use Shared\Models\Post;
 use Quantum\Di\Di;
 
 /**
  * Class PostService
- * @package Base\Services
+ * @package Shared\Services
  */
 class PostService extends QtService
 {

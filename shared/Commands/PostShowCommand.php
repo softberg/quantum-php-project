@@ -12,18 +12,18 @@
  * @since 2.6.0
  */
 
-namespace Base\Commands;
+namespace Shared\Commands;
 
 use Symfony\Component\Console\Helper\Table;
 use Quantum\Factory\ServiceFactory;
-use Base\Services\PostService;
+use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Di\Di;
 
 
 /**
  * Class PostShowCommand
- * @package Base\Commands
+ * @package Shared\Commands
  */
 class PostShowCommand extends QtCommand
 {

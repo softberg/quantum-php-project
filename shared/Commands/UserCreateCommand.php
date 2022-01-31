@@ -12,18 +12,18 @@
  * @since 2.6.0
  */
 
-namespace Base\Commands;
+namespace Shared\Commands;
 
 use Quantum\Factory\ServiceFactory;
 use Quantum\Libraries\Hasher\Hasher;
-use Base\Services\AuthService;
+use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
 use Quantum\Di\Di;
 
 
 /**
  * Class UserCreateCommand
- * @package Base\Commands
+ * @package Shared\Commands
  */
 class UserCreateCommand extends QtCommand
 {

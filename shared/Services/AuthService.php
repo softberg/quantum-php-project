@@ -12,17 +12,17 @@
  * @since 2.6.0
  */
 
-namespace Base\Services;
+namespace Shared\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
-use Base\Models\User;
+use Shared\Models\User;
 
 /**
  * Class AuthService
- * @package Base\Services
+ * @package Shared\Services
  */
 class AuthService extends QtService implements AuthServiceInterface
 {

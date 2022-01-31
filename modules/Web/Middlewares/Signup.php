@@ -20,7 +20,7 @@ use Quantum\Middleware\QtMiddleware;
 use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Base\Models\User;
+use Shared\Models\User;
 use Quantum\Di\Di;
 use Closure;
 

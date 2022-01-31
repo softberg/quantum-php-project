@@ -12,17 +12,17 @@
  * @since 2.6.0
  */
 
-namespace Base\Commands;
+namespace Shared\Commands;
 
 use Quantum\Factory\ServiceFactory;
-use Base\Services\PostService;
+use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Di\Di;
 
 
 /**
  * Class PostDeleteCommand
- * @package Base\Commands
+ * @package Shared\Commands
  */
 class PostDeleteCommand extends QtCommand
 {

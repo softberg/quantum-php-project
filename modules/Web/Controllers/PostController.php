@@ -16,7 +16,7 @@ namespace Modules\Web\Controllers;
 
 use Quantum\Factory\ServiceFactory;
 use Quantum\Factory\ViewFactory;
-use Base\Services\PostService;
+use Shared\Services\PostService;
 use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
@@ -31,7 +31,7 @@ class PostController extends QtController
 
     /**
      * Post service
-     * @var \Base\Services\PostService
+     * @var \Shared\Services\PostService
      */
     public $postService;
 

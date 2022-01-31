@@ -12,7 +12,7 @@
  * @since 2.6.0
  */
 
-namespace Base\Models;
+namespace Shared\Models;
 
 use Quantum\Mvc\QtModel;
 
