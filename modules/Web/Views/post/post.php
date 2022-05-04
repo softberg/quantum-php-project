@@ -11,11 +11,4 @@
     <?php endif; ?>
 
     <?php echo partial('post/partials/modal', ['item' => t('common.the_post')]) ?>
-
-    <?php if (auth()->check() && auth()->user()->getFieldValue('role') == 'admin'): ?>
-        <div class="fixed-action-btn">
-            <a class="btn-floating btn-large waves-effect waves-light blue-grey darken-1 hoverable"
-               href="<?php echo base_url() . '/' . current_lang() ?>/post/create"><i class="material-icons">add</i></a>
-        </div>
-    <?php endif; ?>
 </div>

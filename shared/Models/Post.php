@@ -40,6 +40,8 @@ class Post extends QtModel
      * @var array
      */
     public $fillable = [
+        'uuid',
+        'user_uuid',
         'title',
         'content',
         'image',

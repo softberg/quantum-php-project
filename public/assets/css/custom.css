@@ -611,6 +611,25 @@ div.polaroid {
     color: #fff;
 }
 
+.edit-my-post{
+    right: 50px;
+}
+
+.img-my-post{
+    margin-top: 5px;
+    width: 60px!important;
+    height: 60px!important;
+    left: 5px!important;
+}
+
+.post-title{
+    font-size: 20px!important;
+}
+
+.avatar p{
+    font-size: 15px;
+}
+
 @media only screen and (max-width: 1500px) {
     .content_no_img{
         width: 100% !important;

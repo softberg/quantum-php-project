@@ -14,10 +14,14 @@
 
 namespace Shared\Commands;
 
+use Faker\Core\Uuid;
+use Quantum\Di\Di;
+use Quantum\Factory\ServiceFactory;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Console\QtCommand;
+use Shared\Services\UserService;
 use Faker\Factory;
 
 
@@ -54,7 +58,12 @@ class DemoCommand extends QtCommand
     /**
      * How many posts to create
      */
-    const POST_COUNT = 12;
+    const USER_COUNT = 3;
+
+    /**
+     * How many posts to create
+     */
+    const POST_COUNT_PER_USER = 4;
 
     /**
      * Default password for generated users
@@ -87,22 +96,31 @@ class DemoCommand extends QtCommand
      */
     public function exec()
     {
-        $adminArguments = $this->newUser('admin');
-        $guestArguments = $this->newUser();
-
-        $this->runCommand(self::COMMAND_USER_CREATE, $adminArguments);
-        $this->runCommand(self::COMMAND_USER_CREATE, $guestArguments);
-
-        for ($i = 1; $i <= self::POST_COUNT; $i++) {
-            $postArguments = [
-                'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
-                'description' => str_replace(['"', '\'', '-'], '', $this->faker->realText(1000)),
-                'image' => $this->faker->imageUrl(640, 480, true, 0),
-                'author' => $adminArguments['email'],
-            ];
-
-            $this->runCommand(self::COMMAND_POST_CREATE, $postArguments);
+        for ($i = 1; $i <= self::USER_COUNT; $i++){
+            $guestArguments = $this->newUser('editor');
+            $this->runCommand(self::COMMAND_USER_CREATE, $guestArguments);
         }
+
+        $serviceFactory = Di::get(ServiceFactory::class);
+        $userService = $serviceFactory->get(UserService::class);
+
+        $users = $userService->getAll();
+
+        foreach ($users as $user){
+            for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
+                $postArguments = [
+                    'uuid' => $this->faker->uuid(),
+                    'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
+                    'description' => str_replace(['"', '\'', '-'], '', $this->faker->realText(1000)),
+                    'image' => $this->faker->imageUrl(640, 480, true, 0),
+                    'user_uuid' => $user['uuid'],
+                    'author' => $user['email'],
+                ];
+
+                $this->runCommand(self::COMMAND_POST_CREATE, $postArguments);
+            }
+        }
+
 
         $this->info('Demo installed successfully');
 

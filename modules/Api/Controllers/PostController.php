@@ -82,6 +82,33 @@ class PostController extends ApiController
     }
 
     /**
+     * Get my posts action
+     * @param string $lang
+     * @param string $uuid
+     * @param \Quantum\Http\Response $response
+     */
+    public function getMyPosts(string $lang, string $user_uuid, Response $response)
+    {
+        if (!$user_uuid && $lang) {
+            $user_uuid = $lang;
+        }
+
+        $posts = $this->postService->getMyPosts($user_uuid);
+
+        if ($posts) {
+            $response->json([
+                'status' => 'success',
+                'data' => $posts
+            ]);
+        } else {
+            $response->json([
+                'status' => 'error',
+                'message' => t('common.post_not_found')
+            ]);
+        }
+    }
+
+    /**
      * Create post action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
@@ -89,6 +116,7 @@ class PostController extends ApiController
     public function createPost(Request $request, Response $response)
     {
         $postData = [
+            'user_uuid' => auth()->user()->getData()['uuid'],
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
             'image' => '',
@@ -125,7 +153,22 @@ class PostController extends ApiController
 
         $post = $this->postService->getPost($id);
 
-        if (!$post) {
+        if (!empty($post) && $post['user_uuid'] == auth()->user()->getData()['uuid']){
+            if ($request->hasFile('image')) {
+                if ($post['image']) {
+                    $this->postService->deleteImage($post['image']);
+                }
+
+                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+                $postData['image'] = base_url() . '/uploads/' . $imageName;
+            }
+
+            $this->postService->updatePost($id, $postData);
+            $response->json([
+                'status' => 'success',
+                'message' => t('common.updated_successfully')
+            ]);
+        } else{
             $response->json([
                 'status' => 'error',
                 'message' => t('common.post_not_found')
@@ -134,20 +177,6 @@ class PostController extends ApiController
             stop();
         }
 
-        if ($request->hasFile('image')) {
-            if ($post['image']) {
-                $this->postService->deleteImage($post['image']);
-            }
-
-            $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-            $postData['image'] = base_url() . '/uploads/' . $imageName;
-        }
-
-        $this->postService->updatePost($id, $postData);
-        $response->json([
-            'status' => 'success',
-            'message' => t('common.updated_successfully')
-        ]);
     }
 
     /**

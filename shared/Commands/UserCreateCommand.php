@@ -44,7 +44,7 @@ class UserCreateCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to create a user record:' . PHP_EOL . 'php qt user:create `Email` `Password` `[Role]` `[Firstname]` `[Lastname]`';
+    protected $help = 'Use the following format to create a user record:' . PHP_EOL . 'php qt user:create `uuid` `Email` `Password` `[Role]` `[Firstname]` `[Lastname]`';
 
     /**
      * Command arguments

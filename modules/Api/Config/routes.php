@@ -11,14 +11,15 @@ return function ($route) {
     $route->post('[:alpha:2]?/api-resend', 'AuthController', 'resend')->middlewares(['Resend']);
 
     $route->get('[:alpha:2]?/api-posts', 'PostController', 'getPosts');
-    $route->get('[:alpha:2]?/api-post/[:num]', 'PostController', 'getPost');
+    $route->get('[:alpha:2]?/api-posts/[:any]', 'PostController', 'getPost');
 
     $route->group('auth', function ($route) {
         $route->get('[:alpha:2]?/api-signout', 'AuthController', 'signout');
-        $route->post('[:alpha:2]?/api-post/create', 'PostController', 'createPost')->middlewares(['Editor']);
-        $route->add('[:alpha:2]?/api-post/amend/[:num]', 'PUT', 'PostController', 'amendPost')->middlewares(['Editor']);
-        $route->add('[:alpha:2]?/api-post/delete/[:num]', 'DELETE', 'PostController', 'deletePost')->middlewares(['Editor']);
-        $route->add('[:alpha:2]?/api-post/delete-image/[:num]', 'DELETE', 'PostController', 'deletePostImage')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/api-my-post', 'POST','PostController', 'getMyPosts')->middlewares(['Editor']);
+        $route->post('[:alpha:2]?/api-my-post/create', 'PostController', 'createPost')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/api-my-post/amend/[:any]', 'PUT', 'PostController', 'amendPost')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/api-my-post/delete/[:any]', 'DELETE', 'PostController', 'deletePost')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/api-my-post/delete-image/[:any]', 'DELETE', 'PostController', 'deletePostImage')->middlewares(['Editor']);
     })->middlewares(['Auth']);
     
 };

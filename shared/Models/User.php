@@ -40,6 +40,7 @@ class User extends QtModel
      * @var array
      */
     public $fillable = [
+        'uuid',
         'firstname',
         'lastname',
         'role',

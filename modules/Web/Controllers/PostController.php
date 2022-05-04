@@ -62,19 +62,39 @@ class PostController extends QtController
     }
 
     /**
-     * Get post action
-     * @param string $lang
-     * @param int $id
+     *Get my posts action
+     * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
      */
-    public function getPost(string $lang, int $id, Response $response, ViewFactory $view)
+    public function getMyPosts(Request $request, Response $response, ViewFactory $view, string $lang)
     {
-        if (!$id && $lang) {
-            $id = $lang;
+        $user_uuid = auth()->user()->getFieldValue('uuid');
+        if (!empty($user_uuid)){
+            $posts = $this->postService->getMyPosts($user_uuid);
         }
 
-        $post = $this->postService->getPost($id);
+
+        $view->setParam('title', 'My Posts | ' . config()->get('app_name'));
+        $view->setParam('posts', $posts);
+        $view->setParam('langs', config()->get('langs'));
+        $response->html($view->render('post/my_posts'));
+    }
+
+    /**
+     * Get post action
+     * @param string $lang
+     * @param string $uuid
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
+     */
+    public function getPost(string $lang, string $uuid, Response $response, ViewFactory $view)
+    {
+        if (!$uuid && $lang) {
+            $uuid = $lang;
+        }
+
+        $post = $this->postService->getPost($uuid);
 
         if (!$post) {
             hook('errorPage');
@@ -83,7 +103,7 @@ class PostController extends QtController
 
         $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
         $view->setParam('post', $post);
-        $view->setParam('id', $id);
+        $view->setParam('uuid', $uuid);
         $view->setParam('langs', config()->get('langs'));
 
         $response->html($view->render('post/single'));
@@ -99,10 +119,11 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
             $postData = [
+                'user_uuid' => auth()->user()->getFieldValue('uuid'),
+                'author' => auth()->user()->getFieldValue('email'),
                 'title' => $request->get('title', null, true),
                 'content' => $request->get('content', null, true),
                 'image' => '',
-                'author' => auth()->user()->getFieldValue('email'),
                 'updated_at' => date('m/d/Y H:i'),
             ];
 
@@ -112,7 +133,7 @@ class PostController extends QtController
             }
 
             $this->postService->addPost($postData);
-            redirect(base_url() . '/' . current_lang() . '/posts');
+            redirect(base_url() . '/' . current_lang() . '/my-posts');
         } else {
             $view->setParam('title', 'New post | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
@@ -129,7 +150,7 @@ class PostController extends QtController
      * @param string $lang
      * @param int|null $id
      */
-    public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, int $id = null)
+    public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, string $uuid = null)
     {
         if ($request->isMethod('post')) {
             $postData = [
@@ -139,66 +160,68 @@ class PostController extends QtController
                 'updated_at' => date('m/d/Y H:i'),
             ];
 
-            $post = $this->postService->getPost($id);
+            $post = $this->postService->getPost($uuid);
 
-            if (!$post) {
-                redirect(base_url() . '/' . current_lang() . '/posts');
-            }
+            if (!empty($post) && $post['user_uuid'] == auth()->user()->getData()['uuid']){
+                if ($request->hasFile('image')) {
+                    if ($post['image']) {
+                        $this->postService->deleteImage($post['image']);
+                    }
 
-            if ($request->hasFile('image')) {
-                if ($post['image']) {
-                    $this->postService->deleteImage($post['image']);
+                    $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+                    $postData['image'] = base_url() . '/uploads/' . $imageName;
                 }
 
-                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-                $postData['image'] = base_url() . '/uploads/' . $imageName;
+                $this->postService->updatePost($uuid, $postData);
+                redirect(base_url() . '/' . current_lang() . '/my-posts');
+            } else{
+                redirect(base_url() . '/' . current_lang() . '/my-posts');
             }
 
-            $this->postService->updatePost($id, $postData);
-            redirect(base_url() . '/' . current_lang() . '/posts');
 
         } else {
-            $post = $this->postService->getPost($id);
-            $view->setParam('id', $id);
+            $post = $this->postService->getPost($uuid);
+            $view->setParam('uuid', $uuid);
 
-            if (!$post) {
+            if (!empty($post) && $post['user_uuid'] == auth()->user()->getData()['uuid']){
+                $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
+                $view->setParam('langs', config()->get('langs'));
+
+                $response->html($view->render('post/form', ['post' => $post]));
+            } else{
                 hook('errorPage');
                 stop();
             }
 
-            $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
-            $view->setParam('langs', config()->get('langs'));
-
-            $response->html($view->render('post/form', ['post' => $post]));
         }
     }
 
     /**
      * Delete post action
      * @param string $lang
-     * @param int $id
+     * @param string $uuid
      */
-    public function deletePost(string $lang, int $id)
+    public function deletePost(string $lang, string $uuid)
     {
-        $post = $this->postService->getPost($id);
+        $post = $this->postService->getPost($uuid);
 
         if ($post['image']) {
             $this->postService->deleteImage($post['image']);
         }
 
-        $this->postService->deletePost($id);
+        $this->postService->deletePost($uuid);
 
-        redirect(base_url() . '/' . current_lang() . '/posts');
+        redirect(base_url() . '/' . current_lang() . '/my-posts');
     }
 
     /**
      * Delete post image action
      * @param string $lang
-     * @param int $id
+     * @param string $uuid
      */
-    public function deletePostImage(string $lang, int $id)
+    public function deletePostImage(string $lang, string $uuid)
     {
-        $post = $this->postService->getPost($id);
+        $post = $this->postService->getPost($uuid);
 
         if ($post['image']) {
             $this->postService->deleteImage($post['image']);
@@ -206,9 +229,9 @@ class PostController extends QtController
 
         $post['image'] = '';
 
-        $this->postService->updatePost($id, $post);
+        $this->postService->updatePost($uuid, $post);
 
-        redirect(base_url() . '/' . current_lang() . '/posts');
+        redirect(base_url() . '/' . current_lang() . '/my-posts');
     }
 
 }
