@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col s8">
                     <div class="post-date"><?php echo $post['updated_at'] ?? '' ?></div>
-                    <div class="post-author"><?php echo $post['author'] ?? '' ?></div>
+                    <div class="post-author"><?php echo $author ?? '' ?></div>
                 </div>
             </div>
         </div>

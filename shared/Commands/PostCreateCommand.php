@@ -50,12 +50,10 @@ class PostCreateCommand extends QtCommand
      * @var \string[][]
      */
     protected $args = [
-        ['uuid', 'required', 'Post uuid'],
-        ['user_uuid', 'required', 'Post user_uuid'],
         ['title', 'required', 'Post title'],
         ['description', 'required', 'Post description'],
+        ['user_id', 'optional', 'Post user_id'],
         ['image', 'optional', 'Post image'],
-        ['author', 'optional', 'Post author'],
     ];
 
     /**
@@ -68,11 +66,9 @@ class PostCreateCommand extends QtCommand
         $postService = $serviceFactory->get(PostService::class);
 
         $post = [
-            'uuid' => $this->getArgument('uuid'),
-            'user_uuid' => $this->getArgument('user_uuid'),
+            'user_id' => $this->getArgument('user_id')?:'',
             'title' => $this->getArgument('title'),
             'content' => $this->getArgument('description'),
-            'author' => $this->getArgument('author') ?: 'anonymous@qt.com',
             'image' => $this->getArgument('image'),
             'updated_at' => date('m/d/Y H:i')
         ];

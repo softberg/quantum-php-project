@@ -87,13 +87,10 @@ class PostController extends ApiController
      * @param string $uuid
      * @param \Quantum\Http\Response $response
      */
-    public function getMyPosts(string $lang, string $user_uuid, Response $response)
+    public function getMyPosts(string $lang, Response $response)
     {
-        if (!$user_uuid && $lang) {
-            $user_uuid = $lang;
-        }
-
-        $posts = $this->postService->getMyPosts($user_uuid);
+        $user_id = auth()->user()->getFieldValue('id');
+        $posts = $this->postService->getMyPosts($user_id);
 
         if ($posts) {
             $response->json([
@@ -116,11 +113,10 @@ class PostController extends ApiController
     public function createPost(Request $request, Response $response)
     {
         $postData = [
-            'user_uuid' => auth()->user()->getData()['uuid'],
+            'user_id' => auth()->user()->getFieldValue('id'),
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
             'image' => '',
-            'author' => auth()->user()->getFieldValue('email'),
             'updated_at' => date('m/d/Y H:i'),
         ];
 
@@ -153,7 +149,7 @@ class PostController extends ApiController
 
         $post = $this->postService->getPost($id);
 
-        if (!empty($post) && $post['user_uuid'] == auth()->user()->getData()['uuid']){
+        if (!empty($post) && $post['user_id'] == auth()->user()->getFieldValue('id')){
             if ($request->hasFile('image')) {
                 if ($post['image']) {
                     $this->postService->deleteImage($post['image']);
@@ -219,9 +215,9 @@ class PostController extends ApiController
      * @param \Quantum\Http\Response $response
      * @param int $id
      */
-    public function deletePostImage(Response $response, int $id)
+    public function deletePostImage(Response $response, string $uuid)
     {
-        $post = $this->postService->getPost($id);
+        $post = $this->postService->getPost($uuid);
 
         if (!$post) {
             $response->json([
@@ -237,7 +233,7 @@ class PostController extends ApiController
         }
 
         $post['image'] = '';
-        $this->postService->updatePost($id, $post);
+        $this->postService->updatePost($uuid, $post);
 
         $response->json([
             'status' => 'success',

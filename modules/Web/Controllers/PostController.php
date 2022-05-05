@@ -53,10 +53,12 @@ class PostController extends QtController
      */
     public function getPosts(Response $response, ViewFactory $view)
     {
-        $posts = $this->postService->getPosts();
+        $usersPosts = $this->postService->getPosts();
+        $anonymousPosts = $this->postService->getAnonymousPosts();
 
         $view->setParam('title', 'Posts | ' . config()->get('app_name'));
-        $view->setParam('posts', $posts);
+        $view->setParam('users_posts', $usersPosts);
+        $view->setParam('anonymous_posts', $anonymousPosts);
         $view->setParam('langs', config()->get('langs'));
         $response->html($view->render('post/post'));
     }
@@ -69,9 +71,9 @@ class PostController extends QtController
      */
     public function getMyPosts(Request $request, Response $response, ViewFactory $view, string $lang)
     {
-        $user_uuid = auth()->user()->getFieldValue('uuid');
-        if (!empty($user_uuid)){
-            $posts = $this->postService->getMyPosts($user_uuid);
+        $user_id = auth()->user()->getFieldValue('id');
+        if (!empty($user_id)){
+            $posts = $this->postService->getMyPosts($user_id);
         }
 
 
@@ -119,8 +121,7 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
             $postData = [
-                'user_uuid' => auth()->user()->getFieldValue('uuid'),
-                'author' => auth()->user()->getFieldValue('email'),
+                'user_id' => auth()->user()->getFieldValue('id'),
                 'title' => $request->get('title', null, true),
                 'content' => $request->get('content', null, true),
                 'image' => '',
@@ -162,7 +163,7 @@ class PostController extends QtController
 
             $post = $this->postService->getPost($uuid);
 
-            if (!empty($post) && $post['user_uuid'] == auth()->user()->getData()['uuid']){
+            if (!empty($post) && $post['user_id'] == auth()->user()->getFieldValue('id')){
                 if ($request->hasFile('image')) {
                     if ($post['image']) {
                         $this->postService->deleteImage($post['image']);
@@ -183,7 +184,7 @@ class PostController extends QtController
             $post = $this->postService->getPost($uuid);
             $view->setParam('uuid', $uuid);
 
-            if (!empty($post) && $post['user_uuid'] == auth()->user()->getData()['uuid']){
+            if (!empty($post) && $post['user_id'] == auth()->user()->getFieldValue('id')){
                 $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
                 $view->setParam('langs', config()->get('langs'));
 

@@ -43,8 +43,8 @@ return function ($route) {
         $route->get('[:alpha:2]?/signout', 'AuthController', 'signout');
         $route->get('[:alpha:2]?/my-posts', 'PostController', 'getMyPosts')->middlewares(['Editor']);
         $route->add('[:alpha:2]?/my-posts/create', 'GET|POST', 'PostController', 'createPost')->middlewares(['Editor']);
-        $route->add('[:alpha:2]?/my-post/amend/[:any]?', 'GET|POST', 'PostController', 'amendPost')->middlewares(['Editor']);
-        $route->get('[:alpha:2]?/my-post/delete/[:any]', 'PostController', 'deletePost')->middlewares(['Editor']);
-        $route->get('[:alpha:2]?/my-post/delete-image/[:any]','PostController', 'deletePostImage')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/my-posts/amend/[:any]?', 'GET|POST', 'PostController', 'amendPost')->middlewares(['Editor']);
+        $route->get('[:alpha:2]?/my-posts/delete/[:any]', 'PostController', 'deletePost')->middlewares(['Editor']);
+        $route->get('[:alpha:2]?/my-posts/delete-image/[:any]','PostController', 'deletePostImage')->middlewares(['Editor']);
     })->middlewares(['Auth']);
 };

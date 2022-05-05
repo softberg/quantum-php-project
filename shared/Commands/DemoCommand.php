@@ -17,6 +17,7 @@ namespace Shared\Commands;
 use Faker\Core\Uuid;
 use Quantum\Di\Di;
 use Quantum\Factory\ServiceFactory;
+use Shared\Services\AuthService;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Bluemmb\Faker\PicsumPhotosProvider;
@@ -56,7 +57,7 @@ class DemoCommand extends QtCommand
     protected $faker;
 
     /**
-     * How many posts to create
+     * How many users to create
      */
     const USER_COUNT = 3;
 
@@ -97,24 +98,22 @@ class DemoCommand extends QtCommand
     public function exec()
     {
         for ($i = 1; $i <= self::USER_COUNT; $i++){
-            $guestArguments = $this->newUser('editor');
-            $this->runCommand(self::COMMAND_USER_CREATE, $guestArguments);
+            $userArguments = $this->newUser('editor');
+            $this->runCommand(self::COMMAND_USER_CREATE, $userArguments);
         }
 
         $serviceFactory = Di::get(ServiceFactory::class);
-        $userService = $serviceFactory->get(UserService::class);
+        $authService = $serviceFactory->get(AuthService::class);
 
-        $users = $userService->getAll();
+        $users = $authService->getAll();
 
         foreach ($users as $user){
             for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
                 $postArguments = [
-                    'uuid' => $this->faker->uuid(),
                     'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
                     'description' => str_replace(['"', '\'', '-'], '', $this->faker->realText(1000)),
                     'image' => $this->faker->imageUrl(640, 480, true, 0),
-                    'user_uuid' => $user['uuid'],
-                    'author' => $user['email'],
+                    'user_id' => $user['id'],
                 ];
 
                 $this->runCommand(self::COMMAND_POST_CREATE, $postArguments);

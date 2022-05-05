@@ -21,6 +21,7 @@ use Faker\Factory;
 use Quantum\Mvc\QtService;
 use Shared\Models\Post;
 use Quantum\Di\Di;
+use Shared\Models\User;
 
 /**
  * Class PostService
@@ -34,6 +35,8 @@ class PostService extends QtService
      */
     private $postModel;
 
+    private $userModel;
+
     /**
      * Initialise the service
      * @param \Quantum\Factory\ModelFactory $modelFactory
@@ -41,6 +44,7 @@ class PostService extends QtService
     public function __init(ModelFactory $modelFactory)
     {
         $this->postModel = $modelFactory->get(Post::class);
+        $this->userModel = $modelFactory->get(User::class);
     }
 
     /**
@@ -49,7 +53,12 @@ class PostService extends QtService
      */
     public function getPosts(): array
     {
-        return $this->postModel->get();
+        return $this->userModel->joinTo($this->postModel)->get();
+    }
+
+    public function getAnonymousPosts(): ?array
+    {
+        return $this->postModel->criteria('user_id', '=', '')->get();
     }
 
     /**
@@ -59,7 +68,7 @@ class PostService extends QtService
      */
     public function getPost(string $uuid): ?array
     {
-        return $this->postModel->findOneBy('uuid',$uuid)->asArray();
+        return $this->postModel->findOneBy('uuid', $uuid)->asArray();
     }
 
     /**
@@ -67,9 +76,9 @@ class PostService extends QtService
      * @param string $id
      * @return ?array
      */
-    public function getMyPosts(string $user_uuid): ?array
+    public function getMyPosts(int $user_id): ?array
     {
-        return $this->postModel->criteria('user_uuid', '=', $user_uuid)->get();
+        return $this->postModel->criteria('user_id', '=', $user_id)->get();
     }
 
     /**

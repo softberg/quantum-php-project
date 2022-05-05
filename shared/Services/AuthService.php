@@ -58,6 +58,7 @@ class AuthService extends QtService implements AuthServiceInterface
     public function userSchema(): array
     {
         return [
+            'id' => ['name' => 'id', 'visible' => true],
             'uuid' => ['name' => 'uuid', 'visible' => true],
             'firstname' => ['name' => 'firstname', 'visible' => true],
             'lastname' => ['name' => 'lastname', 'visible' => true],
