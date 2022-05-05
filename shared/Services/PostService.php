@@ -53,7 +53,7 @@ class PostService extends QtService
      */
     public function getPosts(): array
     {
-        return $this->userModel->joinTo($this->postModel)->get();
+        return $this->userModel->joinTo($this->postModel, false)->get();
     }
 
     public function getAnonymousPosts(): ?array
@@ -85,12 +85,14 @@ class PostService extends QtService
      * Add post
      * @param array $data
      */
-    public function addPost(array $data)
+    public function addPost(array $data): array
     {
         $data['uuid'] = Factory::create()->uuid();
         $post = $this->postModel->create();
         $post->fillObjectProps($data);
         $post->save();
+
+        return $data;
     }
 
     /**

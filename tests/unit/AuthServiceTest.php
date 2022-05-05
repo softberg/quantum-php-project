@@ -12,7 +12,7 @@ class AuthServiceTest extends TestCase
     public $authService;
 
     private $initialUser = [
-        'email' => 'admin@qt.com',
+        'email' => 'anonymous@qt.com',
         'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
         'firstname' => 'Tom',
         'lastname' => 'Hunter',
@@ -47,7 +47,7 @@ class AuthServiceTest extends TestCase
 
     public function testUserGet()
     {
-        $user = $this->authService->get('email', 'admin@qt.com');
+        $user = $this->authService->get('email', 'anonymous@qt.com');
         
         $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
         $this->assertArrayHasKey('password', $user->getData());
@@ -75,7 +75,7 @@ class AuthServiceTest extends TestCase
 
     public function testUserUpdate()
     {
-        $user = $this->authService->get('email', 'admin@qt.com');
+        $user = $this->authService->get('email', 'anonymous@qt.com');
 
         $this->assertEmpty($user->getFieldValue('remember_token'));
 
@@ -85,7 +85,7 @@ class AuthServiceTest extends TestCase
             ['remember_token' => $rememberToken]
         );
 
-        $user = $this->authService->get('email', 'admin@qt.com');
+        $user = $this->authService->get('email', 'anonymous@qt.com');
 
         $this->assertNotEmpty($user->getFieldValue('remember_token'));
         $this->assertEquals($user->getFieldValue('remember_token'), $rememberToken);
