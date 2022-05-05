@@ -143,7 +143,6 @@ class PostController extends ApiController
         $postData = [
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
-            'author' => auth()->user()->getFieldValue('email'),
             'updated_at' => date('m/d/Y H:i'),
         ];
 
