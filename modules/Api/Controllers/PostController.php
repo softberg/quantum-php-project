@@ -113,7 +113,7 @@ class PostController extends ApiController
     public function createPost(Request $request, Response $response)
     {
         $postData = [
-            'user_id' => intval(auth()->user()->getFieldValue('id')),
+            'user_id' => (int)auth()->user()->getFieldValue('id'),
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
             'image' => '',
