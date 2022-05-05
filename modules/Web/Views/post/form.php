@@ -13,7 +13,7 @@
             <div class="card teal accent-4">
                 <div class="card-content">
                     <form method="post"
-                          action="<?php echo base_url() . '/' . current_lang() . '/my-post/' . (isset($post) ? 'amend/' . $post['uuid'] : 'create') ?>"
+                          action="<?php echo base_url() . '/' . current_lang() . '/my-posts/' . (isset($post) ? 'amend/' . $post['uuid'] : 'create') ?>"
                           enctype="multipart/form-data">
                         <div class="row">
                             <div class="input-field col s12">
