@@ -85,13 +85,14 @@ class PostServiceTest extends TestCase
         $uuid = $this->postService->getPosts()[0]['posts'][0]['uuid'];
 
         $post = $this->postService->getPost($uuid);
+
         $this->assertIsArray($post);
         $this->assertArrayHasKey('uuid', $post);
         $this->assertArrayHasKey('user_id', $post);
         $this->assertArrayHasKey('title', $post);
         $this->assertArrayHasKey('content', $post);
-        $this->assertEquals($post['title'], 'Walt Disney');
-        $this->assertEquals($post['content'], 'The way to get started is to quit talking and begin doing.');
+        $this->assertEquals('Walt Disney', $post['title']);
+        $this->assertEquals('The way to get started is to quit talking and begin doing.', $post['content']);
     }
 
     public function testAddNewPost()
