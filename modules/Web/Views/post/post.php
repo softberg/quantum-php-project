@@ -8,13 +8,8 @@
                  <?php endforeach; ?>
             <?php endforeach; ?>
         <?php endif; ?>
-            <?php if (count($anonymous_posts)):?>
-                <?php foreach ($anonymous_posts as $anonymous_post): ?>
-                    <?php echo partial('post/partials/post-item', ['post' => $anonymous_post, 'author' => 'Anonymous']) ?>
-                <?php endforeach; ?>
-        <?php endif; ?>
     </div>
-    <?php if(empty($users_posts) && empty($anonymous_posts)): ?>
+    <?php if(empty($users_posts)): ?>
         <h4 class="center-align"><?php _t('common.no_posts') ?>... <?php _t('common.try_creating') ?></h4>
     <?php endif; ?>
 

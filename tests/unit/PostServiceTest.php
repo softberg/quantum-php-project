@@ -13,6 +13,8 @@ class PostServiceTest extends TestCase
 
     public $postService;
 
+    public $userId = 1;
+
     private $initialUser = [
         'email' => 'anonymous@qt.com',
         'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
@@ -39,6 +41,18 @@ class PostServiceTest extends TestCase
         ],
         [
             'user_id' => 1,
+            'title' => 'Lorem ipsum dolor sit amet',
+            'content' => 'Praesent hendrerit lobortis malesuada. Proin bibendum lacinia nunc ac aliquet.',
+            'image' => null,
+            'updated_at' => '05/08/2022 23:13',
+        ],
+        [
+            'title' => 'Aenean dui turpis',
+            'content' => 'Etiam aliquet urna luctus, venenatis justo aliquam, hendrerit arcu.',
+            'image' => null,
+            'updated_at' => '05/08/2022 23:13',
+        ],
+        [
             'title' => 'James Cameron',
             'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
             'image' => null,
@@ -74,9 +88,10 @@ class PostServiceTest extends TestCase
     public function testGetPosts()
     {
         $this->assertIsObject($this->postService);
+        $this->assertArrayHasKey('posts', $this->postService->getPosts()[0]);
         $this->assertIsArray($this->postService->getPosts()[0]['posts']);
         $this->assertNotEmpty($this->postService->getPosts()[0]['posts']);
-        $this->assertCount(2, $this->postService->getPosts()[0]['posts']);
+        $this->assertCount(4, $this->postService->getPosts()[0]['posts']);
     }
 
     public function testGetSinglePost()
@@ -91,8 +106,6 @@ class PostServiceTest extends TestCase
         $this->assertArrayHasKey('user_id', $post);
         $this->assertArrayHasKey('title', $post);
         $this->assertArrayHasKey('content', $post);
-        $this->assertEquals('Walt Disney', $post['title']);
-        $this->assertEquals('The way to get started is to quit talking and begin doing.', $post['content']);
     }
 
     public function testAddNewPost()
@@ -108,7 +121,7 @@ class PostServiceTest extends TestCase
 
         $userPosts = $this->postService->getPosts()[0]['posts'];
 
-        $this->assertCount(3, $userPosts);
+        $this->assertCount(5, $userPosts);
         $this->assertEquals('Just another post', $this->postService->getPost($post['uuid'])['title']);
         $this->assertEquals('Content of just another post', $this->postService->getPost($post['uuid'])['content']);
         $this->assertEquals($date, $this->postService->getPost($post['uuid'])['updated_at']);
@@ -145,13 +158,13 @@ class PostServiceTest extends TestCase
 
         $userPosts = $this->postService->getPosts()[0]['posts'];
 
-        $this->assertCount(3, $userPosts);
+        $this->assertCount(5, $userPosts);
 
         $this->postService->deletePost($post['uuid']);
 
         $Post = $this->postService->getPosts()[0]['posts'];
 
-        $this->assertCount(2, $Post);
+        $this->assertCount(4, $Post);
 
         $this->assertEmpty($this->postService->getPost($post['uuid']));
 

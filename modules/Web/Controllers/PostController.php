@@ -54,11 +54,9 @@ class PostController extends QtController
     public function getPosts(Response $response, ViewFactory $view)
     {
         $usersPosts = $this->postService->getPosts();
-        $anonymousPosts = $this->postService->getAnonymousPosts();
 
         $view->setParam('title', 'Posts | ' . config()->get('app_name'));
         $view->setParam('users_posts', $usersPosts);
-        $view->setParam('anonymous_posts', $anonymousPosts);
         $view->setParam('langs', config()->get('langs'));
         $response->html($view->render('post/post'));
     }

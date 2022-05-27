@@ -56,11 +56,6 @@ class PostService extends QtService
         return $this->userModel->joinTo($this->postModel, false)->get();
     }
 
-    public function getAnonymousPosts(): ?array
-    {
-        return $this->postModel->criteria('user_id', '=', '')->get();
-    }
-
     /**
      * Get post
      * @param int $id
