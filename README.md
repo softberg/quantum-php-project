@@ -4,6 +4,7 @@
 [![GitHub](https://img.shields.io/github/license/softberg/quantum-php-core)](https://github.com/softberg/quantum-php-core/blob/master/LICENSE)
 [![Scrutinizer code quality](https://shields.cdn.bka.li/scrutinizer/quality/g/softberg/quantum-php-core)](https://scrutinizer-ci.com/g/softberg/quantum-php-core)
 [![Packagist Version](https://img.shields.io/packagist/v/quantum/framework)](https://packagist.org/packages/quantum/project)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsoftberg%2Fquantum-php-project.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsoftberg%2Fquantum-php-project?ref=badge_shield)
 
 Very fast and extremely simple, next generation PHP MVC framework with modular structure, which allows you to create projects of any complexity.
 
@@ -23,3 +24,7 @@ $ php -S localhost:8080 -t {project-name}/public
 
 - [Website](https://quantumphp.io/)
 - [Blog](http://blog.softberg.org/category/quantum-php-framework/)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsoftberg%2Fquantum-php-project.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsoftberg%2Fquantum-php-project?ref=badge_large)
