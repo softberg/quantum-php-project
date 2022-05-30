@@ -30,6 +30,7 @@ return [
     'cancel' => 'Отмена',
     'content' => 'Содержание',
     'posts' => 'Публикации',
+    'my_posts' => 'Мои Публикации',
     'new_post' => 'Новая публикация',
     'created_successfully' => 'Успешно создано',
     'update_post' => 'Обновить Сообщение',

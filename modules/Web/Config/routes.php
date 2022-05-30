@@ -27,7 +27,7 @@ return function ($route) {
     })->name('about');
 
     $route->get('[:alpha:2]?/posts', 'PostController', 'getPosts');
-    $route->get('[:alpha:2]?/post/[:num]', 'PostController', 'getPost');
+    $route->get('[:alpha:2]?/posts/[:any]', 'PostController', 'getPost');
 
     $route->group('guest', function ($route) {
         $route->add('[:alpha:2]?/signin', 'GET|POST', 'AuthController', 'signin')->name('signin');
@@ -41,9 +41,10 @@ return function ($route) {
 
     $route->group('auth', function ($route) {
         $route->get('[:alpha:2]?/signout', 'AuthController', 'signout');
-        $route->add('[:alpha:2]?/post/create', 'GET|POST', 'PostController', 'createPost')->middlewares(['Editor']);
-        $route->add('[:alpha:2]?/post/amend/[:num]?', 'GET|POST', 'PostController', 'amendPost')->middlewares(['Editor']);
-        $route->get('[:alpha:2]?/post/delete/[:num]', 'PostController', 'deletePost')->middlewares(['Editor']);
-        $route->get('[:alpha:2]?/post/delete-image/[:num]','PostController', 'deletePostImage')->middlewares(['Editor']);
+        $route->get('[:alpha:2]?/my-posts', 'PostController', 'getMyPosts')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/my-posts/create', 'GET|POST', 'PostController', 'createPost')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/my-posts/amend/[:any]?', 'GET|POST', 'PostController', 'amendPost')->middlewares(['Editor']);
+        $route->get('[:alpha:2]?/my-posts/delete/[:any]', 'PostController', 'deletePost')->middlewares(['Editor']);
+        $route->get('[:alpha:2]?/my-posts/delete-image/[:any]','PostController', 'deletePostImage')->middlewares(['Editor']);
     })->middlewares(['Auth']);
 };

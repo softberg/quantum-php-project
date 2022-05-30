@@ -8,6 +8,11 @@
 
         <ul class="right">
             <li>
+                <a href="<?php echo base_url() . '/' . current_lang() ?>/my-posts" class="white-text">
+                    My Posts
+                </a>
+            </li>
+            <li>
                 <a href="<?php echo base_url() . '/' . current_lang() ?>/posts" class="white-text">
                     <?php _t('common.posts') ?>
                 </a>

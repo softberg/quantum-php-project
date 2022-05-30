@@ -14,6 +14,7 @@
 
 namespace Shared\Services;
 
+use Faker\Factory;
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Factory\ModelFactory;
@@ -42,12 +43,23 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
+     * Get
+     * @return users
+     */
+    public function getAll(): ?array
+    {
+        return $this->userModel->get();
+    }
+
+    /**
      * User Schema
      * @return array
      */
     public function userSchema(): array
     {
         return [
+            'id' => ['name' => 'id', 'visible' => true],
+            'uuid' => ['name' => 'uuid', 'visible' => true],
             'firstname' => ['name' => 'firstname', 'visible' => true],
             'lastname' => ['name' => 'lastname', 'visible' => true],
             'role' => ['name' => 'role', 'visible' => true],
@@ -92,6 +104,7 @@ class AuthService extends QtService implements AuthServiceInterface
             unset($data['token']);
         }
 
+        $data['uuid'] = Factory::create()->uuid();
         $user = $this->userModel->create();
         $user->fillObjectProps($data);
         $user->save();

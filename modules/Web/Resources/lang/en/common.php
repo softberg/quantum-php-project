@@ -32,6 +32,7 @@ return [
     'title' => 'Title',
     'content' => 'Content',
     'posts' => 'Posts',
+    'my_posts' => 'My Posts',
     'new_post' => 'New Post',
     'created_successfully' => 'Created successfully',
     'update_post' => 'Update Post',

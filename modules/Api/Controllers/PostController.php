@@ -57,21 +57,44 @@ class PostController extends ApiController
     /**
      * Get post action
      * @param string $lang
-     * @param int $id
+     * @param string $uuid
      * @param \Quantum\Http\Response $response
      */
-    public function getPost(string $lang, int $id, Response $response)
+    public function getPost(string $lang, string $uuid, Response $response)
     {
-        if (!$id && $lang) {
-            $id = $lang;
+        if (!$uuid && $lang) {
+            $uuid = $lang;
         }
 
-        $post = $this->postService->getPost($id);
+        $post = $this->postService->getPost($uuid);
 
         if ($post) {
             $response->json([
                 'status' => 'success',
                 'data' => $post
+            ]);
+        } else {
+            $response->json([
+                'status' => 'error',
+                'message' => t('common.post_not_found')
+            ]);
+        }
+    }
+
+    /**
+     * Get my posts action
+     * @param string $lang
+     * @param \Quantum\Http\Response $response
+     */
+    public function getMyPosts(string $lang, Response $response)
+    {
+        $user_id = auth()->user()->getFieldValue('id');
+        $posts = $this->postService->getMyPosts($user_id);
+
+        if ($posts) {
+            $response->json([
+                'status' => 'success',
+                'data' => $posts
             ]);
         } else {
             $response->json([
@@ -89,10 +112,10 @@ class PostController extends ApiController
     public function createPost(Request $request, Response $response)
     {
         $postData = [
+            'user_id' => (int)auth()->user()->getFieldValue('id'),
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
             'image' => '',
-            'author' => auth()->user()->getFieldValue('email'),
             'updated_at' => date('m/d/Y H:i'),
         ];
 
@@ -112,20 +135,34 @@ class PostController extends ApiController
      * Amend post action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
-     * @param int $id
+     * @param string $uuid
      */
-    public function amendPost(Request $request, Response $response, int $id)
+    public function amendPost(Request $request, Response $response, string $uuid)
     {
         $postData = [
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
-            'author' => auth()->user()->getFieldValue('email'),
             'updated_at' => date('m/d/Y H:i'),
         ];
 
-        $post = $this->postService->getPost($id);
+        $post = $this->postService->getPost($uuid);
 
-        if (!$post) {
+        if (!empty($post) && $post['user_id'] == auth()->user()->getFieldValue('id')){
+            if ($request->hasFile('image')) {
+                if ($post['image']) {
+                    $this->postService->deleteImage($post['image']);
+                }
+
+                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+                $postData['image'] = base_url() . '/uploads/' . $imageName;
+            }
+
+            $this->postService->updatePost($uuid, $postData);
+            $response->json([
+                'status' => 'success',
+                'message' => t('common.updated_successfully')
+            ]);
+        } else{
             $response->json([
                 'status' => 'error',
                 'message' => t('common.post_not_found')
@@ -134,30 +171,16 @@ class PostController extends ApiController
             stop();
         }
 
-        if ($request->hasFile('image')) {
-            if ($post['image']) {
-                $this->postService->deleteImage($post['image']);
-            }
-
-            $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-            $postData['image'] = base_url() . '/uploads/' . $imageName;
-        }
-
-        $this->postService->updatePost($id, $postData);
-        $response->json([
-            'status' => 'success',
-            'message' => t('common.updated_successfully')
-        ]);
     }
 
     /**
      * Delete post action
      * @param \Quantum\Http\Response $response
-     * @param int $id
+     * @param string $uuid
      */
-    public function deletePost(Response $response, int $id)
+    public function deletePost(Response $response, string $uuid)
     {
-        $post = $this->postService->getPost($id);
+        $post = $this->postService->getPost($uuid);
 
         if (!$post) {
             $response->json([
@@ -172,7 +195,7 @@ class PostController extends ApiController
             $this->postService->deleteImage($post['image']);
         }
 
-        if ($this->postService->deletePost($id)) {
+        if ($this->postService->deletePost($uuid)) {
             $response->json([
                 'status' => 'success',
                 'message' => t('common.deleted_successfully')
@@ -188,11 +211,11 @@ class PostController extends ApiController
     /**
      * Delete post image action
      * @param \Quantum\Http\Response $response
-     * @param int $id
+     * @param string $uuid
      */
-    public function deletePostImage(Response $response, int $id)
+    public function deletePostImage(Response $response, string $uuid)
     {
-        $post = $this->postService->getPost($id);
+        $post = $this->postService->getPost($uuid);
 
         if (!$post) {
             $response->json([
@@ -208,7 +231,7 @@ class PostController extends ApiController
         }
 
         $post['image'] = '';
-        $this->postService->updatePost($id, $post);
+        $this->postService->updatePost($uuid, $post);
 
         $response->json([
             'status' => 'success',

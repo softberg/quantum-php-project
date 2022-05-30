@@ -2,7 +2,7 @@
     <?php echo partial('post/partials/back') ?>
     <div class="row">
         <div class="col s12">
-            <h2 class="center-align teal-text"><?php isset($id) ? _t('common.update_post') : _t('common.new_post') ?></h2>
+            <h2 class="center-align teal-text"><?php isset($uuid) ? _t('common.update_post') : _t('common.new_post') ?></h2>
 
             <?php if (session()->has('error')): ?>
                 <?php echo partial('partials/messages/error') ?>
@@ -13,7 +13,7 @@
             <div class="card teal accent-4">
                 <div class="card-content">
                     <form method="post"
-                          action="<?php echo base_url() . '/' . current_lang() . '/post/' . (isset($post) ? 'amend/' . $post['id'] : 'create') ?>"
+                          action="<?php echo base_url() . '/' . current_lang() . '/my-posts/' . (isset($post) ? 'amend/' . $post['uuid'] : 'create') ?>"
                           enctype="multipart/form-data">
                         <div class="row">
                             <div class="input-field col s12">
@@ -42,7 +42,7 @@
                         <div class="post-image">
                             <?php if (isset($post) && $post['image']): ?>
                                 <a class="waves-effect waves-light btn modal-trigger image_delete"
-                                   data-url="<?php echo base_url() . '/' . current_lang() . '/post/delete-image/' . $post['id'] ?>"
+                                   data-url="<?php echo base_url() . '/' . current_lang() . '/my-post/delete-image/' . $post['uuid'] ?>"
                                    href="#modal-confirm"
                                    title="<?php _t('common.delete') ?>">
                                     <i class="material-icons">close</i>
@@ -56,7 +56,7 @@
                             <button class="btn btn-large waves-effect waves-light submit-btn" type="submit">
                                 <?php _t('common.save') ?>
                             </button>
-                            <a href="<?php echo base_url() . '/' . current_lang() ?>/posts"
+                            <a href="<?php echo base_url() . '/' . current_lang() ?>/my-posts"
                                class="btn btn-large waves-effect waves-teal btn-flat white-text">
                                 <?php _t('common.cancel') ?>
                             </a>

@@ -35,15 +35,20 @@ class Post extends QtModel
      */
     public $table = 'posts';
 
+    public $foreignKeys = [
+        'users' => 'user_id'
+    ];
+
     /**
      * Fillable properties
      * @var array
      */
     public $fillable = [
+        'uuid',
+        'user_id',
         'title',
         'content',
         'image',
-        'author',
         'updated_at'
     ];
 
