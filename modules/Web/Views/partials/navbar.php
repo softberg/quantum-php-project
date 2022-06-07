@@ -8,11 +8,6 @@
 
         <ul class="right">
             <li>
-                <a href="<?php echo base_url() . '/' . current_lang() ?>/my-posts" class="white-text">
-                    My Posts
-                </a>
-            </li>
-            <li>
                 <a href="<?php echo base_url() . '/' . current_lang() ?>/posts" class="white-text">
                     <?php _t('common.posts') ?>
                 </a>
@@ -27,6 +22,11 @@
                           </span>
                     </a>
                     <ul id="dropdown1" class="dropdown-content">
+                        <li>
+                            <a href="<?php echo base_url() . '/' . current_lang() ?>/my-posts">
+                                My Posts
+                            </a>
+                        </li>
                         <li>
                             <a href="<?php echo base_url() . '/' . current_lang() ?>/signout"><?php _t('common.signout'); ?></a>
                         </li>
