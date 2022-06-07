@@ -42,7 +42,7 @@
                         <div class="post-image">
                             <?php if (isset($post) && $post['image']): ?>
                                 <a class="waves-effect waves-light btn modal-trigger image_delete"
-                                   data-url="<?php echo base_url() . '/' . current_lang() . '/my-post/delete-image/' . $post['uuid'] ?>"
+                                   data-url="<?php echo base_url() . '/' . current_lang() . '/my-posts/delete-image/' . $post['uuid'] ?>"
                                    href="#modal-confirm"
                                    title="<?php _t('common.delete') ?>">
                                     <i class="material-icons">close</i>

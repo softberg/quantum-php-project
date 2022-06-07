@@ -40,8 +40,9 @@ class Activate extends QtMiddleware
         list($lang, $token) = route_args();
 
         if (!$this->checkToken($token)) {
-            hook('errorPage');
-            stop();
+            stop(function () use($response){
+                $response->html(partial('errors/404'), 404);
+            });
         }
 
         $request->set('activation_token', $token);

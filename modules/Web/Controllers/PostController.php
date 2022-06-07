@@ -96,8 +96,9 @@ class PostController extends QtController
         $post = $this->postService->getPost($uuid);
 
         if (!$post) {
-            hook('errorPage');
-            stop();
+            stop(function () use ($response){
+                $response->html(partial('errors/404'), 404);
+            });
         }
 
         $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
@@ -186,8 +187,9 @@ class PostController extends QtController
 
                 $response->html($view->render('post/form', ['post' => $post]));
             } else{
-                hook('errorPage');
-                stop();
+                stop(function () use($response){
+                    $response->html(partial('errors/404'), 404);
+                });
             }
 
         }
