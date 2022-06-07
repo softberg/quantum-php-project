@@ -82,8 +82,9 @@ class Reset extends QtMiddleware
 
         } elseif ($request->isMethod('get')) {
             if (!$this->checkToken($token)) {
-                hook('errorPage');
-                stop();
+                stop(function () use($response){
+                    $response->html(partial('errors/404'), 404);
+                });
             }
         }
 

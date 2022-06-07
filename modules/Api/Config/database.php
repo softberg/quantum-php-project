@@ -31,6 +31,7 @@ return [
         'username' => env("DB_USERNAME", "root"),
         'password' => env("DB_PASSWORD"),
         'charset' => env("DB_CHARSET", 'utf8'),
+        'orm' => \Quantum\Libraries\Database\Idiorm\IdiormDbal::class
     ],
     'sleekdb' => [
         'config' => [
