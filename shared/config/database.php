@@ -8,7 +8,7 @@ return [
      *
      * Current configuration to use.
      */
-    'current' => 'sleekdb',
+    'current' => 'mysql',
 
     /**
      * ---------------------------------------------------------
@@ -40,7 +40,7 @@ return [
     ],
     'sleekdb' => [
         'config' => [
-            'auto_cache' => true,
+            'auto_cache' => false,
             'cache_lifetime' => null,
             'timeout' => false,
             'search' => [
