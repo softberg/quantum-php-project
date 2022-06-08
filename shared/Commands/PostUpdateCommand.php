@@ -93,7 +93,7 @@ class PostUpdateCommand extends QtCommand
             'content' => $description ?: $post['content'],
             'image' => $image ?: $post['image'] ?? '',
             'author' => $author ?: $post['author'],
-            'updated_at' => date('m/d/Y H:i')
+            'updated_at' => date('Y-m-d H:i:s')
         ];
 
         $postService->updatePost($id, $postData);

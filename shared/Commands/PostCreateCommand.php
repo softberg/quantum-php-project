@@ -70,7 +70,7 @@ class PostCreateCommand extends QtCommand
             'title' => $this->getArgument('title'),
             'content' => $this->getArgument('description'),
             'image' => $this->getArgument('image'),
-            'updated_at' => date('Y-m-d H:i:S')
+            'updated_at' => date('Y-m-d H:i:s')
         ];
 
         $postService->addPost($post);

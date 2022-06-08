@@ -123,7 +123,7 @@ class PostController extends QtController
                 'title' => $request->get('title', null, true),
                 'content' => $request->get('content', null, true),
                 'image' => '',
-                'updated_at' => date('m/d/Y H:i'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ];
 
             if ($request->hasFile('image')) {
@@ -155,7 +155,7 @@ class PostController extends QtController
             $postData = [
                 'title' => $request->get('title', null, true),
                 'content' => $request->get('content', null, true),
-                'updated_at' => date('m/d/Y H:i'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ];
 
             $post = $this->postService->getPost($uuid);
