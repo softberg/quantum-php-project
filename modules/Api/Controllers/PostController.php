@@ -116,7 +116,7 @@ class PostController extends ApiController
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
             'image' => '',
-            'updated_at' => date('Y-m-d H:i:S'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         if ($request->hasFile('image')) {
@@ -142,7 +142,7 @@ class PostController extends ApiController
         $postData = [
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
-            'updated_at' => date('Y-m-d H:i:S'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         $post = $this->postService->getPost($uuid);
