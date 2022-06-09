@@ -8,7 +8,7 @@ return [
      *
      * Current configuration to use.
      */
-    'current' => 'mysql',
+    'current' => 'sleekdb',
 
     /**
      * ---------------------------------------------------------
