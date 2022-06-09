@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.7.0
  */
 
 namespace Modules\Api\Controllers;
@@ -88,8 +88,8 @@ class PostController extends ApiController
      */
     public function getMyPosts(string $lang, Response $response)
     {
-        $user_id = auth()->user()->getFieldValue('id');
-        $posts = $this->postService->getMyPosts($user_id);
+        $userId = auth()->user()->getFieldValue('id');
+        $posts = $this->postService->getMyPosts($userId);
 
         if ($posts) {
             $response->json([

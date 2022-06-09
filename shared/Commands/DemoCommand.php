@@ -9,21 +9,19 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.7.0
  */
 
 namespace Shared\Commands;
 
-use Faker\Core\Uuid;
-use Quantum\Di\Di;
-use Quantum\Factory\ServiceFactory;
-use Shared\Services\AuthService;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Bluemmb\Faker\PicsumPhotosProvider;
+use Quantum\Factory\ServiceFactory;
+use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
-use Shared\Services\UserService;
 use Faker\Factory;
+use Quantum\Di\Di;
 
 
 /**

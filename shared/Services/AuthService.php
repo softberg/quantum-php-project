@@ -9,17 +9,17 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.7.0
  */
 
 namespace Shared\Services;
 
-use Faker\Factory;
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
 use Shared\Models\User;
+use Faker\Factory;
 
 /**
  * Class AuthService
@@ -34,7 +34,7 @@ class AuthService extends QtService implements AuthServiceInterface
     private $userModel;
 
     /**
-     * Initialise the service
+     * Initialize the service
      * @param \Quantum\Factory\ModelFactory $modelFactory
      */
     public function __init(ModelFactory $modelFactory)
