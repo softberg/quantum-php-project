@@ -24,7 +24,7 @@
                     <ul id="dropdown1" class="dropdown-content">
                         <li>
                             <a href="<?php echo base_url() . '/' . current_lang() ?>/my-posts">
-                                My Posts
+                                <?php _t('common.my_posts') ?>
                             </a>
                         </li>
                         <li>
