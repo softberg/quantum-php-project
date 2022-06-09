@@ -17,7 +17,7 @@
                 </li>
                 <li>
                     <h6><?php _t('common.run_server'); ?></h6>
-                    <code>&gt; php -S localhost:8080 -t {project name}/public</code>
+                    <code>&gt; php qt serve</code>
                 </li>
             </ul>
         </div>
