@@ -14,8 +14,8 @@
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Factory\ModelFactory;
 use Quantum\Middleware\QtMiddleware;
+use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;

@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.7.0
  */
 
 namespace Shared\Services;
@@ -17,11 +17,11 @@ namespace Shared\Services;
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
-use Faker\Factory;
 use Quantum\Mvc\QtService;
+use Shared\Models\User;
 use Shared\Models\Post;
 use Quantum\Di\Di;
-use Shared\Models\User;
+use Faker\Factory;
 
 /**
  * Class PostService
@@ -35,10 +35,13 @@ class PostService extends QtService
      */
     private $postModel;
 
+    /**
+     * @var \Quantum\Mvc\QtModel
+     */
     private $userModel;
 
     /**
-     * Initialise the service
+     * Initialize the service
      * @param \Quantum\Factory\ModelFactory $modelFactory
      */
     public function __init(ModelFactory $modelFactory)
@@ -58,7 +61,7 @@ class PostService extends QtService
 
     /**
      * Get post
-     * @param int $id
+     * @param int $uuid
      * @return ?array
      */
     public function getPost(string $uuid): ?array
@@ -68,12 +71,12 @@ class PostService extends QtService
 
     /**
      * Get post
-     * @param string $id
+     * @param string $userId
      * @return ?array
      */
-    public function getMyPosts(int $user_id): ?array
+    public function getMyPosts(int $userId): ?array
     {
-        return $this->postModel->criteria('user_id', '=', $user_id)->get();
+        return $this->postModel->criteria('user_id', '=', $userId)->get();
     }
 
     /**

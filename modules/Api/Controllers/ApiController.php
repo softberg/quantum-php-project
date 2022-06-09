@@ -30,6 +30,9 @@ class ApiController extends QtController
      */
     public $csrfVerification = false;
 
+    /**
+     * ApiController constructor
+     */
     public function __construct()
     {
         Response::setHeader('Access-Control-Allow-Origin', '*');

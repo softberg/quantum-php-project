@@ -14,10 +14,10 @@
 
 namespace Modules\Web\Middlewares;
 
-use Quantum\Factory\ModelFactory;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
+use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;

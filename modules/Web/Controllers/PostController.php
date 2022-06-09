@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.7.0
  */
 
 namespace Modules\Web\Controllers;
@@ -69,15 +69,15 @@ class PostController extends QtController
      */
     public function getMyPosts(Request $request, Response $response, ViewFactory $view, string $lang)
     {
-        $user_id = auth()->user()->getFieldValue('id');
-        if (!empty($user_id)){
-            $posts = $this->postService->getMyPosts($user_id);
+        $userId = auth()->user()->getFieldValue('id');
+        if (!empty($userId)){
+            $posts = $this->postService->getMyPosts($userId);
         }
 
         $view->setParam('title', 'My Posts | ' . config()->get('app_name'));
         $view->setParam('posts', $posts);
         $view->setParam('langs', config()->get('langs'));
-        $response->html($view->render('post/my_posts'));
+        $response->html($view->render('post/my-posts'));
     }
 
     /**
