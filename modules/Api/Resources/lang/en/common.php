@@ -52,5 +52,5 @@ return [
     'otp' => 'One Time Password',
     '2sv' => '2 Step Verification',
     'resend_otp' => 'Resend otp',
-	'yes' => 'Yes',
+    'yes' => 'Yes',
 ];
