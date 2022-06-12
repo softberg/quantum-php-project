@@ -25,7 +25,7 @@ use Quantum\Di\Di;
 
 
 /**
- * Class PostCreateCommand
+ * Class DemoCommand
  * @package Shared\Commands
  */
 class DemoCommand extends QtCommand
@@ -47,7 +47,7 @@ class DemoCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'The command will create 2 new files (users.php and posts.php) and will generate records';
+    protected $help = 'The command will create demo users and posts for your project';
 
     /**
      * @var \Faker\Generator

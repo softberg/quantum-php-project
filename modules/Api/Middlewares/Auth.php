@@ -37,7 +37,7 @@ class Auth extends QtMiddleware
             $response->json([
                 'status' => 'error',
                 'message' => t('validation.unauthorizedRequest')
-            ]);
+            ], 401);
             
             stop();
         }
