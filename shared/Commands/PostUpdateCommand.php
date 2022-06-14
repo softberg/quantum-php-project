@@ -43,14 +43,14 @@ class PostUpdateCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to update the post:' . PHP_EOL . 'php qt post:update `[Post Id]` -t `Title` -d `Description` [-i `Image`] [-a `Author`]';
+    protected $help = 'Use the following format to update the post:' . PHP_EOL . 'php qt post:update `[Post uuid]` -t `Title` -d `Description` [-i `Image`] [-a `Author`]';
 
     /**
      * Command arguments
      * @var array
      */
     protected $args = [
-        ['id', 'required', 'Post ID']
+        ['uuid', 'required', 'Post uuid']
     ];
 
     /**
@@ -74,9 +74,9 @@ class PostUpdateCommand extends QtCommand
 
         $postService = $serviceFactory->get(PostService::class);
 
-        $id = $this->getArgument('id');
+        $uuid = $this->getArgument('uuid');
 
-        $post = $postService->getPost($id);
+        $post = $postService->getPost($uuid);
 
         if (!$post) {
             $this->error('The post is not found');
@@ -96,7 +96,7 @@ class PostUpdateCommand extends QtCommand
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        $postService->updatePost($id, $postData);
+        $postService->updatePost($uuid, $postData);
 
         $this->info('Post updated successfully');
     }

@@ -43,14 +43,14 @@ class PostDeleteCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to delete a post:' . PHP_EOL . 'php qt post:delete `Post Id`';
+    protected $help = 'Use the following format to delete a post:' . PHP_EOL . 'php qt post:delete `Post uuid`';
 
     /**
      * Command arguments
      * @var \string[][]
      */
     protected $args = [
-        ['id', 'required', 'Post ID'],
+        ['uuid', 'required', 'Post uuid'],
     ];
 
     /**
@@ -63,16 +63,16 @@ class PostDeleteCommand extends QtCommand
 
         $postService = $serviceFactory->get(PostService::class);
 
-        $id = $this->getArgument('id');
+        $uuid = $this->getArgument('uuid');
 
-        $post = $postService->getPost($id);
+        $post = $postService->getPost($uuid);
 
         if (!$post) {
             $this->error('The post is not found');
             return;
         }
 
-        $postService->deletePost($id);
+        $postService->deletePost($uuid);
 
         $this->info('Post deleted successfully');
 

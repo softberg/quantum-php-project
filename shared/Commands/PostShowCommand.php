@@ -44,14 +44,14 @@ class PostShowCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post Id]`';
+    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post uuid]`';
 
     /**
      * Command arguments
      * @var array
      */
     protected $args = [
-        ['id', 'optional', 'Post ID']
+        ['uuid', 'optional', 'Post uuid']
     ];
 
     /**
@@ -64,16 +64,16 @@ class PostShowCommand extends QtCommand
 
         $postService = $serviceFactory->get(PostService::class);
 
-        $id = $this->getArgument('id');
+        $uuid = $this->getArgument('uuid');
 
         $rows = [];
 
-        if ($id) {
-            $post = $postService->getPost($id);
+        if ($uuid) {
+            $post = $postService->getPost($uuid);
 
             if (!empty($post)) {
                 $rows[] = [
-                    $post['id'],
+                    $post['uuid'],
                     $post['title'],
                     strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...',
                     $post['author'],
@@ -88,7 +88,7 @@ class PostShowCommand extends QtCommand
 
             foreach ($posts as $post) {
                 $rows[] = [
-                    $post['id'],
+                    $post['uuid'],
                     $post['title'],
                     strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...',
                     $post['author'],
@@ -100,7 +100,7 @@ class PostShowCommand extends QtCommand
         $table = new Table($this->output);
 
         $table->setHeaderTitle('Posts')
-            ->setHeaders(['ID', 'Title', 'Description', 'Author', 'Date'])
+            ->setHeaders(['uuid', 'Title', 'Description', 'Author', 'Date'])
             ->setRows($rows)
             ->render();
 
