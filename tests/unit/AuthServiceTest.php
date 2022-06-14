@@ -59,6 +59,17 @@ class AuthServiceTest extends TestCase
         $this->assertEquals('admin', $user->getFieldValue('role'));
     }
 
+    public function testUserGetById()
+    {
+        $user = $this->authService->get('id', 1);
+
+        $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
+
+        $userData = $user->getData();
+
+        $this->assertIsArray($userData);
+    }
+
     public function testUserAdd()
     {
         $user = $this->authService->add([

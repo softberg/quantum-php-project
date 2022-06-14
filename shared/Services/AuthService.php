@@ -79,10 +79,10 @@ class AuthService extends QtService implements AuthServiceInterface
     /**
      * Get
      * @param string $field
-     * @param string|null $value
+     * @param mixed $value
      * @return \Quantum\Libraries\Auth\User|null
      */
-    public function get(string $field, ?string $value): ?AuthUser
+    public function get(string $field, $value): ?AuthUser
     {
         $user = $this->userModel->findOneBy($field, $value);
 
