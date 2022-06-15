@@ -4,7 +4,7 @@
         <h1 class="single-blog-title"><?php echo $post['title'] ?></h1>
         <div class="row">
             <div class="col s12 center-align post-date teal-text text-accent-4"><?php echo date('m/d/Y H:i', strtotime($post['updated_at'])) ?? '' ?></div>
-            <div class="col s12 center-align post-author teal-text text-accent-4"><?php echo $post['author'] ?? '' ?></div>
+            <div class="col s12 center-align post-author teal-text text-accent-4"><?php echo $author ?? '' ?></div>
         </div>
         <?php if ($post['image']): ?>
             <img src="<?php echo $post['image'] ?>" class="single_page_img">

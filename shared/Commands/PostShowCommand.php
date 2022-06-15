@@ -82,7 +82,7 @@ class PostShowCommand extends QtCommand
                     $post['title']?? '',
                     strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...'?? '',
                     $user->getFieldValue('firstname') . ' ' . $user->getFieldValue('lastname'),
-                    $post['updated_at']?? ''
+                    date('m/d/Y H:i', strtotime($post['updated_at']))?? ''
                 ];
             } else {
                 $this->error('The post is not found');
@@ -98,7 +98,7 @@ class PostShowCommand extends QtCommand
                         $post['title']?? '',
                         strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...'?? '',
                         $userPosts['firstname'] . ' '. $userPosts['lastname'],
-                        $post['updated_at']?? ''
+                        date('m/d/Y H:i', strtotime($post['updated_at']))?? ''
                     ];
                 }
 
