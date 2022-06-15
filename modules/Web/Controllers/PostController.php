@@ -16,6 +16,7 @@ namespace Modules\Web\Controllers;
 
 use Quantum\Factory\ServiceFactory;
 use Quantum\Factory\ViewFactory;
+use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
@@ -36,6 +37,12 @@ class PostController extends QtController
     public $postService;
 
     /**
+     * Post service
+     * @var \Shared\Services\AuthService
+     */
+    public $userService;
+
+    /**
      * Works before an action
      * @param \Quantum\Factory\ServiceFactory $serviceFactory
      * @param \Quantum\Factory\ViewFactory $view
@@ -43,6 +50,7 @@ class PostController extends QtController
     public function __before(ServiceFactory $serviceFactory, ViewFactory $view)
     {
         $this->postService = $serviceFactory->get(PostService::class);
+        $this->userService = $serviceFactory->get(AuthService::class);
         $view->setLayout('layouts/main');
     }
 
@@ -94,7 +102,8 @@ class PostController extends QtController
         }
 
         $post = $this->postService->getPost($uuid);
-
+        $user = $this->userService->get('id', $post['user_id']);
+        $author = $user->getFieldValue('firstname') . ' ' . $user->getFieldValue('lastname');
         if (!$post) {
             stop(function () use ($response){
                 $response->html(partial('errors/404'), 404);
@@ -104,6 +113,7 @@ class PostController extends QtController
         $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
         $view->setParam('post', $post);
         $view->setParam('uuid', $uuid);
+        $view->setParam('author', $author);
         $view->setParam('langs', config()->get('langs'));
 
         $response->html($view->render('post/single'));
