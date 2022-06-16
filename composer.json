@@ -3,10 +3,10 @@
     "description": "Quantum Project",
     "keywords": ["framework", "php", "quantum", "project"],
     "license": "MIT",
-    "version": "2.6.0",
+    "version": "2.7.0",
     "type": "project",
     "require": {
-        "quantum/framework": "dev-master",
+        "quantum/framework": "^2.7",
         "fakerphp/faker": "^1.15",
         "bluemmb/faker-picsum-photos-provider": "^2.0"
     },
