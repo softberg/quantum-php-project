@@ -17,7 +17,6 @@
     "autoload": {
         "psr-4": {
             "Modules\\": "modules",
-            "Hooks\\": "hooks",
             "Shared\\": "shared"
         }
     },
