@@ -11,7 +11,7 @@
         "bluemmb/faker-picsum-photos-provider": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0",
+        "phpunit/phpunit": "^9.0",
         "mockery/mockery": "^1.2"
     },
     "autoload": {
