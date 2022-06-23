@@ -6,12 +6,12 @@
     "version": "2.7.0",
     "type": "project",
     "require": {
-        "quantum/framework": "^2.7",
+        "quantum/framework": "dev-master",
         "fakerphp/faker": "^1.15",
         "bluemmb/faker-picsum-photos-provider": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0",
+        "phpunit/phpunit": "^9.0",
         "mockery/mockery": "^1.2"
     },
     "autoload": {
