@@ -6,10 +6,6 @@ use Shared\Services\AuthService;
 use Quantum\Di\Di;
 use Quantum\App;
 
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
 class AuthServiceTest extends TestCase
 {
 

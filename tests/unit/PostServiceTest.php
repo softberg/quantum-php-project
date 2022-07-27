@@ -7,10 +7,6 @@ use Shared\Services\PostService;
 use Quantum\Di\Di;
 use Quantum\App;
 
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
 class PostServiceTest extends TestCase
 {
 
