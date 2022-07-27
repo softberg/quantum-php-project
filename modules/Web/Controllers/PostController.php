@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.7.0
+ * @since 2.8.0
  */
 
 namespace Modules\Web\Controllers;
@@ -21,7 +21,6 @@ use Shared\Services\PostService;
 use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-
 
 /**
  * Class PostController
@@ -44,13 +43,13 @@ class PostController extends QtController
 
     /**
      * Works before an action
-     * @param \Quantum\Factory\ServiceFactory $serviceFactory
      * @param \Quantum\Factory\ViewFactory $view
      */
-    public function __before(ServiceFactory $serviceFactory, ViewFactory $view)
+    public function __before(ViewFactory $view)
     {
-        $this->postService = $serviceFactory->get(PostService::class);
-        $this->userService = $serviceFactory->get(AuthService::class);
+        $this->postService = ServiceFactory::get(PostService::class);
+        $this->userService = ServiceFactory::get(AuthService::class);
+
         $view->setLayout('layouts/main');
     }
 
@@ -61,62 +60,50 @@ class PostController extends QtController
      */
     public function getPosts(Response $response, ViewFactory $view)
     {
-        $usersPosts = $this->postService->getPosts();
+        $view->setParams([
+            'title' => t('common.posts') . ' | ' . config()->get('app_name'),
+            'langs' => config()->get('langs'),
+            'posts' => $this->postService->getPosts()
+        ]);
 
-        $view->setParam('title', 'Posts | ' . config()->get('app_name'));
-        $view->setParam('users_posts', $usersPosts);
-        $view->setParam('langs', config()->get('langs'));
         $response->html($view->render('post/post'));
     }
 
     /**
-     *Get my posts action
+     * Get post action
+     * @param string|null $lang
+     * @param string $postId
+     * @param \Quantum\Http\Response $response
+     * @param \Quantum\Factory\ViewFactory $view
+     */
+    public function getPost(?string $lang, string $postId, Response $response, ViewFactory $view)
+    {
+        $post = $this->postService->getPost($postId);
+
+        $view->setParams([
+            'title' => $post['title'] . ' | ' . config()->get('app_name'),
+            'langs' => config()->get('langs'),
+            'post' => $post
+        ]);
+
+        $response->html($view->render('post/single'));
+    }
+
+    /**
+     * Get my posts action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
      */
-    public function getMyPosts(Request $request, Response $response, ViewFactory $view, string $lang)
+    public function getMyPosts(Request $request, Response $response, ViewFactory $view)
     {
-        $userId = auth()->user()->getFieldValue('id');
-        if (!empty($userId)){
-            $posts = $this->postService->getMyPosts($userId);
-        }
+        $view->setParams([
+            'title' => t('common.my_posts') . ' | ' . config()->get('app_name'),
+            'langs' => config()->get('langs'),
+            'posts' => $this->postService->getMyPosts(auth()->user()->getFieldValue('id'))
+        ]);
 
-        $view->setParam('title', 'My Posts | ' . config()->get('app_name'));
-        $view->setParam('posts', $posts);
-        $view->setParam('langs', config()->get('langs'));
         $response->html($view->render('post/my-posts'));
-    }
-
-    /**
-     * Get post action
-     * @param string $lang
-     * @param string $uuid
-     * @param \Quantum\Http\Response $response
-     * @param \Quantum\Factory\ViewFactory $view
-     */
-    public function getPost(string $lang, string $uuid, Response $response, ViewFactory $view)
-    {
-        if (!$uuid && $lang) {
-            $uuid = $lang;
-        }
-
-        $post = $this->postService->getPost($uuid);
-        $user = $this->userService->get('id', $post['user_id']);
-        $author = $user->getFieldValue('firstname') . ' ' . $user->getFieldValue('lastname');
-        if (!$post) {
-            stop(function () use ($response){
-                $response->html(partial('errors/404'), 404);
-            });
-        }
-
-        $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
-        $view->setParam('post', $post);
-        $view->setParam('uuid', $uuid);
-        $view->setParam('author', $author);
-        $view->setParam('langs', config()->get('langs'));
-
-        $response->html($view->render('post/single'));
     }
 
     /**
@@ -129,7 +116,7 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
             $postData = [
-                'user_id' => (int)auth()->user()->getFieldValue('id'),
+                'user_id' => (int) auth()->user()->getFieldValue('id'),
                 'title' => $request->get('title', null, true),
                 'content' => $request->get('content', null, true),
                 'image' => '',
@@ -142,10 +129,13 @@ class PostController extends QtController
             }
 
             $this->postService->addPost($postData);
+            
             redirect(base_url() . '/' . current_lang() . '/my-posts');
         } else {
-            $view->setParam('title', 'New post | ' . config()->get('app_name'));
-            $view->setParam('langs', config()->get('langs'));
+            $view->setParams([
+                'title' => t('common.new_post') . ' | ' . config()->get('app_name'),
+                'langs' => config()->get('langs')
+            ]);
 
             $response->html($view->render('post/form'));
         }
@@ -156,11 +146,13 @@ class PostController extends QtController
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      * @param \Quantum\Factory\ViewFactory $view
-     * @param string $lang
-     * @param int|null $id
+     * @param string|null $lang
+     * @param string $postId
      */
-    public function amendPost(Request $request, Response $response, ViewFactory $view, string $lang, string $uuid = null)
+    public function amendPost(Request $request, Response $response, ViewFactory $view, ?string $lang, string $postId)
     {
+        $post = $this->postService->getPost($postId);
+
         if ($request->isMethod('post')) {
             $postData = [
                 'title' => $request->get('title', null, true),
@@ -168,77 +160,66 @@ class PostController extends QtController
                 'updated_at' => date('Y-m-d H:i:s'),
             ];
 
-            $post = $this->postService->getPost($uuid);
-
-            if (!empty($post) && $post['user_id'] == auth()->user()->getFieldValue('id')){
-                if ($request->hasFile('image')) {
-                    if ($post['image']) {
-                        $this->postService->deleteImage($post['image']);
-                    }
-
-                    $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-                    $postData['image'] = base_url() . '/uploads/' . $imageName;
+            if ($request->hasFile('image')) {
+                if ($post['image']) {
+                    $this->postService->deleteImage($post['image']);
                 }
 
-                $this->postService->updatePost($uuid, $postData);
-                redirect(base_url() . '/' . current_lang() . '/my-posts');
-            } else{
-                redirect(base_url() . '/' . current_lang() . '/my-posts');
+                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
+                $postData['image'] = base_url() . '/uploads/' . $imageName;
             }
 
-
+            $this->postService->updatePost($postId, $postData);
+            
+            redirect(base_url() . '/' . current_lang() . '/my-posts');
         } else {
-            $post = $this->postService->getPost($uuid);
-            $view->setParam('uuid', $uuid);
+            $view->setParams([
+                'title' => $post['title'] . ' | ' . config()->get('app_name'),
+                'langs' => config()->get('langs'),
+                'post' => $post
+            ]);
 
-            if (!empty($post) && $post['user_id'] == auth()->user()->getFieldValue('id')){
-                $view->setParam('title', $post['title'] . ' | ' . config()->get('app_name'));
-                $view->setParam('langs', config()->get('langs'));
-
-                $response->html($view->render('post/form', ['post' => $post]));
-            } else{
-                stop(function () use($response){
-                    $response->html(partial('errors/404'), 404);
-                });
-            }
-
+            $response->html($view->render('post/form'));
         }
     }
 
     /**
      * Delete post action
-     * @param string $lang
-     * @param string $uuid
+     * @param string|null $lang
+     * @param string $postId
      */
-    public function deletePost(string $lang, string $uuid)
+    public function deletePost(?string $lang, string $postId)
     {
-        $post = $this->postService->getPost($uuid);
+        $post = $this->postService->getPost($postId);
 
         if ($post['image']) {
             $this->postService->deleteImage($post['image']);
         }
 
-        $this->postService->deletePost($uuid);
+        $this->postService->deletePost($postId);
 
         redirect(base_url() . '/' . current_lang() . '/my-posts');
     }
 
     /**
      * Delete post image action
-     * @param string $lang
-     * @param string $uuid
+     * @param string|null $lang
+     * @param string $postId
      */
-    public function deletePostImage(string $lang, string $uuid)
+    public function deletePostImage(?string $lang, string $postId)
     {
-        $post = $this->postService->getPost($uuid);
+        $post = $this->postService->getPost($postId, false);
 
         if ($post['image']) {
             $this->postService->deleteImage($post['image']);
         }
 
-        $post['image'] = '';
-
-        $this->postService->updatePost($uuid, $post);
+        $this->postService->updatePost($postId, [
+            'title' => $post['title'],
+            'content' => $post['content'],
+            'image' => '',
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
 
         redirect(base_url() . '/' . current_lang() . '/my-posts');
     }

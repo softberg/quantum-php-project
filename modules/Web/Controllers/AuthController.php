@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Web\Controllers;
@@ -78,7 +78,7 @@ class AuthController extends QtController
             try {
                 $code = auth()->signin($request->get('email'), $request->get('password'), !!$request->get('remember'));
 
-                if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
+                if (filter_var(config()->get('2FA'), FILTER_VALIDATE_BOOLEAN)) {
                     redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
                 } else {
                     redirect(base_url() . '/' . current_lang());
@@ -184,7 +184,7 @@ class AuthController extends QtController
     {
         if ($request->isMethod('post')) {
             try {
-                auth()->verifyOtp((int)$request->get('otp'), $request->get('code'));
+                auth()->verifyOtp((int) $request->get('otp'), $request->get('code'));
                 redirect(base_url() . '/' . current_lang());
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
@@ -192,9 +192,9 @@ class AuthController extends QtController
             }
         } else {
             $view->setParams([
-                'title' => t('common.2sv') . ' | ' . config()->get('app_name'),
+                'title' => t('common.2fa') . ' | ' . config()->get('app_name'),
                 'langs' => config()->get('langs'),
-                'code' => $request->getSegment(3)
+                'code' => route_param('code')
             ]);
 
             $response->html($view->render(self::VIEW_VERIFY));
@@ -203,17 +203,11 @@ class AuthController extends QtController
 
     /**
      * Resend OTP action
-     * @param \Quantum\Http\Request $request
      */
-    public function resend(Request $request)
+    public function resend()
     {
-        if (!$request->getSegment(3)) {
-            redirect(base_url() . '/' . current_lang() . '/signin');
-        }
-
         try {
-            $code = auth()->resendOtp($request->getSegment(3));
-            redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
+            redirect(base_url() . '/' . current_lang() . '/verify/' . auth()->resendOtp(route_param('code')));
         } catch (AuthException $e) {
             redirect(base_url() . '/' . current_lang() . '/signin');
         }

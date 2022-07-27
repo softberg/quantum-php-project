@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Api\Controllers;
@@ -42,26 +42,22 @@ class AuthController extends ApiController
      */
     public function signin(Request $request, Response $response)
     {
-        if ($request->isMethod('post')) {
-            try {
-                $code = auth()->signin($request->get('username'), $request->get('password'));
-
-                if (filter_var(config()->get('2SV'), FILTER_VALIDATE_BOOLEAN)) {
-                    $response->json([
-                        'status' => self::STATUS_SUCCESS,
-                        'code' => $code
-                    ]);
-                } else {
-                    $response->json([
-                        'status' => self::STATUS_SUCCESS
-                    ]);
-                }
-            } catch (AuthException $e) {
+        try {
+            if (filter_var(config()->get('2FA'), FILTER_VALIDATE_BOOLEAN)) {
                 $response->json([
-                    'status' => self::STATUS_ERROR,
-                    'message' => $e->getMessage()
+                    'status' => self::STATUS_SUCCESS,
+                    'code' => auth()->signin($request->get('username'), $request->get('password'))
+                ]);
+            } else {
+                $response->json([
+                    'status' => self::STATUS_SUCCESS
                 ]);
             }
+        } catch (AuthException $e) {
+            $response->json([
+                'status' => self::STATUS_ERROR,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
@@ -135,6 +131,7 @@ class AuthController extends ApiController
     public function reset(Request $request, Response $response)
     {
         auth()->reset($request->get('reset_token'), $request->get('password'));
+        
         $response->json([
             'status' => self::STATUS_SUCCESS
         ]);
@@ -148,7 +145,7 @@ class AuthController extends ApiController
     public function verify(Request $request, Response $response)
     {
         try {
-            auth()->verifyOtp((int)$request->get('otp'), $request->get('code'));
+            auth()->verifyOtp((int) $request->get('otp'), $request->get('code'));
 
             $response->json([
                 'status' => self::STATUS_SUCCESS
@@ -163,17 +160,14 @@ class AuthController extends ApiController
 
     /**
      * Resend action
-     * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
      */
-    public function resend(Request $request, Response $response)
+    public function resend(Response $response)
     {
         try {
-            $code = auth()->resendOtp($request->get('code'));
-
             $response->json([
                 'status' => self::STATUS_SUCCESS,
-                'code' => $code
+                'code' => auth()->resendOtp(route_param('code'))
             ]);
         } catch (AuthException $e) {
             $response->json([
