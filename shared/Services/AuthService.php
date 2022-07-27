@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.7.0
+ * @since 2.8.0
  */
 
 namespace Shared\Services;
@@ -29,26 +29,12 @@ class AuthService extends QtService implements AuthServiceInterface
 {
 
     /**
-     * @var \Quantum\Mvc\QtModel
-     */
-    private $userModel;
-
-    /**
-     * Initialize the service
-     * @param \Quantum\Factory\ModelFactory $modelFactory
-     */
-    public function __init(ModelFactory $modelFactory)
-    {
-        $this->userModel = $modelFactory->get(User::class);
-    }
-
-    /**
      * Get
      * @return users
      */
     public function getAll(): ?array
     {
-        return $this->userModel->get();
+        return ModelFactory::get(User::class)->get();
     }
 
     /**
@@ -84,7 +70,7 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function get(string $field, $value): ?AuthUser
     {
-        $user = $this->userModel->findOneBy($field, $value);
+        $user = ModelFactory::get(User::class)->findOneBy($field, $value);
 
         if (empty($user->asArray())) {
             return null;
@@ -105,7 +91,8 @@ class AuthService extends QtService implements AuthServiceInterface
         }
 
         $data['uuid'] = Factory::create()->uuid();
-        $user = $this->userModel->create();
+        
+        $user = ModelFactory::get(User::class)->create();
         $user->fillObjectProps($data);
         $user->save();
 
@@ -121,7 +108,7 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function update(string $field, ?string $value, array $data): ?AuthUser
     {
-        $user = $this->userModel->findOneBy($field, $value);
+        $user = ModelFactory::get(User::class)->findOneBy($field, $value);
 
         if (empty($user->asArray())) {
             return null;
@@ -138,7 +125,7 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function deleteTable()
     {
-        $this->userModel->deleteTable();
+        ModelFactory::get(User::class)->deleteTable();
     }
 
 }
