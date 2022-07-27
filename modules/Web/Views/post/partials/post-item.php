@@ -1,6 +1,6 @@
 <div class="col s12 m3 post-item">
     <div class="card post-card hoverable">
-        <a href="<?php echo base_url() . '/' . current_lang() . '/posts/' . $post['uuid'] ?>">
+        <a href="<?php echo base_url() . '/' . current_lang() . '/post/' . $post['id'] ?>">
             <div class="card-image card-image-box">
                 <?php if ($post['image']): ?>
                     <img src="<?php echo $post['image'] ?>" class="content_img">
@@ -12,8 +12,8 @@
         <div class="card-content white teal-text text-darken-4">
             <span class="card-title post-title" title="<?php echo $post['title'] ?>">
                 <a class="teal-text"
-                   href="<?php echo base_url() . '/' . current_lang() . '/posts/' . $post['uuid'] ?>">
-                    <?php echo $post['title'] ?>
+                   href="<?php echo base_url() . '/' . current_lang() . '/post/' . $post['id'] ?>">
+                       <?php echo $post['title'] ?>
                 </a>
             </span>
             <p class="truncate"><?php echo $post['content'] ?></p>
@@ -21,8 +21,8 @@
         <div class="card-action teal accent-4">
             <div class="row">
                 <div class="col s8">
-                    <div class="post-date"><?php echo date('m/d/Y H:i', strtotime($post['updated_at'])) ?? '' ?></div>
-                    <div class="post-author"><?php echo $author ?? '' ?></div>
+                    <div class="post-date"><?php echo $post['date'] ?></div>
+                    <div class="post-author"><?php echo $post['author'] ?></div>
                 </div>
             </div>
         </div>

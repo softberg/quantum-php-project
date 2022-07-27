@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col s12 center-align white-text">
-        <h2><?php _t('common.2sv'); ?></h2>
+        <h2><?php _t('common.2fa'); ?></h2>
 
         <?php if (session()->has('error')): ?>
             <?php echo partial('partials/messages/error') ?>
