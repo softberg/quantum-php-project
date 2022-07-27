@@ -7,14 +7,16 @@ use Shared\Services\PostService;
 use Quantum\Di\Di;
 use Quantum\App;
 
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
+ */
 class PostServiceTest extends TestCase
 {
+
     public $authService;
-
     public $postService;
-
     public $userId = 1;
-
     private $initialUser = [
         'email' => 'anonymous@qt.com',
         'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
@@ -30,33 +32,34 @@ class PostServiceTest extends TestCase
         'otp_expires' => '',
         'otp_token' => '',
     ];
-
     private $initialPosts = [
         [
             'user_id' => 1,
             'title' => 'Walt Disney',
             'content' => 'The way to get started is to quit talking and begin doing.',
-            'image' => null,
-            'updated_at' => '05/08/2021 23:13',
+            'image' => '',
+            'updated_at' => '2021-05-08 23:11:00',
         ],
         [
             'user_id' => 1,
             'title' => 'Lorem ipsum dolor sit amet',
             'content' => 'Praesent hendrerit lobortis malesuada. Proin bibendum lacinia nunc ac aliquet.',
-            'image' => null,
-            'updated_at' => '05/08/2022 23:13',
+            'image' => '',
+            'updated_at' => '2021-05-08 23:12:00',
         ],
         [
+            'user_id' => 1,
             'title' => 'Aenean dui turpis',
             'content' => 'Etiam aliquet urna luctus, venenatis justo aliquam, hendrerit arcu.',
-            'image' => null,
-            'updated_at' => '05/08/2022 23:13',
+            'image' => '',
+            'updated_at' => '2021-05-08 23:13:00',
         ],
         [
+            'user_id' => 1,
             'title' => 'James Cameron',
             'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
-            'image' => null,
-            'updated_at' => '05/08/2021 23:13',
+            'image' => '',
+            'updated_at' => '2021-05-08 23:14:00',
         ]
     ];
 
@@ -68,11 +71,11 @@ class PostServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        $this->authService = (new ServiceFactory)->get(AuthService::class, ['shared' . DS . 'store', 'users']);
+        $this->authService = ServiceFactory::get(AuthService::class, ['shared' . DS . 'store', 'users']);
 
         $this->authService->add($this->initialUser);
 
-        $this->postService = (new ServiceFactory)->get(PostService::class, ['shared' . DS . 'store', 'posts']);
+        $this->postService = ServiceFactory::get(PostService::class, ['shared' . DS . 'store', 'posts']);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
@@ -88,51 +91,71 @@ class PostServiceTest extends TestCase
     public function testGetPosts()
     {
         $this->assertIsObject($this->postService);
-        $this->assertArrayHasKey('posts', $this->postService->getPosts()[0]);
-        $this->assertIsArray($this->postService->getPosts()[0]['posts']);
-        $this->assertNotEmpty($this->postService->getPosts()[0]['posts']);
-        $this->assertCount(4, $this->postService->getPosts()[0]['posts']);
+
+        $posts = $this->postService->getPosts();
+
+        $this->assertIsArray($posts);
+
+        $this->assertCount(4, $posts);
+
+        $post = $posts[0];
+
+        $this->assertIsArray($post);
+
+        $this->assertArrayHasKey('author', $post);
+
+        $this->assertEquals('Tom Hunter', $post['author']);
     }
 
     public function testGetSinglePost()
     {
-
-        $uuid = $this->postService->getPosts()[0]['posts'][0]['uuid'];
+        $uuid = $this->postService->getPosts()[0]['id'];
 
         $post = $this->postService->getPost($uuid);
 
         $this->assertIsArray($post);
-        $this->assertArrayHasKey('uuid', $post);
-        $this->assertArrayHasKey('user_id', $post);
+
+        $this->assertArrayHasKey('id', $post);
+
         $this->assertArrayHasKey('title', $post);
+
         $this->assertArrayHasKey('content', $post);
+
+        $this->assertArrayHasKey('date', $post);
+
+        $this->assertArrayHasKey('author', $post);
     }
 
     public function testAddNewPost()
     {
-        $date = date('m/d/Y H:i');
+        $date = date('Y-m-d H:i:s');
 
-        $post = $this->postService->addPost([
+        $newPost = $this->postService->addPost([
             'user_id' => 1,
             'title' => 'Just another post',
             'content' => 'Content of just another post',
+            'image' => '',
             'updated_at' => $date
         ]);
 
-        $userPosts = $this->postService->getPosts()[0]['posts'];
+        $uuid = $newPost['uuid'];
 
-        $this->assertCount(5, $userPosts);
-        $this->assertEquals('Just another post', $this->postService->getPost($post['uuid'])['title']);
-        $this->assertEquals('Content of just another post', $this->postService->getPost($post['uuid'])['content']);
-        $this->assertEquals($date, $this->postService->getPost($post['uuid'])['updated_at']);
+        $post = $this->postService->getPost($uuid);
+
+        $this->assertEquals('Just another post', $post['title']);
+
+        $this->assertEquals('Content of just another post', $post['content']);
+
+        $this->assertEquals(date('Y/m/d H:i', strtotime($date)), $post['date']);
+
+        $this->assertEquals('Tom Hunter', $post['author']);
     }
 
     public function testUpdatePost()
     {
-        $date = date('m/d/Y H:i');
+        $date = date('Y-m-d H:i:s');
 
-        $userPosts = $this->postService->getPosts()[0]['posts'];
-        $uuid = $userPosts[0]['uuid'];
+        $uuid = $this->postService->getPosts()[0]['id'];
 
         $this->postService->updatePost($uuid, [
             'title' => 'Walt Disney Jr.',
@@ -141,32 +164,38 @@ class PostServiceTest extends TestCase
             'updated_at' => $date
         ]);
 
-        $this->assertNotEquals('Lorem ipsum dolor sit amet', $this->postService->getPost($uuid)['title']);
-        $this->assertEquals('Walt Disney Jr.', $this->postService->getPost($uuid)['title']);
-        $this->assertEquals('The best way to get started is to quit talking and begin doing.', $this->postService->getPost($uuid)['content']);
-        $this->assertEquals('https://somedomain.com/images/image.jpg', $this->postService->getPost($uuid)['image']);
-        $this->assertEquals($date, $this->postService->getPost($uuid)['updated_at']);
+        $post = $this->postService->getPost($uuid);
+
+        $this->assertNotEquals('Lorem ipsum dolor sit amet', $post['title']);
+
+        $this->assertEquals('Walt Disney Jr.', $post['title']);
+
+        $this->assertEquals('The best way to get started is to quit talking and begin doing.', $post['content']);
+
+        $this->assertEquals('https://somedomain.com/images/image.jpg', $post['image']);
+
+        $this->assertEquals(date('Y/m/d H:i', strtotime($date)), $post['date']);
+
+        $this->assertEquals('Tom Hunter', $post['author']);
     }
 
     public function testDeletePost()
     {
+        $this->assertCount(4, $this->postService->getPosts());
+
         $post = $this->postService->addPost([
+            'user_id' => 1,
             'title' => 'Just another post',
             'content' => 'Content of just another post',
-            'updated_at' => date('m/d/Y H:i')
+            'image' => '',
+            'updated_at' => date('Y-m-d H:i:s')
         ]);
 
-        $userPosts = $this->postService->getPosts()[0]['posts'];
-
-        $this->assertCount(5, $userPosts);
+        $this->assertCount(5, $this->postService->getPosts());
 
         $this->postService->deletePost($post['uuid']);
 
-        $Post = $this->postService->getPosts()[0]['posts'];
-
-        $this->assertCount(4, $Post);
-
-        $this->assertEmpty($this->postService->getPost($post['uuid']));
-
+        $this->assertCount(4, $this->postService->getPosts());
     }
+
 }
