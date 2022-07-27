@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -19,7 +19,6 @@ use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;
-use Quantum\Di\Di;
 use Closure;
 
 /**
@@ -37,10 +36,10 @@ class Activate extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        list($lang, $token) = route_args();
+        $token = route_param('token');
 
         if (!$this->checkToken($token)) {
-            stop(function () use($response){
+            stop(function () use ($response) {
                 $response->html(partial('errors/404'), 404);
             });
         }
@@ -57,9 +56,7 @@ class Activate extends QtMiddleware
      */
     private function checkToken(string $token): bool
     {
-        $modelFactory = Di::get(ModelFactory::class);
-        $userModel = $modelFactory->get(User::class);
-
+        $userModel = ModelFactory::get(User::class);
         return !empty($userModel->findOneBy('activation_token', $token)->asArray());
     }
 

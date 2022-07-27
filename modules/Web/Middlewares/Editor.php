@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Web\Middlewares;
@@ -27,6 +27,8 @@ use Closure;
  */
 class Editor extends QtMiddleware
 {
+
+    const ROLES = ['admin', 'editor'];
 
     /**
      * @var \Quantum\Libraries\Validation\Validator
@@ -72,7 +74,7 @@ class Editor extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        if (auth()->user()->getFieldValue('role') != 'admin' && auth()->user()->getFieldValue('role') != 'editor') {
+        if (!in_array(auth()->user()->getFieldValue('role'), self::ROLES)) {
             redirect(base_url() . '/' . current_lang());
         }
 
@@ -87,4 +89,5 @@ class Editor extends QtMiddleware
 
         return $next($request, $response);
     }
+
 }

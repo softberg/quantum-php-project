@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Quantum PHP Framework
  *
@@ -8,13 +9,11 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Api\Middlewares;
 
-use Quantum\Libraries\Validation\Validator;
-use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
@@ -24,28 +23,8 @@ use Closure;
  * Class Resend
  * @package Modules\Web\Middlewares
  */
-
 class Resend extends QtMiddleware
 {
-
-    /**
-     * @var \Quantum\Libraries\Validation\Validator
-     */
-    private $validator;
-
-    /**
-     * Class constructor
-     */
-    public function __construct()
-    {
-        $this->validator = new Validator();
-
-        $this->validator->addRules([
-            'code' => [
-                Rule::set('required')
-            ],
-        ]);
-    }
 
     /**
      * @param \Quantum\Http\Request $request
@@ -55,18 +34,16 @@ class Resend extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        if ($request->isMethod('post')) {
-            if (!$this->validator->isValid($request->all())) {
+        if (!route_param('code')) {
+            $response->json([
+                'status' => 'error',
+                'message' => $this->validator->getErrors()
+            ]);
 
-                $response->json([
-                    'status' => 'error',
-                    'message' => $this->validator->getErrors()
-                ]);
-
-                stop();
-            }
+            stop();
         }
 
         return $next($request, $response);
     }
+
 }

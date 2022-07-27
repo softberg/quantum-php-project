@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -35,7 +35,7 @@ class Editor extends QtMiddleware
     /**
      * @var string[]
      */
-    private $rolesAllowed = ['admin', 'editor'];
+    const ROLES = ['admin', 'editor'];
 
     /**
      * Class constructor
@@ -76,8 +76,7 @@ class Editor extends QtMiddleware
      */
     public function apply(Request $request, Response $response, \Closure $next)
     {
-
-        if (!in_array(auth()->user()->getFieldValue('role'), $this->rolesAllowed)) {
+        if (!in_array(auth()->user()->getFieldValue('role'), self::ROLES)) {
             $response->json([
                 'status' => 'error',
                 'message' => t('validation.unauthorizedRequest')
