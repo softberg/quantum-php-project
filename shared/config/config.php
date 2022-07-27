@@ -58,12 +58,12 @@ return [
 
     /**
      * ---------------------------------------------------------
-     * Two-step verification
+     * Two-factor authentication
      * ---------------------------------------------------------
      * 
-     * Enables or disables 2-step verification
+     * Enables or disables 2-factor authentication
      */
-    '2SV' => env('2SV', true),
+    '2FA' => env('2FA', true),
 
       /**
        * ---------------------------------------------------------

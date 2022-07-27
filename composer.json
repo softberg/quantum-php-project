@@ -3,7 +3,7 @@
     "description": "Quantum Project",
     "keywords": ["framework", "php", "quantum", "project"],
     "license": "MIT",
-    "version": "2.7.0",
+    "version": "2.8.0",
     "type": "project",
     "require": {
         "quantum/framework": "dev-master",
