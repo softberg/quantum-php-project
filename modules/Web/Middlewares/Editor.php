@@ -28,6 +28,9 @@ use Closure;
 class Editor extends QtMiddleware
 {
 
+    /**
+     * Roles
+     */
     const ROLES = ['admin', 'editor'];
 
     /**

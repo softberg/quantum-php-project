@@ -23,7 +23,12 @@ use Quantum\Libraries\Transformer\TransformerInterface;
 class PostSleekTransformer implements TransformerInterface
 {
 
-    public function transform($item)
+    /**
+     * Transforms the data
+     * @param mixed $item
+     * @return array
+     */
+    public function transform($item): array
     {
         return [
             'id' => $item['uuid'],

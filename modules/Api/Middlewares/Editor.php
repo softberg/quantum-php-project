@@ -28,14 +28,14 @@ class Editor extends QtMiddleware
 {
 
     /**
+     * Roles
+     */
+    const ROLES = ['admin', 'editor'];
+
+    /**
      * @var \Quantum\Libraries\Validation\Validator
      */
     private $validator;
-
-    /**
-     * @var string[]
-     */
-    const ROLES = ['admin', 'editor'];
 
     /**
      * Class constructor
