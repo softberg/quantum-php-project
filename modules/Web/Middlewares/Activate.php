@@ -36,7 +36,7 @@ class Activate extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        $token = route_param('token');
+        $token = (string) route_param('token');
 
         if (!$this->checkToken($token)) {
             stop(function () use ($response) {

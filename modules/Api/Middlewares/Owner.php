@@ -36,7 +36,7 @@ class Owner extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        $postId = route_param('id');
+        $postId = (string) route_param('id');
 
         $post = ServiceFactory::get(PostService::class)->getPost($postId, false);
 
@@ -44,7 +44,7 @@ class Owner extends QtMiddleware
             $response->json([
                 'status' => 'error',
                 'message' => t('common.post_not_found')
-            ], 404);
+                    ], 404);
 
             stop();
         }

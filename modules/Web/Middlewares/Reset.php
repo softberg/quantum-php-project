@@ -58,7 +58,7 @@ class Reset extends QtMiddleware
     {
         $token = route_param('token');
 
-        if ($request->isMethod('post')) {
+        if ($token && $request->isMethod('post')) {
             if (!$this->checkToken($token)) {
                 session()->setFlash('error', [
                     'password' => [

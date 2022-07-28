@@ -63,7 +63,7 @@ class Reset extends QtMiddleware
     {
         $token = route_param('token');
 
-        if (!$this->checkToken($token)) {
+        if (!$token || !$this->checkToken($token)) {
             $response->json([
                 'status' => 'error',
                 'message' => [t('validation.nonExistingRecord', 'token')]

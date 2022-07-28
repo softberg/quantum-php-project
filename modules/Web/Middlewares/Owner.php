@@ -36,7 +36,7 @@ class Owner extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        $postId = route_param('id');
+        $postId = (string) route_param('id');
 
         $post = ServiceFactory::get(PostService::class)->getPost($postId, false);
 

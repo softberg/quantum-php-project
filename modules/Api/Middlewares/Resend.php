@@ -37,7 +37,7 @@ class Resend extends QtMiddleware
         if (!route_param('code')) {
             $response->json([
                 'status' => 'error',
-                'message' => $this->validator->getErrors()
+                'message' => t('validation.required', 'code')
             ]);
 
             stop();

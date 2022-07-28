@@ -74,7 +74,7 @@ class PostService extends QtService
 
     /**
      * Get post
-     * @param string $userId
+     * @param int $userId
      * @return ?array
      */
     public function getMyPosts(int $userId): ?array
