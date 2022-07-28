@@ -32,6 +32,7 @@ return [
     'title' => 'Title',
     'content' => 'Content',
     'posts' => 'Posts',
+    'my_posts' => 'My Posts',
     'new_post' => 'New Post',
     'created_successfully' => 'Created successfully',
     'update_post' => 'Update Post',
@@ -50,7 +51,7 @@ return [
     'ru' => 'Russian',
     'am' => 'Armenian',
     'otp' => 'One Time Password',
-    '2sv' => '2 Step Verification',
+    '2fa' => '2 Factor Authentication',
     'resend_otp' => 'Resend otp',
     'yes' => 'Yes',
 ];

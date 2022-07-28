@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -21,7 +21,6 @@ use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;
-use Quantum\Di\Di;
 
 class Signup extends QtMiddleware
 {
@@ -40,9 +39,7 @@ class Signup extends QtMiddleware
         $this->validator = new Validator();
 
         $this->validator->addValidation('uniqueUser', function ($value) {
-            $modelFactory = Di::get(ModelFactory::class);
-            $userModel = $modelFactory->get(User::class);
-
+            $userModel = ModelFactory::get(User::class);
             return empty($userModel->findOneBy('email', $value)->asArray());
         });
 

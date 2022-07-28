@@ -15,17 +15,17 @@
 namespace Modules\Web\Middlewares;
 
 use Quantum\Middleware\QtMiddleware;
-use Quantum\Factory\ModelFactory;
+use Quantum\Factory\ServiceFactory;
+use Shared\Services\PostService;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Shared\Models\User;
 use Closure;
 
 /**
- * Class Activate
+ * Class Editor
  * @package Modules\Web\Middlewares
  */
-class Activate extends QtMiddleware
+class Post extends QtMiddleware
 {
 
     /**
@@ -36,28 +36,16 @@ class Activate extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        $token = (string) route_param('token');
+        $postId = (string) route_param('id');
 
-        if (!$this->checkToken($token)) {
-            stop(function () use ($response) {
-                $response->html(partial('errors/404'), 404);
-            });
+        $post = ServiceFactory::get(PostService::class)->getPost($postId, false);
+
+        if (!$post) {
+            $response->html(partial('errors/404'), 404);
+            stop();
         }
 
-        $request->set('activation_token', $token);
-
         return $next($request, $response);
-    }
-
-    /**
-     * Check token
-     * @param string $token
-     * @return bool
-     */
-    private function checkToken(string $token): bool
-    {
-        $userModel = ModelFactory::get(User::class);
-        return !empty($userModel->findOneBy('activation_token', $token)->asArray());
     }
 
 }

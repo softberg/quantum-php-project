@@ -15,17 +15,15 @@
 namespace Modules\Web\Middlewares;
 
 use Quantum\Middleware\QtMiddleware;
-use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Shared\Models\User;
 use Closure;
 
 /**
- * Class Activate
+ * Class Resend
  * @package Modules\Web\Middlewares
  */
-class Activate extends QtMiddleware
+class Resend extends QtMiddleware
 {
 
     /**
@@ -36,28 +34,11 @@ class Activate extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        $token = (string) route_param('token');
-
-        if (!$this->checkToken($token)) {
-            stop(function () use ($response) {
-                $response->html(partial('errors/404'), 404);
-            });
+        if (!route_param('code')) {
+            redirect(base_url() . '/' . current_lang() . '/signin');
         }
 
-        $request->set('activation_token', $token);
-
         return $next($request, $response);
-    }
-
-    /**
-     * Check token
-     * @param string $token
-     * @return bool
-     */
-    private function checkToken(string $token): bool
-    {
-        $userModel = ModelFactory::get(User::class);
-        return !empty($userModel->findOneBy('activation_token', $token)->asArray());
     }
 
 }

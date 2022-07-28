@@ -9,11 +9,12 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.7.0
+ * @since 2.8.0
  */
 
 namespace Shared\Services;
 
+use Shared\Transformers\PostSleekTransformer;
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
@@ -31,23 +32,16 @@ class PostService extends QtService
 {
 
     /**
-     * @var \Quantum\Mvc\QtModel
+     * @var \Quantum\Libraries\Transformer\TransformerInterface
      */
-    private $postModel;
-
-    /**
-     * @var \Quantum\Mvc\QtModel
-     */
-    private $userModel;
+    private $transformer;
 
     /**
      * Initialize the service
-     * @param \Quantum\Factory\ModelFactory $modelFactory
      */
-    public function __init(ModelFactory $modelFactory)
+    public function __init(PostSleekTransformer $transformer)
     {
-        $this->postModel = $modelFactory->get(Post::class);
-        $this->userModel = $modelFactory->get(User::class);
+        $this->transformer = $transformer;
     }
 
     /**
@@ -56,27 +50,36 @@ class PostService extends QtService
      */
     public function getPosts(): array
     {
-        return $this->userModel->joinTo($this->postModel, false)->get();
+        $posts = ModelFactory::get(Post::class)->joinThrough(ModelFactory::get(User::class))->orderBy('updated_at', 'desc')->get();
+
+        return transform($posts, $this->transformer);
     }
 
     /**
      * Get post
-     * @param int $uuid
-     * @return ?array
+     * @param string $uuid
+     * @param bool $transformed
+     * @return array|null
      */
-    public function getPost(string $uuid): ?array
+    public function getPost(string $uuid, bool $transformed = true): ?array
     {
-        return $this->postModel->findOneBy('uuid', $uuid)->asArray();
+        $post = ModelFactory::get(Post::class)->joinThrough(ModelFactory::get(User::class))->criteria('uuid', '=', $uuid)->get();
+
+        if (empty($post)) {
+            return null;
+        }
+
+        return $transformed ? current(transform($post, $this->transformer)) : current($post);
     }
 
     /**
      * Get post
-     * @param string $userId
+     * @param int $userId
      * @return ?array
      */
     public function getMyPosts(int $userId): ?array
     {
-        return $this->postModel->criteria('user_id', '=', $userId)->get();
+        return ModelFactory::get(Post::class)->criteria('user_id', '=', $userId)->get();
     }
 
     /**
@@ -86,7 +89,8 @@ class PostService extends QtService
     public function addPost(array $data): array
     {
         $data['uuid'] = Factory::create()->uuid();
-        $post = $this->postModel->create();
+
+        $post = ModelFactory::get(Post::class)->create();
         $post->fillObjectProps($data);
         $post->save();
 
@@ -100,7 +104,7 @@ class PostService extends QtService
      */
     public function updatePost(string $uuid, array $data)
     {
-        $post = $this->postModel->findOneBy('uuid', $uuid);
+        $post = ModelFactory::get(Post::class)->findOneBy('uuid', $uuid);
         $post->fillObjectProps($data);
         $post->save();
     }
@@ -112,8 +116,7 @@ class PostService extends QtService
      */
     public function deletePost(string $uuid): bool
     {
-        $post = $this->postModel->findOneBy('uuid', $uuid);
-        return $post->delete();
+        return ModelFactory::get(Post::class)->findOneBy('uuid', $uuid)->delete();
     }
 
     /**
@@ -121,7 +124,7 @@ class PostService extends QtService
      */
     public function deleteTable()
     {
-        $this->postModel->deleteTable();
+        ModelFactory::get(Post::class)->deleteTable();
     }
 
     /**

@@ -8,7 +8,7 @@ return function ($route) {
         $view->setLayout('layouts/landing');
 
         $view->setParams([
-            'title' => 'Welcome | ' . config()->get('app_name'),
+            'title' => config()->get('app_name'),
             'langs' => config()->get('langs')
         ]);
 
@@ -19,7 +19,7 @@ return function ($route) {
         $view->setLayout('layouts/landing');
 
         $view->setParams([
-            'title' => 'About | ' . config()->get('app_name'),
+            'title' => t('common.about') . ' | ' . config()->get('app_name'),
             'langs' => config()->get('langs')
         ]);
 
@@ -27,24 +27,24 @@ return function ($route) {
     })->name('about');
 
     $route->get('[:alpha:2]?/posts', 'PostController', 'getPosts');
-    $route->get('[:alpha:2]?/posts/[:any]', 'PostController', 'getPost');
+    $route->get('[:alpha:2]?/post/[id=:any]', 'PostController', 'getPost')->middlewares(['Post']);
 
     $route->group('guest', function ($route) {
         $route->add('[:alpha:2]?/signin', 'GET|POST', 'AuthController', 'signin')->name('signin');
         $route->add('[:alpha:2]?/signup', 'GET|POST', 'AuthController', 'signup')->middlewares(['Signup'])->name('signup');
-        $route->get('[:alpha:2]?/activate/[:any]', 'AuthController', 'activate')->middlewares(['Activate']);
+        $route->get('[:alpha:2]?/activate/[token=:any]', 'AuthController', 'activate')->middlewares(['Activate']);
         $route->add('[:alpha:2]?/forget', 'GET|POST', 'AuthController', 'forget')->middlewares(['Forget']);
-        $route->add('[:alpha:2]?/reset/[:any]', 'GET|POST', 'AuthController', 'reset')->middlewares(['Reset']);
-        $route->add('[:alpha:2]?/verify/[:any]?', 'GET|POST', 'AuthController', 'verify')->middlewares(['Verify']);
-        $route->get('[:alpha:2]?/resend/[:any]?', 'AuthController', 'resend');
+        $route->add('[:alpha:2]?/reset/[token=:any]', 'GET|POST', 'AuthController', 'reset')->middlewares(['Reset']);
+        $route->get('[:alpha:2]?/resend/[code=:any]', 'AuthController', 'resend')->middlewares(['Resend']);
+        $route->add('[:alpha:2]?/verify/[code=:any]?', 'GET|POST', 'AuthController', 'verify')->middlewares(['Verify']);
     })->middlewares(['Guest']);
 
     $route->group('auth', function ($route) {
         $route->get('[:alpha:2]?/signout', 'AuthController', 'signout');
         $route->get('[:alpha:2]?/my-posts', 'PostController', 'getMyPosts')->middlewares(['Editor']);
         $route->add('[:alpha:2]?/my-posts/create', 'GET|POST', 'PostController', 'createPost')->middlewares(['Editor']);
-        $route->add('[:alpha:2]?/my-posts/amend/[:any]?', 'GET|POST', 'PostController', 'amendPost')->middlewares(['Editor']);
-        $route->get('[:alpha:2]?/my-posts/delete/[:any]', 'PostController', 'deletePost')->middlewares(['Editor']);
-        $route->get('[:alpha:2]?/my-posts/delete-image/[:any]','PostController', 'deletePostImage')->middlewares(['Editor']);
+        $route->add('[:alpha:2]?/my-posts/amend/[id=:any]', 'GET|POST', 'PostController', 'amendPost')->middlewares(['Editor', 'Owner']);
+        $route->get('[:alpha:2]?/my-posts/delete/[id=:any]', 'PostController', 'deletePost')->middlewares(['Editor', 'Owner']);
+        $route->get('[:alpha:2]?/my-posts/delete-image/[id=:any]', 'PostController', 'deletePostImage')->middlewares(['Editor', 'Owner']);
     })->middlewares(['Auth']);
 };

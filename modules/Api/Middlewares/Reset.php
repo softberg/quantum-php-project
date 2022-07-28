@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -21,7 +21,6 @@ use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;
-use Quantum\Di\Di;
 
 /**
  * Class Reset
@@ -52,7 +51,6 @@ class Reset extends QtMiddleware
                 Rule::set('minLen', 6)
             ]
         ]);
-
     }
 
     /**
@@ -63,7 +61,16 @@ class Reset extends QtMiddleware
      */
     public function apply(Request $request, Response $response, \Closure $next)
     {
-        list($token) = route_args();
+        $token = route_param('token');
+
+        if (!$token || !$this->checkToken($token)) {
+            $response->json([
+                'status' => 'error',
+                'message' => [t('validation.nonExistingRecord', 'token')]
+            ]);
+
+            stop();
+        }
 
         if (!$this->validator->isValid($request->all())) {
             $response->json([
@@ -74,16 +81,6 @@ class Reset extends QtMiddleware
             stop();
         }
 
-        if (!$this->checkToken($token)) {
-            $response->json([
-                'status' => 'error',
-                'message' => [t('validation.nonExistingRecord', 'token')]
-            ]);
-
-            stop();
-        }
-
-        
         if (!$this->confirmPassword($request->get('password'), $request->get('repeat_password'))) {
             $response->json([
                 'status' => 'error',
@@ -92,7 +89,6 @@ class Reset extends QtMiddleware
 
             stop();
         }
-
 
         $request->set('reset_token', $token);
 
@@ -106,9 +102,7 @@ class Reset extends QtMiddleware
      */
     private function checkToken(string $token): bool
     {
-        $modelFactory = Di::get(ModelFactory::class);
-        $userModel = $modelFactory->get(User::class);
-
+        $userModel = ModelFactory::get(User::class);
         return !empty($userModel->findOneBy('reset_token', $token)->asArray());
     }
 

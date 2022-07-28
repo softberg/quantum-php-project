@@ -15,17 +15,17 @@
 namespace Modules\Api\Middlewares;
 
 use Quantum\Middleware\QtMiddleware;
-use Quantum\Factory\ModelFactory;
+use Quantum\Factory\ServiceFactory;
+use Shared\Services\PostService;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Shared\Models\User;
 use Closure;
 
 /**
- * Class Activate
- * @package Modules\Api\Middlewares
+ * Class Editor
+ * @package Modules\Web\Middlewares
  */
-class Activate extends QtMiddleware
+class Owner extends QtMiddleware
 {
 
     /**
@@ -36,31 +36,20 @@ class Activate extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        $token = route_param('token');
+        $postId = (string) route_param('id');
 
-        if (!$token || !$this->checkToken($token)) {
+        $post = ServiceFactory::get(PostService::class)->getPost($postId, false);
+
+        if (!$post || $post['user_id'] != auth()->user()->getFieldValue('id')) {
             $response->json([
                 'status' => 'error',
-                'message' => [t('validation.nonExistingRecord', 'token')]
-            ]);
+                'message' => t('common.post_not_found')
+                    ], 404);
 
             stop();
         }
 
-        $request->set('activation_token', $token);
-
         return $next($request, $response);
-    }
-
-    /**
-     * Check token
-     * @param string $token
-     * @return bool
-     */
-    private function checkToken(string $token): bool
-    {
-        $userModel = ModelFactory::get(User::class);
-        return !empty($userModel->findOneBy('activation_token', $token)->asArray());
     }
 
 }
