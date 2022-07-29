@@ -5,7 +5,7 @@ use Quantum\Http\Response;
 
 return function ($route) {
     $route->get('[:alpha:2]?', function (Response $response, ViewFactory $view) {
-        $view->setLayout('layouts/landing');
+        $view->setLayout('layouts/main');
 
         $view->setParams([
             'title' => config()->get('app_name'),
@@ -16,7 +16,7 @@ return function ($route) {
     })->name('home');
 
     $route->get('[:alpha:2]?/about', function (Response $response, ViewFactory $view) {
-        $view->setLayout('layouts/landing');
+        $view->setLayout('layouts/main');
 
         $view->setParams([
             'title' => t('common.about') . ' | ' . config()->get('app_name'),

@@ -30,7 +30,7 @@ class AuthController extends QtController
     /**
      * Auth layout
      */
-    const LAYOUT = 'layouts/auth';
+    const LAYOUT = 'layouts/main';
 
     /**
      * Signin view

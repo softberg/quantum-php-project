@@ -1,5 +1,5 @@
 <div class="posts-container">
-    <h2 class="center-align teal-text"><?php _t('common.posts') ?></h2>
+    <h1 class="center-align teal-text"><?php _t('common.posts') ?></h1>
     <div class="row post_container">
         <?php if (count($posts)): ?>
             <?php foreach ($posts as $post): ?>
