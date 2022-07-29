@@ -25,10 +25,16 @@ header {
 
 main {
     flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 main > div:first-child {
     padding-top: 50px;
+}
+
+.main-wrapper {
+    flex: 1 0 auto;
 }
 
 .post-form {
@@ -53,6 +59,10 @@ main > div.posts-container, .posts-container {
 
 .login-list  {
     display: flex;
+}
+
+.footer-text {
+    font-size: 13px;
 }
 
 .page-footer {
@@ -228,10 +238,6 @@ a:hover {
 
 .index-links {
     padding-top: 20px;
-}
-
-a {
-    font-size: 18px;
 }
 
 .index-links a {

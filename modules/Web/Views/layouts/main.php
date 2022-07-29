@@ -18,9 +18,13 @@
             <?php echo view() ?>
         </main>
 
-        <footer class="page-footer">
-            <?php echo partial('partials/footer') ?>
-        </footer>
+        <?php if (route_name() == 'home'): ?>
+            <?php echo partial('partials/bubbles') ?>
+        <?php else: ?>
+            <footer class="page-footer">
+                <?php echo partial('partials/footer') ?>
+            </footer>
+        <?php endif; ?>
 
         <?php echo debugbar() ?>
 
