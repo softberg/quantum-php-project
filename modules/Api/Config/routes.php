@@ -14,6 +14,7 @@ return function ($route) {
     $route->get('[:alpha:2]?/api-post/[id=:any]', 'PostController', 'getPost')->middlewares(['Post']);
 
     $route->group('auth', function ($route) {
+        $route->get('[:alpha:2]?/api-me', 'AuthController', 'me');
         $route->get('[:alpha:2]?/api-signout', 'AuthController', 'signout')->middlewares(['Signout']);
         $route->get('[:alpha:2]?/api-my-posts', 'PostController', 'getMyPosts')->middlewares(['Editor']);
         $route->post('[:alpha:2]?/api-my-posts/create', 'PostController', 'createPost')->middlewares(['Editor']);
