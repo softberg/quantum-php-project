@@ -43,22 +43,33 @@ class AuthController extends ApiController
     public function signin(Request $request, Response $response)
     {
         try {
+            $code = auth()->signin($request->get('username'), $request->get('password'));
+
             if (filter_var(config()->get('2FA'), FILTER_VALIDATE_BOOLEAN)) {
-                $response->json([
-                    'status' => self::STATUS_SUCCESS,
-                    'code' => auth()->signin($request->get('username'), $request->get('password'))
-                ]);
-            } else {
-                $response->json([
-                    'status' => self::STATUS_SUCCESS
-                ]);
+                $response->set('code', $code);
             }
+
+            $response->json([
+                'status' => self::STATUS_SUCCESS
+            ]);
         } catch (AuthException $e) {
             $response->json([
                 'status' => self::STATUS_ERROR,
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    public function me(Request $request, Response $response)
+    {
+        $response->json([
+            'status' => self::STATUS_SUCCESS,
+            'data' => [
+                'firstname' => auth()->user()->firstname,
+                'lastname' => auth()->user()->lastname,
+                'email' => auth()->user()->email
+            ]
+        ]);
     }
 
     /**
@@ -131,7 +142,7 @@ class AuthController extends ApiController
     public function reset(Request $request, Response $response)
     {
         auth()->reset($request->get('reset_token'), $request->get('password'));
-        
+
         $response->json([
             'status' => self::STATUS_SUCCESS
         ]);

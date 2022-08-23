@@ -10,6 +10,19 @@ header {
     z-index: 2;
 }
 
+h1 {
+    margin-top: 0;
+}
+
+h5 ,
+h6 {
+    line-height: 1.4;
+}
+
+.full-height {
+    flex: 1;
+}
+
 .auth-lang-switcher {
     list-style-type: none;
 }
@@ -39,10 +52,6 @@ main > div:first-child {
 
 .post-form {
     position: relative;
-}
-
-main > div.posts-container, .posts-container {
-    padding-top: 0
 }
 
 .main-menu-link {
@@ -84,7 +93,7 @@ main > div.posts-container, .posts-container {
 
 .back-btn {
     position: absolute;
-    top: 25px;
+    top: 8px;
     padding: 0;
     left: 15px;
 }
@@ -244,6 +253,10 @@ a:hover {
     padding: 0 10px;
 }
 
+.logo-block {
+    margin-bottom: 2.8rem;
+}
+
 .logo-block img {
     width: 150px;
     max-width: 100%;
@@ -309,14 +322,6 @@ a:hover {
     font-size: 14px;
 }
 
-.transparent-card.teal {
-    background-color: #00968800 !important;
-}
-
-.posts-container .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
-    margin-right: 10px;
-}
-
 .p-rel {
     position: relative;
 }
@@ -348,6 +353,8 @@ input[type=password] {
     width: 100%;
     height: 100%;
     margin: 0;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .bg-bubbles li {
@@ -483,9 +490,6 @@ input[type=password] {
     }
 }
 
-h5 {
-    line-height: 1.5;
-}
 
 .teal input:-webkit-autofill,
 .teal input:-webkit-autofill:hover,
@@ -532,6 +536,7 @@ h5 {
 .single-blog-title{
     font-size: 32px;
     margin-top: 0;
+    padding: 0 35px;
 }
 
 .single-blog-title:after {
@@ -562,7 +567,7 @@ h5 {
 .post-image {
     position: relative;
     width: 190px;
-    height: 150px;
+    max-height: 150px;
     margin-bottom: 10px;
 }
 
@@ -581,9 +586,8 @@ h5 {
 
 div.polaroid {
     width: 1000px;
-    background-color: white;
-    margin: 5px auto;
-    padding: 70px 20px 20px;
+    margin: 0px auto;
+    padding: 0 20px 20px;
     position: relative;
 }
 
@@ -622,7 +626,6 @@ div.polaroid {
 }
 
 .img-my-post{
-    margin-top: 5px;
     width: 60px!important;
     height: 60px!important;
     left: 5px!important;

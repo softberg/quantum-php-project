@@ -8,19 +8,19 @@
                     <?php echo partial('partials/messages/error') ?>
                 <?php endif; ?>
 
-                <div class="card transparent-card teal">
+                <div class="card teal accent-4">
                     <div class="card-content">
                         <form method="post" class="signup-form" action="<?php echo base_url() . '/' . current_lang() ?>/signin">
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input name="email" id='email' type="text"/>
                                     <label for="email"><?php _t('common.email') ?></label>
+                                    <input name="email" id='email' type="text"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input name="password" id='password' type="password"/>
                                     <label for="password" class="active"><?php _t('common.password') ?></label>
+                                    <input name="password" id='password' type="password"/>
                                     <i class="material-icons visibility-icon on hide">visibility</i>
                                     <i class="material-icons visibility-icon off">visibility_off</i>
                                 </div>
@@ -48,11 +48,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="row mb0">
-
-                            </div>
-
-                            <div class=row">
+                            <div class="row">
                                 <input type="hidden" name="token" value="<?php echo csrf_token() ?>"/>
                                 <button class="btn btn-large waves-effect waves-light" type="submit">
                                     <?php _t('common.signin') ?>

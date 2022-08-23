@@ -11,20 +11,11 @@
         <link rel='stylesheet' href='<?php echo asset()->url('css/custom.css') ?>' type='text/css' />
     </head>
     <body>
-        <header>
-            <?php echo partial('partials/navbar') ?>
-        </header>
-        <main>
-            <?php echo view() ?>
-        </main>
-
-        <?php if (route_name() == 'home'): ?>
-            <?php echo partial('partials/bubbles') ?>
-        <?php else: ?>
-            <footer class="page-footer">
-                <?php echo partial('partials/footer') ?>
-            </footer>
-        <?php endif; ?>
+        <header><?php echo partial('partials/navbar') ?></header>
+        
+        <main><?php echo view() ?></main>
+        
+        <footer class="page-footer"><?php echo partial('partials/footer') ?></footer>
 
         <?php echo debugbar() ?>
 

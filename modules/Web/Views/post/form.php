@@ -1,8 +1,9 @@
-<div class="post-form polaroid">
+<div class="post-form full-height">
+    <div class="polaroid">
     <?php echo partial('post/partials/back') ?>
     <div class="row">
         <div class="col s12">
-            <h2 class="center-align teal-text"><?php isset($post) ? _t('common.update_post') : _t('common.new_post') ?></h2>
+            <h1 class="center-align teal-text"><?php isset($post) ? _t('common.update_post') : _t('common.new_post') ?></h1>
 
             <?php if (session()->has('error')): ?>
                 <?php echo partial('partials/messages/error') ?>
@@ -66,4 +67,4 @@
             </div>
         </div>
     </div>
-</div>
+</div></div>
