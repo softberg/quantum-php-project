@@ -12,7 +12,7 @@
                     <?php echo partial('partials/messages/success') ?>
                 <?php endif; ?>
 
-                <div class="card transparent-card teal">
+                <div class="card teal accent-4">
                     <div class="card-content">
                         <form method="post" action="<?php echo base_url() . '/' . current_lang() ?>/forget">
                             <div class="input-field col s12">

@@ -8,7 +8,7 @@
                     <?php echo partial('partials/messages/error') ?>
                 <?php endif; ?>
 
-                <div class="card transparent-card teal">
+                <div class="card teal accent-4">
                     <div class="card-content">
                         <form method="post" action="<?php echo base_url() . '/' . current_lang() ?>/signup">
                             <div class="form-container">

@@ -1,6 +1,6 @@
-<div class="posts-container">
-    <h2 class="center-align teal-text"><?php _t('common.my_posts') ?></h2>
-    <div class="row post_container">
+<div class="main-wrapper posts-container">
+    <h1 class="center-align teal-text"><?php _t('common.my_posts') ?></h1>
+    <div class="row container">
         <?php if (count($posts)): ?>
             <ul class="collection">
                 <?php foreach ($posts as $post): ?>

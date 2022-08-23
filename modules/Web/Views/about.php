@@ -2,7 +2,7 @@
     <div class="container wrapper center-align white-text">
         <h1><?php _t('common.about'); ?></h1>
 
-        <div class="card teal">
+        <div class="card teal accent-4">
             <div class="card-content">
                 <h6><?php _t('common.about_framework'); ?></h6>
 
@@ -25,3 +25,4 @@
         </div>
     </div>
 </div>
+<?php echo partial('partials/bubbles') ?>

@@ -4,8 +4,8 @@
             <div class="logo-block">
                 <?php echo partial('partials/logo') ?>
             </div>
-            <h2><?php echo env('APP_NAME') ?></h2>
-            <div class="card teal">
+            <h1><?php echo env('APP_NAME') ?></h1>
+            <div class="card teal accent-4">
                 <div class="card-content">
                     <h5><?php _t('common.description') ?></h5>
                 </div>
@@ -17,3 +17,4 @@
         </div>
     </div>
 </div>
+<?php echo partial('partials/bubbles') ?>
