@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.6.0
+ * @since 2.8.0
  */
 
 namespace Shared\Commands;
@@ -18,8 +18,6 @@ use Quantum\Factory\ServiceFactory;
 use Quantum\Libraries\Hasher\Hasher;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
-use Quantum\Di\Di;
-
 
 /**
  * Class UserCreateCommand
@@ -64,8 +62,7 @@ class UserCreateCommand extends QtCommand
      */
     public function exec()
     {
-        $serviceFactory = Di::get(ServiceFactory::class);
-        $authService = $serviceFactory->get(AuthService::class);
+        $authService = ServiceFactory::get(AuthService::class);
 
         $user = [
             'firstname' => $this->getArgument('firstname'),

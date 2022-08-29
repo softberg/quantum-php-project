@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.7.0
+ * @since 2.8.0
  */
 
 namespace Shared\Commands;
@@ -19,8 +19,6 @@ use Quantum\Factory\ServiceFactory;
 use Shared\Services\PostService;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
-use Quantum\Di\Di;
-
 
 /**
  * Class PostShowCommand
@@ -61,11 +59,9 @@ class PostShowCommand extends QtCommand
      */
     public function exec()
     {
-        $serviceFactory = Di::get(ServiceFactory::class);
+        $postService = ServiceFactory::get(PostService::class);
 
-        $postService = $serviceFactory->get(PostService::class);
-
-        $userService = $serviceFactory->get(AuthService::class);
+        $userService = ServiceFactory::get(AuthService::class);
 
         $uuid = $this->getArgument('uuid');
 

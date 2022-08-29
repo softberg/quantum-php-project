@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.7.0
+ * @since 2.8.0
  */
 
 namespace Shared\Commands;
@@ -21,7 +21,6 @@ use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
 use Faker\Factory;
-use Quantum\Di\Di;
 
 
 /**
@@ -100,8 +99,7 @@ class DemoCommand extends QtCommand
             $this->runCommand(self::COMMAND_USER_CREATE, $userArguments);
         }
 
-        $serviceFactory = Di::get(ServiceFactory::class);
-        $authService = $serviceFactory->get(AuthService::class);
+        $authService = ServiceFactory::get(AuthService::class);
 
         $users = $authService->getAll();
 
