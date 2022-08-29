@@ -91,6 +91,7 @@ class AuthService extends QtService implements AuthServiceInterface
         }
 
         $data['uuid'] = Factory::create()->uuid();
+        $data['role'] = $data['role'] ?? 'editor';
         
         $user = ModelFactory::get(User::class)->create();
         $user->fillObjectProps($data);
