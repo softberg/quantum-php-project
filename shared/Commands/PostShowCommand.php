@@ -43,7 +43,7 @@ class PostShowCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post uuid]`';
+    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post id]`';
 
     /**
      * Command arguments
@@ -60,8 +60,6 @@ class PostShowCommand extends QtCommand
     public function exec()
     {
         $postService = ServiceFactory::get(PostService::class);
-
-        $userService = ServiceFactory::get(AuthService::class);
 
         $uuid = $this->getArgument('uuid');
 
