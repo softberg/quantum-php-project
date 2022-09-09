@@ -38,6 +38,24 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
+     * Get user
+     * @param string $uuid
+     * @param bool $transformed
+     * @return array|null
+     */
+    public function getUser(string $uuid): ?array
+    {
+        $user = ModelFactory::get(User::class)->criteria('uuid', '=', $uuid)->get();
+
+        if (empty($user)) {
+            return null;
+        }
+
+        return current($user);
+    }
+
+
+    /**
      * User Schema
      * @return array
      */
@@ -92,7 +110,7 @@ class AuthService extends QtService implements AuthServiceInterface
 
         $data['uuid'] = Factory::create()->uuid();
         $data['role'] = $data['role'] ?? 'editor';
-        
+
         $user = ModelFactory::get(User::class)->create();
         $user->fillObjectProps($data);
         $user->save();
@@ -128,5 +146,4 @@ class AuthService extends QtService implements AuthServiceInterface
     {
         ModelFactory::get(User::class)->deleteTable();
     }
-
 }

@@ -43,7 +43,7 @@ class PostShowCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post uuid]`';
+    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post id]`';
 
     /**
      * Command arguments
@@ -61,8 +61,6 @@ class PostShowCommand extends QtCommand
     {
         $postService = ServiceFactory::get(PostService::class);
 
-        $userService = ServiceFactory::get(AuthService::class);
-
         $uuid = $this->getArgument('uuid');
 
         $rows = [];
@@ -71,43 +69,39 @@ class PostShowCommand extends QtCommand
             $post = $postService->getPost($uuid);
 
             if (!empty($post)) {
-                $user = $userService->get('id', $post['user_id']);
-
-                $rows[] = [
-                    $post['uuid']?? '',
-                    $post['title']?? '',
-                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...'?? '',
-                    $user->getFieldValue('firstname') . ' ' . $user->getFieldValue('lastname'),
-                    date('m/d/Y H:i', strtotime($post['updated_at']))?? ''
-                ];
+                $rows[] = $this->composeTableRow($post);
             } else {
                 $this->error('The post is not found');
                 return;
             }
         } else {
-            $usersPosts = $postService->getPosts();
-
-            foreach ($usersPosts as $userPosts) {
-                foreach ($userPosts['posts'] as $post){
-                    $rows[] = [
-                        $post['uuid']?? '',
-                        $post['title']?? '',
-                        strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...'?? '',
-                        $userPosts['firstname'] . ' '. $userPosts['lastname'],
-                        date('m/d/Y H:i', strtotime($post['updated_at']))?? ''
-                    ];
-                }
-
+            $posts = $postService->getPosts();
+            foreach ($posts as $post) {
+                $rows[] = $this->composeTableRow($post);
             }
         }
 
         $table = new Table($this->output);
 
         $table->setHeaderTitle('Posts')
-            ->setHeaders(['UUID', 'Title', 'Description', 'Author', 'Date'])
+            ->setHeaders(['ID', 'Title', 'Description', 'Author', 'Date'])
             ->setRows($rows)
             ->render();
-
     }
 
+    /**
+     * Composes a table row
+     * @param array $item
+     * @return array
+     */
+    private function composeTableRow(array $item): array
+    {
+        return [
+            $item['id'] ?? '',
+            $item['title'] ?? '',
+            strlen($item['content']) < 100 ? $item['content'] : mb_substr($item['content'], 0, 100) . '...' ?? '',
+            $item['author'],
+            $item['date'] ?? ''
+        ];
+    }
 }

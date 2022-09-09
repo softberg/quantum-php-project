@@ -14,7 +14,7 @@ h1 {
     margin-top: 0;
 }
 
-h5 ,
+h5,
 h6 {
     line-height: 1.4;
 }
@@ -29,7 +29,7 @@ h6 {
 
 .wrapper {
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 
 .remember-box {
@@ -42,7 +42,7 @@ main {
     flex-direction: column;
 }
 
-main > div:first-child {
+main>div:first-child {
     padding-top: 50px;
 }
 
@@ -55,18 +55,18 @@ main > div:first-child {
 }
 
 .main-menu-link {
-    font-size:24px;
+    font-size: 1rem;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-.main-menu-link > * {
+.main-menu-link>* {
     vertical-align: middle;
 }
 
-.login-list  {
+.login-list {
     display: flex;
 }
 
@@ -117,8 +117,8 @@ main > div:first-child {
     color: #fff !important;
 }
 
-.teal .input-field input:focus + label,
-.teal .input-field textarea:focus + label {
+.teal .input-field input:focus+label,
+.teal .input-field textarea:focus+label {
     color: #fff !important;
 }
 
@@ -142,27 +142,27 @@ main > div:first-child {
 }
 
 .teal input:focus {
-    border-bottom: 1px solid #fff ;
-    box-shadow: 0 1px 0 0 #fff ;
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 1px 0 0 #fff;
 }
 
 .input-field .prefix.active {
     color: #fff !important;
 }
 
-.checkbox-white[type="checkbox"] + label:before {
+.checkbox-white[type="checkbox"]+label:before {
     border: 2px solid indigo;
     background: transparent;
 }
 
-.checkbox-white[type="checkbox"]:checked + span:not(.lever):before {
+.checkbox-white[type="checkbox"]:checked+span:not(.lever):before {
     border: 2px solid transparent;
     border-bottom: 2px solid white;
     border-right: 2px solid white;
     background: transparent;
 }
 
-.checkbox-white[type="checkbox"] + span:not(.lever):before, [type="checkbox"]:not(.filled-in) + span:not(.lever):after {
+.checkbox-white[type="checkbox"]+span:not(.lever):before, [type="checkbox"]:not(.filled-in)+span:not(.lever):after {
     border: 2px solid #ffffff;
 }
 
@@ -293,17 +293,19 @@ a:hover {
 }
 
 .post-title {
+    width: 90%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    display: block;
 }
 
-.card-image-box  img{
+.card-image-box img {
     max-height: 100%;
     object-fit: cover;
 }
 
-.card-image-box  .content_no_img {
+.card-image-box .content_no_img {
     object-fit: contain;
 }
 
@@ -330,19 +332,21 @@ a:hover {
     position: absolute;
     right: 0;
     top: 0;
-    bottom: 0;  
+    bottom: 0;
     cursor: pointer;
 }
+
 .visibility-icon::selection {
     background: transparent;
 }
-.col >  .visibility-icon {
+
+.col>.visibility-icon {
     right: 15px;
 }
 
 input[type=password] {
-    padding-right: 20px!important;
-    box-sizing: border-box!important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
 }
 
 /*bubbles  animation styles start*/
@@ -353,7 +357,7 @@ input[type=password] {
     width: 100%;
     height: 100%;
     margin: 0;
-    z-index: 1;
+    z-index: 0;
     pointer-events: none;
 }
 
@@ -442,6 +446,7 @@ input[type=password] {
     0% {
         transform: translateY(0);
     }
+
     100% {
         transform: translateY(-1200px) rotate(600deg);
     }
@@ -450,7 +455,7 @@ input[type=password] {
 /*bubbles  animation styles end*/
 
 @media only screen and (max-width: 992px) {
-    main > div:first-child {
+    main>div:first-child {
         padding-top: 15px;
     }
 
@@ -511,29 +516,30 @@ input[type=password] {
     appearance: none;
     background-color: transparent !important;
     background-image: none !important;
-    color: -internal-light-dark(black, white) ;
+    color: -internal-light-dark(black, white);
     -webkit-text-fill-color: #fff;
     -webkit-box-shadow: 0 0 0px 1000px #00bfa5 inset !important;
 
 }
 
-.content_img{
-    height:350px;
+.content_img {
+    height: 350px;
     object-fit: cover;
 }
 
-.single_page_img{
+.single_page_img {
     max-width: 100%;
     width: 100%;
     height: 400px;
     object-fit: cover;
     object-position: top;
 }
-.single_page_no_img{
-    width:23% !important;
+
+.single_page_no_img {
+    width: 23% !important;
 }
 
-.single-blog-title{
+.single-blog-title {
     font-size: 32px;
     margin-top: 0;
     padding: 0 35px;
@@ -549,17 +555,18 @@ input[type=password] {
     border-radius: 4px;
 }
 
-.upload-btn .btn:hover , .submit-btn:hover ,
-.upload-btn .btn , .submit-btn {
+.upload-btn .btn:hover, .submit-btn:hover,
+.upload-btn .btn, .submit-btn {
     color: #26a69a;
     background-color: #fff;
     transition: opacity 0.2s linear;
 }
 
-.upload-btn .btn:hover , .submit-btn:hover {
+.upload-btn .btn:hover, .submit-btn:hover {
     opacity: 0.9;
 }
-.single-blog-txt{
+
+.single-blog-txt {
     line-height: 1.7;
     word-break: break-word;
 }
@@ -571,16 +578,17 @@ input[type=password] {
     margin-bottom: 10px;
 }
 
-.update_page_img{
-    width:100%;
-    height:100%;
+.update_page_img {
+    width: 100%;
+    height: 100%;
     max-height: 100%;
     max-width: 100%;
 }
-.content_no_img{
-    height:350px;
+
+.content_no_img {
+    height: 350px;
     width: 65%;
-    margin:auto;
+    margin: auto;
     object-fit: contain;
 }
 
@@ -591,14 +599,14 @@ div.polaroid {
     position: relative;
 }
 
-.post_image{
-    width:90px; 
-    height:auto;
-    margin:auto; 
-    display:flex;
+.post_image {
+    width: 90px;
+    height: auto;
+    margin: auto;
+    display: flex;
 }
 
-.image_delete{
+.image_delete {
     position: absolute;
     right: 3px;
     top: 3px;
@@ -607,7 +615,7 @@ div.polaroid {
     border-radius: 50%;
 }
 
-.modal{
+.modal {
     text-align: center;
     width: 33%;
     max-height: 50%;
@@ -621,26 +629,36 @@ div.polaroid {
     color: #fff;
 }
 
-.edit-my-post{
+.edit-my-post {
     right: 50px;
 }
 
-.img-my-post{
-    width: 60px!important;
-    height: 60px!important;
-    left: 5px!important;
+.img-my-post {
+    width: 60px !important;
+    height: 60px !important;
+    left: 5px !important;
 }
 
-.post-title{
-    font-size: 20px!important;
+.post-title {
+    font-size: 20px !important;
 }
 
-.avatar p{
+.avatar p {
     font-size: 15px;
 }
 
+.sidenav {
+    width: unset !important;
+    min-width: 300px !important;
+}
+
+.sidenav-overlay {
+    position: absolute !important;
+    z-index: 1 !important;
+}
+
 @media only screen and (max-width: 1500px) {
-    .content_no_img{
+    .content_no_img {
         width: 100% !important;
     }
 }
@@ -651,8 +669,18 @@ div.polaroid {
     }
 }
 
-@media only screen and (max-width: 991px) {
-    div.polaroid{
-        width: 100% ;
+@media only screen and (max-width: 993px) {
+    div.polaroid {
+        width: 100%;
+    }
+
+    .sidenav li>a>i.material-icons {
+        margin-right: 15px !important;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .navbar-logo img {
+        height: 44px;
     }
 }
