@@ -69,7 +69,7 @@ class PostShowCommand extends QtCommand
             $post = $postService->getPost($uuid);
 
             if (!empty($post)) {
-                $rows[] = $this->composerTableRow($post);
+                $rows[] = $this->composeTableRow($post);
             } else {
                 $this->error('The post is not found');
                 return;
@@ -77,7 +77,7 @@ class PostShowCommand extends QtCommand
         } else {
             $posts = $postService->getPosts();
             foreach ($posts as $post) {
-                $rows[] = $this->composerTableRow($post);
+                $rows[] = $this->composeTableRow($post);
             }
         }
 
@@ -89,7 +89,13 @@ class PostShowCommand extends QtCommand
             ->render();
     }
 
-    private function composerTableRow(array $item)
+    /**
+     * Composes a table row
+     * @param array $item
+     * @return array
+     */
+    
+    private function composeTableRow(array $item): array
     {
         return [
             $item['id'] ?? '',

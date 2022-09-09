@@ -68,7 +68,7 @@ class UserShowCommand extends QtCommand
             $user = $userService->getUser($uuid);
 
             if (!empty($user)) {
-                $rows[] = $this->composerTableRow($user);
+                $rows[] = $this->composeTableRow($user);
             } else {
                 $this->error('The user is not found');
                 return;
@@ -76,7 +76,7 @@ class UserShowCommand extends QtCommand
         } else {
             $users = $userService->getAll();
             foreach ($users as $user) {
-                $rows[] = $this->composerTableRow($user);
+                $rows[] = $this->composeTableRow($user);
             }
         }
 
@@ -104,7 +104,13 @@ class UserShowCommand extends QtCommand
             ->render();
     }
 
-    private function composerTableRow(array $item)
+    /**
+     * Composes a table row
+     * @param array $item
+     * @return array
+     */
+    
+    private function composeTableRow(array $item): array
     {
         return [
             $item['id'] ?? '',
