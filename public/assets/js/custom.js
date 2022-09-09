@@ -12,17 +12,19 @@ jQuery(document).ready(function ($) {
     });
 
     $('.visibility-icon').on('click', function () {
-        if($(this).hasClass('on')) {
+        if ($(this).hasClass('on')) {
             $('.off').removeClass('hide');
-            $(this).parent('.input-field').find('input[type=text]').attr('type','password');
+            $(this).parent('.input-field').find('input[type=text]').attr('type', 'password');
 
         } else {
             $('.on').removeClass('hide');
-            $(this).parent('.input-field').find('input[type=password]').attr('type','text');
+            $(this).parent('.input-field').find('input[type=password]').attr('type', 'text');
         }
 
         $(this).addClass('hide');
     })
+
+    $('.sidenav').sidenav();
 });
 
 
