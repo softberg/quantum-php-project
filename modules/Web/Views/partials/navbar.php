@@ -48,7 +48,7 @@
                     <?php endif; ?>
                 </li>
             <?php endif; ?>
-            <?php echo partial('partials/language') ?>
+            <?php echo partial('partials/language', ['attr' => 'dropdown2']) ?>
         </ul>
         
     </div>

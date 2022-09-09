@@ -13,12 +13,12 @@
     </li>
     <?php if (auth()->check()) : ?>
         <li>
-            <a class="dropdown-trigger login-list" href="#!" data-target="dropdown1">
+            <a class="dropdown-trigger login-list" href="#!" data-target="sidenav-dropdown1">
                 <i class="material-icons left">person</i>
                 <?php echo auth()->user()->getFieldValue('firstname') . ' ' . auth()->user()->getFieldValue('lastname') ?>
                 <i class="material-icons right">arrow_drop_down</i>
             </a>
-            <ul id="dropdown1" class="dropdown-content">
+            <ul id="sidenav-dropdown1" class="dropdown-content">
                 <li>
                     <a href="<?php echo base_url() . '/' . current_lang() ?>/my-posts">
                         <?php _t('common.my_posts') ?>
@@ -47,5 +47,6 @@
             <?php endif; ?>
         </li>
     <?php endif; ?>
-    <?php echo partial('partials/language') ?>
+    <?php echo partial('partials/language', ['attr' => 'sidenav-dropdown2']) ?>
+
 </ul>
