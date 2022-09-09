@@ -94,7 +94,6 @@ class PostShowCommand extends QtCommand
      * @param array $item
      * @return array
      */
-    
     private function composeTableRow(array $item): array
     {
         return [
