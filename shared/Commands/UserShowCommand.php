@@ -58,7 +58,6 @@ class UserShowCommand extends QtCommand
      */
     public function exec()
     {
-
         $userService = ServiceFactory::get(AuthService::class);
 
         $uuid = $this->getArgument('id');
@@ -69,25 +68,7 @@ class UserShowCommand extends QtCommand
             $user = $userService->getUser($uuid);
 
             if (!empty($user)) {
-
-
-                $rows[] = [
-                    $user['id'] ?? '',
-                    $user['uuid'] ?? '',
-                    $user['firstname'] ?? '',
-                    $user['lastname'] ?? '',
-                    $user['role'] ?? '',
-                    $user['username'] ?? '',
-                    $user['password'] ?? '',
-                    $user['activationToken'] ?? '',
-                    $user['rememberToken'] ?? '',
-                    $user['resetToken'] ?? '',
-                    $user['accessToken'] ?? '',
-                    $user['refreshToken'] ?? '',
-                    $user['otp'] ?? '',
-                    $user['otpExpiry'] ?? '',
-                    $user['otpToken'] ?? '',
-                ];
+                $rows[] = $this->composerTableRow($user);
             } else {
                 $this->error('The user is not found');
                 return;
@@ -95,23 +76,7 @@ class UserShowCommand extends QtCommand
         } else {
             $users = $userService->getAll();
             foreach ($users as $user) {
-                $rows[] = [
-                    $user['id'] ?? '',
-                    $user['uuid'] ?? '',
-                    $user['firstname'] ?? '',
-                    $user['lastname'] ?? '',
-                    $user['email'] ?? '',
-                    $user['role'] ?? '',
-                    $user['password'] ?? '',
-                    $user['activationToken'] ?? '',
-                    $user['rememberToken'] ?? '',
-                    $user['resetToken'] ?? '',
-                    $user['accessToken'] ?? '',
-                    $user['refreshToken'] ?? '',
-                    $user['otp'] ?? '',
-                    $user['otpExpiry'] ?? '',
-                    $user['otpToken'] ?? '',
-                ];
+                $rows[] = $this->composerTableRow($user);
             }
         }
 
@@ -137,5 +102,26 @@ class UserShowCommand extends QtCommand
             ])
             ->setRows($rows)
             ->render();
+    }
+
+    private function composerTableRow(array $item)
+    {
+        return [
+            $item['id'] ?? '',
+            $item['uuid'] ?? '',
+            $item['firstname'] ?? '',
+            $item['lastname'] ?? '',
+            $item['role'] ?? '',
+            $item['username'] ?? '',
+            $item['password'] ?? '',
+            $item['activationToken'] ?? '',
+            $item['rememberToken'] ?? '',
+            $item['resetToken'] ?? '',
+            $item['accessToken'] ?? '',
+            $item['refreshToken'] ?? '',
+            $item['otp'] ?? '',
+            $item['otpExpiry'] ?? '',
+            $item['otpToken'] ?? '',
+        ];
     }
 }

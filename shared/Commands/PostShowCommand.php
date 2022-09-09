@@ -69,29 +69,15 @@ class PostShowCommand extends QtCommand
             $post = $postService->getPost($uuid);
 
             if (!empty($post)) {
-
-
-                $rows[] = [
-                    $post['id'] ?? '',
-                    $post['title'] ?? '',
-                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...' ?? '',
-                    $post['author'],
-                    $post['date'] ?? ''
-                ];
+                $rows[] = $this->composerTableRow($post);
             } else {
                 $this->error('The post is not found');
                 return;
             }
         } else {
-            $usersPosts = $postService->getPosts();
-            foreach ($usersPosts as $post) {
-                $rows[] = [
-                    $post['id'] ?? '',
-                    $post['title'] ?? '',
-                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...' ?? '',
-                    $post['author'],
-                    $post['date'] ?? ''
-                ];
+            $posts = $postService->getPosts();
+            foreach ($posts as $post) {
+                $rows[] = $this->composerTableRow($post);
             }
         }
 
@@ -101,5 +87,16 @@ class PostShowCommand extends QtCommand
             ->setHeaders(['ID', 'Title', 'Description', 'Author', 'Date'])
             ->setRows($rows)
             ->render();
+    }
+
+    private function composerTableRow(array $item)
+    {
+        return [
+            $item['id'] ?? '',
+            $item['title'] ?? '',
+            strlen($item['content']) < 100 ? $item['content'] : mb_substr($item['content'], 0, 100) . '...' ?? '',
+            $item['author'],
+            $item['date'] ?? ''
+        ];
     }
 }
