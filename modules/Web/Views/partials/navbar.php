@@ -89,6 +89,7 @@
 		<li>
 			<?php if (route_name() != 'signup') : ?>
 				<a href="<?php echo base_url() . '/' . current_lang() ?>/signup">
+					<i class="material-icons left">person_add</i>
 					<?php _t('common.signup') ?>
 				</a>
 			<?php endif; ?>
@@ -96,6 +97,7 @@
 		<li>
 			<?php if (route_name() != 'signin') : ?>
 				<a href="<?php echo base_url() . '/' . current_lang() ?>/signin">
+					<i class="material-icons left">exit_to_app</i>
 					<?php _t('common.signin') ?>
 				</a>
 			<?php endif; ?>
