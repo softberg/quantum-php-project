@@ -71,14 +71,14 @@ class PostShowCommand extends QtCommand
             $post = $postService->getPost($uuid);
 
             if (!empty($post)) {
-                $user = $userService->get('id', $post['user_id']);
+
 
                 $rows[] = [
-                    $post['uuid']?? '',
-                    $post['title']?? '',
-                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...'?? '',
-                    $user->getFieldValue('firstname') . ' ' . $user->getFieldValue('lastname'),
-                    date('m/d/Y H:i', strtotime($post['updated_at']))?? ''
+                    $post['id'] ?? '',
+                    $post['title'] ?? '',
+                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...' ?? '',
+                    $post['author'],
+                    $post['date'] ?? ''
                 ];
             } else {
                 $this->error('The post is not found');
@@ -86,28 +86,22 @@ class PostShowCommand extends QtCommand
             }
         } else {
             $usersPosts = $postService->getPosts();
-
-            foreach ($usersPosts as $userPosts) {
-                foreach ($userPosts['posts'] as $post){
-                    $rows[] = [
-                        $post['uuid']?? '',
-                        $post['title']?? '',
-                        strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...'?? '',
-                        $userPosts['firstname'] . ' '. $userPosts['lastname'],
-                        date('m/d/Y H:i', strtotime($post['updated_at']))?? ''
-                    ];
-                }
-
+            foreach ($usersPosts as $post) {
+                $rows[] = [
+                    $post['id'] ?? '',
+                    $post['title'] ?? '',
+                    strlen($post['content']) < 100 ? $post['content'] : mb_substr($post['content'], 0, 100) . '...' ?? '',
+                    $post['author'],
+                    $post['date'] ?? ''
+                ];
             }
         }
 
         $table = new Table($this->output);
 
         $table->setHeaderTitle('Posts')
-            ->setHeaders(['UUID', 'Title', 'Description', 'Author', 'Date'])
+            ->setHeaders(['ID', 'Title', 'Description', 'Author', 'Date'])
             ->setRows($rows)
             ->render();
-
     }
-
 }
