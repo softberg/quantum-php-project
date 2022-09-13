@@ -100,7 +100,7 @@ class PostController extends QtController
         $view->setParams([
             'title' => t('common.my_posts') . ' | ' . config()->get('app_name'),
             'langs' => config()->get('langs'),
-            'posts' => $this->postService->getMyPosts(auth()->user()->id)
+            'posts' => $this->postService->getMyPosts((int) auth()->user()->id)
         ]);
 
         $response->html($view->render('post/my-posts'));
