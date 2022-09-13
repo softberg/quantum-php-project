@@ -82,9 +82,12 @@ main>div:first-child {
     margin-bottom: 0;
 }
 
-#dropdown1, #dropdown2 {
-    width: auto !important;
-    min-width: unset !important;
+#dropdown1 {
+    min-width: 210px !important;
+}
+
+#dropdown2 {
+    min-width: 120px !important;
 }
 
 .transparent.no-box {

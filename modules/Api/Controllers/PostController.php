@@ -74,7 +74,7 @@ class PostController extends ApiController
     {
         $response->json([
             'status' => 'success',
-            'data' => $this->postService->getMyPosts((int) auth()->user()->getFieldValue('id'))
+            'data' => $this->postService->getMyPosts((int) auth()->user()->id)
         ]);
     }
 
@@ -86,7 +86,7 @@ class PostController extends ApiController
     public function createPost(Request $request, Response $response)
     {
         $postData = [
-            'user_id' => (int) auth()->user()->getFieldValue('id'),
+            'user_id' => (int) auth()->user()->id,
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
             'image' => '',

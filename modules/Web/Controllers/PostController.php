@@ -100,7 +100,7 @@ class PostController extends QtController
         $view->setParams([
             'title' => t('common.my_posts') . ' | ' . config()->get('app_name'),
             'langs' => config()->get('langs'),
-            'posts' => $this->postService->getMyPosts(auth()->user()->getFieldValue('id'))
+            'posts' => $this->postService->getMyPosts((int) auth()->user()->id)
         ]);
 
         $response->html($view->render('post/my-posts'));
@@ -116,7 +116,7 @@ class PostController extends QtController
     {
         if ($request->isMethod('post')) {
             $postData = [
-                'user_id' => (int) auth()->user()->getFieldValue('id'),
+                'user_id' => (int) auth()->user()->id,
                 'title' => $request->get('title', null, true),
                 'content' => $request->get('content', null, true),
                 'image' => '',

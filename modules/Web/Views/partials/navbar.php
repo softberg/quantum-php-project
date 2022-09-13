@@ -17,7 +17,7 @@
                     <a class="dropdown-trigger login-list" href="#!" data-target="dropdown1">
                         <span class="hide-on-small-only show-on-medium-and-up">
                             <i class="material-icons left">person</i>
-                            <?php echo auth()->user()->getFieldValue('firstname') . ' ' . auth()->user()->getFieldValue('lastname') ?>
+                            <?php echo auth()->user()->firstname . ' ' . auth()->user()->lastname ?>
                             <i class="material-icons right">arrow_drop_down</i>
                         </span>
                     </a>
