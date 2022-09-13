@@ -40,7 +40,7 @@ class Owner extends QtMiddleware
 
         $post = ServiceFactory::get(PostService::class)->getPost($postId, false);
 
-        if (!$post || $post['user_id'] != auth()->user()->getFieldValue('id')) {
+        if (!$post || $post['user_id'] != auth()->user()->id) {
             $response->html(partial('errors/404'), 404);
             stop();
         }

@@ -15,7 +15,7 @@
         <li>
             <a class="dropdown-trigger login-list" href="#!" data-target="sidenav-dropdown1">
                 <i class="material-icons left">person</i>
-                <?php echo auth()->user()->getFieldValue('firstname') . ' ' . auth()->user()->getFieldValue('lastname') ?>
+                <?php echo auth()->user()->firstname . ' ' . auth()->user()->lastname ?>
                 <i class="material-icons right">arrow_drop_down</i>
             </a>
             <ul id="sidenav-dropdown1" class="dropdown-content">
