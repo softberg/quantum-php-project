@@ -5,9 +5,9 @@ body {
     font-size: 17px;
 }
 
-header {
+header nav {
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 
 h1 {
@@ -654,11 +654,6 @@ div.polaroid {
 .sidenav {
     width: unset !important;
     min-width: 300px !important;
-}
-
-.sidenav-overlay {
-    position: absolute !important;
-    z-index: 1 !important;
 }
 
 @media only screen and (max-width: 1500px) {
