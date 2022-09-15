@@ -11,7 +11,6 @@
     </span>
     <p>
         <?php echo date('m/d/Y H:i', strtotime($post['updated_at'])) ?? '' ?> <br>
-        <?php echo $post['author'] ?? '' ?>
     </p>
     <a href="<?php echo base_url() . '/' . current_lang() . '/my-posts/amend/' . $post['uuid'] ?>" class="secondary-content edit-my-post" title="<?php _t('common.edit') ?>" style="right: 50px;">
         <i class="material-icons dp48">edit</i>

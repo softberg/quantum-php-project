@@ -9,7 +9,7 @@
             </ul>
         </div>
     <?php else: ?>
-        <h4 class="center-align"><?php _t('common.no_posts') ?>... <?php _t('common.try_creating') ?></h4>
+        <h4 class="center-align grey-text"><?php _t('common.no_posts') ?>... <?php _t('common.try_creating') ?></h4>
     <?php endif; ?>
 
     <?php echo partial('post/partials/modal', ['item' => t('common.the_post')]) ?>
