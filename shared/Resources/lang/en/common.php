@@ -29,6 +29,7 @@ return [
     'send' => 'Send',
     'reset' => 'Reset',
     'cancel' => 'Cancel',
+    'successfully_signed_up' => 'Successfully signed up',
     'title' => 'Title',
     'content' => 'Content',
     'posts' => 'Posts',

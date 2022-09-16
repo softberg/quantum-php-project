@@ -26,6 +26,7 @@ return [
     'last_name' => 'Ազգանուն',
     'send' => 'Ուղարկել',
     'reset' => 'Վերակայել',
+    'successfully_signed_up' => 'Գրանցումը հաջողվեց',
     'title' => 'Վերնագիր',
     'cancel' => 'Չեղարկել',
     'content' => 'Բովանդակություն',

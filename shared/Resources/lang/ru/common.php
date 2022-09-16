@@ -26,6 +26,7 @@ return [
     'last_name' => 'Фамилия',
     'send' => 'Отправить',
     'reset' => 'Сбросить',
+    'successfully_signed_up' => 'Успешная регистрация',
     'title' => 'Заглавие',
     'cancel' => 'Отмена',
     'content' => 'Содержание',

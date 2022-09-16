@@ -43,7 +43,7 @@ class AuthController extends ApiController
     public function signin(Request $request, Response $response)
     {
         try {
-            $code = auth()->signin($request->get('username'), $request->get('password'));
+            $code = auth()->signin($request->get('email'), $request->get('password'));
 
             if (filter_var(config()->get('2FA'), FILTER_VALIDATE_BOOLEAN)) {
                 $response->set('code', $code);
@@ -60,7 +60,7 @@ class AuthController extends ApiController
         }
     }
 
-    public function me(Request $request, Response $response)
+    public function me(Response $response)
     {
         $response->json([
             'status' => self::STATUS_SUCCESS,
@@ -99,7 +99,8 @@ class AuthController extends ApiController
     {
         if (auth()->signup($request->all())) {
             $response->json([
-                'status' => self::STATUS_SUCCESS
+                'status' => self::STATUS_SUCCESS,
+                'message' => t('common.successfully_signed_up')
             ]);
         }
     }
