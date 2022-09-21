@@ -23,6 +23,7 @@ return [
     'reset_password' => 'Reset password',
     'reset_password_email_content' => 'Reset your password by clicking to the button bellow',
     'repeat_password' => 'Repeat password',
+    'check_email_signup' => 'Registration was successful, please check your email',
     'check_email' => 'Check your email to reset your password',
     'email' => 'Email',
     'password' => 'Password',
