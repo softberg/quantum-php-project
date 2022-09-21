@@ -8,6 +8,10 @@
                     <?php echo partial('partials/messages/error') ?>
                 <?php endif; ?>
 
+                <?php if (session()->has('success')): ?>
+                    <?php echo partial('partials/messages/success') ?>
+                <?php endif; ?>
+                
                 <div class="card teal accent-4">
                     <div class="card-content">
                         <form method="post" action="<?php echo base_url() . '/' . current_lang() ?>/signup">
