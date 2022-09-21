@@ -45,7 +45,7 @@ return [
     'mail_port' => env('MAIL_PORT'),
     'mail_username' => env('MAIL_USERNAME'),
     'mail_password' => env('MAIL_PASSWORD'),
-    'mail_trap' => false,
+    'mail_trap' => true,
 
     /**
      * ---------------------------------------------------------
