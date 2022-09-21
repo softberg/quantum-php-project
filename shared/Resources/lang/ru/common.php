@@ -14,6 +14,8 @@ return [
     'signin' => 'Войти',
     'signup' => 'Зарегистрироваться',
     'signout' => 'Выход',
+    'activate_account' => 'Активировать аккаунт',
+    'account_activated' => 'Аккаунт активирован',
     'remember_me' => 'Запомни меня',
     'forget_password' => 'Забыли пароль?',
     'reset_password' => 'Сброс пароля',

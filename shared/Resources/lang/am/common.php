@@ -14,6 +14,8 @@ return [
     'signin' => 'Մուտք',
     'signup' => 'Գրանցվել',
     'signout' => 'Ելք',
+    'activate_account' => 'Ակտիվացրեք հաշիվը',
+    'account_activated' => 'Հաշիվն ակտիվացված է',
     'remember_me' => 'Հիշիր ինձ',
     'forget_password' => 'Մոռացել եք գաղտնաբառը?',
     'reset_password' => 'Գաղտնաբառի վերականգնում',
