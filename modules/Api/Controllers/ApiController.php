@@ -15,6 +15,7 @@
 namespace Modules\Api\Controllers;
 
 use Quantum\Mvc\QtController;
+use OpenApi\Annotations as OA;
 
 /**
  * Class ApiController
@@ -24,6 +25,18 @@ class ApiController extends QtController
 {
 
     /**
+     * @OA\Info(
+     *      title="Quantum API documentation",
+     *      version="1.0.0",
+     *      description="
+     *Quantum Documentation: https://quantum.softberg.org/en/docs/v1/overview"
+     *      ),  
+     *      @OA\SecurityScheme(
+     *          securityScheme="bearer_token",
+     *          type="apiKey",
+     *          name="Authorization",
+     *          in="header"
+     * )
      * CSRF verification
      * @var bool
      */

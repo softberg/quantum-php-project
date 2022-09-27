@@ -41,6 +41,31 @@ class PostController extends ApiController
     }
 
     /**
+     *  @OA\Get(
+     *     path="/api-posts",
+     *     tags={"Posts"},
+     *     summary="This api returns all posts",
+     *     operationId="getPosts",
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="Not Found"
+     *   ),
+     *   @OA\Response(
+     *       response=500,
+     *       description="Internal Server Error"
+     *   )
+     * )
      * Get posts action
      * @param \Quantum\Http\Response $response
      */
@@ -53,6 +78,40 @@ class PostController extends ApiController
     }
 
     /**
+     *  @OA\Get(
+     *     path="/api-post/{id}",
+     *     tags={"Posts"},
+     *     summary="This api returns all posts",
+     *     operationId="getPost",
+     *   @OA\Parameter(
+     *        name="id",
+     *        description="Post Id",
+     *        required=true,
+     *        in="path",
+     *        @OA\Schema(
+     *            type="string"
+     *        )
+     *     ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="Not Found"
+     *   ),
+     *   @OA\Response(
+     *       response=500,
+     *       description="Internal Server Error"
+     *   )
+     * )
      * Get post action
      * @param string|null $lang
      * @param string $postId
@@ -67,6 +126,34 @@ class PostController extends ApiController
     }
 
     /**
+     *  @OA\Get(
+     *     path="/api-my-posts",
+     *     tags={"Posts"},
+     *     summary="This api returns my posts",
+     *     operationId="getMyPosts",
+     *     security={
+     *       {"bearer_token": {}}
+     *     },
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="Not Found"
+     *   ),
+     *   @OA\Response(
+     *       response=500,
+     *       description="Internal Server Error"
+     *   )
+     * )
      * Get my posts action
      * @param \Quantum\Http\Response $response
      */
@@ -79,6 +166,47 @@ class PostController extends ApiController
     }
 
     /**
+     * @OA\POST(
+     * path="/api-my-posts/create",
+     *   tags={"Posts"},
+     *   summary="Create post",
+     *   operationId="postCreate",
+     *   security={
+     *       {"bearer_token": {}
+     *    }},
+     *   @OA\RequestBody(
+     *       @OA\MediaType(
+     *          mediaType="multipart/form-data",
+     *          @OA\Schema(
+     *              type="object",
+     *              required={"title", "content"},
+     *              @OA\Property(
+     *                  property="title",
+     *                  type="string",
+     *              ),
+     *              @OA\Property(
+     *                  property="content",
+     *                  type="string",
+     *              ),
+     *              @OA\Property(
+     *                  property="image",
+     *                  type="file",
+     *              )
+     *          )
+     *      )
+     *  ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthenticated"
+     *   )
+     *)
      * Create post action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
@@ -107,6 +235,56 @@ class PostController extends ApiController
     }
 
     /**
+     * @OA\PUT(
+     * path="/api-my-posts/amend/{id}",
+     *   tags={"Posts"},
+     *   summary="Edit post",
+     *   operationId="postEdit",
+     *   security={
+     *       {"bearer_token": {}
+     *    }},
+     *   @OA\Parameter(
+     *        name="id",
+     *        description="Post id",
+     *        required=true,
+     *        in="path",
+     *        @OA\Schema(
+     *            type="string"
+     *        )
+     *   ),
+     *   @OA\RequestBody(
+     *       @OA\MediaType(
+     *          mediaType="multipart/form-data",
+     *          @OA\Schema(
+     *              type="object",
+     *              required={"title", "content"},
+     *              @OA\Property(
+     *                  property="title",
+     *                  type="string",
+     *              ),
+     *              @OA\Property(
+     *                  property="content",
+     *                  type="string",
+     *              ),
+     *              @OA\Property(
+     *                  property="image",
+     *                  type="file",
+     *              )
+     *          )
+     *      )
+     *  ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthenticated"
+     *   )
+     *)
      * Amend post action
      * @param \Quantum\Http\Request $request
      * @param \Quantum\Http\Response $response
@@ -141,6 +319,35 @@ class PostController extends ApiController
     }
 
     /**
+     * @OA\DELETE(
+     * path="/api-my-posts/delete/{id}",
+     *   tags={"Posts"},
+     *   summary="Delete post",
+     *   operationId="postDelete",
+     *   security={
+     *       {"bearer_token": {}
+     *    }},
+     *   @OA\Parameter(
+     *        name="id",
+     *        description="Post id",
+     *        required=true,
+     *        in="path",
+     *        @OA\Schema(
+     *            type="string"
+     *        )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthenticated"
+     *   )
+     *)
      * Delete post action
      * @param \Quantum\Http\Response $response
      * @param string|null $lang
@@ -163,6 +370,35 @@ class PostController extends ApiController
     }
 
     /**
+     *  @OA\DELETE(
+     * path="/api-my-posts/delete-image/{id}",
+     *   tags={"Posts"},
+     *   summary="Delete post image",
+     *   operationId="postImageDelete",
+     *   security={
+     *       {"bearer_token": {}
+     *    }},
+     *   @OA\Parameter(
+     *        name="id",
+     *        description="Post id",
+     *        required=true,
+     *        in="path",
+     *        @OA\Schema(
+     *            type="string"
+     *        )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthenticated"
+     *   )
+     *)
      * Delete post image action
      * @param \Quantum\Http\Response $response
      * @param string|null $lang
@@ -188,5 +424,4 @@ class PostController extends ApiController
             'message' => t('common.deleted_successfully')
         ]);
     }
-
 }
