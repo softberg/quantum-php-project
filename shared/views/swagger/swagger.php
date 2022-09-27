@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo asset()->url('SwaggerUI/swagger-ui.css') ?>"/>
     <link rel="stylesheet" type="text/css" href="<?php echo asset()->url('SwaggerUI/index.css') ?>"/>
     <link rel="icon" type="image/png" href="<?php echo asset()->url('images/favicon.ico') ?>"/>
+    <link rel="stylesheet" href="<?php echo asset()->url('SwaggerUI/theme-material.css') ?>" />
 </head>
 
 <body>
