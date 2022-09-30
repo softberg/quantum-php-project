@@ -1,6 +1,6 @@
 window.onload = function () {
     window.ui = SwaggerUIBundle({
-        url: "/assets/api-docs.json",
+        url: 'docs',
         dom_id: '#swagger-ui',
         presets: [
             SwaggerUIBundle.presets.apis,

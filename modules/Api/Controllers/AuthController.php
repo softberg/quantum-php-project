@@ -46,14 +46,14 @@ class AuthController extends ApiController
      *        mediaType="application/json",
      *        @OA\Schema(
      *            @OA\Property(
-     *                property="username",
+     *                property="email",
      *                type="string"
      *            ),
      *            @OA\Property(
      *                property="password",
      *                type="string"
      *            ),
-     *            example={"username": "rgaylord@gmail.com", "password": "password"}
+     *            example={"email": "rgaylord@gmail.com", "password": "password"}
      *        )
      *     )
      * ),
@@ -133,15 +133,21 @@ class AuthController extends ApiController
     }
 
     /**
-     * *  @OA\Get(
+     *  @OA\Get(
      *     path="/api-signout",
      *     tags={"SignIn & SignOut"},
      *     summary="Signout",
      *     operationId="signout",
-     *     security={
-     *       {"bearer_token": {}
-     *    }},
-     *   @OA\Response(
+     * @OA\Parameter(
+     *        name="refresh_token",
+     *        description="Refresh token",
+     *        required=true,
+     *        in="header",
+     *        @OA\Schema(
+     *            type="string"
+     *        )
+     *     ),
+     *  @OA\Response(
      *      response=200,
      *      description="Success",
      *      @OA\MediaType(
@@ -466,5 +472,4 @@ class AuthController extends ApiController
             ]);
         }
     }
-
 }

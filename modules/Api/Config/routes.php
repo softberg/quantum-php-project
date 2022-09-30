@@ -1,11 +1,6 @@
 <?php
 
-use Quantum\Http\Response;
-
 return function ($route) {
-    $route->get('api/documentation', function (Response $response) {
-        $response->html(partial('swagger/swagger'));
-    })->name('swagger');
 
     $route->post('[:alpha:2]?/api-signin', 'AuthController', 'signin');
     $route->post('[:alpha:2]?/api-signup', 'AuthController', 'signup')->middlewares(['Signup']);
