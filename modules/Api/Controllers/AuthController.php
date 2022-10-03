@@ -36,6 +36,9 @@ class AuthController extends ApiController
     const STATUS_SUCCESS = 'success';
 
     /**
+     * Sign in action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @OA\Post(
      * path="/api-signin",
      *   tags={"SignIn & SignOut"},
@@ -73,9 +76,6 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *   )
      *)
-     * Sign in action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
      */
     public function signin(Request $request, Response $response)
     {
@@ -98,6 +98,7 @@ class AuthController extends ApiController
     }
 
     /**
+     * @param \Quantum\Http\Response $response
      *  @OA\Get(
      *     path="/api-me",
      *     tags={"User"},
@@ -118,7 +119,6 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *   )
      * )
-     * @param \Quantum\Http\Response $response
      */
     public function me(Response $response)
     {
@@ -133,6 +133,8 @@ class AuthController extends ApiController
     }
 
     /**
+     * Sign out action
+     * @param \Quantum\Http\Response $response
      *  @OA\Get(
      *     path="/api-signout",
      *     tags={"SignIn & SignOut"},
@@ -159,8 +161,6 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *   )
      * )
-     * Sign out action
-     * @param \Quantum\Http\Response $response
      */
     public function signout(Response $response)
     {
@@ -177,6 +177,9 @@ class AuthController extends ApiController
     }
 
     /**
+     * Sign up action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @OA\POST(
      * path="/api-signup",
      *   tags={"SignIn & SignOut"},
@@ -218,9 +221,6 @@ class AuthController extends ApiController
      *       description="Unauthenticated"
      *   )
      *)
-     * Sign up action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
      */
     public function signup(Request $request, Response $response)
     {
@@ -233,6 +233,9 @@ class AuthController extends ApiController
     }
 
     /**
+     * Activate action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      *  @OA\GET(
      * path="/api-activate/{activate_token}",
      *   tags={"SignIn & SignOut"},
@@ -259,9 +262,6 @@ class AuthController extends ApiController
      *       description="Unauthenticated"
      *   )
      *)
-     * Activate action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
      */
     public function activate(Request $request, Response $response)
     {
@@ -274,6 +274,9 @@ class AuthController extends ApiController
     }
 
     /**
+     * Forget action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @OA\Post(
      * path="/api-forget",
      *   tags={"SignIn & SignOut"},
@@ -308,9 +311,6 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *   )
      *)
-     * Forget action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
      */
     public function forget(Request $request, Response $response)
     {
@@ -323,6 +323,9 @@ class AuthController extends ApiController
     }
 
     /**
+     * Reset action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @OA\POST(
      * path="/api-reset/{reset_token}",
      *   tags={"SignIn & SignOut"},
@@ -365,9 +368,6 @@ class AuthController extends ApiController
      *       description="Unauthenticated"
      *   )
      *)
-     * Reset action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
      */
     public function reset(Request $request, Response $response)
     {
@@ -379,6 +379,9 @@ class AuthController extends ApiController
     }
 
     /**
+     * Verify action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @OA\POST(
      * path="/api-verify",
      *   tags={"SignIn & SignOut"},
@@ -408,9 +411,6 @@ class AuthController extends ApiController
      *       description="Unauthenticated"
      *   )
      *)
-     * Verify action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
      */
     public function verify(Request $request, Response $response)
     {
@@ -429,6 +429,8 @@ class AuthController extends ApiController
     }
 
     /**
+     * Resend action
+     * @param \Quantum\Http\Response $response
      * @OA\GET(
      * path="/api-resend/{otp_token}",
      *   tags={"SignIn & SignOut"},
@@ -455,8 +457,6 @@ class AuthController extends ApiController
      *       description="Unauthenticated"
      *   )
      *)
-     * Resend action
-     * @param \Quantum\Http\Response $response
      */
     public function resend(Response $response)
     {

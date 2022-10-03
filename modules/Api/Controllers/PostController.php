@@ -41,6 +41,8 @@ class PostController extends ApiController
     }
 
     /**
+     * Get posts action
+     * @param \Quantum\Http\Response $response
      *  @OA\Get(
      *     path="/api-posts",
      *     tags={"Posts"},
@@ -66,8 +68,6 @@ class PostController extends ApiController
      *       description="Internal Server Error"
      *   )
      * )
-     * Get posts action
-     * @param \Quantum\Http\Response $response
      */
     public function getPosts(Response $response)
     {
@@ -78,6 +78,10 @@ class PostController extends ApiController
     }
 
     /**
+     * Get post action
+     * @param string|null $lang
+     * @param string $postId
+     * @param \Quantum\Http\Response $response
      *  @OA\Get(
      *     path="/api-post/{id}",
      *     tags={"Posts"},
@@ -112,10 +116,6 @@ class PostController extends ApiController
      *       description="Internal Server Error"
      *   )
      * )
-     * Get post action
-     * @param string|null $lang
-     * @param string $postId
-     * @param \Quantum\Http\Response $response
      */
     public function getPost(?string $lang, string $postId, Response $response)
     {
@@ -126,6 +126,8 @@ class PostController extends ApiController
     }
 
     /**
+     * Get my posts action
+     * @param \Quantum\Http\Response $response
      *  @OA\Get(
      *     path="/api-my-posts",
      *     tags={"Posts"},
@@ -154,8 +156,6 @@ class PostController extends ApiController
      *       description="Internal Server Error"
      *   )
      * )
-     * Get my posts action
-     * @param \Quantum\Http\Response $response
      */
     public function getMyPosts(Response $response)
     {
@@ -166,6 +166,9 @@ class PostController extends ApiController
     }
 
     /**
+     * Create post action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
      * @OA\POST(
      * path="/api-my-posts/create",
      *   tags={"Posts"},
@@ -207,9 +210,6 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *   )
      *)
-     * Create post action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
      */
     public function createPost(Request $request, Response $response)
     {
@@ -235,6 +235,11 @@ class PostController extends ApiController
     }
 
     /**
+     * Amend post action
+     * @param \Quantum\Http\Request $request
+     * @param \Quantum\Http\Response $response
+     * @param string|null $lang
+     * @param string $postId
      * @OA\PUT(
      * path="/api-my-posts/amend/{id}",
      *   tags={"Posts"},
@@ -285,11 +290,6 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *   )
      *)
-     * Amend post action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param string|null $lang
-     * @param string $postId
      */
     public function amendPost(Request $request, Response $response, ?string $lang, string $postId)
     {
@@ -319,6 +319,10 @@ class PostController extends ApiController
     }
 
     /**
+     * Delete post action
+     * @param \Quantum\Http\Response $response
+     * @param string|null $lang
+     * @param string $postId
      * @OA\DELETE(
      * path="/api-my-posts/delete/{id}",
      *   tags={"Posts"},
@@ -348,10 +352,6 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *   )
      *)
-     * Delete post action
-     * @param \Quantum\Http\Response $response
-     * @param string|null $lang
-     * @param string $postId
      */
     public function deletePost(Response $response, ?string $lang, string $postId)
     {
@@ -370,6 +370,10 @@ class PostController extends ApiController
     }
 
     /**
+     * Delete post image action
+     * @param \Quantum\Http\Response $response
+     * @param string|null $lang
+     * @param string $postId
      *  @OA\DELETE(
      * path="/api-my-posts/delete-image/{id}",
      *   tags={"Posts"},
@@ -399,10 +403,6 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *   )
      *)
-     * Delete post image action
-     * @param \Quantum\Http\Response $response
-     * @param string|null $lang
-     * @param string $postId
      */
     public function deletePostImage(Response $response, ?string $lang, string $postId)
     {
