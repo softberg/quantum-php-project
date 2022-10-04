@@ -36,46 +36,46 @@ class AuthController extends ApiController
     const STATUS_SUCCESS = 'success';
 
     /**
-     * Sign in action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @OA\Post(
-     * path="/api-signin",
-     *   tags={"SignIn & SignOut"},
-     *   summary="Login Api",
-     *   operationId="userSignIn",
-     *  @OA\RequestBody(
-     *        @OA\MediaType(
-     *        mediaType="application/json",
+     *  Sign in action
+     *  @OA\Post(
+     *    path="/api-signin",
+     *    tags={"SignIn & SignOut"},
+     *    summary="Login Api",
+     *    operationId="userSignIn",
+     *    @OA\RequestBody(
+     *      @OA\MediaType(
+     *      mediaType="application/json",
      *        @OA\Schema(
-     *            @OA\Property(
-     *                property="email",
-     *                type="string"
-     *            ),
-     *            @OA\Property(
-     *                property="password",
-     *                type="string"
-     *            ),
-     *            example={"email": "rgaylord@gmail.com", "password": "password"}
+     *          @OA\Property(
+     *            property="email",
+     *            type="string"
+     *          ),
+     *          @OA\Property(
+     *            property="password",
+     *            type="string"
+     *          ),
+     *          example={"email": "rgaylord@gmail.com", "password": "password"}
      *        )
-     *     )
-     * ),
-     *   @OA\Response(
+     *      )
+     *    ),
+     *    @OA\Response(
      *      response=200,
      *      description="Success",
      *      @OA\MediaType(
-     *           mediaType="application/json",
+     *        mediaType="application/json",
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=400,
      *      description="Bad Request"
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=401,
      *      description="Unauthenticated"
-     *   )
-     *)
+     *    )
+     *  )
+     *  @param \Quantum\Http\Request $request
+     *  @param \Quantum\Http\Response $response
      */
     public function signin(Request $request, Response $response)
     {
@@ -98,7 +98,7 @@ class AuthController extends ApiController
     }
 
     /**
-     * @param \Quantum\Http\Response $response
+     *  Gets the logged in user data
      *  @OA\Get(
      *     path="/api-me",
      *     tags={"User"},
@@ -106,19 +106,20 @@ class AuthController extends ApiController
      *     operationId="me",
      *     security={
      *       {"bearer_token": {}
-     *    }},
-     *   @OA\Response(
+     *     }},
+     *    @OA\Response(
      *      response=200,
      *      description="Success",
      *      @OA\MediaType(
-     *           mediaType="application/json",
+     *        mediaType="application/json",
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=401,
      *      description="Unauthenticated"
-     *   )
-     * )
+     *    )
+     *  )
+     *  @param \Quantum\Http\Response $response
      */
     public function me(Response $response)
     {
@@ -133,34 +134,34 @@ class AuthController extends ApiController
     }
 
     /**
-     * Sign out action
-     * @param \Quantum\Http\Response $response
+     *  Sign out action
      *  @OA\Get(
-     *     path="/api-signout",
-     *     tags={"SignIn & SignOut"},
-     *     summary="Signout",
-     *     operationId="signout",
-     * @OA\Parameter(
-     *        name="refresh_token",
-     *        description="Refresh token",
-     *        required=true,
-     *        in="header",
-     *        @OA\Schema(
-     *            type="string"
-     *        )
-     *     ),
-     *  @OA\Response(
+     *    path="/api-signout",
+     *    tags={"SignIn & SignOut"},
+     *    summary="Signout",
+     *    operationId="signout",
+     *    @OA\Parameter(
+     *      name="refresh_token",
+     *      description="Refresh token",
+     *      required=true,
+     *      in="header",
+     *      @OA\Schema(
+     *        type="string"
+     *      )
+     *    ),
+     *    @OA\Response(
      *      response=200,
      *      description="Success",
      *      @OA\MediaType(
-     *           mediaType="application/json",
+     *        mediaType="application/json",
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=401,
      *      description="Unauthenticated"
-     *   )
-     * )
+     *    )
+     *  )
+     *  @param \Quantum\Http\Response $response
      */
     public function signout(Response $response)
     {
@@ -177,50 +178,50 @@ class AuthController extends ApiController
     }
 
     /**
-     * Sign up action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @OA\POST(
-     * path="/api-signup",
-     *   tags={"SignIn & SignOut"},
-     *   summary="SignUp Api",
-     *   operationId="signUpApi",
-     *   @OA\RequestBody(
-     *       @OA\MediaType(
-     *          mediaType="application/json",
-     *          @OA\Schema(
-     *              @OA\Property(
-     *                  property="email",
-     *                  type="string",
-     *              ),
-     *              @OA\Property(
-     *                  property="password",
-     *                  type="string"
-     *              ),
-     *              @OA\Property(
-     *                  property="firstname",
-     *                  type="string",
-     *              ),
-     *              @OA\Property(
-     *                  property="lastname",
-     *                  type="string",
-     *              ),
-     *              example={"email": "mail@example.com", "password": "password",  "firstname": "Jon", "lastname": "Smit"}
-     *          )
+     *  Sign up action
+     *  @OA\POST(
+     *  path="/api-signup",
+     *    tags={"SignIn & SignOut"},
+     *    summary="SignUp Api",
+     *    operationId="signUpApi",
+     *    @OA\RequestBody(
+     *      @OA\MediaType(
+     *        mediaType="application/json",
+     *        @OA\Schema(
+     *          @OA\Property(
+     *            property="email",
+     *            type="string",
+     *          ),
+     *          @OA\Property(
+     *            property="password",
+     *            type="string"
+     *          ),
+     *          @OA\Property(
+     *            property="firstname",
+     *            type="string",
+     *          ),
+     *          @OA\Property(
+     *            property="lastname",
+     *            type="string",
+     *          ),
+     *          example={"email": "mail@example.com", "password": "password",  "firstname": "Jon", "lastname": "Smit"}
+     *        )
      *      )
-     *  ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=200,
      *      description="Success",
      *      @OA\MediaType(
-     *           mediaType="application/json",
+     *        mediaType="application/json",
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=401,
-     *       description="Unauthenticated"
-     *   )
-     *)
+     *      description="Unauthenticated"
+     *    )
+     *  )
+     *  @param \Quantum\Http\Request $request
+     *  @param \Quantum\Http\Response $response
      */
     public function signup(Request $request, Response $response)
     {
@@ -233,35 +234,35 @@ class AuthController extends ApiController
     }
 
     /**
-     * Activate action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
+     *  Activate action
      *  @OA\GET(
-     * path="/api-activate/{activate_token}",
-     *   tags={"SignIn & SignOut"},
-     *   summary="Activate profile",
-     *   operationId="activateProfile",
-     *   @OA\Parameter(
-     *        name="activate_token",
-     *        description="Activate token",
-     *        required=true,
-     *        in="path",
-     *        @OA\Schema(
-     *            type="string"
-     *        )
-     *     ),
-     *   @OA\Response(
-     *      response=200,
-     *       description="Success",
-     *      @OA\MediaType(
-     *           mediaType="application/json",
+     *  path="/api-activate/{activate_token}",
+     *    tags={"SignIn & SignOut"},
+     *    summary="Activate profile",
+     *    operationId="activateProfile",
+     *    @OA\Parameter(
+     *      name="activate_token",
+     *      description="Activate token",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *        type="string"
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *        mediaType="application/json",
+     *      )
+     *    ),
+     *    @OA\Response(
      *      response=401,
-     *       description="Unauthenticated"
-     *   )
-     *)
+     *      description="Unauthenticated"
+     *    )
+     *  )
+     *  @param \Quantum\Http\Request $request
+     *  @param \Quantum\Http\Response $response
      */
     public function activate(Request $request, Response $response)
     {
@@ -274,43 +275,42 @@ class AuthController extends ApiController
     }
 
     /**
-     * Forget action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @OA\Post(
-     * path="/api-forget",
-     *   tags={"SignIn & SignOut"},
-     *   summary="Forget password Api",
-     *   operationId="forgetPassword",
-     *
-     *  @OA\RequestBody(
-     *        @OA\MediaType(
-     *        mediaType="application/json",
+     *  Forget action
+     *  @OA\Post(
+     *  path="/api-forget",
+     *    tags={"SignIn & SignOut"},
+     *    summary="Forget password Api",
+     *    operationId="forgetPassword",
+     *    @OA\RequestBody(
+     *      @OA\MediaType(
+     *      mediaType="application/json",
      *        @OA\Schema(
-     *            @OA\Property(
-     *                property="username",
-     *                type="string"
-     *            ),
-     *            example={"email": "mail@example.com"}
+     *          @OA\Property(
+     *            property="username",
+     *            type="string"
+     *          ),
+     *          example={"email": "mail@example.com"}
      *        )
-     *     )
-     * ),
-     *   @OA\Response(
+     *      )
+     *    ),
+     *    @OA\Response(
      *      response=200,
      *      description="Success",
      *      @OA\MediaType(
-     *           mediaType="application/json",
+     *        mediaType="application/json",
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=400,
      *      description="Bad Request"
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
      *      response=401,
      *      description="Unauthenticated"
-     *   )
-     *)
+     *    )
+     *  )
+     *  @param \Quantum\Http\Request $request
+     *  @param \Quantum\Http\Response $response
      */
     public function forget(Request $request, Response $response)
     {
@@ -323,51 +323,51 @@ class AuthController extends ApiController
     }
 
     /**
-     * Reset action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @OA\POST(
-     * path="/api-reset/{reset_token}",
-     *   tags={"SignIn & SignOut"},
-     *   summary="Reset password",
-     *   operationId="resetPassword",
-     *   @OA\Parameter(
-     *        name="reset_token",
-     *        description="Reset token",
-     *        required=true,
-     *        in="path",
-     *        @OA\Schema(
-     *            type="string"
-     *        )
-     *     ),
-     *   @OA\RequestBody(
-     *        @OA\MediaType(
+     *  Reset action
+     *  @OA\POST(
+     *  path="/api-reset/{reset_token}",
+     *    tags={"SignIn & SignOut"},
+     *    summary="Reset password",
+     *    operationId="resetPassword",
+     *    @OA\Parameter(
+     *      name="reset_token",
+     *      description="Reset token",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *        type="string"
+     *      )
+     *    ),
+     *    @OA\RequestBody(
+     *      @OA\MediaType(
      *        mediaType="application/json",
      *        @OA\Schema(
-     *            @OA\Property(
-     *                property="password",
-     *                type="string"
-     *            ),
-     *            @OA\Property(
-     *                property="repeat_password",
-     *                type="string"
-     *            ),
-     *            example={"password": "password","repeat_password": "password"}
+     *          @OA\Property(
+     *            property="password",
+     *            type="string"
+     *          ),
+     *          @OA\Property(
+     *            property="repeat_password",
+     *            type="string"
+     *          ),
+     *          example={"password": "password","repeat_password": "password"}
      *        )
-     *     )
-     * ),
-     *   @OA\Response(
-     *      response=200,
-     *       description="Success",
-     *      @OA\MediaType(
-     *           mediaType="application/json",
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *        mediaType="application/json",
+     *      )
+     *    ),
+     *    @OA\Response(
      *      response=401,
-     *       description="Unauthenticated"
-     *   )
-     *)
+     *      description="Unauthenticated"
+     *    )
+     *  )
+     *  @param \Quantum\Http\Request $request
+     *  @param \Quantum\Http\Response $response
      */
     public function reset(Request $request, Response $response)
     {
@@ -379,38 +379,38 @@ class AuthController extends ApiController
     }
 
     /**
-     * Verify action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @OA\POST(
-     * path="/api-verify",
-     *   tags={"SignIn & SignOut"},
-     *   summary="Verify account",
-     *   operationId="accountVerify",
-     *   @OA\RequestBody(
-     *        @OA\MediaType(
-     *        mediaType="application/json",
-     *        @OA\Schema(
-     *            @OA\Property(
-     *                property="otp_code",
-     *                type="string"
-     *            ),
-     *            example={"otp_code": "123456"}
-     *        )
-     *     )
-     * ),
-     *   @OA\Response(
-     *      response=200,
-     *       description="Success",
+     *  Verify action
+     *  @OA\POST(
+     *  path="/api-verify",
+     *    tags={"SignIn & SignOut"},
+     *    summary="Verify account",
+     *    operationId="accountVerify",
+     *    @OA\RequestBody(
      *      @OA\MediaType(
-     *           mediaType="application/json",
+     *      mediaType="application/json",
+     *        @OA\Schema(
+     *          @OA\Property(
+     *            property="otp_code",
+     *            type="string"
+     *          ),
+     *          example={"otp_code": "123456"}
+     *        )
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *        mediaType="application/json",
+     *      )
+     *    ),
+     *    @OA\Response(
      *      response=401,
-     *       description="Unauthenticated"
-     *   )
-     *)
+     *      description="Unauthenticated"
+     *    )
+     *  )
+     *  @param \Quantum\Http\Request $request
+     *  @param \Quantum\Http\Response $response
      */
     public function verify(Request $request, Response $response)
     {
@@ -429,34 +429,34 @@ class AuthController extends ApiController
     }
 
     /**
-     * Resend action
-     * @param \Quantum\Http\Response $response
-     * @OA\GET(
-     * path="/api-resend/{otp_token}",
-     *   tags={"SignIn & SignOut"},
-     *   summary="Resend OTP code",
-     *   operationId="resendOTP",
-     *   @OA\Parameter(
-     *        name="otp_token",
-     *        description="OTP token",
-     *        required=true,
-     *        in="path",
-     *        @OA\Schema(
-     *            type="string"
-     *        )
-     *     ),
-     *   @OA\Response(
-     *      response=200,
-     *       description="Success",
-     *      @OA\MediaType(
-     *           mediaType="application/json",
+     *  Resend action
+     *  @OA\GET(
+     *  path="/api-resend/{otp_token}",
+     *    tags={"SignIn & SignOut"},
+     *    summary="Resend OTP code",
+     *    operationId="resendOTP",
+     *    @OA\Parameter(
+     *      name="otp_token",
+     *      description="OTP token",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *        type="string"
      *      )
-     *   ),
-     *   @OA\Response(
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *        mediaType="application/json",
+     *      )
+     *    ),
+     *    @OA\Response(
      *      response=401,
-     *       description="Unauthenticated"
-     *   )
-     *)
+     *      description="Unauthenticated"
+     *    )
+     *  )
+     *  @param \Quantum\Http\Response $response
      */
     public function resend(Response $response)
     {

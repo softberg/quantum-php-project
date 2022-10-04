@@ -18,20 +18,19 @@ use Quantum\Mvc\QtController;
 use OpenApi\Annotations as OA;
 
 /**
- * Class ApiController
- * @package Modules\Api\Controllers
- * @OA\Info(
- *      title="Quantum API documentation",
- *      version="2.8.0",
- *      description="
- *Quantum Documentation: https://quantum.softberg.org/en/docs/v1/overview"
- *      ),  
- *      @OA\SecurityScheme(
- *          securityScheme="bearer_token",
- *          type="apiKey",
- *          name="Authorization",
- *          in="header"
- * )
+ *  Class ApiController
+ *  @package Modules\Api\Controllers
+ *  @OA\Info(
+ *    title="Quantum API documentation",
+ *    version="2.8.0",
+ *    description="*Quantum Documentation: https://quantum.softberg.org/en/docs/v1/overview"
+ *  ),  
+ *  @OA\SecurityScheme(
+ *    securityScheme="bearer_token",
+ *    type="apiKey",
+ *    name="Authorization",
+ *    in="header"
+ *  )
  */
 class ApiController extends QtController
 {
