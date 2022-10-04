@@ -22,7 +22,7 @@ use OpenApi\Annotations as OA;
  * @package Modules\Api\Controllers
  * @OA\Info(
  *      title="Quantum API documentation",
- *      version="1.0.0",
+ *      version="2.8.0",
  *      description="
  *Quantum Documentation: https://quantum.softberg.org/en/docs/v1/overview"
  *      ),  
