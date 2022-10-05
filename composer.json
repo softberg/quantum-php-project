@@ -23,8 +23,9 @@
     "scripts": {
         "post-create-project-cmd": [
             "php qt core:env",
-            "php qt core:debugbar",
             "php qt core:key --length=64",
+            "php qt install:debugbar",
+            "php qt install:openapi module",
             "php qt install:demo",
             "php qt core:version"
         ]
