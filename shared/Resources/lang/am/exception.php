@@ -53,7 +53,7 @@ return [
     'middleware_not_defined' => 'Middleware `{%1}` not defined',
     'middleware_not_found' => 'Middleware `{%1}` not found',
     'wrong_migration_direction' => 'Migration direction can only be [up] or [down]',
-    'not_supported_driver' => 'The driver `{%1}`, does not support migrations',
+    'not_supported_driver' => 'The driver `{%1}` is not supported',
     'non_supported_action' => 'The action `{%1}`, is not supported',
     'table_already_exists' => 'The table `{%1}` is already exists',
     'table_does_not_exists' => 'The table `{%1}` does not exists',
@@ -86,5 +86,6 @@ return [
     'direct_view_instance' => 'Views can not be instantiated directly, use `{%1}` class instead',
     'layout_not_set' => 'Layout is not set',
     'view_file_not_found' => 'File `{%1}.php` does not exists',
-    'template_engine_config_missing' => 'Missing Template engine configurations'
+    'template_engine_config_missing' => 'Missing Template engine configurations',
+    'non_iterable_value' => 'The argument {%1} is not iterable'
 ];
