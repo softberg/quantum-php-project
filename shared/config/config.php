@@ -31,6 +31,7 @@ return [
      *
      * Possible languages and project default language.
      */
+    'multilang' => true,
     'langs' => ['en', 'ru', 'am'],
     'lang_default' => 'en',
     'lang_segment' => 1,

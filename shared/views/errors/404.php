@@ -72,7 +72,7 @@
 
             <h1>404</h1>
             <h3>ERROR PAGE</h3>
-            <a class="white-text" href="<?php echo base_url() ?>">Back to Home</a>
+            <a class="white-text" href="<?php echo base_url(true) ?>">Back to Home</a>
         </div>
     </div>
 </main>

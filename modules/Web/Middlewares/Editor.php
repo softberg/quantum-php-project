@@ -78,7 +78,7 @@ class Editor extends QtMiddleware
     public function apply(Request $request, Response $response, Closure $next)
     {
         if (!in_array(auth()->user()->role, self::ROLES)) {
-            redirect(base_url() . '/' . current_lang());
+            redirect(base_url(true) . '/' . current_lang());
         }
 
         if ($request->isMethod('post')) {

@@ -130,7 +130,7 @@ class PostController extends QtController
 
             $this->postService->addPost($postData);
             
-            redirect(base_url() . '/' . current_lang() . '/my-posts');
+            redirect(base_url(true) . '/' . current_lang() . '/my-posts');
         } else {
             $view->setParams([
                 'title' => t('common.new_post') . ' | ' . config()->get('app_name'),
@@ -171,7 +171,7 @@ class PostController extends QtController
 
             $this->postService->updatePost($postId, $postData);
             
-            redirect(base_url() . '/' . current_lang() . '/my-posts');
+            redirect(base_url(true) . '/' . current_lang() . '/my-posts');
         } else {
             $view->setParams([
                 'title' => $post['title'] . ' | ' . config()->get('app_name'),
@@ -198,7 +198,7 @@ class PostController extends QtController
 
         $this->postService->deletePost($postId);
 
-        redirect(base_url() . '/' . current_lang() . '/my-posts');
+        redirect(base_url(true) . '/' . current_lang() . '/my-posts');
     }
 
     /**
@@ -221,7 +221,7 @@ class PostController extends QtController
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        redirect(base_url() . '/' . current_lang() . '/my-posts');
+        redirect(base_url(true) . '/' . current_lang() . '/my-posts');
     }
 
 }

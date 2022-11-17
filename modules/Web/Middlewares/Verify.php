@@ -59,7 +59,7 @@ class Verify extends QtMiddleware
         if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {
                 session()->setFlash('error', $this->validator->getErrors());
-                redirectWith(base_url() . '/' . current_lang() . '/verify', $request->all());
+                redirectWith(base_url(true) . '/' . current_lang() . '/verify', $request->all());
             }
         }
 

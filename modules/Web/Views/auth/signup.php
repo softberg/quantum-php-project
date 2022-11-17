@@ -14,7 +14,7 @@
                 
                 <div class="card teal accent-4">
                     <div class="card-content">
-                        <form method="post" action="<?php echo base_url() . '/' . current_lang() ?>/signup">
+                        <form method="post" action="<?php echo base_url(true) . '/' . current_lang() ?>/signup">
                             <div class="row">
                                 <div class="input-field col s12">
                                     <label class="auth-form-label"><?php _t('common.email'); ?></label>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="row">
                                 <div class="col s12 right-align">
-                                    <a href="<?php echo base_url() . '/' . current_lang() ?>/signin" class="white-text"><?php _t('common.signin') ?></a>
+                                    <a href="<?php echo base_url(true) . '/' . current_lang() ?>/signin" class="white-text"><?php _t('common.signin') ?></a>
                                 </div>
                             </div>
                             <div>

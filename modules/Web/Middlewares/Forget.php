@@ -59,7 +59,7 @@ class Forget extends QtMiddleware
         if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {
                 session()->setFlash('error', $this->validator->getErrors());
-                redirect(base_url() . '/' . current_lang() . '/forget');
+                redirect(base_url(true) . '/' . current_lang() . '/forget');
             }
 
             if (!$this->emailExists($request->get('email'))) {
@@ -69,7 +69,7 @@ class Forget extends QtMiddleware
                     ]
                 ]);
 
-                redirect(base_url() . '/' . current_lang() . '/forget');
+                redirect(base_url(true) . '/' . current_lang() . '/forget');
             }
         }
 

@@ -1,12 +1,12 @@
 <ul class="sidenav" id="mobile-demo">
     <li>
-        <a href="<?php echo base_url() . '/' . current_lang() ?>">
+        <a href="<?php echo base_url(true) . '/' . current_lang() ?>">
             <i class="material-icons left">home</i>
             <?php _t('common.home') ?>
         </a>
     </li>
     <li>
-        <a href="<?php echo base_url() . '/' . current_lang() ?>/posts">
+        <a href="<?php echo base_url(true) . '/' . current_lang() ?>/posts">
             <i class="material-icons left">assignment</i>
             <?php _t('common.posts') ?>
         </a>
@@ -20,19 +20,19 @@
             </a>
             <ul id="sidenav-dropdown1" class="dropdown-content">
                 <li>
-                    <a href="<?php echo base_url() . '/' . current_lang() ?>/my-posts">
+                    <a href="<?php echo base_url(true) . '/' . current_lang() ?>/my-posts">
                         <?php _t('common.my_posts') ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo base_url() . '/' . current_lang() ?>/signout"><?php _t('common.signout'); ?></a>
+                    <a href="<?php echo base_url(true) . '/' . current_lang() ?>/signout"><?php _t('common.signout'); ?></a>
                 </li>
             </ul>
         </li>
     <?php else : ?>
         <li>
             <?php if (route_name() != 'signup') : ?>
-                <a href="<?php echo base_url() . '/' . current_lang() ?>/signup">
+                <a href="<?php echo base_url(true) . '/' . current_lang() ?>/signup">
                     <i class="material-icons left">person_add</i>
                     <?php _t('common.signup') ?>
                 </a>
@@ -40,7 +40,7 @@
         </li>
         <li>
             <?php if (route_name() != 'signin') : ?>
-                <a href="<?php echo base_url() . '/' . current_lang() ?>/signin">
+                <a href="<?php echo base_url(true) . '/' . current_lang() ?>/signin">
                     <i class="material-icons left">exit_to_app</i>
                     <?php _t('common.signin') ?>
                 </a>

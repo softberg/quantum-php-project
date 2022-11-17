@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="index-links">
-                <a href="<?php echo base_url() . '/' . current_lang() ?>/about" class="white-text"><?php _t('common.about') ?></a>
+                <a href="<?php echo base_url(true) . '/' . current_lang() ?>/about" class="white-text"><?php _t('common.about') ?></a>
                 <a href="https://quantum.softberg.org" target="_blank" class="white-text"><?php _t('common.learn_more') ?></a>
             </div>
         </div>

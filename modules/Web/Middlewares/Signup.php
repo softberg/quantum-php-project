@@ -79,7 +79,7 @@ class Signup extends QtMiddleware
 
             if (!$this->validator->isValid($request->all())) {
                 session()->setFlash('error', $this->validator->getErrors());
-                redirectWith(base_url() . '/' . current_lang() . '/signup', $request->all());
+                redirectWith(base_url(true) . '/' . current_lang() . '/signup', $request->all());
             }
         }
 

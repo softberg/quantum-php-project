@@ -14,14 +14,14 @@
 
                 <div class="card teal accent-4">
                     <div class="card-content">
-                        <form method="post" action="<?php echo base_url() . '/' . current_lang() . '/verify' ?>">
+                        <form method="post" action="<?php echo base_url(true) . '/' . current_lang() . '/verify' ?>">
                             <div class="form-container">
                                 <div class="input-field">
                                     <label class="auth-form-label"><?php _t('common.otp'); ?></label>
                                     <input type="text" name="otp"/>
                                     <input type="hidden" name="code" value="<?php echo $code; ?>"/>
                                     <a style="color: white; font-size: 14px"
-                                       href="<?php echo base_url() . '/' . current_lang() . '/resend/' . $code ?>">
+                                       href="<?php echo base_url(true) . '/' . current_lang() . '/resend/' . $code ?>">
                                            <?php _t('common.resend_otp') ?>
                                     </a>
                                 </div>
