@@ -14,7 +14,7 @@
 
                 <div class="card teal accent-4">
                     <div class="card-content">
-                        <form method="post" action="<?php echo base_url() . '/' . current_lang() . '/reset/' . $reset_token ?>">
+                        <form method="post" action="<?php echo base_url(true) . '/' . current_lang() . '/reset/' . $reset_token ?>">
                             <div class="form-container">
                                 <div class="input-field">
                                     <label class="auth-form-label"><?php _t('common.new_password'); ?></label>

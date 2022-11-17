@@ -17,7 +17,7 @@
     <?php if (auth()->check()): ?>
         <div class="fixed-action-btn">
             <a class="btn-floating btn-large waves-effect waves-light blue-grey darken-1 hoverable"
-               href="<?php echo base_url() . '/' . current_lang() ?>/my-posts/create"><i class="material-icons">add</i></a>
+               href="<?php echo base_url(true) . '/' . current_lang() ?>/my-posts/create"><i class="material-icons">add</i></a>
         </div>
     <?php endif; ?>
 </div>

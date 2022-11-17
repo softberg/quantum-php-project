@@ -35,7 +35,7 @@ class Resend extends QtMiddleware
     public function apply(Request $request, Response $response, Closure $next)
     {
         if (!route_param('code')) {
-            redirect(base_url() . '/' . current_lang() . '/signin');
+            redirect(base_url(true) . '/' . current_lang() . '/signin');
         }
 
         return $next($request, $response);

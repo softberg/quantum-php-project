@@ -10,7 +10,7 @@
 
                 <div class="card teal accent-4">
                     <div class="card-content">
-                        <form method="post" class="signup-form" action="<?php echo base_url() . '/' . current_lang() ?>/signin">
+                        <form method="post" class="signup-form" action="<?php echo base_url(true) . '/' . current_lang() ?>/signin">
                             <div class="row">
                                 <div class="input-field col s12">
                                     <label for="email"><?php _t('common.email') ?></label>
@@ -29,13 +29,13 @@
                                 <div class="col s12 l6">
                                     <div class="row">
                                         <div class="col s12 left-align">
-                                            <a href="<?php echo base_url() . '/' . current_lang() ?>/signup"
+                                            <a href="<?php echo base_url(true) . '/' . current_lang() ?>/signup"
                                                class="white-text"><?php _t('common.signup') ?></a>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col s12 left-align">
-                                            <a href="<?php echo base_url() . '/' . current_lang() ?>/forget"
+                                            <a href="<?php echo base_url(true) . '/' . current_lang() ?>/forget"
                                                class="white-text"><?php _t('common.forget_password') ?></a>
                                         </div>
                                     </div>

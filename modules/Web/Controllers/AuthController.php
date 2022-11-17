@@ -79,13 +79,13 @@ class AuthController extends QtController
                 $code = auth()->signin($request->get('email'), $request->get('password'), !!$request->get('remember'));
 
                 if (filter_var(config()->get('2FA'), FILTER_VALIDATE_BOOLEAN)) {
-                    redirect(base_url() . '/' . current_lang() . '/verify/' . $code);
+                    redirect(base_url(true) . '/' . current_lang() . '/verify/' . $code);
                 } else {
-                    redirect(base_url() . '/' . current_lang());
+                    redirect(base_url(true) . '/' . current_lang());
                 }
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
-                redirect(base_url() . '/' . current_lang() . '/signin');
+                redirect(base_url(true) . '/' . current_lang() . '/signin');
             }
         } else {
             $view->setParam('title', t('common.signin') . ' | ' . config()->get('app_name'));
@@ -100,7 +100,7 @@ class AuthController extends QtController
     public function signout()
     {
         auth()->signout();
-        redirect(base_url() . '/' . current_lang());
+        redirect(base_url(true) . '/' . current_lang());
     }
 
     /**
@@ -114,7 +114,7 @@ class AuthController extends QtController
         if ($request->isMethod('post')) {
             if (auth()->signup($request->all())) {
                 session()->setFlash('success', t('common.check_email_signup'));
-                redirect(base_url() . '/' . current_lang() . '/signup');
+                redirect(base_url(true) . '/' . current_lang() . '/signup');
             }
         } else {
             $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));
@@ -130,7 +130,7 @@ class AuthController extends QtController
     public function activate(Request $request)
     {
         auth()->activate($request->get('activation_token'));
-        redirect(base_url() . '/' . current_lang() . '/signin');
+        redirect(base_url(true) . '/' . current_lang() . '/signin');
     }
 
     /**
@@ -145,7 +145,7 @@ class AuthController extends QtController
             auth()->forget($request->get('email'));
 
             session()->setFlash('success', t('common.check_email'));
-            redirect(base_url() . '/' . current_lang() . '/forget');
+            redirect(base_url(true) . '/' . current_lang() . '/forget');
         } else {
             $view->setParam('title', t('common.forget_password') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
@@ -163,7 +163,7 @@ class AuthController extends QtController
     {
         if ($request->isMethod('post')) {
             auth()->reset($request->get('reset_token'), $request->get('password'));
-            redirect(base_url() . '/' . current_lang() . '/signin');
+            redirect(base_url(true) . '/' . current_lang() . '/signin');
         } else {
             $view->setParams([
                 'title' => t('common.reset_password') . ' | ' . config()->get('app_name'),
@@ -186,10 +186,10 @@ class AuthController extends QtController
         if ($request->isMethod('post')) {
             try {
                 auth()->verifyOtp((int) $request->get('otp'), $request->get('code'));
-                redirect(base_url() . '/' . current_lang());
+                redirect(base_url(true) . '/' . current_lang());
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
-                redirect(base_url() . '/' . current_lang() . '/verify/' . $request->get('code'));
+                redirect(base_url(true) . '/' . current_lang() . '/verify/' . $request->get('code'));
             }
         } else {
             $view->setParams([
@@ -208,9 +208,9 @@ class AuthController extends QtController
     public function resend()
     {
         try {
-            redirect(base_url() . '/' . current_lang() . '/verify/' . auth()->resendOtp(route_param('code')));
+            redirect(base_url(true) . '/' . current_lang() . '/verify/' . auth()->resendOtp(route_param('code')));
         } catch (AuthException $e) {
-            redirect(base_url() . '/' . current_lang() . '/signin');
+            redirect(base_url(true) . '/' . current_lang() . '/signin');
         }
     }
 
