@@ -17,7 +17,7 @@ namespace Shared\Transformers;
 use Quantum\Libraries\Transformer\TransformerInterface;
 
 /**
- * Class SleekdbTransformer
+ * Class MysqlTransformer
  * @package Shared\Transformers
  */
 class MysqlTransformer implements TransformerInterface
