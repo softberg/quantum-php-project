@@ -1,5 +1,8 @@
 /vendor
 /.idea
 /nbproject/private/
-composer.lock
+/shared/store/*
+/shared/emails/*
 .env
+composer.lock
+.phpunit.result.cache

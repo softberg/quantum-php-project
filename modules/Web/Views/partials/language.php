@@ -7,7 +7,7 @@
         <?php if ($langs) : ?>
             <?php foreach ($langs as $lang) : ?>
                 <li>
-                    <a href="<?php echo url_with_lang($lang) ?>"><?php echo _t('common.' . $lang) ?></a>
+                    <a href="<?php echo url_with_lang($lang) ?>"><?php _t('common.' . $lang) ?></a>
                 </li>
             <?php endforeach ?>
         <?php endif ?>

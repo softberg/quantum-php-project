@@ -17,10 +17,10 @@ namespace Shared\Transformers;
 use Quantum\Libraries\Transformer\TransformerInterface;
 
 /**
- * Class PostSleekTransformer
+ * Class MysqlTransformer
  * @package Shared\Transformers
  */
-class PostMysqlTransformer implements TransformerInterface
+class MysqlTransformer implements TransformerInterface
 {
 
     public function transform($item)

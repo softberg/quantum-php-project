@@ -14,8 +14,13 @@
 
 namespace Shared\Services;
 
-use Shared\Transformers\PostSleekTransformer;
+use Quantum\Libraries\Transformer\TransformerInterface;
+use Quantum\Exceptions\DatabaseException;
 use Quantum\Libraries\Storage\FileSystem;
+use Shared\Transformers\PostTransformer;
+use Quantum\Exceptions\ConfigException;
+use Quantum\Exceptions\ModelException;
+use Quantum\Exceptions\DiException;
 use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
@@ -32,14 +37,14 @@ class PostService extends QtService
 {
 
     /**
-     * @var \Quantum\Libraries\Transformer\TransformerInterface
+     * @var TransformerInterface
      */
     private $transformer;
 
     /**
      * Initialize the service
      */
-    public function __init(PostSleekTransformer $transformer)
+    public function __init(PostTransformer $transformer)
     {
         $this->transformer = $transformer;
     }
@@ -85,6 +90,12 @@ class PostService extends QtService
     /**
      * Add post
      * @param array $data
+     * @return array
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws \ReflectionException
      */
     public function addPost(array $data): array
     {
@@ -129,7 +140,7 @@ class PostService extends QtService
 
     /**
      * Saves the post images
-     * @param \Quantum\Libraries\Upload\File $file
+     * @param File $file
      * @param string $imageName
      * @return string
      */
