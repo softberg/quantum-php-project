@@ -17,10 +17,10 @@ namespace Shared\Transformers;
 use Quantum\Libraries\Transformer\TransformerInterface;
 
 /**
- * Class PostSleekTransformer
+ * Class SleekdbTransformer
  * @package Shared\Transformers
  */
-class PostSleekTransformer implements TransformerInterface
+class SleekdbTransformer implements TransformerInterface
 {
 
     /**

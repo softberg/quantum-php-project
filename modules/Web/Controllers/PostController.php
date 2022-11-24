@@ -31,19 +31,19 @@ class PostController extends QtController
 
     /**
      * Post service
-     * @var \Shared\Services\PostService
+     * @var PostService
      */
     public $postService;
 
     /**
      * Post service
-     * @var \Shared\Services\AuthService
+     * @var AuthService
      */
     public $userService;
 
     /**
      * Works before an action
-     * @param \Quantum\Factory\ViewFactory $view
+     * @param ViewFactory $view
      */
     public function __before(ViewFactory $view)
     {
@@ -55,8 +55,8 @@ class PostController extends QtController
 
     /**
      * Get posts action
-     * @param \Quantum\Http\Response $response
-     * @param \Quantum\Factory\ViewFactory $view
+     * @param Response $response
+     * @param ViewFactory $view
      */
     public function getPosts(Response $response, ViewFactory $view)
     {
@@ -73,8 +73,8 @@ class PostController extends QtController
      * Get post action
      * @param string|null $lang
      * @param string $postId
-     * @param \Quantum\Http\Response $response
-     * @param \Quantum\Factory\ViewFactory $view
+     * @param Response $response
+     * @param ViewFactory $view
      */
     public function getPost(?string $lang, string $postId, Response $response, ViewFactory $view)
     {
@@ -91,9 +91,9 @@ class PostController extends QtController
 
     /**
      * Get my posts action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Quantum\Factory\ViewFactory $view
+     * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
      */
     public function getMyPosts(Request $request, Response $response, ViewFactory $view)
     {
@@ -108,9 +108,9 @@ class PostController extends QtController
 
     /**
      * Create post action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Quantum\Factory\ViewFactory $view
+     * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
      */
     public function createPost(Request $request, Response $response, ViewFactory $view)
     {
@@ -143,9 +143,9 @@ class PostController extends QtController
 
     /**
      * Amend post action
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Quantum\Factory\ViewFactory $view
+     * @param Request $request
+     * @param Response $response
+     * @param ViewFactory $view
      * @param string|null $lang
      * @param string $postId
      */

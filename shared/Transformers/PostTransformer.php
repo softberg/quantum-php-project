@@ -17,15 +17,22 @@ namespace Shared\Transformers;
 use Quantum\Libraries\Transformer\TransformerInterface;
 
 /**
- * Class PostSleekTransformer
+ * Class PostTransformer
  * @package Shared\Transformers
  */
-class PostMysqlTransformer implements TransformerInterface
+class PostTransformer implements TransformerInterface
 {
 
-    public function transform($item)
+    /**
+     * Transforms the post data
+     * @param $item
+     * @return mixed
+     */
+    public function transform($item): array
     {
-       //
+        $transformer = __NAMESPACE__ . '\\' . ucfirst(config()->get('database.current')) . 'Transformer';
+
+        return (new $transformer)->transform($item);
     }
 
 }

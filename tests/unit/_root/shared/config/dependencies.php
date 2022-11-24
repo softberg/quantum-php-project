@@ -1,6 +1,5 @@
 <?php
 
 return [
-    \Shared\Transformers\PostSleekTransformer::class,
-    \Shared\Transformers\PostMysqlTransformer::class,
+    \Shared\Transformers\PostTransformer::class,
 ];

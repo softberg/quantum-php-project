@@ -14,8 +14,9 @@
 
 namespace Shared\Services;
 
-use Shared\Transformers\PostSleekTransformer;
+use Quantum\Libraries\Transformer\TransformerInterface;
 use Quantum\Libraries\Storage\FileSystem;
+use Shared\Transformers\PostTransformer;
 use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
@@ -32,14 +33,14 @@ class PostService extends QtService
 {
 
     /**
-     * @var \Quantum\Libraries\Transformer\TransformerInterface
+     * @var TransformerInterface
      */
     private $transformer;
 
     /**
      * Initialize the service
      */
-    public function __init(PostSleekTransformer $transformer)
+    public function __init(PostTransformer $transformer)
     {
         $this->transformer = $transformer;
     }
