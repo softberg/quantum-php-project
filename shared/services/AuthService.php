@@ -16,6 +16,10 @@ namespace Shared\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Libraries\Auth\User as AuthUser;
+use Quantum\Exceptions\DatabaseException;
+use Quantum\Exceptions\ConfigException;
+use Quantum\Exceptions\ModelException;
+use Quantum\Exceptions\DiException;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
 use Shared\Models\User;
@@ -30,7 +34,12 @@ class AuthService extends QtService implements AuthServiceInterface
 
     /**
      * Get
-     * @return users
+     * @return array|null
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws \ReflectionException
      */
     public function getAll(): ?array
     {
@@ -40,8 +49,12 @@ class AuthService extends QtService implements AuthServiceInterface
     /**
      * Get user
      * @param string $uuid
-     * @param bool $transformed
      * @return array|null
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws \ReflectionException
      */
     public function getUser(string $uuid): ?array
     {
@@ -53,7 +66,6 @@ class AuthService extends QtService implements AuthServiceInterface
 
         return current($user);
     }
-
 
     /**
      * User Schema
@@ -84,7 +96,7 @@ class AuthService extends QtService implements AuthServiceInterface
      * Get
      * @param string $field
      * @param mixed $value
-     * @return \Quantum\Libraries\Auth\User|null
+     * @return AuthUser|null
      */
     public function get(string $field, $value): ?AuthUser
     {
@@ -100,7 +112,7 @@ class AuthService extends QtService implements AuthServiceInterface
     /**
      * Add user
      * @param array $data
-     * @return \Quantum\Libraries\Auth\User
+     * @return AuthUser
      */
     public function add(array $data): AuthUser
     {
@@ -123,7 +135,7 @@ class AuthService extends QtService implements AuthServiceInterface
      * @param string $field
      * @param string|null $value
      * @param array $data
-     * @return \Quantum\Libraries\Auth\User|null
+     * @return AuthUser|null
      */
     public function update(string $field, ?string $value, array $data): ?AuthUser
     {
