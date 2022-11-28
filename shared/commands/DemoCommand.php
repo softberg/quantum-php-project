@@ -19,10 +19,10 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
-use Quantum\Console\QtCommand;
-use Faker\Factory;
-use Quantum\Loader\Setup;
 use Shared\Services\PostService;
+use Quantum\Console\QtCommand;
+use Quantum\Loader\Setup;
+use Faker\Factory;
 
 /**
  * Class DemoCommand
@@ -55,11 +55,11 @@ class DemoCommand extends QtCommand
     protected $faker;
 
     /**
-     * The length of the key that will be generated (default 32)
+     * The default action for all confirmations
      * @var array
      */
     protected $options = [
-        ['yes', 'y', 'optional', 'Answer of re-run migrate', 'N']
+        ['yes', 'y', 'none', 'Answer of re-run migrate']
     ];
 
     /**
@@ -117,7 +117,7 @@ class DemoCommand extends QtCommand
             config()->import(new Setup('config', 'database'));
         }
 
-        if ($this->getOption('yes')) {
+        if (!$this->getOption('yes')) {
 
             $message = "The operation will remove all previously created data and will create new dataset. Continue? [y/N]";
 
