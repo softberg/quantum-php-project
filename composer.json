@@ -26,7 +26,7 @@
             "php qt core:key --length=64",
             "php qt install:debugbar",
             "php qt install:openapi module",
-            "php qt install:demo",
+            "php qt install:demo -y",
             "php qt core:version"
         ]
     }
