@@ -21,7 +21,8 @@ use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
 use Faker\Factory;
-
+use Quantum\Loader\Setup;
+use Shared\Services\PostService;
 
 /**
  * Class DemoCommand
@@ -54,6 +55,14 @@ class DemoCommand extends QtCommand
     protected $faker;
 
     /**
+     * The length of the key that will be generated (default 32)
+     * @var array
+     */
+    protected $options = [
+        ['yes', 'y', 'optional', 'Answer of re-run migrate', 'N']
+    ];
+
+    /**
      * How many users to create
      */
     const USER_COUNT = 3;
@@ -67,6 +76,16 @@ class DemoCommand extends QtCommand
      * Default password for generated users
      */
     const DEFAULT_PASSWORD = 'password';
+
+    /**
+     * Command name of migration down
+     */
+    const COMMAND_MIGRATION_DOWN = 'migration:migrate down';
+
+    /**
+     * Command name of migration up
+     */
+    const COMMAND_MIGRATION = 'migration:migrate';
 
     /**
      * Command name of create user
@@ -94,7 +113,33 @@ class DemoCommand extends QtCommand
      */
     public function exec()
     {
-        for ($i = 1; $i <= self::USER_COUNT; $i++){
+        if (!config()->has('database') || !config()->has('database.current')) {
+            config()->import(new Setup('config', 'database'));
+        }
+
+        if ($this->getOption('yes')) {
+
+            $message = "The operation will remove all previously created data and will create new dataset. Continue? [y/N]";
+
+            if (!$this->confirm($message)) {
+                $this->info('Operation was canceled!');
+                return;
+            }
+
+            if (config()->get('database')['current'] === 'mysql') {
+                $this->runCommand(self::COMMAND_MIGRATION, ['direction' => 'down']);
+            } elseif (config()->get('database')['current'] === 'sleekdb') {
+                $postsTable = new PostService;
+                $usersTable = new AuthService;
+
+                $postsTable->deleteTable();
+                $usersTable->deleteTable();
+            }
+        }
+        if (config()->get('database')['current'] === 'mysql') {
+            $this->runCommand(self::COMMAND_MIGRATION, []);
+        }
+        for ($i = 1; $i <= self::USER_COUNT; $i++) {
             $userArguments = $this->newUser('editor');
             $this->runCommand(self::COMMAND_USER_CREATE, $userArguments);
         }
@@ -103,7 +148,7 @@ class DemoCommand extends QtCommand
 
         $users = $authService->getAll();
 
-        foreach ($users as $user){
+        foreach ($users as $user) {
             for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
                 $postArguments = [
                     'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
@@ -118,7 +163,6 @@ class DemoCommand extends QtCommand
 
 
         $this->info('Demo installed successfully');
-
     }
 
     /**
@@ -146,6 +190,4 @@ class DemoCommand extends QtCommand
             'password' => self::DEFAULT_PASSWORD,
         ];
     }
-
-
 }
