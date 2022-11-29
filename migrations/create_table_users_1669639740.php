@@ -19,13 +19,14 @@ class Create_table_users_1669639740 extends QtMigration
         $table->addColumn('role', 'varchar', 255);
         $table->addColumn('email', 'varchar', 255);
         $table->addColumn('password', 'varchar', 255);
-        $table->addColumn('activation_token', 'varchar', 255);
-        $table->addColumn('remember_token', 'varchar', 255);
-        $table->addColumn('access_token', 'varchar', 255);
-        $table->addColumn('refresh_token', 'varchar', 255);
-        $table->addColumn('reset_token', 'varchar', 255);
-        $table->addColumn('otp', 'integer');
-        $table->addColumn('otp_token', 'varchar', 255);
+        $table->addColumn('activation_token', 'varchar', 255)->nullable();
+        $table->addColumn('remember_token', 'varchar', 255)->nullable();
+        $table->addColumn('access_token', 'varchar', 255)->nullable();
+        $table->addColumn('refresh_token', 'varchar', 255)->nullable();
+        $table->addColumn('reset_token', 'varchar', 255)->nullable();
+        $table->addColumn('otp', 'integer')->nullable();
+        $table->addColumn('otp_token', 'varchar', 255)->nullable();
+        $table->addColumn('otp_expires', 'timestamp')->nullable();
     }
 
     public function down(?TableFactory $tableFactory)

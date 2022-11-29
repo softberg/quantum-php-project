@@ -16,7 +16,7 @@ class Create_table_posts_1669639752 extends QtMigration
         $table->addColumn('uuid', 'char', 36);
         $table->addColumn('user_id', 'integer')->index();
         $table->addColumn('title', 'varchar', 255);
-        $table->addColumn('content', 'varchar', 255);
+        $table->addColumn('content', 'text');
         $table->addColumn('image', 'varchar', 255);
         $table->addColumn('updated_at', 'timestamp');
     }
