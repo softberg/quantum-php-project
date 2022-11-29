@@ -35,7 +35,7 @@ class AuthServiceTest extends TestCase
 
         Di::loadDefinitions();
 
-        $this->authService = (new ServiceFactory)->get(AuthService::class, ['shared' . DS . 'store', 'users']);
+        $this->authService = ServiceFactory::get(AuthService::class, ['shared' . DS . 'store', 'users']);
 
         $this->authService->add($this->initialUser);
     }
