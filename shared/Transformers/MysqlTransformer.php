@@ -23,9 +23,20 @@ use Quantum\Libraries\Transformer\TransformerInterface;
 class MysqlTransformer implements TransformerInterface
 {
 
-    public function transform($item)
+    /**
+     * Transforms the data
+     * @param mixed $item
+     * @return array
+     */
+    public function transform($item): array
     {
-       //
+        return [
+            'id' => $item['uuid'],
+            'title' => $item['title'],
+            'content' => $item['content'],
+            'image' => $item['image'],
+            'date' => date('Y/m/d H:i', strtotime($item['updated_at'])),
+            'author' => $item['firstname'] . ' ' . $item['lastname']
+        ];
     }
-
 }
