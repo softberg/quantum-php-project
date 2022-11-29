@@ -30,9 +30,14 @@ class PostTransformer implements TransformerInterface
      */
     public function transform($item): array
     {
-        $transformer = __NAMESPACE__ . '\\' . ucfirst(config()->get('database.current')) . 'Transformer';
-
-        return (new $transformer)->transform($item);
+        return [
+            'id' => $item['uuid'],
+            'title' => $item['title'],
+            'content' => $item['content'],
+            'image' => $item['image'],
+            'date' => date('Y/m/d H:i', strtotime($item['updated_at'])),
+            'author' => $item['firstname'] . ' ' . $item['lastname']
+        ];
     }
 
 }
