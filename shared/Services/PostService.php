@@ -55,7 +55,11 @@ class PostService extends QtService
      */
     public function getPosts(): array
     {
-        $posts = ModelFactory::get(Post::class)->joinThrough(ModelFactory::get(User::class))->orderBy('updated_at', 'desc')->get();
+        $posts = ModelFactory::get(Post::class)
+            ->joinThrough(ModelFactory::get(User::class))
+            ->select('posts.uuid', 'title', 'content', 'image', 'updated_at', ['users.firstname' => 'firstname'], ['users.lastname' => 'lastname'])
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
         return transform($posts, $this->transformer);
     }
@@ -68,7 +72,11 @@ class PostService extends QtService
      */
     public function getPost(string $uuid, bool $transformed = true): ?array
     {
-        $post = ModelFactory::get(Post::class)->joinThrough(ModelFactory::get(User::class))->criteria('uuid', '=', $uuid)->get();
+        $post = ModelFactory::get(Post::class)
+            ->joinThrough(ModelFactory::get(User::class))
+            ->criteria('uuid', '=', $uuid)
+            ->select('posts.uuid', 'user_id', 'title', 'content', 'image', 'updated_at', ['users.firstname' => 'firstname'], ['users.lastname' => 'lastname'])
+            ->get();
 
         if (empty($post)) {
             return null;
