@@ -38,7 +38,7 @@ class AuthController extends ApiController
     /**
      *  Sign in action
      *  @OA\Post(
-     *    path="/api-signin",
+     *    path="/api/signin",
      *    tags={"SignIn & SignOut"},
      *    summary="Login Api",
      *    operationId="userSignIn",
@@ -100,7 +100,7 @@ class AuthController extends ApiController
     /**
      *  Gets the logged in user data
      *  @OA\Get(
-     *     path="/api-me",
+     *     path="/api/me",
      *     tags={"User"},
      *     summary="Return auth user",
      *     operationId="me",
@@ -136,7 +136,7 @@ class AuthController extends ApiController
     /**
      *  Sign out action
      *  @OA\Get(
-     *    path="/api-signout",
+     *    path="/api/signout",
      *    tags={"SignIn & SignOut"},
      *    summary="Signout",
      *    operationId="signout",
@@ -179,8 +179,8 @@ class AuthController extends ApiController
 
     /**
      *  Sign up action
-     *  @OA\POST(
-     *  path="/api-signup",
+     *  @OA\Post(
+     *  path="/api/signup",
      *    tags={"SignIn & SignOut"},
      *    summary="SignUp Api",
      *    operationId="signUpApi",
@@ -235,8 +235,8 @@ class AuthController extends ApiController
 
     /**
      *  Activate action
-     *  @OA\GET(
-     *  path="/api-activate/{activate_token}",
+     *  @OA\Get(
+     *  path="/api/activate/{activate_token}",
      *    tags={"SignIn & SignOut"},
      *    summary="Activate profile",
      *    operationId="activateProfile",
@@ -277,7 +277,7 @@ class AuthController extends ApiController
     /**
      *  Forget action
      *  @OA\Post(
-     *  path="/api-forget",
+     *  path="/api/forget",
      *    tags={"SignIn & SignOut"},
      *    summary="Forget password Api",
      *    operationId="forgetPassword",
@@ -324,8 +324,8 @@ class AuthController extends ApiController
 
     /**
      *  Reset action
-     *  @OA\POST(
-     *  path="/api-reset/{reset_token}",
+     *  @OA\Post(
+     *  path="/api/reset/{reset_token}",
      *    tags={"SignIn & SignOut"},
      *    summary="Reset password",
      *    operationId="resetPassword",
@@ -380,8 +380,8 @@ class AuthController extends ApiController
 
     /**
      *  Verify action
-     *  @OA\POST(
-     *  path="/api-verify",
+     *  @OA\Post(
+     *  path="/api/verify",
      *    tags={"SignIn & SignOut"},
      *    summary="Verify account",
      *    operationId="accountVerify",
@@ -430,8 +430,8 @@ class AuthController extends ApiController
 
     /**
      *  Resend action
-     *  @OA\GET(
-     *  path="/api-resend/{otp_token}",
+     *  @OA\Get(
+     *  path="/api/resend/{otp_token}",
      *    tags={"SignIn & SignOut"},
      *    summary="Resend OTP code",
      *    operationId="resendOTP",

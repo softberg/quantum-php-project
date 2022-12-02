@@ -43,7 +43,7 @@ class PostController extends ApiController
     /**
      *  Get posts action
      *  @OA\Get(
-     *    path="/api-posts",
+     *    path="/api/posts",
      *    tags={"Posts"},
      *    summary="This api returns all posts",
      *    operationId="getPosts",
@@ -80,7 +80,7 @@ class PostController extends ApiController
     /**
      *  Get post action
      *  @OA\Get(
-     *    path="/api-post/{id}",
+     *    path="/api/post/{id}",
      *    tags={"Posts"},
      *    summary="This api returns all posts",
      *    operationId="getPost",
@@ -128,7 +128,7 @@ class PostController extends ApiController
     /**
      *  Get my posts action
      *  @OA\Get(
-     *    path="/api-my-posts",
+     *    path="/api/my-posts",
      *    tags={"Posts"},
      *    summary="This api returns my posts",
      *    operationId="getMyPosts",
@@ -167,8 +167,8 @@ class PostController extends ApiController
 
     /**
      *  Create post action
-     *  @OA\POST(
-     *  path="/api-my-posts/create",
+     *  @OA\Post(
+     *  path="/api/my-posts/create",
      *    tags={"Posts"},
      *    summary="Create post",
      *    operationId="postCreate",
@@ -236,8 +236,8 @@ class PostController extends ApiController
 
     /**
      *  Amend post action
-     *  @OA\PUT(
-     *  path="/api-my-posts/amend/{id}",
+     *  @OA\Put(
+     *  path="/api/my-posts/amend/{id}",
      *    tags={"Posts"},
      *    summary="Edit post",
      *    operationId="postEdit",
@@ -320,8 +320,8 @@ class PostController extends ApiController
 
     /**
      *  Delete post action
-     *  @OA\DELETE(
-     *    path="/api-my-posts/delete/{id}",
+     *  @OA\Delete(
+     *    path="/api/my-posts/delete/{id}",
      *    tags={"Posts"},
      *    summary="Delete post",
      *    operationId="postDelete",
@@ -371,8 +371,8 @@ class PostController extends ApiController
 
     /**
      *  Delete post image action
-     *  @OA\DELETE(
-     *    path="/api-my-posts/delete-image/{id}",
+     *  @OA\Delete(
+     *    path="/api/my-posts/delete-image/{id}",
      *    tags={"Posts"},
      *    summary="Delete post image",
      *    operationId="postImageDelete",
