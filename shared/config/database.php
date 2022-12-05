@@ -39,6 +39,7 @@ return [
         'prefix' => '',
     ],
     'sleekdb' => [
+        'driver' => 'sleekdb',
         'config' => [
             'auto_cache' => false,
             'cache_lifetime' => null,
