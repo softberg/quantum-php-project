@@ -199,9 +199,11 @@ class DemoCommand extends QtCommand
     {
         switch (config()->get('database')['current']) {
             case 'mysql':
-                if ((new TableFactory)->checkTableExists(MigrationTable::TABLE)) {
+                $tableFactory = new TableFactory();
+
+                if ($tableFactory->checkTableExists(MigrationTable::TABLE)) {
                     $migrationTable = new MigrationTable();
-                    $migrationTable->up($this->tableFactory);
+                    $migrationTable->up($tableFactory);
                 }
 
                 $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down']);
