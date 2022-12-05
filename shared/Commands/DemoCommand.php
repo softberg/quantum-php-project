@@ -17,7 +17,9 @@ namespace Shared\Commands;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Bluemmb\Faker\PicsumPhotosProvider;
+use Quantum\Migration\MigrationTable;
 use Quantum\Factory\ServiceFactory;
+use Quantum\Factory\TableFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -50,17 +52,27 @@ class DemoCommand extends QtCommand
     protected $help = 'The command will create demo users and posts for your project';
 
     /**
-     * @var \Faker\Generator
-     */
-    protected $faker;
-
-    /**
      * The default action for all confirmations
      * @var array
      */
     protected $options = [
-        ['yes', 'y', 'none', 'Answer of re-run migrate']
+        ['yes', 'y', 'none', 'Acceptance of the confirmations']
     ];
+
+    /**
+     * @var AuthService
+     */
+    protected $authService;
+
+    /**
+     * @var PostService
+     */
+    protected $postService;
+
+    /**
+     * @var \Faker\Generator
+     */
+    protected $faker;
 
     /**
      * How many users to create
@@ -78,14 +90,9 @@ class DemoCommand extends QtCommand
     const DEFAULT_PASSWORD = 'password';
 
     /**
-     * Command name of migration down
+     * Command name of run migration
      */
-    const COMMAND_MIGRATION_DOWN = 'migration:migrate down';
-
-    /**
-     * Command name of migration up
-     */
-    const COMMAND_MIGRATION = 'migration:migrate';
+    const COMMAND_MIGRATE = 'migration:migrate';
 
     /**
      * Command name of create user
@@ -105,6 +112,8 @@ class DemoCommand extends QtCommand
         parent::__construct();
         $this->faker = Factory::create();
         $this->faker->addProvider(new PicsumPhotosProvider($this->faker));
+        $this->authService = ServiceFactory::get(AuthService::class);
+        $this->postService = ServiceFactory::get(PostService::class);
     }
 
     /**
@@ -118,69 +127,45 @@ class DemoCommand extends QtCommand
         }
 
         if (!$this->getOption('yes')) {
-
-            $message = "The operation will remove all previously created data and will create new dataset. Continue? [y/N]";
-
-            if (!$this->confirm($message)) {
+            if (!$this->confirm('The operation will remove all previously created data and will create new dataset. Continue?')) {
                 $this->info('Operation was canceled!');
                 return;
             }
-
-            if (config()->get('database')['current'] === 'mysql') {
-                $this->runCommand(self::COMMAND_MIGRATION, ['direction' => 'down']);
-            } elseif (config()->get('database')['current'] === 'sleekdb') {
-                $postsTable = new PostService;
-                $usersTable = new AuthService;
-
-                $postsTable->deleteTable();
-                $usersTable->deleteTable();
-            }
         }
-        if (config()->get('database')['current'] === 'mysql') {
-            $this->runCommand(self::COMMAND_MIGRATION, []);
-        }
+
+        $this->cleanUp();
+
         for ($i = 1; $i <= self::USER_COUNT; $i++) {
-            $userArguments = $this->newUser('editor');
-            $this->runCommand(self::COMMAND_USER_CREATE, $userArguments);
+            $this->runExternalCommand(self::COMMAND_USER_CREATE, $this->newUserData('editor'));
         }
 
-        $authService = ServiceFactory::get(AuthService::class);
-
-        $users = $authService->getAll();
+        $users = $this->authService->getAll();
 
         foreach ($users as $user) {
             for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
-                $postArguments = [
-                    'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
-                    'description' => str_replace(['"', '\'', '-'], '', $this->faker->realText(1000)),
-                    'image' => $this->faker->imageUrl(640, 480, true, 0),
-                    'user_id' => $user['id'],
-                ];
-
-                $this->runCommand(self::COMMAND_POST_CREATE, $postArguments);
+                $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user['id']));
             }
         }
 
-
-        $this->info('Demo installed successfully');
+        $this->info('Demo project created successfully');
     }
 
     /**
-     * Runs the external command
+     * Runs an external command
      * @throws \Exception
      */
-    protected function runCommand($commandName, $arguments)
+    protected function runExternalCommand($commandName, $arguments)
     {
         $command = $this->getApplication()->find($commandName);
         $command->run(new ArrayInput($arguments), new NullOutput);
     }
 
     /**
-     * Creates new user
+     * User data
      * @param string $role
      * @return array
      */
-    private function newUser(string $role = ''): array
+    private function newUserData(string $role = ''): array
     {
         return [
             'firstname' => $this->faker->name(),
@@ -189,5 +174,45 @@ class DemoCommand extends QtCommand
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_PASSWORD,
         ];
+    }
+
+    /**
+     * Post data
+     * @param int $userId
+     * @return array
+     */
+    private function newPostData(int $userId): array
+    {
+        return [
+            'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
+            'description' => str_replace(['"', '\'', '-'], '', $this->faker->realText(1000)),
+            'image' => $this->faker->imageUrl(640, 480, true, 0),
+            'user_id' => $userId,
+        ];
+    }
+
+    /**
+     * Cleanups the database
+     * @throws \Quantum\Exceptions\DatabaseException
+     */
+    private function cleanUp()
+    {
+        switch (config()->get('database')['current']) {
+            case 'mysql':
+                $tableFactory = new TableFactory();
+
+                if (!$tableFactory->checkTableExists(MigrationTable::TABLE)) {
+                    $migrationTable = new MigrationTable();
+                    $migrationTable->up($tableFactory);
+                }
+
+                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down']);
+                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'up']);
+                break;
+            case 'sleekdb':
+                $this->postService->deleteTable();
+                $this->authService->deleteTable();
+                break;
+        }
     }
 }
