@@ -201,7 +201,7 @@ class DemoCommand extends QtCommand
             case 'mysql':
                 $tableFactory = new TableFactory();
 
-                if ($tableFactory->checkTableExists(MigrationTable::TABLE)) {
+                if (!$tableFactory->checkTableExists(MigrationTable::TABLE)) {
                     $migrationTable = new MigrationTable();
                     $migrationTable->up($tableFactory);
                 }
