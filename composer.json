@@ -3,10 +3,9 @@
     "description": "Quantum Project",
     "keywords": ["framework", "php", "quantum", "project"],
     "license": "MIT",
-    "version": "2.8.0",
     "type": "project",
     "require": {
-        "quantum/framework": "^2.8",
+        "quantum/framework": "^2.8.0",
         "fakerphp/faker": "^1.15",
         "bluemmb/faker-picsum-photos-provider": "^2.0"
     },
@@ -25,7 +24,7 @@
             "php qt core:env",
             "php qt core:key --length=64",
             "php qt install:debugbar",
-            "php qt install:openapi module",
+            "php qt install:openapi Api",
             "php qt install:demo --yes",
             "php qt core:version"
         ]
