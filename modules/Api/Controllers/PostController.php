@@ -82,7 +82,7 @@ class PostController extends ApiController
      *  @OA\Get(
      *    path="/api/post/{id}",
      *    tags={"Posts"},
-     *    summary="This api returns all posts",
+     *    summary="This api return single post",
      *    operationId="getPost",
      *    @OA\Parameter(
      *      name="id",
