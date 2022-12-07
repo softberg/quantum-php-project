@@ -74,8 +74,8 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      */
     public function signin(Request $request, Response $response)
     {
@@ -98,7 +98,7 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Gets the logged in user data
+     *  Gets the logged-in user data
      *  @OA\Get(
      *     path="/api/me",
      *     tags={"User"},
@@ -119,7 +119,7 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      */
     public function me(Response $response)
     {
@@ -161,7 +161,7 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      */
     public function signout(Response $response)
     {
@@ -220,8 +220,8 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      */
     public function signup(Request $request, Response $response)
     {
@@ -261,8 +261,8 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      */
     public function activate(Request $request, Response $response)
     {
@@ -309,8 +309,8 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      */
     public function forget(Request $request, Response $response)
     {
@@ -366,8 +366,8 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      */
     public function reset(Request $request, Response $response)
     {
@@ -409,8 +409,8 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      */
     public function verify(Request $request, Response $response)
     {
@@ -456,7 +456,7 @@ class AuthController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      */
     public function resend(Response $response)
     {

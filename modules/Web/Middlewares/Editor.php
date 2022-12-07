@@ -34,13 +34,13 @@ class Editor extends QtMiddleware
     const ROLES = ['admin', 'editor'];
 
     /**
-     * @var \Quantum\Libraries\Validation\Validator
+     * @var Validator
      */
     private $validator;
 
     /**
      * Class constructor
-     * @param \Quantum\Http\Request $request
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -70,9 +70,9 @@ class Editor extends QtMiddleware
     }
 
     /**
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Closure $next
+     * @param Request $request
+     * @param Response $response
+     * @param Closure $next
      * @return mixed
      */
     public function apply(Request $request, Response $response, Closure $next)

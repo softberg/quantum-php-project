@@ -16,8 +16,10 @@ namespace Modules\Web\Middlewares;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
+use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Shared\Models\User;
 use Closure;
 
 /**
@@ -27,7 +29,7 @@ use Closure;
 class Verify extends QtMiddleware
 {
     /**
-     * @var \Quantum\Libraries\Validation\Validator
+     * @var Validator
      */
     private $validator;
 
@@ -49,9 +51,9 @@ class Verify extends QtMiddleware
     }
 
     /**
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Closure $next
+     * @param Request $request
+     * @param Response $response
+     * @param Closure $next
      * @return mixed
      */
     public function apply(Request $request, Response $response, Closure $next)
@@ -61,8 +63,23 @@ class Verify extends QtMiddleware
                 session()->setFlash('error', $this->validator->getErrors());
                 redirectWith(base_url(true) . '/' . current_lang() . '/verify', $request->all());
             }
+        } else {
+            $token = (string)route_param('code');
+
+            if (!$this->checkToken($token)) {
+                stop(function () use ($response) {
+                    $response->html(partial('errors/404'), 404);
+                });
+            }
+
         }
 
         return $next($request, $response);
+    }
+
+    private function checkToken(string $token): bool
+    {
+        $userModel = ModelFactory::get(User::class);
+        return !empty($userModel->findOneBy('otp_token', $token)->asArray());
     }
 }

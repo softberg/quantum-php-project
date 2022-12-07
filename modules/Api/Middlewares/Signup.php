@@ -21,18 +21,18 @@ use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;
+use Closure;
 
 class Signup extends QtMiddleware
 {
 
     /**
-     * @var \Quantum\Libraries\Validation\Validator
+     * @var Validator
      */
     private $validator;
 
     /**
      * Class constructor
-     * @throws \Exception
      */
     public function __construct()
     {
@@ -63,12 +63,12 @@ class Signup extends QtMiddleware
     }
 
     /**
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Closure $next
+     * @param Request $request
+     * @param Response $response
+     * @param Closure $next
      * @return mixed
      */
-    public function apply(Request $request, Response $response, \Closure $next)
+    public function apply(Request $request, Response $response, Closure $next)
     {
         if (!$this->validator->isValid($request->all())) {
             $response->json([

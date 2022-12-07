@@ -14,6 +14,7 @@
 
 namespace Modules\Api\Middlewares;
 
+use Closure;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
@@ -30,7 +31,7 @@ class Forget extends QtMiddleware
 {
 
     /**
-     * @var \Quantum\Libraries\Validation\Validator
+     * @var Validator
      */
     private $validator;
 
@@ -48,12 +49,12 @@ class Forget extends QtMiddleware
     }
 
     /**
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Closure $next
+     * @param Request $request
+     * @param Response $response
+     * @param Closure $next
      * @return mixed
      */
-    public function apply(Request $request, Response $response, \Closure $next)
+    public function apply(Request $request, Response $response, Closure $next)
     {
         if ($request->isMethod('post')) {
             if (!$this->validator->isValid($request->all())) {

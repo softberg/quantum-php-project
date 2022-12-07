@@ -21,6 +21,7 @@ use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;
+use Exception;
 use Closure;
 
 /**
@@ -31,7 +32,7 @@ class Forget extends QtMiddleware
 {
 
     /**
-     * @var \Quantum\Libraries\Validation\Validator
+     * @var Validator
      */
     private $validator;
 
@@ -49,9 +50,9 @@ class Forget extends QtMiddleware
     }
 
     /**
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Closure $next
+     * @param Request $request
+     * @param Response $response
+     * @param Closure $next
      * @return mixed
      */
     public function apply(Request $request, Response $response, Closure $next)
@@ -80,7 +81,7 @@ class Forget extends QtMiddleware
      * Check for email existence
      * @param string $email
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     private function emailExists(string $email): bool
     {

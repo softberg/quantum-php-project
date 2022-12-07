@@ -67,7 +67,7 @@ class PostController extends ApiController
      *      description="Internal Server Error"
      *    )
      *  )
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      */
     public function getPosts(Response $response)
     {
@@ -115,7 +115,7 @@ class PostController extends ApiController
      *  )
      *  @param string|null $lang
      *  @param string $postId
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      */
     public function getPost(?string $lang, string $postId, Response $response)
     {
@@ -155,7 +155,7 @@ class PostController extends ApiController
      *      description="Internal Server Error"
      *    )
      *  )
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      */
     public function getMyPosts(Response $response)
     {
@@ -208,8 +208,8 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      */
     public function createPost(Request $request, Response $response)
     {
@@ -286,8 +286,8 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Request $request
-     *  @param \Quantum\Http\Response $response
+     *  @param Request $request
+     *  @param Response $response
      *  @param string|null $lang
      *  @param string $postId
      */
@@ -349,7 +349,7 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      *  @param string|null $lang
      *  @param string $postId
      */
@@ -400,7 +400,7 @@ class PostController extends ApiController
      *      description="Unauthenticated"
      *    )
      *  )
-     *  @param \Quantum\Http\Response $response
+     *  @param Response $response
      *  @param string|null $lang
      *  @param string $postId
      */
