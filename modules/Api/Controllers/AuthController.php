@@ -39,7 +39,7 @@ class AuthController extends ApiController
      *  Sign in action
      *  @OA\Post(
      *    path="/api/signin",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="Login Api",
      *    operationId="userSignIn",
      *    @OA\RequestBody(
@@ -137,7 +137,7 @@ class AuthController extends ApiController
      *  Sign out action
      *  @OA\Get(
      *    path="/api/signout",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="Signout",
      *    operationId="signout",
      *    @OA\Parameter(
@@ -181,7 +181,7 @@ class AuthController extends ApiController
      *  Sign up action
      *  @OA\Post(
      *  path="/api/signup",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="SignUp Api",
      *    operationId="signUpApi",
      *    @OA\RequestBody(
@@ -237,7 +237,7 @@ class AuthController extends ApiController
      *  Activate action
      *  @OA\Get(
      *  path="/api/activate/{activate_token}",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="Activate profile",
      *    operationId="activateProfile",
      *    @OA\Parameter(
@@ -278,7 +278,7 @@ class AuthController extends ApiController
      *  Forget action
      *  @OA\Post(
      *  path="/api/forget",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="Forget password Api",
      *    operationId="forgetPassword",
      *    @OA\RequestBody(
@@ -326,7 +326,7 @@ class AuthController extends ApiController
      *  Reset action
      *  @OA\Post(
      *  path="/api/reset/{reset_token}",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="Reset password",
      *    operationId="resetPassword",
      *    @OA\Parameter(
@@ -382,7 +382,7 @@ class AuthController extends ApiController
      *  Verify action
      *  @OA\Post(
      *  path="/api/verify",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="Verify account",
      *    operationId="accountVerify",
      *    @OA\RequestBody(
@@ -393,7 +393,10 @@ class AuthController extends ApiController
      *            property="otp_code",
      *            type="string"
      *          ),
-     *          example={"otp_code": "123456"}
+     *          example={
+     *              "otp": "123456",
+     *              "code": "otp_token"
+     *              }
      *        )
      *      )
      *    ),
@@ -432,7 +435,7 @@ class AuthController extends ApiController
      *  Resend action
      *  @OA\Get(
      *  path="/api/resend/{otp_token}",
-     *    tags={"SignIn & SignOut"},
+     *    tags={"Authentication"},
      *    summary="Resend OTP code",
      *    operationId="resendOTP",
      *    @OA\Parameter(
