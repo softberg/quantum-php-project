@@ -59,7 +59,6 @@ class PostUpdateCommand extends QtCommand
         ['title', 't', 'optional', 'Post title'],
         ['description', 'd', 'optional', 'Post description'],
         ['image', 'i', 'optional', 'Post image'],
-        ['author', 'a', 'optional', 'Post author'],
     ];
 
     /**
@@ -82,13 +81,11 @@ class PostUpdateCommand extends QtCommand
         $title = $this->getOption('title');
         $description = $this->getOption('description');
         $image = $this->getOption('image');
-        $author = $this->getOption('author');
 
         $postData = [
             'title' => $title ?: $post['title'],
             'content' => $description ?: $post['content'],
             'image' => $image ?: $post['image'] ?? '',
-            'author' => $author ?: $post['author'],
             'updated_at' => date('Y-m-d H:i:s')
         ];
 

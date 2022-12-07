@@ -18,6 +18,10 @@ use Quantum\Factory\ServiceFactory;
 use Quantum\Libraries\Hasher\Hasher;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
+use Quantum\Factory\ModelFactory;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Libraries\Validation\Validator;
+use Shared\Models\User;
 
 /**
  * Class UserCreateCommand
@@ -62,7 +66,12 @@ class UserCreateCommand extends QtCommand
      */
     public function exec()
     {
+        if (!$this->emailValidate($this->getArgument('email'))) {
+            $this->error("The email field must be a valid email address");
+            return;
+        }
         $authService = ServiceFactory::get(AuthService::class);
+        
 
         $user = [
             'firstname' => $this->getArgument('firstname'),
@@ -76,5 +85,26 @@ class UserCreateCommand extends QtCommand
 
         $this->info('User created successfully');
     }
+    /**
+     * Validate email
+     * @param string $email
+     * @return boolean
+     */
+    private function emailValidate(string $email)
+    {
+        $validator = new Validator();
+        $validator->addValidation('uniqueUser', function ($value) {
+            $userModel = ModelFactory::get(User::class);
+            return empty($userModel->findOneBy('email', $value)->asArray());
+        });
+        $validator->addRules([
+            'email' => [
+                Rule::set('required'),
+                Rule::set('email'),
+                Rule::set('uniqueUser')
+            ],
+        ]);
 
+        return $validator->isValid(['email' => $email]);
+    }
 }
