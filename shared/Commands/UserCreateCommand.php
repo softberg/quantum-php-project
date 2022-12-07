@@ -14,13 +14,13 @@
 
 namespace Shared\Commands;
 
-use Quantum\Factory\ServiceFactory;
-use Quantum\Libraries\Hasher\Hasher;
-use Shared\Services\AuthService;
-use Quantum\Console\QtCommand;
-use Quantum\Factory\ModelFactory;
-use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Validation\Validator;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Libraries\Hasher\Hasher;
+use Quantum\Factory\ServiceFactory;
+use Quantum\Factory\ModelFactory;
+use Quantum\Console\QtCommand;
+use Shared\Services\AuthService;
 use Shared\Models\User;
 
 /**
