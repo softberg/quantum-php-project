@@ -90,15 +90,6 @@ class UserShowCommand extends QtCommand
                 'Lastname',
                 'Email',
                 'Role',
-                'Password',
-                'ActivationToken',
-                'RememberToken',
-                'Reset Token',
-                'Access Token',
-                'Refresh Token',
-                'OTP',
-                'OTP Expiry',
-                'OTP Token'
             ])
             ->setRows($rows)
             ->render();
@@ -116,17 +107,8 @@ class UserShowCommand extends QtCommand
             $item['uuid'] ?? '',
             $item['firstname'] ?? '',
             $item['lastname'] ?? '',
+            $item['email'] ?? '',
             $item['role'] ?? '',
-            $item['username'] ?? '',
-            $item['password'] ?? '',
-            $item['activationToken'] ?? '',
-            $item['rememberToken'] ?? '',
-            $item['resetToken'] ?? '',
-            $item['accessToken'] ?? '',
-            $item['refreshToken'] ?? '',
-            $item['otp'] ?? '',
-            $item['otpExpiry'] ?? '',
-            $item['otpToken'] ?? '',
         ];
     }
 }

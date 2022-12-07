@@ -14,10 +14,14 @@
 
 namespace Shared\Commands;
 
-use Quantum\Factory\ServiceFactory;
+use Quantum\Libraries\Validation\Validator;
+use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Hasher\Hasher;
-use Shared\Services\AuthService;
+use Quantum\Factory\ServiceFactory;
+use Quantum\Factory\ModelFactory;
 use Quantum\Console\QtCommand;
+use Shared\Services\AuthService;
+use Shared\Models\User;
 
 /**
  * Class UserCreateCommand
@@ -45,6 +49,12 @@ class UserCreateCommand extends QtCommand
     protected $help = 'Use the following format to create a user record:' . PHP_EOL . 'php qt user:create `Email` `Password` `[Role]` `[Firstname]` `[Lastname]`';
 
     /**
+     * Error message
+     * @var string
+     */
+    protected $errorMessage;
+
+    /**
      * Command arguments
      * @var \string[][]
      */
@@ -62,6 +72,11 @@ class UserCreateCommand extends QtCommand
      */
     public function exec()
     {
+        if (!$this->validateEmail($this->getArgument('email'))) {
+            $this->error($this->errorMessage);
+            return;
+        }
+
         $authService = ServiceFactory::get(AuthService::class);
 
         $user = [
@@ -77,4 +92,31 @@ class UserCreateCommand extends QtCommand
         $this->info('User created successfully');
     }
 
+    /**
+     * Validate email
+     * @param string $email
+     * @return boolean
+     */
+    private function validateEmail(string $email)
+    {
+        $validator = new Validator();
+        $validator->addValidation('uniqueUser', function ($value) {
+            $userModel = ModelFactory::get(User::class);
+            return empty($userModel->findOneBy('email', $value)->asArray());
+        });
+
+        $validator->addRules([
+            'email' => [
+                Rule::set('required'),
+                Rule::set('email'),
+                Rule::set('uniqueUser')
+            ],
+        ]);
+
+        if (!$validator->isValid(['email' => $email])) {
+            $this->errorMessage = $validator->getErrors()['email'][0];
+            return false;
+        }
+        return true;
+    }
 }
