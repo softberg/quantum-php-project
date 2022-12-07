@@ -14,6 +14,7 @@
 
 namespace Modules\Api\Middlewares;
 
+use Closure;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
@@ -33,13 +34,13 @@ class Editor extends QtMiddleware
     const ROLES = ['admin', 'editor'];
 
     /**
-     * @var \Quantum\Libraries\Validation\Validator
+     * @var Validator
      */
     private $validator;
 
     /**
      * Class constructor
-     * @param \Quantum\Http\Request $request
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -69,12 +70,12 @@ class Editor extends QtMiddleware
     }
 
     /**
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Closure $next
+     * @param Request $request
+     * @param Response $response
+     * @param Closure $next
      * @return mixed
      */
-    public function apply(Request $request, Response $response, \Closure $next)
+    public function apply(Request $request, Response $response, Closure $next)
     {
         if (!in_array(auth()->user()->role, self::ROLES)) {
             $response->json([

@@ -14,6 +14,7 @@
 
 namespace Modules\Api\Middlewares;
 
+use Closure;
 use Quantum\Factory\ModelFactory;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
@@ -30,7 +31,7 @@ class Reset extends QtMiddleware
 {
 
     /**
-     * @var \Quantum\Libraries\Validation\Validator
+     * @var Validator
      */
     private $validator;
 
@@ -54,12 +55,12 @@ class Reset extends QtMiddleware
     }
 
     /**
-     * @param \Quantum\Http\Request $request
-     * @param \Quantum\Http\Response $response
-     * @param \Closure $next
+     * @param Request $request
+     * @param Response $response
+     * @param Closure $next
      * @return mixed
      */
-    public function apply(Request $request, Response $response, \Closure $next)
+    public function apply(Request $request, Response $response, Closure $next)
     {
         $token = route_param('token');
 
