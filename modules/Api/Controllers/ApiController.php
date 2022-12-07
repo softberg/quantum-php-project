@@ -23,7 +23,7 @@ use OpenApi\Annotations as OA;
  *  @OA\Info(
  *    title="Quantum API documentation",
  *    version="2.8.0",
- *    description="    *Quantum Documentation: https://quantum.softberg.org/en/docs/v1/overview"
+ *    description="*Quantum Documentation: https://quantum.softberg.org/en/docs/v1/overview"
  *  ),  
  *  @OA\SecurityScheme(
  *    securityScheme="bearer_token",

@@ -28,7 +28,7 @@ class PostController extends ApiController
 
     /**
      * Post service
-     * @var \Shared\Services\PostService
+     * @var PostService
      */
     public $postService;
 
@@ -45,7 +45,7 @@ class PostController extends ApiController
      *  @OA\Get(
      *    path="/api/posts",
      *    tags={"Posts"},
-     *    summary="This api returns all posts",
+     *    summary="Get posts action",
      *    operationId="getPosts",
      *    @OA\Response(
      *      response=200,
@@ -82,7 +82,7 @@ class PostController extends ApiController
      *  @OA\Get(
      *    path="/api/post/{id}",
      *    tags={"Posts"},
-     *    summary="This api return single post",
+     *    summary="Get post action",
      *    operationId="getPost",
      *    @OA\Parameter(
      *      name="id",
@@ -130,7 +130,7 @@ class PostController extends ApiController
      *  @OA\Get(
      *    path="/api/my-posts",
      *    tags={"Posts"},
-     *    summary="This api returns my posts",
+     *    summary="Get my posts action",
      *    operationId="getMyPosts",
      *    security={
      *      {"bearer_token": {}}
@@ -170,7 +170,7 @@ class PostController extends ApiController
      *  @OA\Post(
      *  path="/api/my-posts/create",
      *    tags={"Posts"},
-     *    summary="Create post",
+     *    summary="Create post action",
      *    operationId="postCreate",
      *    security={
      *      {"bearer_token": {}
@@ -239,7 +239,7 @@ class PostController extends ApiController
      *  @OA\Put(
      *  path="/api/my-posts/amend/{id}",
      *    tags={"Posts"},
-     *    summary="Edit post",
+     *    summary="Amend post action",
      *    operationId="postEdit",
      *    security={
      *      {"bearer_token": {}
@@ -323,7 +323,7 @@ class PostController extends ApiController
      *  @OA\Delete(
      *    path="/api/my-posts/delete/{id}",
      *    tags={"Posts"},
-     *    summary="Delete post",
+     *    summary="Delete post action",
      *    operationId="postDelete",
      *    security={
      *      {"bearer_token": {}
@@ -374,7 +374,7 @@ class PostController extends ApiController
      *  @OA\Delete(
      *    path="/api/my-posts/delete-image/{id}",
      *    tags={"Posts"},
-     *    summary="Delete post image",
+     *    summary="Delete post image action",
      *    operationId="postImageDelete",
      *    security={
      *      {"bearer_token": {}
