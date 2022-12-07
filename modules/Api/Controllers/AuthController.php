@@ -40,7 +40,7 @@ class AuthController extends ApiController
      *  @OA\Post(
      *    path="/api/signin",
      *    tags={"Authentication"},
-     *    summary="Login Api",
+     *    summary="Sign in action",
      *    operationId="userSignIn",
      *    @OA\RequestBody(
      *      @OA\MediaType(
@@ -102,7 +102,7 @@ class AuthController extends ApiController
      *  @OA\Get(
      *     path="/api/me",
      *     tags={"User"},
-     *     summary="Return auth user",
+     *     summary="Gets the logged-in user data",
      *     operationId="me",
      *     security={
      *       {"bearer_token": {}
@@ -138,7 +138,7 @@ class AuthController extends ApiController
      *  @OA\Get(
      *    path="/api/signout",
      *    tags={"Authentication"},
-     *    summary="Signout",
+     *    summary="Sign out action",
      *    operationId="signout",
      *    @OA\Parameter(
      *      name="refresh_token",
@@ -182,7 +182,7 @@ class AuthController extends ApiController
      *  @OA\Post(
      *  path="/api/signup",
      *    tags={"Authentication"},
-     *    summary="SignUp Api",
+     *    summary="Sign up action",
      *    operationId="signUpApi",
      *    @OA\RequestBody(
      *      @OA\MediaType(
@@ -238,7 +238,7 @@ class AuthController extends ApiController
      *  @OA\Get(
      *  path="/api/activate/{activate_token}",
      *    tags={"Authentication"},
-     *    summary="Activate profile",
+     *    summary="Activate action",
      *    operationId="activateProfile",
      *    @OA\Parameter(
      *      name="activate_token",
@@ -279,7 +279,7 @@ class AuthController extends ApiController
      *  @OA\Post(
      *  path="/api/forget",
      *    tags={"Authentication"},
-     *    summary="Forget password Api",
+     *    summary="Forget action",
      *    operationId="forgetPassword",
      *    @OA\RequestBody(
      *      @OA\MediaType(
@@ -327,7 +327,7 @@ class AuthController extends ApiController
      *  @OA\Post(
      *  path="/api/reset/{reset_token}",
      *    tags={"Authentication"},
-     *    summary="Reset password",
+     *    summary="Reset action",
      *    operationId="resetPassword",
      *    @OA\Parameter(
      *      name="reset_token",
@@ -383,7 +383,7 @@ class AuthController extends ApiController
      *  @OA\Post(
      *  path="/api/verify",
      *    tags={"Authentication"},
-     *    summary="Verify account",
+     *    summary="Verify action",
      *    operationId="accountVerify",
      *    @OA\RequestBody(
      *      @OA\MediaType(
@@ -436,7 +436,7 @@ class AuthController extends ApiController
      *  @OA\Get(
      *  path="/api/resend/{otp_token}",
      *    tags={"Authentication"},
-     *    summary="Resend OTP code",
+     *    summary="Resend action",
      *    operationId="resendOTP",
      *    @OA\Parameter(
      *      name="otp_token",
