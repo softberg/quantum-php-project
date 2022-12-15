@@ -16,6 +16,7 @@ namespace Shared\Commands;
 
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
+use Quantum\Libraries\Storage\FileSystem;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Migration\MigrationTable;
 use Quantum\Factory\ServiceFactory;
@@ -25,6 +26,7 @@ use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Loader\Setup;
 use Faker\Factory;
+use Quantum\Di\Di;
 
 /**
  * Class DemoCommand
@@ -135,6 +137,20 @@ class DemoCommand extends QtCommand
 
         $this->cleanUp();
 
+        $fs = Di::get(FileSystem::class);
+
+        $uploadsFolder = $fs->glob(uploads_dir() . '/*');
+
+        foreach ($uploadsFolder as $user_uuid) {
+            $userImages = $fs->glob($user_uuid . '/*');
+
+            foreach ($userImages as $file) {
+                $fs->remove($file);
+            }
+
+            $fs->removeDirectory($user_uuid);
+        }
+
         for ($i = 1; $i <= self::USER_COUNT; $i++) {
             $this->runExternalCommand(self::COMMAND_USER_CREATE, $this->newUserData('editor'));
         }
@@ -142,6 +158,7 @@ class DemoCommand extends QtCommand
         $users = $this->authService->getAll();
 
         foreach ($users as $user) {
+            $fs->makeDirectory(uploads_dir() . DS . $user['uuid']);
             for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
                 $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user['id']));
             }
