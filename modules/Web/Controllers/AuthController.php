@@ -115,12 +115,10 @@ class AuthController extends QtController
     {
         if ($request->isMethod('post')) {
             $user = auth()->signup($request->all());
-            if ($user) {
-                session()->setFlash('success', t('common.check_email_signup'));
-                $fs = Di::get(FileSystem::class);
-                $fs->makeDirectory(uploads_dir() . DS . $user->uuid);
-                redirect(base_url(true) . '/' . current_lang() . '/signup');
-            }
+            session()->setFlash('success', t('common.check_email_signup'));
+            $fs = Di::get(FileSystem::class);
+            $fs->makeDirectory(uploads_dir() . DS . $user->uuid);
+            redirect(base_url(true) . '/' . current_lang() . '/signup');
         } else {
             $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));

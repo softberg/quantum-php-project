@@ -139,10 +139,10 @@ class DemoCommand extends QtCommand
 
         $fs = Di::get(FileSystem::class);
 
-        $uploadsFolder = $fs->glob(uploads_dir() . '/*');
+        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
 
         foreach ($uploadsFolder as $user_uuid) {
-            $userImages = $fs->glob($user_uuid . '/*');
+            $userImages = $fs->glob($user_uuid . DS . '*');
 
             foreach ($userImages as $file) {
                 $fs->remove($file);

@@ -14,9 +14,11 @@
 
 namespace Modules\Api\Controllers;
 
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Exceptions\AuthException;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Quantum\Di\Di;
 
 /**
  * Class AuthController
@@ -225,12 +227,13 @@ class AuthController extends ApiController
      */
     public function signup(Request $request, Response $response)
     {
-        if (auth()->signup($request->all())) {
-            $response->json([
-                'status' => self::STATUS_SUCCESS,
-                'message' => t('common.successfully_signed_up')
-            ]);
-        }
+        $user = auth()->signup($request->all());
+        $fs = Di::get(FileSystem::class);
+        $fs->makeDirectory(uploads_dir() . DS . $user->uuid);
+        $response->json([
+            'status' => self::STATUS_SUCCESS,
+            'message' => t('common.successfully_signed_up')
+        ]);
     }
 
     /**
