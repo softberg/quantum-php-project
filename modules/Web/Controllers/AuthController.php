@@ -112,10 +112,9 @@ class AuthController extends QtController
     public function signup(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->isMethod('post')) {
-            if (auth()->signup($request->all())) {
-                session()->setFlash('success', t('common.check_email_signup'));
-                redirect(base_url(true) . '/' . current_lang() . '/signup');
-            }
+            auth()->signup($request->all());
+            session()->setFlash('success', t('common.check_email_signup'));
+            redirect(base_url(true) . '/' . current_lang() . '/signup');
         } else {
             $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
@@ -213,5 +212,4 @@ class AuthController extends QtController
             redirect(base_url(true) . '/' . current_lang() . '/signin');
         }
     }
-
 }

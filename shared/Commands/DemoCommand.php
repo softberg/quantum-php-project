@@ -16,6 +16,7 @@ namespace Shared\Commands;
 
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
+use Quantum\Libraries\Storage\FileSystem;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Migration\MigrationTable;
 use Quantum\Factory\ServiceFactory;
@@ -25,6 +26,7 @@ use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Loader\Setup;
 use Faker\Factory;
+use Quantum\Di\Di;
 
 /**
  * Class DemoCommand
@@ -197,6 +199,8 @@ class DemoCommand extends QtCommand
      */
     private function cleanUp()
     {
+        $this->removeFolders();
+
         switch (config()->get('database')['current']) {
             case 'mysql':
                 $tableFactory = new TableFactory();
@@ -213,6 +217,23 @@ class DemoCommand extends QtCommand
                 $this->postService->deleteTable();
                 $this->authService->deleteTable();
                 break;
+        }
+    }
+
+    private function removeFolders()
+    {
+        $fs = Di::get(FileSystem::class);
+
+        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
+
+        foreach ($uploadsFolder as $user_uuid) {
+            $userImages = $fs->glob($user_uuid . DS . '*');
+
+            foreach ($userImages as $file) {
+                $fs->remove($file);
+            }
+
+            $fs->removeDirectory($user_uuid);
         }
     }
 }

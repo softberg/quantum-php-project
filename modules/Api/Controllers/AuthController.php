@@ -225,12 +225,11 @@ class AuthController extends ApiController
      */
     public function signup(Request $request, Response $response)
     {
-        if (auth()->signup($request->all())) {
-            $response->json([
-                'status' => self::STATUS_SUCCESS,
-                'message' => t('common.successfully_signed_up')
-            ]);
-        }
+        auth()->signup($request->all());
+        $response->json([
+            'status' => self::STATUS_SUCCESS,
+            'message' => t('common.successfully_signed_up')
+        ]);
     }
 
     /**

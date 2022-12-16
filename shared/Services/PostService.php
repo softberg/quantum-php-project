@@ -155,7 +155,7 @@ class PostService extends QtService
     public function saveImage(File $file, string $imageName): string
     {
         $file->setName($imageName . '-' . random_number());
-        $file->save(uploads_dir());
+        $file->save(uploads_dir() . DS . auth()->user()->uuid);
 
         return $file->getNameWithExtension();
     }
@@ -170,8 +170,8 @@ class PostService extends QtService
         $pathParts = explode('/', $imageUrl);
         $imageName = end($pathParts);
 
-        if ($fs->exists(uploads_dir() . DS . $imageName)) {
-            $fs->remove(uploads_dir() . DS . $imageName);
+        if ($fs->exists(uploads_dir() . DS . auth()->user()->uuid . DS . $imageName)) {
+            $fs->remove(uploads_dir() . DS . auth()->user()->uuid . DS . $imageName);
         }
     }
 

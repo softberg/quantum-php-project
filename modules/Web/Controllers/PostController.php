@@ -125,7 +125,7 @@ class PostController extends QtController
 
             if ($request->hasFile('image')) {
                 $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-                $postData['image'] = base_url() . '/uploads/' . $imageName;
+                $postData['image'] = base_url() . '/uploads/' . auth()->user()->uuid . '/' . $imageName;
             }
 
             $this->postService->addPost($postData);
@@ -166,7 +166,7 @@ class PostController extends QtController
                 }
 
                 $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-                $postData['image'] = base_url() . '/uploads/' . $imageName;
+                $postData['image'] = base_url() . '/uploads/' . auth()->user()->uuid . '/' . $imageName;
             }
 
             $this->postService->updatePost($postId, $postData);
