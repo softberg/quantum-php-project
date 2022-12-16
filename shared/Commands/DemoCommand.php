@@ -199,19 +199,7 @@ class DemoCommand extends QtCommand
      */
     private function cleanUp()
     {
-        $fs = Di::get(FileSystem::class);
-
-        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
-
-        foreach ($uploadsFolder as $user_uuid) {
-            $userImages = $fs->glob($user_uuid . DS . '*');
-
-            foreach ($userImages as $file) {
-                $fs->remove($file);
-            }
-
-            $fs->removeDirectory($user_uuid);
-        }
+        $this->removeFolders();
 
         switch (config()->get('database')['current']) {
             case 'mysql':
@@ -229,6 +217,23 @@ class DemoCommand extends QtCommand
                 $this->postService->deleteTable();
                 $this->authService->deleteTable();
                 break;
+        }
+    }
+
+    private function removeFolders()
+    {
+        $fs = Di::get(FileSystem::class);
+
+        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
+
+        foreach ($uploadsFolder as $user_uuid) {
+            $userImages = $fs->glob($user_uuid . DS . '*');
+
+            foreach ($userImages as $file) {
+                $fs->remove($file);
+            }
+
+            $fs->removeDirectory($user_uuid);
         }
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
+use PHPUnit\Framework\TestCase;
 use Quantum\Di\Di;
 use Quantum\App;
 
@@ -43,12 +44,13 @@ class AuthServiceTest extends TestCase
     public function tearDown(): void
     {
         $this->authService->deleteTable();
+        $this->removeFolders();
     }
 
     public function testUserGet()
     {
         $user = $this->authService->get('email', 'anonymous@qt.com');
-        
+
         $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
         $this->assertArrayHasKey('password', $user->getData());
         $this->assertArrayHasKey('firstname', $user->getData());
@@ -92,7 +94,9 @@ class AuthServiceTest extends TestCase
 
         $rememberToken = base64_encode(time());
 
-        $this->authService->update('email', $user->getFieldValue('email'),
+        $this->authService->update(
+            'email',
+            $user->getFieldValue('email'),
             ['remember_token' => $rememberToken]
         );
 
@@ -120,4 +124,14 @@ class AuthServiceTest extends TestCase
         $this->assertArrayHasKey('visible', $this->authService->userSchema()['username']);
     }
 
+    private function removeFolders()
+    {
+        $fs = Di::get(FileSystem::class);
+
+        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
+
+        foreach ($uploadsFolder as $user_uuid) {
+            $fs->removeDirectory($user_uuid);
+        }
+    }
 }

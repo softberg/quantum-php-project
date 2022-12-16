@@ -1,9 +1,10 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
+use PHPUnit\Framework\TestCase;
 use Quantum\Di\Di;
 use Quantum\App;
 
@@ -82,6 +83,7 @@ class PostServiceTest extends TestCase
     {
         $this->authService->deleteTable();
         $this->postService->deleteTable();
+        $this->removeFolders();
     }
 
     public function testGetPosts()
@@ -194,4 +196,14 @@ class PostServiceTest extends TestCase
         $this->assertCount(4, $this->postService->getPosts());
     }
 
+    private function removeFolders()
+    {
+        $fs = Di::get(FileSystem::class);
+
+        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
+
+        foreach ($uploadsFolder as $user_uuid) {
+            $fs->removeDirectory($user_uuid);
+        }
+    }
 }
