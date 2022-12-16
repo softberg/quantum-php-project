@@ -14,13 +14,13 @@
 
 namespace Modules\Web\Controllers;
 
-use Quantum\Di\Di;
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Exceptions\AuthException;
 use Quantum\Factory\ViewFactory;
 use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Di\Di;
 
 /**
  * Class AuthController
