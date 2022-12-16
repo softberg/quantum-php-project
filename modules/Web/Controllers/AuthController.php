@@ -14,13 +14,11 @@
 
 namespace Modules\Web\Controllers;
 
-use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Exceptions\AuthException;
 use Quantum\Factory\ViewFactory;
 use Quantum\Mvc\QtController;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Quantum\Di\Di;
 
 /**
  * Class AuthController
@@ -114,10 +112,8 @@ class AuthController extends QtController
     public function signup(Request $request, Response $response, ViewFactory $view)
     {
         if ($request->isMethod('post')) {
-            $user = auth()->signup($request->all());
+            auth()->signup($request->all());
             session()->setFlash('success', t('common.check_email_signup'));
-            $fs = Di::get(FileSystem::class);
-            $fs->makeDirectory(uploads_dir() . DS . $user->uuid);
             redirect(base_url(true) . '/' . current_lang() . '/signup');
         } else {
             $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));

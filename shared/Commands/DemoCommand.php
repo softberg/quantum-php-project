@@ -137,20 +137,6 @@ class DemoCommand extends QtCommand
 
         $this->cleanUp();
 
-        $fs = Di::get(FileSystem::class);
-
-        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
-
-        foreach ($uploadsFolder as $user_uuid) {
-            $userImages = $fs->glob($user_uuid . DS . '*');
-
-            foreach ($userImages as $file) {
-                $fs->remove($file);
-            }
-
-            $fs->removeDirectory($user_uuid);
-        }
-
         for ($i = 1; $i <= self::USER_COUNT; $i++) {
             $this->runExternalCommand(self::COMMAND_USER_CREATE, $this->newUserData('editor'));
         }
@@ -158,7 +144,6 @@ class DemoCommand extends QtCommand
         $users = $this->authService->getAll();
 
         foreach ($users as $user) {
-            $fs->makeDirectory(uploads_dir() . DS . $user['uuid']);
             for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
                 $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user['id']));
             }
@@ -214,6 +199,20 @@ class DemoCommand extends QtCommand
      */
     private function cleanUp()
     {
+        $fs = Di::get(FileSystem::class);
+
+        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
+
+        foreach ($uploadsFolder as $user_uuid) {
+            $userImages = $fs->glob($user_uuid . DS . '*');
+
+            foreach ($userImages as $file) {
+                $fs->remove($file);
+            }
+
+            $fs->removeDirectory($user_uuid);
+        }
+
         switch (config()->get('database')['current']) {
             case 'mysql':
                 $tableFactory = new TableFactory();

@@ -16,6 +16,7 @@ namespace Shared\Services;
 
 use Quantum\Libraries\Auth\AuthServiceInterface;
 use Quantum\Libraries\Auth\User as AuthUser;
+use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Exceptions\DatabaseException;
 use Quantum\Exceptions\ConfigException;
 use Quantum\Exceptions\ModelException;
@@ -24,6 +25,7 @@ use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
 use Shared\Models\User;
 use Faker\Factory;
+use Quantum\Di\Di;
 
 /**
  * Class AuthService
@@ -122,6 +124,9 @@ class AuthService extends QtService implements AuthServiceInterface
 
         $data['uuid'] = Factory::create()->uuid();
         $data['role'] = $data['role'] ?? 'editor';
+
+        $fs = Di::get(FileSystem::class);
+        $fs->makeDirectory(uploads_dir() . DS . $data['uuid']);
 
         $user = ModelFactory::get(User::class)->create();
         $user->fillObjectProps($data);
