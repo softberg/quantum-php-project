@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -23,7 +23,7 @@ use Closure;
 
 /**
  * Class Activate
- * @package Modules\Api\Middlewares
+ * @package Modules\Api
  */
 class Activate extends QtMiddleware
 {
@@ -42,7 +42,7 @@ class Activate extends QtMiddleware
             $response->json([
                 'status' => 'error',
                 'message' => [t('validation.nonExistingRecord', 'token')]
-            ]);
+            ], 422);
 
             stop();
         }

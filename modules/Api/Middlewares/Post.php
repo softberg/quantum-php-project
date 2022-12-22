@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -22,8 +22,8 @@ use Quantum\Http\Request;
 use Closure;
 
 /**
- * Class Editor
- * @package Modules\Web\Middlewares
+ * Class Post
+ * @package Modules\Api
  */
 class Post extends QtMiddleware
 {
@@ -36,7 +36,7 @@ class Post extends QtMiddleware
      */
     public function apply(Request $request, Response $response, Closure $next)
     {
-        $postId = (string) route_param('id');
+        $postId = (string)route_param('id');
 
         $post = ServiceFactory::get(PostService::class)->getPost($postId, false);
 
@@ -44,7 +44,7 @@ class Post extends QtMiddleware
             $response->json([
                 'status' => 'error',
                 'message' => t('common.post_not_found')
-                    ], 404);
+            ], 404);
 
             stop();
         }
