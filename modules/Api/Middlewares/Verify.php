@@ -8,7 +8,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -22,7 +22,7 @@ use Closure;
 
 /**
  * Class Verify
- * @package Modules\Web\Middlewares
+ * @package Modules\Api
  */
 
 class Verify extends QtMiddleware
@@ -64,7 +64,7 @@ class Verify extends QtMiddleware
                 $response->json([
                     'status' => 'error',
                     'message' => $this->validator->getErrors()
-                ]);
+                ], 422);
 
                 stop();
             }

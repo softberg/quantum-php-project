@@ -9,12 +9,11 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Api\Middlewares;
 
-use Closure;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Middleware\QtMiddleware;
@@ -22,10 +21,11 @@ use Quantum\Factory\ModelFactory;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;
+use Closure;
 
 /**
  * Class Forget
- * @package Modules\Api\Middlewares
+ * @package Modules\Api
  */
 class Forget extends QtMiddleware
 {
@@ -61,7 +61,7 @@ class Forget extends QtMiddleware
                 $response->json([
                     'status' => 'error',
                     'message' => $this->validator->getErrors()
-                ]);
+                ], 422);
                 
                 stop();
             }
@@ -70,7 +70,7 @@ class Forget extends QtMiddleware
                 $response->json([
                     'status' => 'error',
                     'message' => [t('validation.nonExistingRecord', $request->get('email'))]
-                ]);
+                ], 422);
                 
                 stop();
             }

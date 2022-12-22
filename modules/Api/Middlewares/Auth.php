@@ -9,19 +9,19 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Api\Middlewares;
 
-use Closure;
 use Quantum\Middleware\QtMiddleware;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Closure;
 
 /**
  * Class Auth
- * @package Modules\Api\Middlewares
+ * @package Modules\Api
  */
 class Auth extends QtMiddleware
 {

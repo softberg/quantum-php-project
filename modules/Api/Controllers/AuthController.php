@@ -9,73 +9,25 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Api\Controllers;
 
+use Modules\Api\Controllers\Abstracts\OpenApiAuthController;
 use Quantum\Exceptions\AuthException;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
 /**
  * Class AuthController
- * @package Modules\Api\Controllers
+ * @package Modules\Api
  */
-class AuthController extends ApiController
+class AuthController extends OpenApiAuthController
 {
 
     /**
-     * Status error
-     */
-    const STATUS_ERROR = 'error';
-
-    /**
-     * Status success
-     */
-    const STATUS_SUCCESS = 'success';
-
-    /**
-     *  Sign in action
-     *  @OA\Post(
-     *    path="/api/signin",
-     *    tags={"Authentication"},
-     *    summary="Sign in action",
-     *    operationId="userSignIn",
-     *    @OA\RequestBody(
-     *      @OA\MediaType(
-     *      mediaType="application/json",
-     *        @OA\Schema(
-     *          @OA\Property(
-     *            property="email",
-     *            type="string"
-     *          ),
-     *          @OA\Property(
-     *            property="password",
-     *            type="string"
-     *          ),
-     *          example={"email": "rgaylord@gmail.com", "password": "password"}
-     *        )
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=400,
-     *      description="Bad Request"
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Request $request
-     *  @param Response $response
+     * @inheritDoc
      */
     public function signin(Request $request, Response $response)
     {
@@ -93,33 +45,12 @@ class AuthController extends ApiController
             $response->json([
                 'status' => self::STATUS_ERROR,
                 'message' => $e->getMessage()
-            ]);
+            ], 422);
         }
     }
 
     /**
-     *  Gets the logged-in user data
-     *  @OA\Get(
-     *     path="/api/me",
-     *     tags={"User"},
-     *     summary="Gets the logged-in user data",
-     *     operationId="me",
-     *     security={
-     *       {"bearer_token": {}
-     *     }},
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Response $response
+     * @inheritDoc
      */
     public function me(Response $response)
     {
@@ -134,34 +65,7 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Sign out action
-     *  @OA\Get(
-     *    path="/api/signout",
-     *    tags={"Authentication"},
-     *    summary="Sign out action",
-     *    operationId="signout",
-     *    @OA\Parameter(
-     *      name="refresh_token",
-     *      description="Refresh token",
-     *      required=true,
-     *      in="header",
-     *      @OA\Schema(
-     *        type="string"
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Response $response
+     * @inheritDoc
      */
     public function signout(Response $response)
     {
@@ -178,54 +82,12 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Sign up action
-     *  @OA\Post(
-     *  path="/api/signup",
-     *    tags={"Authentication"},
-     *    summary="Sign up action",
-     *    operationId="signUpApi",
-     *    @OA\RequestBody(
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *        @OA\Schema(
-     *          @OA\Property(
-     *            property="email",
-     *            type="string",
-     *          ),
-     *          @OA\Property(
-     *            property="password",
-     *            type="string"
-     *          ),
-     *          @OA\Property(
-     *            property="firstname",
-     *            type="string",
-     *          ),
-     *          @OA\Property(
-     *            property="lastname",
-     *            type="string",
-     *          ),
-     *          example={"email": "mail@example.com", "password": "password",  "firstname": "Jon", "lastname": "Smit"}
-     *        )
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Request $request
-     *  @param Response $response
+     * @inheritDoc
      */
     public function signup(Request $request, Response $response)
     {
         auth()->signup($request->all());
+
         $response->json([
             'status' => self::STATUS_SUCCESS,
             'message' => t('common.successfully_signed_up')
@@ -233,35 +95,7 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Activate action
-     *  @OA\Get(
-     *  path="/api/activate/{activate_token}",
-     *    tags={"Authentication"},
-     *    summary="Activate action",
-     *    operationId="activateProfile",
-     *    @OA\Parameter(
-     *      name="activate_token",
-     *      description="Activate token",
-     *      required=true,
-     *      in="path",
-     *      @OA\Schema(
-     *        type="string"
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Request $request
-     *  @param Response $response
+     * @inheritDoc
      */
     public function activate(Request $request, Response $response)
     {
@@ -274,42 +108,7 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Forget action
-     *  @OA\Post(
-     *  path="/api/forget",
-     *    tags={"Authentication"},
-     *    summary="Forget action",
-     *    operationId="forgetPassword",
-     *    @OA\RequestBody(
-     *      @OA\MediaType(
-     *      mediaType="application/json",
-     *        @OA\Schema(
-     *          @OA\Property(
-     *            property="username",
-     *            type="string"
-     *          ),
-     *          example={"email": "mail@example.com"}
-     *        )
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=400,
-     *      description="Bad Request"
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Request $request
-     *  @param Response $response
+     * @inheritDoc
      */
     public function forget(Request $request, Response $response)
     {
@@ -322,51 +121,7 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Reset action
-     *  @OA\Post(
-     *  path="/api/reset/{reset_token}",
-     *    tags={"Authentication"},
-     *    summary="Reset action",
-     *    operationId="resetPassword",
-     *    @OA\Parameter(
-     *      name="reset_token",
-     *      description="Reset token",
-     *      required=true,
-     *      in="path",
-     *      @OA\Schema(
-     *        type="string"
-     *      )
-     *    ),
-     *    @OA\RequestBody(
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *        @OA\Schema(
-     *          @OA\Property(
-     *            property="password",
-     *            type="string"
-     *          ),
-     *          @OA\Property(
-     *            property="repeat_password",
-     *            type="string"
-     *          ),
-     *          example={"password": "password","repeat_password": "password"}
-     *        )
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Request $request
-     *  @param Response $response
+     * @inheritDoc
      */
     public function reset(Request $request, Response $response)
     {
@@ -378,46 +133,12 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Verify action
-     *  @OA\Post(
-     *  path="/api/verify",
-     *    tags={"Authentication"},
-     *    summary="Verify action",
-     *    operationId="accountVerify",
-     *    @OA\RequestBody(
-     *      @OA\MediaType(
-     *      mediaType="application/json",
-     *        @OA\Schema(
-     *          @OA\Property(
-     *            property="otp_code",
-     *            type="string"
-     *          ),
-     *          example={
-     *              "otp": "123456",
-     *              "code": "otp_token"
-     *              }
-     *        )
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Request $request
-     *  @param Response $response
+     * @inheritDoc
      */
     public function verify(Request $request, Response $response)
     {
         try {
-            auth()->verifyOtp((int) $request->get('otp'), $request->get('code'));
+            auth()->verifyOtp((int)$request->get('otp'), $request->get('code'));
 
             $response->json([
                 'status' => self::STATUS_SUCCESS
@@ -431,34 +152,7 @@ class AuthController extends ApiController
     }
 
     /**
-     *  Resend action
-     *  @OA\Get(
-     *  path="/api/resend/{otp_token}",
-     *    tags={"Authentication"},
-     *    summary="Resend action",
-     *    operationId="resendOTP",
-     *    @OA\Parameter(
-     *      name="otp_token",
-     *      description="OTP token",
-     *      required=true,
-     *      in="path",
-     *      @OA\Schema(
-     *        type="string"
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *        mediaType="application/json",
-     *      )
-     *    ),
-     *    @OA\Response(
-     *      response=401,
-     *      description="Unauthenticated"
-     *    )
-     *  )
-     *  @param Response $response
+     * @inheritDoc
      */
     public function resend(Response $response)
     {

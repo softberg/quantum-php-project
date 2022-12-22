@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Api\Middlewares;
@@ -21,7 +21,7 @@ use Closure;
 
 /**
  * Class Resend
- * @package Modules\Web\Middlewares
+ * @package Modules\Api
  */
 class Resend extends QtMiddleware
 {
@@ -38,7 +38,7 @@ class Resend extends QtMiddleware
             $response->json([
                 'status' => 'error',
                 'message' => t('validation.required', 'code')
-            ]);
+            ], 422);
 
             stop();
         }
