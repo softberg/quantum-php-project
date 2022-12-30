@@ -2,6 +2,7 @@
 
 return [
     'required' => 'The field {%1} is required',
+    'recaptcha' =>'The field is not valid',
     'email' => 'The {%1} field must be a valid email address',
     'minLen' => 'The {%1} field needs to be at least {%2} characters',
     'maxLen' => 'The {%1} field needs to be {%2} characters or less',
