@@ -60,7 +60,6 @@ class PostService extends QtService
             ->select('posts.uuid', 'title', 'content', 'image', 'updated_at', ['users.firstname' => 'firstname'], ['users.lastname' => 'lastname'])
             ->orderBy('updated_at', 'desc')
             ->get();
-        // dd($posts);
         return transform($posts, $this->transformer);
     }
 
@@ -72,9 +71,6 @@ class PostService extends QtService
      */
     public function getPost(string $uuid, bool $transformed = true): ?array
     {
-        $post = ModelFactory::get(Post::class)->findOne($uuid);
-        dd($post->id);
-
         $post = ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
             ->criteria('uuid', '=', $uuid)
