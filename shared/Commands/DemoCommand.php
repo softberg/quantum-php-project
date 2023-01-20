@@ -210,7 +210,7 @@ class DemoCommand extends QtCommand
                     $migrationTable->up($tableFactory);
                 }
 
-                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down']);
+                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down', '--yes' => 'yes']);
                 $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'up']);
                 break;
             case 'sleekdb':
