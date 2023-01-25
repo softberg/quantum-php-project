@@ -81,7 +81,7 @@ class PostService extends QtService
             return null;
         }
 
-        return $transformed ? current(transform($post, $this->transformer)) : current($post);
+        return $transformed ? current(transform($post, $this->transformer)) : current($post)->asArray();
     }
 
     /**
