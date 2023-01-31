@@ -60,7 +60,6 @@ class PostService extends QtService
             ->select('posts.uuid', 'title', 'content', 'image', 'updated_at', ['users.firstname' => 'firstname'], ['users.lastname' => 'lastname'])
             ->orderBy('updated_at', 'desc')
             ->get();
-
         return transform($posts, $this->transformer);
     }
 
@@ -82,7 +81,7 @@ class PostService extends QtService
             return null;
         }
 
-        return $transformed ? current(transform($post, $this->transformer)) : current($post);
+        return $transformed ? current(transform($post, $this->transformer)) : current($post)->asArray();
     }
 
     /**
