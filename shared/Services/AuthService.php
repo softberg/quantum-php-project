@@ -118,8 +118,8 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function add(array $data): AuthUser
     {
-        if (key_exists('token', $data)) {
-            unset($data['token']);
+        if (key_exists('csrf-token', $data)) {
+            unset($data['csrf-token']);
         }
 
         $data['uuid'] = Factory::create()->uuid();

@@ -29,7 +29,7 @@
                                     <i class="material-icons visibility-icon off">visibility_off</i>
                                 </div>
                                 <div>
-                                    <input type="hidden" name="token" value="<?php echo csrf_token() ?>"/>
+                                    <input type="hidden" name="csrf-token" value="<?php echo csrf_token() ?>"/>
                                     <button class="btn btn-large waves-effect waves-light" type="submit">
                                         <?php _t('common.send') ?>
                                     </button>
