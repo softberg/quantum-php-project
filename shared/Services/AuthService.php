@@ -118,10 +118,6 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function add(array $data): AuthUser
     {
-        if (key_exists('token', $data)) {
-            unset($data['token']);
-        }
-
         $data['uuid'] = Factory::create()->uuid();
         $data['role'] = $data['role'] ?? 'editor';
 
