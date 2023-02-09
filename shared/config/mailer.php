@@ -12,7 +12,7 @@ return [
 
     'mail_trap' => true,
     
-    'default' => [
+    'smtp' => [
         'mail_host' => env('MAIL_HOST'),
         'mail_secure' => env('MAIL_SMTP_SECURE'),
         'mail_port' => env('MAIL_PORT'),
