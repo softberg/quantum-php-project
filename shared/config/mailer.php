@@ -8,11 +8,11 @@ return [
      *
      * Current configuration to use.
      */
-    'current' => 'sendinblue',
+    'current' => 'smtp',
 
-    'mail_trap' => true,
     
     'smtp' => [
+        'mail_trap' => true,
         'mail_host' => env('MAIL_HOST'),
         'mail_secure' => env('MAIL_SMTP_SECURE'),
         'mail_port' => env('MAIL_PORT'),
@@ -22,5 +22,10 @@ return [
 
     'sendinblue' => [
         'api_key' => env("SENDINBLUE_APIKEY", null),
+    ],
+
+    'mailgun' => [
+        'api_key' => env("MAILGUN_APIKEY", null),
+        'domain' => env("MAILGUN_DOMAIN", null),
     ],
 ];
