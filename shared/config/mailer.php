@@ -28,4 +28,8 @@ return [
         'api_key' => env("MAILGUN_APIKEY", null),
         'domain' => env("MAILGUN_DOMAIN", null),
     ],
+    
+    'mandrill' => [
+        'api_key' => env("MANDRILL_APIKEY", null),
+    ],
 ];
