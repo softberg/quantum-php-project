@@ -10,9 +10,9 @@ return [
      */
     'current' => 'smtp',
 
+    'mail_trap' => true,
     
     'smtp' => [
-        'mail_trap' => true,
         'mail_host' => env('MAIL_HOST'),
         'mail_secure' => env('MAIL_SMTP_SECURE'),
         'mail_port' => env('MAIL_PORT'),
