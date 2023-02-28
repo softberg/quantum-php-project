@@ -23,6 +23,10 @@ return [
     'sendinblue' => [
         'api_key' => env("SENDINBLUE_APIKEY", null),
     ],
+    
+    'sendgrid' => [
+        'api_key' => env("SENDGRID_APIKEY", null),
+    ],
 
     'mailgun' => [
         'api_key' => env("MAILGUN_APIKEY", null),
