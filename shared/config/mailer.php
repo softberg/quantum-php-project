@@ -8,7 +8,7 @@ return [
      *
      * Current configuration to use.
      */
-    'current' => 'sendinblue',
+    'current' => 'smtp',
 
     'mail_trap' => true,
     
@@ -22,5 +22,18 @@ return [
 
     'sendinblue' => [
         'api_key' => env("SENDINBLUE_APIKEY", null),
+    ],
+    
+    'sendgrid' => [
+        'api_key' => env("SENDGRID_APIKEY", null),
+    ],
+
+    'mailgun' => [
+        'api_key' => env("MAILGUN_APIKEY", null),
+        'domain' => env("MAILGUN_DOMAIN", null),
+    ],
+    
+    'mandrill' => [
+        'api_key' => env("MANDRILL_APIKEY", null),
     ],
 ];
