@@ -145,7 +145,7 @@ class DemoCommand extends QtCommand
 
         foreach ($users as $user) {
             for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
-                $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user['id']));
+                $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user->id));
             }
         }
 
@@ -210,7 +210,7 @@ class DemoCommand extends QtCommand
                     $migrationTable->up($tableFactory);
                 }
 
-                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down']);
+                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down', '--yes' => true]);
                 $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'up']);
                 break;
             case 'sleekdb':
