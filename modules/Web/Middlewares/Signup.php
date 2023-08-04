@@ -64,6 +64,10 @@ class Signup extends QtMiddleware
             'lastname' => [
                 Rule::set('required')
             ],
+            'recaptcha' => [
+                Rule::set('required'),
+                Rule::set('recaptcha')
+            ]
         ]);
     }
 
@@ -76,6 +80,11 @@ class Signup extends QtMiddleware
     public function apply(Request $request, Response $response, Closure $next)
     {
         if ($request->isMethod('post')) {
+
+            if($request->has('g-recaptcha-response')) {
+                $request->set('recaptcha', $request->get('g-recaptcha-response'));
+                $request->delete('g-recaptcha-response');
+            }
 
             if (!$this->validator->isValid($request->all())) {
                 session()->setFlash('error', $this->validator->getErrors());

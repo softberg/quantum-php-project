@@ -54,3 +54,12 @@ function url_with_lang(string $lang): string
     return $url;
 }
 
+function getRecaptcha()
+{
+    if (env('RECAPTCHA_SITE_KEY_V2')){
+        echo partial('partials/recaptchaVersions/recaptchaCheckbox');
+    } elseif (env('RECAPTCHA_SITE_KEY_V3')){
+        echo partial('partials/recaptchaVersions/recaptchaInvisibleV3');
+    }
+}
+
