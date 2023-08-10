@@ -23,6 +23,7 @@ use Quantum\Exceptions\ModelException;
 use Quantum\Exceptions\DiException;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
+use ReflectionException;
 use Shared\Models\User;
 use Faker\Factory;
 use Quantum\Di\Di;
@@ -41,7 +42,7 @@ class AuthService extends QtService implements AuthServiceInterface
      * @throws DatabaseException
      * @throws DiException
      * @throws ModelException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getAll(): ?array
     {
@@ -56,7 +57,7 @@ class AuthService extends QtService implements AuthServiceInterface
      * @throws DatabaseException
      * @throws DiException
      * @throws ModelException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getUser(string $uuid): ?array
     {
@@ -121,8 +122,7 @@ class AuthService extends QtService implements AuthServiceInterface
         $data['uuid'] = Factory::create()->uuid();
         $data['role'] = $data['role'] ?? 'editor';
 
-        $fs = Di::get(FileSystem::class);
-        $fs->makeDirectory(uploads_dir() . DS . $data['uuid']);
+        $this->createUserDirectory($data['uuid']);
 
         $user = ModelFactory::get(User::class)->create();
         $user->fillObjectProps($data);
@@ -158,5 +158,17 @@ class AuthService extends QtService implements AuthServiceInterface
     public function deleteTable()
     {
         ModelFactory::get(User::class)->deleteTable();
+    }
+
+    /**
+     * @param string $uuid
+     * @return void
+     * @throws DiException
+     * @throws ReflectionException
+     */
+    private function createUserDirectory(string $uuid)
+    {
+        $fs = Di::get(FileSystem::class);
+        $fs->makeDirectory(uploads_dir() . DS . $uuid);
     }
 }

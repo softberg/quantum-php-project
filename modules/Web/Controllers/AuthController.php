@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Modules\Web\Controllers;
@@ -88,8 +88,11 @@ class AuthController extends QtController
                 redirect(base_url(true) . '/' . current_lang() . '/signin');
             }
         } else {
-            $view->setParam('title', t('common.signin') . ' | ' . config()->get('app_name'));
-            $view->setParam('langs', config()->get('langs'));
+            $view->setParams([
+                'title' => t('common.signin') . ' | ' . config()->get('app_name'),
+                'langs' => config()->get('langs')
+            ]);
+
             $response->html($view->render(self::VIEW_SIGNIN));
         }
     }
@@ -116,8 +119,11 @@ class AuthController extends QtController
             session()->setFlash('success', t('common.check_email_signup'));
             redirect(base_url(true) . '/' . current_lang() . '/signup');
         } else {
-            $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));
-            $view->setParam('langs', config()->get('langs'));
+            $view->setParams([
+                'title' => t('common.signup') . ' | ' . config()->get('app_name'),
+                'langs' => config()->get('langs')
+            ]);
+
             $response->html($view->render(self::VIEW_SIGNUP));
         }
     }
@@ -142,12 +148,14 @@ class AuthController extends QtController
     {
         if ($request->isMethod('post')) {
             auth()->forget($request->get('email'));
-
             session()->setFlash('success', t('common.check_email'));
             redirect(base_url(true) . '/' . current_lang() . '/forget');
         } else {
-            $view->setParam('title', t('common.forget_password') . ' | ' . config()->get('app_name'));
-            $view->setParam('langs', config()->get('langs'));
+            $view->setParams([
+                'title' => t('common.forget_password') . ' | ' . config()->get('app_name'),
+                'langs' => config()->get('langs'),
+            ]);
+
             $response->html($view->render(self::VIEW_FORGET));
         }
     }
@@ -184,7 +192,7 @@ class AuthController extends QtController
     {
         if ($request->isMethod('post')) {
             try {
-                auth()->verifyOtp((int) $request->get('otp'), $request->get('code'));
+                auth()->verifyOtp((int)$request->get('otp'), $request->get('code'));
                 redirect(base_url(true) . '/' . current_lang());
             } catch (AuthException $e) {
                 session()->setFlash('error', $e->getMessage());
@@ -207,7 +215,8 @@ class AuthController extends QtController
     public function resend()
     {
         try {
-            redirect(base_url(true) . '/' . current_lang() . '/verify/' . auth()->resendOtp(route_param('code')));
+            $otpToken = auth()->resendOtp(route_param('code'));
+            redirect(base_url(true) . '/' . current_lang() . '/verify/' . $otpToken);
         } catch (AuthException $e) {
             redirect(base_url(true) . '/' . current_lang() . '/signin');
         }
