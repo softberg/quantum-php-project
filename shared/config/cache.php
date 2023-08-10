@@ -20,7 +20,7 @@ return [
         'params' => [
             'prefix' => str_replace(' ', '', env('APP_NAME')),
             'path' => base_dir() . DS . 'cache' . DS . 'data',
-            'ttl' => 60
+            'ttl' => 600
         ]
     ],
     'database' => [
