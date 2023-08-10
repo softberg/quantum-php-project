@@ -1,5 +1,6 @@
 <?php
 
+use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
@@ -10,7 +11,6 @@ use Quantum\App;
 
 class PostServiceTest extends TestCase
 {
-
     public $authService;
     public $postService;
     public $userId = 1;
@@ -59,6 +59,8 @@ class PostServiceTest extends TestCase
             'updated_at' => '2021-05-08 23:14:00',
         ]
     ];
+    private $fs;
+    private $user;
 
     public function setUp(): void
     {
@@ -68,9 +70,11 @@ class PostServiceTest extends TestCase
 
         Di::loadDefinitions();
 
+        $this->fs = Di::get(FileSystem::class);
+
         $this->authService = ServiceFactory::get(AuthService::class, ['shared' . DS . 'store', 'users']);
 
-        $this->authService->add($this->initialUser);
+        $this->user = $this->authService->add($this->initialUser);
 
         $this->postService = ServiceFactory::get(PostService::class, ['shared' . DS . 'store', 'posts']);
 
@@ -158,7 +162,7 @@ class PostServiceTest extends TestCase
         $this->postService->updatePost($uuid, [
             'title' => 'Walt Disney Jr.',
             'content' => 'The best way to get started is to quit talking and begin doing.',
-            'image' => 'https://somedomain.com/images/image.jpg',
+            'image' => 'image.jpg',
             'updated_at' => $date
         ]);
 
@@ -170,7 +174,7 @@ class PostServiceTest extends TestCase
 
         $this->assertEquals('The best way to get started is to quit talking and begin doing.', $post['content']);
 
-        $this->assertEquals('https://somedomain.com/images/image.jpg', $post['image']);
+        $this->assertEquals($this->user->uuid . '/image.jpg', $post['image']);
 
         $this->assertEquals(date('Y/m/d H:i', strtotime($date)), $post['date']);
 
@@ -196,14 +200,34 @@ class PostServiceTest extends TestCase
         $this->assertCount(4, $this->postService->getPosts());
     }
 
+    public function testSaveDeleteImage()
+    {
+
+        $this->fileMeta = [
+            'size' => 500,
+            'name' => 'foo.jpg',
+            'tmp_name' => base_dir() . DS . 'tmp' . DS . 'php8fe1.tmp',
+            'type' => 'image/jpg',
+            'error' => 0,
+        ];
+
+        $uploadedFile = new UploadedFile($this->fileMeta);
+
+        $image = $this->postService->saveImage($uploadedFile, $this->user->uuid, 'poster');
+
+        $this->assertFileExists(uploads_dir() . DS . $this->user->uuid . DS . $image);
+
+        $this->postService->deleteImage($this->user->uuid . DS . $image);
+
+        $this->assertFileDoesNotExist(uploads_dir() . DS . $this->user->uuid . DS . $image);
+    }
+
     private function removeFolders()
     {
-        $fs = Di::get(FileSystem::class);
-
-        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
+        $uploadsFolder = $this->fs->glob(uploads_dir() . DS . '*');
 
         foreach ($uploadsFolder as $user_uuid) {
-            $fs->removeDirectory($user_uuid);
+            $this->fs->removeDirectory($user_uuid);
         }
     }
 }

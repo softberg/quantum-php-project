@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Shared\Transformers;
@@ -34,7 +34,7 @@ class PostTransformer implements TransformerInterface
             'id' => $item->uuid,
             'title' => $item->title,
             'content' => $item->content,
-            'image' => $item->image,
+            'image' => $item->image ? $item->user_directory . '/' . $item->image : null,
             'date' => date('Y/m/d H:i', strtotime($item->updated_at)),
             'author' => $item->firstname . ' ' . $item->lastname
         ];

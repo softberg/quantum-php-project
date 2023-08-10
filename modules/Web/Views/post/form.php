@@ -44,7 +44,7 @@
                                     title="<?php _t('common.delete') ?>">
                                         <i class="material-icons">close</i>
                                     </a>
-                                    <img src="<?php echo $post['image'] ?>" class="update_page_img">
+                                    <img src="<?php echo base_url() . '/uploads/' . $post['image'] ?>" class="update_page_img">
                                 <?php endif; ?>
                             </div>
 
