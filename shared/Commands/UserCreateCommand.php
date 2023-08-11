@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Shared\Commands;
@@ -17,10 +17,11 @@ namespace Shared\Commands;
 use Quantum\Libraries\Validation\Validator;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Hasher\Hasher;
+use Quantum\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Quantum\Factory\ModelFactory;
-use Quantum\Console\QtCommand;
 use Shared\Services\AuthService;
+use Quantum\Console\QtCommand;
 use Shared\Models\User;
 
 /**
@@ -56,7 +57,7 @@ class UserCreateCommand extends QtCommand
 
     /**
      * Command arguments
-     * @var \string[][]
+     * @var array[]
      */
     protected $args = [
         ['email', 'required', 'User email'],
@@ -68,7 +69,7 @@ class UserCreateCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws \Quantum\Exceptions\DiException
+     * @throws DiException
      */
     public function exec()
     {
@@ -97,7 +98,7 @@ class UserCreateCommand extends QtCommand
      * @param string $email
      * @return boolean
      */
-    private function validateEmail(string $email)
+    private function validateEmail(string $email): bool
     {
         $validator = new Validator();
         $validator->addValidation('uniqueUser', function ($value) {
@@ -117,6 +118,7 @@ class UserCreateCommand extends QtCommand
             $this->errorMessage = $validator->getErrors()['email'][0];
             return false;
         }
+
         return true;
     }
 }

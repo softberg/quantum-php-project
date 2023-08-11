@@ -44,6 +44,7 @@ return [
     'unregistered_hook_name' => 'The Hook `{%1}` was not registered',
     'unexpected_request_initialization' => 'HTTP Request can not be initialized outside of the core',
     'unexpected_response_initialization' => 'HTTP Response can not be initialized outside of the core',
+    'request_not_created' => 'Request is not created',
     'method_not_available' => 'Provided request method `{%1}` is not available',
     'not_supported_content_type' => 'The content type is not supported',
     'jwt_payload_not_found' => 'JWT payload is missing',

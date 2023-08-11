@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Shared\Commands;
@@ -17,16 +17,20 @@ namespace Shared\Commands;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Exceptions\DatabaseException;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Migration\MigrationTable;
 use Quantum\Factory\ServiceFactory;
+use Quantum\Exceptions\DiException;
 use Quantum\Factory\TableFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Loader\Setup;
+use ReflectionException;
 use Faker\Factory;
 use Quantum\Di\Di;
+use Exception;
 
 /**
  * Class DemoCommand
@@ -120,7 +124,7 @@ class DemoCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws \Quantum\Exceptions\DiException
+     * @throws DiException
      */
     public function exec()
     {
@@ -145,7 +149,7 @@ class DemoCommand extends QtCommand
 
         foreach ($users as $user) {
             for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
-                $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user->id));
+                $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user));
             }
         }
 
@@ -154,7 +158,7 @@ class DemoCommand extends QtCommand
 
     /**
      * Runs an external command
-     * @throws \Exception
+     * @throws Exception
      */
     protected function runExternalCommand($commandName, $arguments)
     {
@@ -180,22 +184,32 @@ class DemoCommand extends QtCommand
 
     /**
      * Post data
-     * @param int $userId
+     * @param $user
      * @return array
+     * @throws DiException
+     * @throws ReflectionException
      */
-    private function newPostData(int $userId): array
+    private function newPostData($user): array
     {
+        $title = $this->textCleanUp($this->faker->realText(50));
+
+        $imageName = save_remote_image(
+            $this->faker->imageUrl(640, 480, true, 0),
+            $user->uuid,
+            $title
+        );
+
         return [
-            'title' => str_replace(['"', '\'', '-'], '', $this->faker->realText(50)),
-            'description' => str_replace(['"', '\'', '-'], '', $this->faker->realText(1000)),
-            'image' => $this->faker->imageUrl(640, 480, true, 0),
-            'user_id' => $userId,
+            'title' => $title,
+            'description' => $this->textCleanUp($this->faker->realText(1000)),
+            'image' => $imageName,
+            'user_id' => $user->id,
         ];
     }
 
     /**
      * Cleanups the database
-     * @throws \Quantum\Exceptions\DatabaseException
+     * @throws DatabaseException
      */
     private function cleanUp()
     {
@@ -220,20 +234,34 @@ class DemoCommand extends QtCommand
         }
     }
 
+    /**
+     * @param string $text
+     * @return array|string|string[]
+     */
+    private function textCleanUp(string $text)
+    {
+        return str_replace(['"', '\'', '-'], '', $text);
+    }
+
+    /**
+     * Removes users folders
+     * @throws DiException
+     * @throws ReflectionException
+     */
     private function removeFolders()
     {
         $fs = Di::get(FileSystem::class);
 
         $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
 
-        foreach ($uploadsFolder as $user_uuid) {
-            $userImages = $fs->glob($user_uuid . DS . '*');
+        foreach ($uploadsFolder as $folder) {
+            $userImages = $fs->glob($folder . DS . '*');
 
             foreach ($userImages as $file) {
                 $fs->remove($file);
             }
 
-            $fs->removeDirectory($user_uuid);
+            $fs->removeDirectory($folder);
         }
     }
 }

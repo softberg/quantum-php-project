@@ -9,11 +9,12 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Shared\Commands;
 
+use Quantum\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -45,7 +46,7 @@ class PostDeleteCommand extends QtCommand
 
     /**
      * Command arguments
-     * @var \string[][]
+     * @var array[]
      */
     protected $args = [
         ['uuid', 'required', 'Post uuid'],
@@ -53,7 +54,7 @@ class PostDeleteCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws \Quantum\Exceptions\DiException
+     * @throws DiException
      */
     public function exec()
     {
@@ -61,7 +62,7 @@ class PostDeleteCommand extends QtCommand
 
         $uuid = $this->getArgument('uuid');
 
-        $post = $postService->getPost($uuid);
+        $post = $postService->getPost($uuid, false);
 
         if (!$post) {
             $this->error('The post is not found');

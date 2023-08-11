@@ -9,8 +9,12 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
+
+use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Exceptions\DiException;
+use Quantum\Di\Di;
 
 /**
  * Gets the url with selected language
@@ -54,12 +58,30 @@ function url_with_lang(string $lang): string
     return $url;
 }
 
+/**
+ * @param string $imageUrl
+ * @param string $userDirectory
+ * @param string $imageName
+ * @return string
+ * @throws DiException
+ * @throws ReflectionException
+ */
+function save_remote_image(string $imageUrl, string $userDirectory, string $imageName): string
+{
+    $fs = Di::get(FileSystem::class);
+
+    $imageName = slugify($imageName) . '.jpg';
+
+    $fs->put(uploads_dir() . DS . $userDirectory . DS . $imageName, $fs->get($imageUrl));
+
+    return $imageName;
+}
+
 function getRecaptcha()
 {
-    if (env('RECAPTCHA_SITE_KEY_V2')){
+    if (env('RECAPTCHA_SITE_KEY_V2')) {
         echo partial('partials/recaptchaVersions/recaptchaCheckbox');
-    } elseif (env('RECAPTCHA_SITE_KEY_V3')){
+    } elseif (env('RECAPTCHA_SITE_KEY_V3')) {
         echo partial('partials/recaptchaVersions/recaptchaInvisibleV3');
     }
 }
-

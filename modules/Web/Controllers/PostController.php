@@ -58,7 +58,7 @@ class PostController extends QtController
      * @param Response $response
      * @param ViewFactory $view
      */
-    public function getPosts(Response $response, ViewFactory $view)
+    public function posts(Response $response, ViewFactory $view)
     {
         $view->setParams([
             'title' => t('common.posts') . ' | ' . config()->get('app_name'),
@@ -76,7 +76,7 @@ class PostController extends QtController
      * @param Response $response
      * @param ViewFactory $view
      */
-    public function getPost(?string $lang, string $postId, Response $response, ViewFactory $view)
+    public function post(?string $lang, string $postId, Response $response, ViewFactory $view)
     {
         $post = $this->postService->getPost($postId);
 
@@ -95,92 +95,107 @@ class PostController extends QtController
      * @param Response $response
      * @param ViewFactory $view
      */
-    public function getMyPosts(Request $request, Response $response, ViewFactory $view)
+    public function myPosts(Request $request, Response $response, ViewFactory $view)
     {
         $view->setParams([
             'title' => t('common.my_posts') . ' | ' . config()->get('app_name'),
             'langs' => config()->get('langs'),
-            'posts' => $this->postService->getMyPosts((int) auth()->user()->id)
+            'posts' => $this->postService->getMyPosts((int)auth()->user()->id)
         ]);
 
         $response->html($view->render('post/my-posts'));
     }
 
     /**
-     * Create post action
-     * @param Request $request
+     * Create post form
      * @param Response $response
      * @param ViewFactory $view
      */
-    public function createPost(Request $request, Response $response, ViewFactory $view)
+    public function createFrom(Response $response, ViewFactory $view)
     {
-        if ($request->isMethod('post')) {
-            $postData = [
-                'user_id' => (int) auth()->user()->id,
-                'title' => $request->get('title', null, true),
-                'content' => $request->get('content', null, true),
-                'image' => '',
-                'updated_at' => date('Y-m-d H:i:s'),
-            ];
+        $view->setParams([
+            'title' => t('common.new_post') . ' | ' . config()->get('app_name'),
+            'langs' => config()->get('langs')
+        ]);
 
-            if ($request->hasFile('image')) {
-                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-                $postData['image'] = base_url() . '/uploads/' . auth()->user()->uuid . '/' . $imageName;
-            }
+        $response->html($view->render('post/form'));
+    }
 
-            $this->postService->addPost($postData);
-            
-            redirect(base_url(true) . '/' . current_lang() . '/my-posts');
-        } else {
-            $view->setParams([
-                'title' => t('common.new_post') . ' | ' . config()->get('app_name'),
-                'langs' => config()->get('langs')
-            ]);
+    /**
+     * Create post action
+     * @param Request $request
+     */
+    public function create(Request $request)
+    {
+        $postData = [
+            'user_id' => (int)auth()->user()->id,
+            'title' => $request->get('title', null, true),
+            'content' => $request->get('content', null, true),
+            'image' => '',
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
 
-            $response->html($view->render('post/form'));
+        if ($request->hasFile('image')) {
+            $imageName = $this->postService->saveImage(
+                $request->getFile('image'),
+                auth()->user()->uuid,
+                slugify($request->get('title'))
+            );
+
+            $postData['image'] = $imageName;
         }
+
+        $this->postService->addPost($postData);
+
+        redirect(base_url(true) . '/' . current_lang() . '/my-posts');
+    }
+
+    public function amendForm(Response $response, ViewFactory $view, ?string $lang, string $postId)
+    {
+        $post = $this->postService->getPost($postId);
+
+        $view->setParams([
+            'title' => $post['title'] . ' | ' . config()->get('app_name'),
+            'langs' => config()->get('langs'),
+            'post' => $post
+        ]);
+
+        $response->html($view->render('post/form'));
     }
 
     /**
      * Amend post action
      * @param Request $request
-     * @param Response $response
-     * @param ViewFactory $view
      * @param string|null $lang
      * @param string $postId
      */
-    public function amendPost(Request $request, Response $response, ViewFactory $view, ?string $lang, string $postId)
+    public function amend(Request $request, ?string $lang, string $postId)
     {
-        $post = $this->postService->getPost($postId);
+        $postData = [
+            'title' => $request->get('title', null, true),
+            'content' => $request->get('content', null, true),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
 
-        if ($request->isMethod('post')) {
-            $postData = [
-                'title' => $request->get('title', null, true),
-                'content' => $request->get('content', null, true),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ];
+        $post = $this->postService->getPost($postId, false);
 
-            if ($request->hasFile('image')) {
-                if ($post['image']) {
-                    $this->postService->deleteImage($post['image']);
-                }
-
-                $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-                $postData['image'] = base_url() . '/uploads/' . auth()->user()->uuid . '/' . $imageName;
+        if ($request->hasFile('image')) {
+            if ($post['image']) {
+                $this->postService->deleteImage(auth()->user()->uuid . DS .  $post['image']);
             }
 
-            $this->postService->updatePost($postId, $postData);
-            
-            redirect(base_url(true) . '/' . current_lang() . '/my-posts');
-        } else {
-            $view->setParams([
-                'title' => $post['title'] . ' | ' . config()->get('app_name'),
-                'langs' => config()->get('langs'),
-                'post' => $post
-            ]);
+            $imageName = $this->postService->saveImage(
+                $request->getFile('image'),
+                auth()->user()->uuid,
+                slugify($request->get('title'))
+            );
 
-            $response->html($view->render('post/form'));
+            $postData['image'] = $imageName;
         }
+
+        $this->postService->updatePost($postId, $postData);
+
+        redirect(base_url(true) . '/' . current_lang() . '/my-posts');
     }
 
     /**
@@ -188,12 +203,12 @@ class PostController extends QtController
      * @param string|null $lang
      * @param string $postId
      */
-    public function deletePost(?string $lang, string $postId)
+    public function delete(?string $lang, string $postId)
     {
-        $post = $this->postService->getPost($postId);
+        $post = $this->postService->getPost($postId, false);
 
         if ($post['image']) {
-            $this->postService->deleteImage($post['image']);
+            $this->postService->deleteImage(auth()->user()->uuid . DS . $post['image']);
         }
 
         $this->postService->deletePost($postId);
@@ -206,12 +221,12 @@ class PostController extends QtController
      * @param string|null $lang
      * @param string $postId
      */
-    public function deletePostImage(?string $lang, string $postId)
+    public function deleteImage(?string $lang, string $postId)
     {
         $post = $this->postService->getPost($postId, false);
 
         if ($post['image']) {
-            $this->postService->deleteImage($post['image']);
+            $this->postService->deleteImage(auth()->user()->uuid . DS . $post['image']);
         }
 
         $this->postService->updatePost($postId, [

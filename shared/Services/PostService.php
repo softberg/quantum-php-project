@@ -9,21 +9,26 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Shared\Services;
 
 use Quantum\Libraries\Transformer\TransformerInterface;
+use Quantum\Exceptions\FileSystemException;
+use Quantum\Exceptions\FileUploadException;
+use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\Exceptions\DatabaseException;
 use Quantum\Libraries\Storage\FileSystem;
 use Shared\Transformers\PostTransformer;
 use Quantum\Exceptions\ConfigException;
 use Quantum\Exceptions\ModelException;
+use Quantum\Exceptions\LangException;
 use Quantum\Exceptions\DiException;
-use Quantum\Libraries\Upload\File;
 use Quantum\Factory\ModelFactory;
+use Gumlet\ImageResizeException;
 use Quantum\Mvc\QtService;
+use ReflectionException;
 use Shared\Models\User;
 use Shared\Models\Post;
 use Quantum\Di\Di;
@@ -57,9 +62,19 @@ class PostService extends QtService
     {
         $posts = ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
-            ->select('posts.uuid', 'title', 'content', 'image', 'updated_at', ['users.firstname' => 'firstname'], ['users.lastname' => 'lastname'])
+            ->select(
+                'posts.uuid',
+                'title',
+                'content',
+                'image',
+                'updated_at',
+                ['users.firstname' => 'firstname'],
+                ['users.lastname' => 'lastname'],
+                ['users.uuid' => 'user_directory']
+            )
             ->orderBy('updated_at', 'desc')
             ->get();
+
         return transform($posts, $this->transformer);
     }
 
@@ -74,7 +89,17 @@ class PostService extends QtService
         $post = ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
             ->criteria('uuid', '=', $uuid)
-            ->select('posts.uuid', 'user_id', 'title', 'content', 'image', 'updated_at', ['users.firstname' => 'firstname'], ['users.lastname' => 'lastname'])
+            ->select(
+                'posts.uuid',
+                'user_id',
+                'title',
+                'content',
+                'image',
+                'updated_at',
+                ['users.firstname' => 'firstname'],
+                ['users.lastname' => 'lastname'],
+                ['users.uuid' => 'user_directory']
+            )
             ->get();
 
         if (empty($post)) {
@@ -91,7 +116,19 @@ class PostService extends QtService
      */
     public function getMyPosts(int $userId): ?array
     {
-        return ModelFactory::get(Post::class)->criteria('user_id', '=', $userId)->get();
+        $posts = ModelFactory::get(Post::class)
+            ->joinThrough(ModelFactory::get(User::class))
+            ->criteria('user_id', '=', $userId)
+            ->select(
+                'posts.uuid',
+                'title',
+                'image',
+                'updated_at',
+                ['users.uuid' => 'user_directory']
+            )
+            ->get();
+
+        return transform($posts, $this->transformer);
     }
 
     /**
@@ -102,7 +139,7 @@ class PostService extends QtService
      * @throws DatabaseException
      * @throws DiException
      * @throws ModelException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function addPost(array $data): array
     {
@@ -147,30 +184,35 @@ class PostService extends QtService
 
     /**
      * Saves the post images
-     * @param File $file
+     * @param UploadedFile $uploadedFile
+     * @param string $imageDirectory
      * @param string $imageName
      * @return string
+     * @throws ImageResizeException
+     * @throws FileSystemException
+     * @throws FileUploadException
+     * @throws LangException
      */
-    public function saveImage(File $file, string $imageName): string
+    public function saveImage(UploadedFile $uploadedFile, string $imageDirectory, string $imageName): string
     {
-        $file->setName($imageName . '-' . random_number());
-        $file->save(uploads_dir() . DS . auth()->user()->uuid);
+        $uploadedFile->setName($imageName . '-' . random_number());
+        $uploadedFile->save(uploads_dir() . DS . $imageDirectory);
 
-        return $file->getNameWithExtension();
+        return $uploadedFile->getNameWithExtension();
     }
 
     /**
      * Deletes the post image
-     * @param string $imageUrl
+     * @param string $imagePath
+     * @throws DiException
+     * @throws ReflectionException
      */
-    public function deleteImage(string $imageUrl)
+    public function deleteImage(string $imagePath)
     {
         $fs = Di::get(FileSystem::class);
-        $pathParts = explode('/', $imageUrl);
-        $imageName = end($pathParts);
 
-        if ($fs->exists(uploads_dir() . DS . auth()->user()->uuid . DS . $imageName)) {
-            $fs->remove(uploads_dir() . DS . auth()->user()->uuid . DS . $imageName);
+        if ($fs->exists(uploads_dir() . DS . $imagePath)) {
+            $fs->remove(uploads_dir() . DS . $imagePath);
         }
     }
 
