@@ -27,6 +27,7 @@
             "php qt install:openapi Api",
             "php qt install:demo --yes",
             "php qt core:version"
-        ]
+        ],
+        "test": "vendor/bin/phpunit --stderr --coverage-clover coverage.xml"
     }
 }
