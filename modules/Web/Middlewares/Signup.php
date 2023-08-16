@@ -64,9 +64,9 @@ class Signup extends QtMiddleware
             'lastname' => [
                 Rule::set('required')
             ],
-            'recaptcha' => [
+            'captcha' => [
                 Rule::set('required'),
-                Rule::set('recaptcha')
+                Rule::set('captcha')
             ]
         ]);
     }
@@ -82,13 +82,22 @@ class Signup extends QtMiddleware
         if ($request->isMethod('post')) {
 
             if($request->has('g-recaptcha-response')) {
-                $request->set('recaptcha', $request->get('g-recaptcha-response'));
+                $request->set('captcha', $request->get('g-recaptcha-response'));
                 $request->delete('g-recaptcha-response');
+            }
+
+            if ($request->has('h-captcha-response')) {
+                $request->set('captcha', $request->get('h-captcha-response'));
+                $request->delete('h-captcha-response');
             }
 
             if (!$this->validator->isValid($request->all())) {
                 session()->setFlash('error', $this->validator->getErrors());
                 redirectWith(base_url(true) . '/' . current_lang() . '/signup', $request->all());
+            }
+
+            if ($request->has('captcha')) {
+                $request->delete('captcha');
             }
         }
 

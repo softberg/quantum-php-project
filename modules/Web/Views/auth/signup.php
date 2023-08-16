@@ -14,7 +14,7 @@
                 
                 <div class="card teal accent-4">
                     <div class="card-content">
-                        <form method="post" action="<?php echo base_url(true) . '/' . current_lang() ?>/signup">
+                        <form id="signUpForm" method="post" action="<?php echo base_url(true) . '/' . current_lang() ?>/signup">
                             <div class="row">
                                 <div class="input-field col s12">
                                     <label class="auth-form-label"><?php _t('common.email'); ?></label>
@@ -47,6 +47,9 @@
                                     <a href="<?php echo base_url(true) . '/' . current_lang() ?>/signin" class="white-text"><?php _t('common.signin') ?></a>
                                 </div>
                             </div>
+                            <div class="row">
+                                <?php echo htmlspecialchars_decode($captcha) ?>
+                            </div>
                             <div>
                                 <input type="hidden" name="csrf-token" value="<?php echo csrf_token() ?>" />
                                 <button class="btn btn-large waves-effect waves-light" type="submit">
@@ -60,3 +63,14 @@
         </div>
     </div>
 </div>
+<?php echo htmlspecialchars_decode($captchaJs) ?>
+
+
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6LfkRXwjAAAAAAYX8Eb641ZcbdsUjjuFbJKAum4S"></script>
+<script>
+    grecaptcha.enterprise.ready(function() {
+        grecaptcha.enterprise.execute('6LfkRXwjAAAAAAYX8Eb641ZcbdsUjjuFbJKAum4S', {action: 'login'}).then(function(token) {
+        ...
+        });
+    });
+</script>
