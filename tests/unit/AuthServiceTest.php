@@ -130,8 +130,8 @@ class AuthServiceTest extends TestCase
 
         $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
 
-        foreach ($uploadsFolder as $user_uuid) {
-            $fs->removeDirectory($user_uuid);
+        foreach ($uploadsFolder as $folder) {
+            $fs->removeDirectory($folder);
         }
     }
 }

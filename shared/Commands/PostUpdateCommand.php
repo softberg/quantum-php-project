@@ -9,11 +9,12 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Shared\Commands;
 
+use Quantum\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -63,33 +64,29 @@ class PostUpdateCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws \Quantum\Exceptions\DiException
+     * @throws DiException
      */
     public function exec()
     {
         $postService = ServiceFactory::get(PostService::class);
 
-        $uuid = $this->getArgument('uuid');
+        $postId = $this->getArgument('uuid');
 
-        $post = $postService->getPost($uuid);
+        $post = $postService->getPost($postId, false);
 
         if (!$post) {
             $this->error('The post is not found');
             return;
         }
 
-        $title = $this->getOption('title');
-        $description = $this->getOption('description');
-        $image = $this->getOption('image');
-
         $postData = [
-            'title' => $title ?: $post['title'],
-            'content' => $description ?: $post['content'],
-            'image' => $image ?: $post['image'] ?? '',
+            'title' => $this->getOption('title') ?: $post['title'],
+            'content' => $this->getOption('description') ?: $post['content'],
+            'image' => $this->getOption('image') ?: $post['image'] ?? '',
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        $postService->updatePost($uuid, $postData);
+        $postService->updatePost($postId, $postData);
 
         $this->info('Post updated successfully');
     }

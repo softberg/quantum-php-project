@@ -3,7 +3,7 @@
         <a href="<?php echo base_url(true) . '/' . current_lang() . '/post/' . $post['id'] ?>">
             <div class="card-image card-image-box">
                 <?php if ($post['image']) : ?>
-                    <img src="<?php echo $post['image'] ?>" class="content_img">
+                    <img src="<?php echo base_url() . '/uploads/' . $post['image'] ?>" class="content_img">
                 <?php else : ?>
                     <img src="<?php echo base_url() ?>/assets/images/no-image.png" class="content_no_img">
                 <?php endif; ?>

@@ -7,7 +7,7 @@
             <div class="col s12 center-align post-author teal-text text-accent-4"><?php echo $post['author'] ?></div>
         </div>
         <?php if ($post['image']): ?>
-            <img src="<?php echo $post['image'] ?>" class="single_page_img">
+            <img src="<?php echo base_url() . '/uploads/' . $post['image'] ?>" class="single_page_img">
         <?php endif; ?>
 
         <p class="left-align single-blog-txt"><?php echo nl2br($post['content']) ?></p>

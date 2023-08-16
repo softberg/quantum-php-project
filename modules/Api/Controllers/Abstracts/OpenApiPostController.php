@@ -30,7 +30,7 @@ abstract class OpenApiPostController extends ApiController
      *    path="/api/posts",
      *    tags={"Posts"},
      *    summary="Get posts action",
-     *    operationId="getPosts",
+     *    operationId="posts",
      *    @OA\Response(
      *      response=200,
      *      description="Success",
@@ -45,7 +45,7 @@ abstract class OpenApiPostController extends ApiController
      *  )
      * @param Response $response
      */
-    abstract public function getPosts(Response $response);
+    abstract public function posts(Response $response);
 
     /**
      * Get post action
@@ -53,7 +53,7 @@ abstract class OpenApiPostController extends ApiController
      *    path="/api/post/{id}",
      *    tags={"Posts"},
      *    summary="Get post action",
-     *    operationId="getPost",
+     *    operationId="post",
      *    @OA\Parameter(
      *      name="id",
      *      description="Post Id",
@@ -83,7 +83,7 @@ abstract class OpenApiPostController extends ApiController
      * @param string $postId
      * @param Response $response
      */
-    abstract public function getPost(?string $lang, string $postId, Response $response);
+    abstract public function post(?string $lang, string $postId, Response $response);
 
     /**
      * Get my posts action
@@ -91,7 +91,7 @@ abstract class OpenApiPostController extends ApiController
      *    path="/api/my-posts",
      *    tags={"Posts"},
      *    summary="Get my posts action",
-     *    operationId="getMyPosts",
+     *    operationId="myPosts",
      *    security={
      *      {"bearer_token": {}}
      *    },
@@ -113,7 +113,7 @@ abstract class OpenApiPostController extends ApiController
      *  )
      * @param Response $response
      */
-    abstract public function getMyPosts(Response $response);
+    abstract public function myPosts(Response $response);
 
     /**
      * Create post action
@@ -121,7 +121,7 @@ abstract class OpenApiPostController extends ApiController
      *  path="/api/my-posts/create",
      *    tags={"Posts"},
      *    summary="Create post action",
-     *    operationId="postCreate",
+     *    operationId="create",
      *    security={
      *      {"bearer_token": {}
      *    }},
@@ -169,7 +169,7 @@ abstract class OpenApiPostController extends ApiController
      * @param Request $request
      * @param Response $response
      */
-    abstract public function createPost(Request $request, Response $response);
+    abstract public function create(Request $request, Response $response);
 
     /**
      * Amend post action
@@ -177,7 +177,7 @@ abstract class OpenApiPostController extends ApiController
      *  path="/api/my-posts/amend/{id}",
      *    tags={"Posts"},
      *    summary="Amend post action",
-     *    operationId="postEdit",
+     *    operationId="amend",
      *    security={
      *      {"bearer_token": {}
      *    }},
@@ -236,7 +236,7 @@ abstract class OpenApiPostController extends ApiController
      * @param string|null $lang
      * @param string $postId
      */
-    abstract public function amendPost(Request $request, Response $response, ?string $lang, string $postId);
+    abstract public function amend(Request $request, Response $response, ?string $lang, string $postId);
 
     /**
      * Delete post action
@@ -244,7 +244,7 @@ abstract class OpenApiPostController extends ApiController
      *    path="/api/my-posts/delete/{id}",
      *    tags={"Posts"},
      *    summary="Delete post action",
-     *    operationId="postDelete",
+     *    operationId="delete",
      *    security={
      *      {"bearer_token": {}}
      *    },
@@ -281,7 +281,7 @@ abstract class OpenApiPostController extends ApiController
      * @param string|null $lang
      * @param string $postId
      */
-    abstract public function deletePost(Response $response, ?string $lang, string $postId);
+    abstract public function delete(Response $response, ?string $lang, string $postId);
 
     /**
      * Delete post image action
@@ -289,7 +289,7 @@ abstract class OpenApiPostController extends ApiController
      *    path="/api/my-posts/delete-image/{id}",
      *    tags={"Posts"},
      *    summary="Delete post image action",
-     *    operationId="postImageDelete",
+     *    operationId="deleteImage",
      *    security={
      *      {"bearer_token": {}
      *    }},
@@ -326,6 +326,6 @@ abstract class OpenApiPostController extends ApiController
      * @param string|null $lang
      * @param string $postId
      */
-    abstract public function deletePostImage(Response $response, ?string $lang, string $postId);
+    abstract public function deleteImage(Response $response, ?string $lang, string $postId);
 
 }

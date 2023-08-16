@@ -44,7 +44,7 @@ class PostController extends OpenApiPostController
     /**
      * @inheritDoc
      */
-    public function getPosts(Response $response)
+    public function posts(Response $response)
     {
         $response->json([
             'status' => 'success',
@@ -55,7 +55,7 @@ class PostController extends OpenApiPostController
     /**
      * @inheritDoc
      */
-    public function getPost(?string $lang, string $postId, Response $response)
+    public function post(?string $lang, string $postId, Response $response)
     {
         $response->json([
             'status' => 'success',
@@ -66,21 +66,21 @@ class PostController extends OpenApiPostController
     /**
      * @inheritDoc
      */
-    public function getMyPosts(Response $response)
+    public function myPosts(Response $response)
     {
         $response->json([
             'status' => 'success',
-            'data' => $this->postService->getMyPosts((int) auth()->user()->id)
+            'data' => $this->postService->getMyPosts((int)auth()->user()->id)
         ]);
     }
 
     /**
      * @inheritDoc
      */
-    public function createPost(Request $request, Response $response)
+    public function create(Request $request, Response $response)
     {
         $postData = [
-            'user_id' => (int) auth()->user()->id,
+            'user_id' => (int)auth()->user()->id,
             'title' => $request->get('title', null, true),
             'content' => $request->get('content', null, true),
             'image' => '',
@@ -88,8 +88,13 @@ class PostController extends OpenApiPostController
         ];
 
         if ($request->hasFile('image')) {
-            $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-                $postData['image'] = base_url() . '/uploads/' . auth()->user()->uuid . '/' . $imageName;
+            $imageName = $this->postService->saveImage(
+                $request->getFile('image'),
+                auth()->user()->uuid,
+                slugify($request->get('title'))
+            );
+
+            $postData['image'] = $imageName;
         }
 
         $this->postService->addPost($postData);
@@ -103,7 +108,7 @@ class PostController extends OpenApiPostController
     /**
      * @inheritDoc
      */
-    public function amendPost(Request $request, Response $response, ?string $lang, string $postId)
+    public function amend(Request $request, Response $response, ?string $lang, string $postId)
     {
         $postData = [
             'title' => $request->get('title', null, true),
@@ -111,15 +116,20 @@ class PostController extends OpenApiPostController
             'updated_at' => date('Y-m-d H:i:s'),
         ];
 
-        $post = $this->postService->getPost($postId);
+        $post = $this->postService->getPost($postId, false);
 
         if ($request->hasFile('image')) {
             if ($post['image']) {
-                $this->postService->deleteImage($post['image']);
+                $this->postService->deleteImage(auth()->user()->uuid . DS . $post['image']);
             }
 
-            $imageName = $this->postService->saveImage($request->getFile('image'), slugify($request->get('title')));
-            $postData['image'] = base_url() . '/uploads/' . auth()->user()->uuid . '/' . $imageName;
+            $imageName = $this->postService->saveImage(
+                $request->getFile('image'),
+                auth()->user()->uuid,
+                slugify($request->get('title'))
+            );
+
+            $postData['image'] = $imageName;
         }
 
         $this->postService->updatePost($postId, $postData);
@@ -133,12 +143,12 @@ class PostController extends OpenApiPostController
     /**
      * @inheritDoc
      */
-    public function deletePost(Response $response, ?string $lang, string $postId)
+    public function delete(Response $response, ?string $lang, string $postId)
     {
-        $post = $this->postService->getPost($postId);
+        $post = $this->postService->getPost($postId, false);
 
         if ($post['image']) {
-            $this->postService->deleteImage($post['image']);
+            $this->postService->deleteImage(auth()->user()->uuid . DS . $post['image']);
         }
 
         $this->postService->deletePost($postId);
@@ -152,12 +162,12 @@ class PostController extends OpenApiPostController
     /**
      * @inheritDoc
      */
-    public function deletePostImage(Response $response, ?string $lang, string $postId)
+    public function deleteImage(Response $response, ?string $lang, string $postId)
     {
         $post = $this->postService->getPost($postId, false);
 
         if ($post['image']) {
-            $this->postService->deleteImage($post['image']);
+            $this->postService->deleteImage(auth()->user()->uuid . DS . $post['image']);
         }
 
         $this->postService->updatePost($postId, [
