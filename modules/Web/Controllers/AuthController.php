@@ -14,6 +14,7 @@
 
 namespace Modules\Web\Controllers;
 
+use Quantum\Libraries\Captcha\CaptchaManager;
 use Quantum\Exceptions\AuthException;
 use Quantum\Factory\ViewFactory;
 use Quantum\Mvc\QtController;
@@ -111,13 +112,20 @@ class AuthController extends QtController
      */
     public function signup(Request $request, Response $response, ViewFactory $view)
     {
+        $captcha = CaptchaManager::getCaptcha();
+
         if ($request->isMethod('post')) {
+            if (!empty($captcha->getErrorCodes())){
+
+            }
             auth()->signup($request->all());
             session()->setFlash('success', t('common.check_email_signup'));
             redirect(base_url(true) . '/' . current_lang() . '/signup');
         } else {
             $view->setParam('title', t('common.signup') . ' | ' . config()->get('app_name'));
             $view->setParam('langs', config()->get('langs'));
+            $view->setParam('captcha', $captcha->display('signUpForm'));
+            $view->setParam('captchaJs', $captcha->renderJs());
             $response->html($view->render(self::VIEW_SIGNUP));
         }
     }

@@ -61,6 +61,11 @@ return [
        *
        * OTP expires after minutes defined
        */
-    'otp_expires' => 2
+    'otp_expires' => 2,
+
+    'HCAPTCH_SECRET_KEY' => env('HCAPTCH_SECRET_KEY', '0xE1a02fB374Bf228678E613645295A2d0fD0Dc5Fa'),
+    'HCAPTCH_SITE_KEY' => env('HCAPTCH_SITE_KEY', '07737dfc-abfa-44e3-a695-66ac44365d0c'),
+    'RECAPTCHA_SECRET_KEY' => env('RECAPTCHA_SECRET_KEY', ''),
+    'RECAPTCHA_SITE_KEY' => env('RECAPTCHA_SITE_KEY', '')
 
 ];
