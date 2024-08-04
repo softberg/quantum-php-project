@@ -109,6 +109,7 @@ class DemoCommand extends QtCommand
      * Command name of create post
      */
     const COMMAND_POST_CREATE = 'post:create';
+    const COMMAND_CREATE_MODULE = 'module:generate';
 
     /**
      * Command constructor
@@ -152,6 +153,21 @@ class DemoCommand extends QtCommand
                 $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user));
             }
         }
+
+        $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
+            "module" => "Web",
+            "--yes" => true,
+            "--template" => "web",
+            "--demo" => "yes"
+        ]);
+
+        $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
+            "module" => "Api",
+            "--yes" => true,
+            "--template" => "api",
+            "--demo" => "yes"
+        ]);
+
 
         $this->info('Demo project created successfully');
     }
