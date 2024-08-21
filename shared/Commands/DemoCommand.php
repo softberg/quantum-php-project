@@ -14,11 +14,14 @@
 
 namespace Shared\Commands;
 
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Exceptions\DatabaseException;
+use Quantum\Exceptions\ConfigException;
 use Bluemmb\Faker\PicsumPhotosProvider;
+use Quantum\Exceptions\ModelException;
 use Quantum\Migration\MigrationTable;
 use Quantum\Factory\ServiceFactory;
 use Quantum\Exceptions\DiException;
@@ -96,19 +99,23 @@ class DemoCommand extends QtCommand
     const DEFAULT_PASSWORD = 'password';
 
     /**
-     * Command name of run migration
+     * Command name to run migrations
      */
     const COMMAND_MIGRATE = 'migration:migrate';
 
     /**
-     * Command name of create user
+     * Command name to create users
      */
     const COMMAND_USER_CREATE = 'user:create';
 
     /**
-     * Command name of create post
+     * Command name to create posts
      */
     const COMMAND_POST_CREATE = 'post:create';
+
+    /**
+     * Command name to generate modules
+     */
     const COMMAND_CREATE_MODULE = 'module:generate';
 
     /**
@@ -125,7 +132,13 @@ class DemoCommand extends QtCommand
 
     /**
      * Executes the command
+     * @throws DatabaseException
      * @throws DiException
+     * @throws ReflectionException
+     * @throws ConfigException
+     * @throws ModelException
+     * @throws Exception
+     * @throws ExceptionInterface
      */
     public function exec()
     {
@@ -175,6 +188,7 @@ class DemoCommand extends QtCommand
     /**
      * Runs an external command
      * @throws Exception
+     * @throws ExceptionInterface
      */
     protected function runExternalCommand($commandName, $arguments)
     {
@@ -226,6 +240,9 @@ class DemoCommand extends QtCommand
     /**
      * Cleanups the database
      * @throws DatabaseException
+     * @throws DiException
+     * @throws ExceptionInterface
+     * @throws ReflectionException
      */
     private function cleanUp()
     {

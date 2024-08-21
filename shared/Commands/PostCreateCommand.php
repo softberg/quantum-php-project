@@ -14,10 +14,12 @@
 
 namespace Shared\Commands;
 
+use Quantum\Exceptions\ServiceException;
 use Quantum\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
+use ReflectionException;
 
 /**
  * Class PostCreateCommand
@@ -58,6 +60,8 @@ class PostCreateCommand extends QtCommand
     /**
      * Executes the command
      * @throws DiException
+     * @throws ServiceException
+     * @throws ReflectionException
      */
     public function exec()
     {

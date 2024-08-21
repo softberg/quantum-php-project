@@ -57,6 +57,11 @@ class PostService extends QtService
     /**
      * Get posts
      * @return array
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function getPosts(): array
     {
@@ -79,10 +84,15 @@ class PostService extends QtService
     }
 
     /**
-     * Get post
+     *  Get post
      * @param string $uuid
      * @param bool $transformed
      * @return array|null
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function getPost(string $uuid, bool $transformed = true): ?array
     {
@@ -110,9 +120,14 @@ class PostService extends QtService
     }
 
     /**
-     * Get post
+     *  Get post
      * @param int $userId
-     * @return ?array
+     * @return array|null
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function getMyPosts(int $userId): ?array
     {
@@ -156,6 +171,11 @@ class PostService extends QtService
      * Update post
      * @param string $uuid
      * @param array $data
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function updatePost(string $uuid, array $data)
     {
@@ -168,6 +188,11 @@ class PostService extends QtService
      * Deletes the post
      * @param string $uuid
      * @return bool
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function deletePost(string $uuid): bool
     {

@@ -6,7 +6,7 @@ return [
      * Project modules
      * ---------------------------------------------------------
      *
-     * Project modules which will be loaded by framework if enabled
+     * Project modules which framework will load if enabled
      */
     'modules' => [
     ]

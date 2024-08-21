@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.8.0
+ * @since 2.9.0
  */
 
 namespace Shared\Services;
@@ -96,10 +96,15 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
-     * Get
+     *  Get
      * @param string $field
-     * @param mixed $value
+     * @param $value
      * @return AuthUser|null
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function get(string $field, $value): ?AuthUser
     {
@@ -116,6 +121,11 @@ class AuthService extends QtService implements AuthServiceInterface
      * Add user
      * @param array $data
      * @return AuthUser
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function add(array $data): AuthUser
     {
@@ -137,6 +147,11 @@ class AuthService extends QtService implements AuthServiceInterface
      * @param string|null $value
      * @param array $data
      * @return AuthUser|null
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function update(string $field, ?string $value, array $data): ?AuthUser
     {
@@ -162,7 +177,6 @@ class AuthService extends QtService implements AuthServiceInterface
 
     /**
      * @param string $uuid
-     * @return void
      * @throws DiException
      * @throws ReflectionException
      */

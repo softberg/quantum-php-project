@@ -13,6 +13,7 @@
  */
 
 use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Exceptions\LangException;
 use Quantum\Exceptions\DiException;
 use Quantum\Di\Di;
 
@@ -20,6 +21,7 @@ use Quantum\Di\Di;
  * Gets the url with selected language
  * @param string $lang
  * @return string
+ * @throws LangException
  */
 function url_with_lang(string $lang): string
 {
@@ -75,13 +77,4 @@ function save_remote_image(string $imageUrl, string $userDirectory, string $imag
     $fs->put(uploads_dir() . DS . $userDirectory . DS . $imageName, $fs->get($imageUrl));
 
     return $imageName;
-}
-
-function getRecaptcha()
-{
-    if (env('RECAPTCHA_SITE_KEY_V2')) {
-        echo partial('partials/recaptchaVersions/recaptchaCheckbox');
-    } elseif (env('RECAPTCHA_SITE_KEY_V3')) {
-        echo partial('partials/recaptchaVersions/recaptchaInvisibleV3');
-    }
 }

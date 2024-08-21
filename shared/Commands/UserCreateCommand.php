@@ -15,6 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Libraries\Validation\Validator;
+use Quantum\Exceptions\ServiceException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Exceptions\DiException;
@@ -22,6 +23,7 @@ use Quantum\Factory\ServiceFactory;
 use Quantum\Factory\ModelFactory;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
+use ReflectionException;
 use Shared\Models\User;
 
 /**
@@ -70,6 +72,8 @@ class UserCreateCommand extends QtCommand
     /**
      * Executes the command
      * @throws DiException
+     * @throws ServiceException
+     * @throws ReflectionException
      */
     public function exec()
     {

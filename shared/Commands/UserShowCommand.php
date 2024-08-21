@@ -15,10 +15,12 @@
 namespace Shared\Commands;
 
 use Symfony\Component\Console\Helper\Table;
+use Quantum\Exceptions\ServiceException;
 use Quantum\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
+use ReflectionException;
 
 /**
  * Class UserShowCommand
@@ -56,6 +58,8 @@ class UserShowCommand extends QtCommand
     /**
      * Executes the command
      * @throws DiException
+     * @throws ServiceException
+     * @throws ReflectionException
      */
     public function exec()
     {
