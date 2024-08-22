@@ -3,7 +3,7 @@
 return [
     /**
      * ---------------------------------------------------------
-     * Current database settings
+     * Database settings
      * ---------------------------------------------------------
      *
      * Current configuration to use.
@@ -17,12 +17,12 @@ return [
      *
      * You can define as many database configurations as you want.
      *
-     * driver     : mysql, pgsql, sqlite, sleekdb
-     * host       : The database server (localhost)
-     * dbname     : The database name
-     * username   : Username of the database server
-     * password   : Password of the database server
-     * charset    : Default charset
+     * driver: mysql, pgsql, sqlite, sleekdb
+     * host: The database server (localhost)
+     * dbname: The database name
+     * username: Username of the database server
+     * password: Password of the database server
+     * charset: Default charset
      */
     'mysql' => [
         'driver' => env("DB_DRIVER", "mysql"),

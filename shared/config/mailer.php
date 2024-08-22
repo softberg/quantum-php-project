@@ -3,7 +3,7 @@
 return [
     /**
      * ---------------------------------------------------------
-     * Current mailer settings
+     * Mailer settings
      * ---------------------------------------------------------
      *
      * Current configuration to use.

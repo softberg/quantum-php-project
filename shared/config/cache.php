@@ -3,7 +3,7 @@
 return [
     /**
      * ---------------------------------------------------------
-     * Current cache settings
+     * Cache settings
      * ---------------------------------------------------------
      *
      * Current configuration to use.
