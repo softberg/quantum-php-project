@@ -1,11 +1,13 @@
 <?php
 
+use Quantum\Libraries\Database\PaginatorInterface;
 use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use PHPUnit\Framework\TestCase;
+use Quantum\Http\Request;
 use Quantum\Di\Di;
 use Quantum\App;
 
@@ -62,6 +64,11 @@ class PostServiceTest extends TestCase
     private $fs;
     private $user;
 
+	/**
+	 * @var Request
+	 */
+		private $request;
+
     public function setUp(): void
     {
         App::loadCoreFunctions(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'Helpers');
@@ -70,6 +77,8 @@ class PostServiceTest extends TestCase
 
         Di::loadDefinitions();
 
+				$this->request = new Request();
+
         $this->fs = Di::get(FileSystem::class);
 
         $this->authService = ServiceFactory::get(AuthService::class, ['shared' . DS . 'store', 'users']);
@@ -77,6 +86,8 @@ class PostServiceTest extends TestCase
         $this->user = $this->authService->add($this->initialUser);
 
         $this->postService = ServiceFactory::get(PostService::class, ['shared' . DS . 'store', 'posts']);
+
+				$this->request->set('per_page', 5);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
@@ -94,13 +105,14 @@ class PostServiceTest extends TestCase
     {
         $this->assertIsObject($this->postService);
 
-        $posts = $this->postService->getPosts();
+        $posts = $this->postService->getPosts($this->request);
 
-        $this->assertIsArray($posts);
+				$this->assertInstanceOf(PaginatorInterface::class, $posts);
+        $this->assertIsArray($posts->data);
 
-        $this->assertCount(4, $posts);
+        $this->assertCount(4, $posts->data);
 
-        $post = $posts[0];
+        $post = $posts->data[0];
 
         $this->assertIsArray($post);
 
@@ -111,7 +123,9 @@ class PostServiceTest extends TestCase
 
     public function testGetSinglePost()
     {
-        $uuid = $this->postService->getPosts()[0]['id'];
+				$posts = $this->postService->getPosts($this->request);
+
+        $uuid = $posts->data[0]['id'];
 
         $post = $this->postService->getPost($uuid);
 
@@ -157,7 +171,9 @@ class PostServiceTest extends TestCase
     {
         $date = date('Y-m-d H:i:s');
 
-        $uuid = $this->postService->getPosts()[0]['id'];
+	      $posts = $this->postService->getPosts($this->request);
+
+	      $uuid = $posts->data[0]['id'];
 
         $this->postService->updatePost($uuid, [
             'title' => 'Walt Disney Jr.',
@@ -183,7 +199,7 @@ class PostServiceTest extends TestCase
 
     public function testDeletePost()
     {
-        $this->assertCount(4, $this->postService->getPosts());
+        $this->assertCount(4, $this->postService->getPosts($this->request)->data);
 
         $post = $this->postService->addPost([
             'user_id' => 1,
@@ -193,11 +209,11 @@ class PostServiceTest extends TestCase
             'updated_at' => date('Y-m-d H:i:s')
         ]);
 
-        $this->assertCount(5, $this->postService->getPosts());
+        $this->assertCount(5, $this->postService->getPosts($this->request)->data);
 
         $this->postService->deletePost($post['uuid']);
 
-        $this->assertCount(4, $this->postService->getPosts());
+        $this->assertCount(4, $this->postService->getPosts($this->request)->data);
     }
 
     public function testSaveDeleteImage()

@@ -14,6 +14,8 @@
 
 namespace Shared\Services;
 
+use Quantum\Http\Request;
+use Quantum\Libraries\Database\PaginatorInterface;
 use Quantum\Libraries\Transformer\TransformerInterface;
 use Quantum\Exceptions\FileSystemException;
 use Quantum\Exceptions\FileUploadException;
@@ -54,17 +56,21 @@ class PostService extends QtService
         $this->transformer = $transformer;
     }
 
-    /**
-     * Get posts
-     * @return array
-     * @throws ConfigException
-     * @throws DatabaseException
-     * @throws DiException
-     * @throws ModelException
-     * @throws ReflectionException
-     */
-    public function getPosts(): array
+	/**
+	 * Get posts
+	 * @param Request $request
+	 * @return PaginatorInterface
+	 * @throws ConfigException
+	 * @throws DatabaseException
+	 * @throws DiException
+	 * @throws ModelException
+	 * @throws ReflectionException
+	 */
+    public function getPosts(Request $request): PaginatorInterface
     {
+				$per_page = $request->get('per_page', 12);
+				$page = $request->get('page', 1);
+
         $posts = ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
             ->select(
@@ -78,9 +84,10 @@ class PostService extends QtService
                 ['users.uuid' => 'user_directory']
             )
             ->orderBy('updated_at', 'desc')
-            ->get();
+            ->paginate($per_page, $page);
 
-        return transform($posts, $this->transformer);
+				$posts->data = transform($posts->data(), $this->transformer);
+        return $posts;
     }
 
     /**

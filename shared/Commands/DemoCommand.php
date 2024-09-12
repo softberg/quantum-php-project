@@ -91,7 +91,7 @@ class DemoCommand extends QtCommand
     /**
      * How many posts to create
      */
-    const POST_COUNT_PER_USER = 4;
+    const POST_COUNT_PER_USER = 20;
 
     /**
      * Default password for generated users
@@ -257,7 +257,7 @@ class DemoCommand extends QtCommand
                     $migrationTable->up($tableFactory);
                 }
 
-                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down', '--yes' => true]);
+                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down']);
                 $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'up']);
                 break;
             case 'sleekdb':
