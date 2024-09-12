@@ -56,15 +56,16 @@ class PostService extends QtService
         $this->transformer = $transformer;
     }
 
-    /**
-     * Get posts
-     * @return array
-     * @throws ConfigException
-     * @throws DatabaseException
-     * @throws DiException
-     * @throws ModelException
-     * @throws ReflectionException
-     */
+	/**
+	 * Get posts
+	 * @param Request $request
+	 * @return PaginatorInterface
+	 * @throws ConfigException
+	 * @throws DatabaseException
+	 * @throws DiException
+	 * @throws ModelException
+	 * @throws ReflectionException
+	 */
     public function getPosts(Request $request): PaginatorInterface
     {
 				$per_page = $request->get('per_page', 12);
