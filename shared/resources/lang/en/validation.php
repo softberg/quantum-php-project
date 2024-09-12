@@ -2,7 +2,6 @@
 
 return [
     'required' => 'The field {%1} is required',
-    'recaptcha' =>'The field is not valid',
     'email' => 'The {%1} field must be a valid email address',
     'minLen' => 'The {%1} field needs to be at least {%2} characters',
     'maxLen' => 'The {%1} field needs to be {%2} characters or less',
@@ -44,4 +43,14 @@ return [
     'nonEqualValues' => 'Values are not equal',
     'unauthorizedRequest' => 'Unauthorized request',
     'uniqueUser' => 'The value of {%1} field is already exists in our database',
+    'captcha' => [
+        'timeout-or-duplicate' => 'Timeout or duplicate.',
+        'missing-input-secret' => 'The secret parameter is missing.',
+        'invalid-input-secret' => 'The secret parameter is invalid or malformed.',
+        'missing-input-response' => 'The response parameter is missing.',
+        'invalid-input-response' => 'The response parameter is invalid or malformed.',
+        'bad-request' => 'The request is invalid or malformed.',
+        'internal-empty-response' => 'The captcha response is required.',
+        'replay-attack' => 'Potential replay attack detected.',
+    ]
 ];
