@@ -5,6 +5,26 @@ body {
     font-size: 17px;
 }
 
+.post-item-link  {
+    position: relative;
+    display: block;
+}
+
+.card .card-action.card-action-custom {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    backdrop-filter: blur(3px);
+    border: 0 none;
+}
+.pagination li {
+    margin: 0 4px;
+}
+
+.pagination li.active {
+    background-color: #00bfa5;
+}
+
 header nav {
     position: relative;
     z-index: 1;
@@ -319,12 +339,12 @@ a:hover {
 }
 
 .post-author {
-    color: white;
+    color: #fff;
     font-size: 12px;
 }
 
 .post-date {
-    color: white;
+    color: #fff;
     font-size: 14px;
 }
 

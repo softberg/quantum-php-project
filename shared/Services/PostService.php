@@ -14,15 +14,12 @@
 
 namespace Shared\Services;
 
-use Quantum\Http\Request;
 use Quantum\Libraries\Database\PaginatorInterface;
-use Quantum\Libraries\Transformer\TransformerInterface;
 use Quantum\Exceptions\FileSystemException;
 use Quantum\Exceptions\FileUploadException;
 use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\Exceptions\DatabaseException;
 use Quantum\Libraries\Storage\FileSystem;
-use Shared\Transformers\PostTransformer;
 use Quantum\Exceptions\ConfigException;
 use Quantum\Exceptions\ModelException;
 use Quantum\Exceptions\LangException;
@@ -44,34 +41,19 @@ class PostService extends QtService
 {
 
     /**
-     * @var TransformerInterface
+     * Get posts
+     * @param int $perPage
+     * @param int $currentPage
+     * @return PaginatorInterface
+     * @throws ConfigException
+     * @throws DatabaseException
+     * @throws DiException
+     * @throws ModelException
+     * @throws ReflectionException
      */
-    private $transformer;
-
-    /**
-     * Initialize the service
-     */
-    public function __init(PostTransformer $transformer)
+    public function getPosts(int $perPage, int $currentPage): PaginatorInterface
     {
-        $this->transformer = $transformer;
-    }
-
-	/**
-	 * Get posts
-	 * @param Request $request
-	 * @return PaginatorInterface
-	 * @throws ConfigException
-	 * @throws DatabaseException
-	 * @throws DiException
-	 * @throws ModelException
-	 * @throws ReflectionException
-	 */
-    public function getPosts(Request $request): PaginatorInterface
-    {
-				$per_page = $request->get('per_page', 12);
-				$page = $request->get('page', 1);
-
-        $posts = ModelFactory::get(Post::class)
+        return ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
             ->select(
                 'posts.uuid',
@@ -84,26 +66,22 @@ class PostService extends QtService
                 ['users.uuid' => 'user_directory']
             )
             ->orderBy('updated_at', 'desc')
-            ->paginate($per_page, $page);
-
-				$posts->data = transform($posts->data(), $this->transformer);
-        return $posts;
+            ->paginate($perPage, $currentPage);
     }
 
     /**
-     *  Get post
+     * Get post
      * @param string $uuid
-     * @param bool $transformed
-     * @return array|null
+     * @return Post|null
      * @throws ConfigException
      * @throws DatabaseException
      * @throws DiException
      * @throws ModelException
      * @throws ReflectionException
      */
-    public function getPost(string $uuid, bool $transformed = true): ?array
+    public function getPost(string $uuid): ?Post
     {
-        $post = ModelFactory::get(Post::class)
+        return ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
             ->criteria('uuid', '=', $uuid)
             ->select(
@@ -117,13 +95,7 @@ class PostService extends QtService
                 ['users.lastname' => 'lastname'],
                 ['users.uuid' => 'user_directory']
             )
-            ->get();
-
-        if (empty($post)) {
-            return null;
-        }
-
-        return $transformed ? current(transform($post, $this->transformer)) : current($post)->asArray();
+            ->first();
     }
 
     /**
@@ -138,7 +110,7 @@ class PostService extends QtService
      */
     public function getMyPosts(int $userId): ?array
     {
-        $posts = ModelFactory::get(Post::class)
+        return ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
             ->criteria('user_id', '=', $userId)
             ->select(
@@ -146,11 +118,11 @@ class PostService extends QtService
                 'title',
                 'image',
                 'updated_at',
+                ['users.firstname' => 'firstname'],
+                ['users.lastname' => 'lastname'],
                 ['users.uuid' => 'user_directory']
             )
             ->get();
-
-        return transform($posts, $this->transformer);
     }
 
     /**
