@@ -15,6 +15,8 @@ use Quantum\App;
 
 class PostServiceTest extends TestCase
 {
+    const PER_PAGE = 10;
+    const CURRENT_PAGE = 1;
     public $authService;
     public $postService;
     public $userId = 1;
@@ -98,7 +100,7 @@ class PostServiceTest extends TestCase
     {
         $this->assertIsObject($this->postService);
 
-        $posts = $this->postService->getPosts(10, 1);
+        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
         $this->assertInstanceOf(PaginatorInterface::class, $posts);
 
@@ -113,7 +115,7 @@ class PostServiceTest extends TestCase
 
     public function testGetSinglePost()
     {
-        $posts = $this->postService->getPosts(10, 1);
+        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
         $uuid = $posts->data()[0]->uuid;
 
@@ -158,7 +160,7 @@ class PostServiceTest extends TestCase
     {
         $date = date('Y-m-d H:i:s');
 
-        $posts = $this->postService->getPosts(10, 1);
+        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
         $uuid = $posts->data()[0]->uuid;
 
@@ -184,7 +186,7 @@ class PostServiceTest extends TestCase
 
     public function testDeletePost()
     {
-        $this->assertCount(4, $this->postService->getPosts(10, 1)->data());
+        $this->assertCount(4, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
 
         $post = $this->postService->addPost([
             'user_id' => 1,
@@ -194,11 +196,11 @@ class PostServiceTest extends TestCase
             'updated_at' => date('Y-m-d H:i:s')
         ]);
 
-        $this->assertCount(5, $this->postService->getPosts(10, 1)->data());
+        $this->assertCount(5, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
 
         $this->postService->deletePost($post['uuid']);
 
-        $this->assertCount(4, $this->postService->getPosts(10, 1)->data());
+        $this->assertCount(4, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
     }
 
     public function testSaveDeleteImage()
