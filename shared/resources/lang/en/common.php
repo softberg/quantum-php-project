@@ -30,8 +30,8 @@ return [
     'password' => 'Password',
     'verification_code' =>'Verification Code',
     'new_password' => 'New password',
-    'first_name' => 'First name',
-    'last_name' => 'Last name',
+    'firstname' => 'First name',
+    'lastname' => 'Last name',
     'send' => 'Send',
     'reset' => 'Reset',
     'cancel' => 'Cancel',
@@ -61,4 +61,8 @@ return [
     '2fa' => '2 Factor Authentication',
     'resend_otp' => 'Resend otp',
     'yes' => 'Yes',
+    'pagination' => [
+        'next' => 'Next &raquo;',
+        'prev' => '&laquo; Prev'
+    ]
 ];

@@ -29,8 +29,8 @@ return [
     'verification_code' =>'Код верификации',
     'new_password' => 'Новый пароль',
     'repeat_password' => 'Повторите пароль',
-    'first_name' => 'Имя',
-    'last_name' => 'Фамилия',
+    'firstname' => 'Имя',
+    'lastname' => 'Фамилия',
     'send' => 'Отправить',
     'reset' => 'Сбросить',
     'successfully_signed_up' => 'Успешная регистрация',
@@ -60,4 +60,8 @@ return [
     '2fa' => 'Двухфакторная аутентификация',
     'resend_otp' => 'Отправить повторно',
     'yes' => 'Да',
+    'pagination' => [
+        'next' => 'Следующий &raquo;',
+        'prev' => '&laquo; Предыдущий'
+    ]
 ];

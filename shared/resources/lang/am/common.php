@@ -29,8 +29,8 @@ return [
     'verification_code' =>'Ստուգման կոդը',
     'new_password' => 'Նոր գաղտնաբառ',
     'repeat_password' => 'Կրկնեք գաղտնաբառը',
-    'first_name' => 'Անուն',
-    'last_name' => 'Ազգանուն',
+    'firstname' => 'Անուն',
+    'lastname' => 'Ազգանուն',
     'send' => 'Ուղարկել',
     'reset' => 'Վերակայել',
     'successfully_signed_up' => 'Գրանցումը հաջողվեց',
@@ -60,4 +60,8 @@ return [
     '2fa' => 'Երկու գործոնով նույնականացում',
     'resend_otp' => 'Կրկին ուղարկել',
     'yes' => 'Այո',
+    'pagination' => [
+        'next' => 'Հաջորդ &raquo;',
+        'prev' => '&laquo; Նախորդ'
+    ]
 ];
