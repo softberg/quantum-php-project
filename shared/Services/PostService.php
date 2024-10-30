@@ -116,6 +116,7 @@ class PostService extends QtService
             ->select(
                 'posts.uuid',
                 'title',
+                'content',
                 'image',
                 'updated_at',
                 ['users.firstname' => 'firstname'],
