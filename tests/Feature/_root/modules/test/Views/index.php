@@ -1,1 +1,0 @@
-<p>Hello <?php echo ($name ?? "World") ?>, this is rendered view</p>

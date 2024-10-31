@@ -2,9 +2,9 @@
 
 namespace Quantum\Tests\Feature\Api;
 
+use Quantum\Tests\Feature\BaseTestCase;
 use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Factory\ModelFactory;
-use Tests\Feature\BaseTestCase;
 use Quantum\Router\Router;
 use Shared\Models\User;
 
@@ -44,7 +44,6 @@ class AuthControllerTest extends BaseTestCase
 
 	public function testMeApi()
 	{
-		$this->loadAppFunctionality();
 		Router::setCurrentRoute([
 			'route' => '/api/en/signin',
 			'prefix' => 'api',
@@ -76,7 +75,6 @@ class AuthControllerTest extends BaseTestCase
 
 	public function testSignoutApi()
 	{
-		$this->loadAppFunctionality();
 		Router::setCurrentRoute([
 			'route' => '/api/en/signin',
 			'prefix' => 'api',
@@ -131,7 +129,6 @@ class AuthControllerTest extends BaseTestCase
 
 	public function testActivateApi()
 	{
-		$this->loadAppFunctionality();
 		$userModel = ModelFactory::get(User::class)->create();
 		$activationToken = base64_encode((new Hasher())->hash('password'));
 		$userModel->fillObjectProps([
@@ -159,7 +156,6 @@ class AuthControllerTest extends BaseTestCase
 
 	public function testResetApi()
 	{
-		$this->loadAppFunctionality();
 		$userModel = ModelFactory::get(User::class)->create();
 		$resetToken = base64_encode((new Hasher())->hash('password'));
 		$userModel->fillObjectProps([
@@ -189,7 +185,7 @@ class AuthControllerTest extends BaseTestCase
 
 	public function testResendApi()
 	{
-		$this->loadAppFunctionality();
+
 		$userModel = ModelFactory::get(User::class)->create();
 		$otpToken = base64_encode((new Hasher())->hash($this->email));
 		$userModel->fillObjectProps([
@@ -213,6 +209,42 @@ class AuthControllerTest extends BaseTestCase
 
 		$this->assertEquals('error', $response->get('status'));
 		$this->assertEquals('Incorrect credentials', $response->get('message'));
+	}
+
+	public function testVerifyApi()
+	{
+		$userModel = ModelFactory::get(User::class)->create();
+		$otpToken = base64_encode((new Hasher())->hash($this->email));
+		$userModel->fillObjectProps([
+			'email' => $this->email,
+			'password' => (new Hasher())->hash($this->password),
+			'firstname' => 'firstname',
+			'lastname' => 'lastname',
+			'otp_token' => $otpToken,
+			'otp' => $otpToken
+		]);
+		$userModel->save();
+
+		$response = $this->request('post', '/api/en/verify', [
+			'otp' => $otpToken,
+			'code' => $otpToken,
+		]);
+
+		$this->assertEquals('success', $response->get('status'));
+		$this->assertArrayHasKey('tokens', $response->all());
+		$this->assertArrayHasKey('refresh_token', $response->get('tokens'));
+		$this->assertArrayHasKey('access_token', $response->get('tokens'));
+	}
+
+	public function testVerifyIncorrectApi()
+	{
+		$response = $this->request('post', '/api/en/verify', [
+			'otp' => 'incorrect-otp',
+			'code' => 'incorrect-code',
+		]);
+
+		$this->assertEquals('error', $response->get('status'));
+		$this->assertEquals('Incorrect verification code.', $response->get('message'));
 	}
 
 	public function tearDown(): void

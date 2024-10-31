@@ -11,9 +11,9 @@
     <testsuites>
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
-        </testsuite><!--processIsolation="true"-->
-<!--        <testsuite name="Unit">-->
-<!--            <directory suffix="Test.php">./tests/Unit</directory>-->
-<!--        </testsuite>-->
+        </testsuite>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

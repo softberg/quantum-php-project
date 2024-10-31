@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Quantum\Tests\Feature;
 
 use Quantum\Libraries\Curl\HttpClient;
 use Quantum\Environment\Environment;
@@ -8,6 +8,7 @@ use Quantum\Libraries\Config\Config;
 use PHPUnit\Framework\TestCase;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Quantum\Loader\Loader;
 use Quantum\Loader\Setup;
 use Quantum\Di\Di;
 use Quantum\App;
@@ -24,11 +25,9 @@ class BaseTestCase extends TestCase
 	{
 		parent::setUp();
 		ob_start();
-
-//		if (!self::$isDatabasePrepared) {
-//			shell_exec('php qt test_data:create');
-//			self::$isDatabasePrepared = true;
-//		}
+		$this->loadAppFunctionality();
+		TestData::createUserData();
+		TestData::createPostData();
 	}
 
 	public function request(string $method, string $url, array $options = [], array $headers = [], string $contentType = 'application/x-www-form-urlencoded'): Response
@@ -58,13 +57,29 @@ class BaseTestCase extends TestCase
 	{
 		parent::tearDown();
 		ob_end_clean();
+		TestData::deleteUserData();
+		TestData::deletePostData();
+
+		foreach (array_diff(scandir(uploads_dir()), array('.', '..', '.gitkeep')) as $item){
+			if (is_dir(uploads_dir() . DS . $item)) {
+				rmdir(uploads_dir() . DS . $item);
+			}elseif (is_file(uploads_dir() . DS . $item)) {
+				unlink(uploads_dir() . DS . $item);
+			}
+		}
 	}
 
-	protected function loadAppFunctionality()
+	private function loadAppFunctionality()
 	{
 		App::setBaseDir(dirname(__DIR__, 2));
 		App::loadCoreFunctions(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'Helpers');
 		Di::loadDefinitions();
+
+		$loader = Di::get(Loader::class);
+		$loader->loadDir(base_dir() . DS . 'helpers');
+		$loader->loadDir(base_dir() . DS . 'libraries');
+		$loader->loadDir(base_dir() . DS . 'hooks');
+
 		Environment::getInstance()->load(new Setup('config', 'env'));
 	}
 }

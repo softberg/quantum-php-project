@@ -42,5 +42,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Install demo
+      run: php qt install:demo
+
     - name: Run tests
       run: composer test
