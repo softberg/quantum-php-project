@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Quantum\Tests\Feature\Api;
 
 use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Factory\ModelFactory;

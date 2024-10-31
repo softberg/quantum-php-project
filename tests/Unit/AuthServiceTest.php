@@ -1,7 +1,10 @@
 <?php
 
+namespace Quantum\Tests\Unit;
+
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;
+use Quantum\Libraries\Auth\User;
 use Shared\Services\AuthService;
 use PHPUnit\Framework\TestCase;
 use Quantum\Di\Di;
@@ -51,7 +54,7 @@ class AuthServiceTest extends TestCase
     {
         $user = $this->authService->get('email', 'anonymous@qt.com');
 
-        $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
+        $this->assertInstanceOf(User::class, $user);
         $this->assertArrayHasKey('password', $user->getData());
         $this->assertArrayHasKey('firstname', $user->getData());
         $this->assertArrayHasKey('lastname', $user->getData());
@@ -65,7 +68,7 @@ class AuthServiceTest extends TestCase
     {
         $user = $this->authService->get('id', 1);
 
-        $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
+        $this->assertInstanceOf(User::class, $user);
 
         $userData = $user->getData();
 
@@ -81,7 +84,7 @@ class AuthServiceTest extends TestCase
             'lastname' => 'User',
         ]);
 
-        $this->assertInstanceOf(\Quantum\Libraries\Auth\User::class, $user);
+        $this->assertInstanceOf(User::class, $user);
         $this->assertArrayHasKey('email', $user->getData());
         $this->assertEquals('guest@qt.com', $user->getFieldValue('email'));
     }
