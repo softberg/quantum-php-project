@@ -10,8 +10,15 @@ use Shared\Models\User;
 
 class AuthControllerTest extends BaseTestCase
 {
-	protected string $email = 'test@test.test';
-	protected string $password = 'password';
+	/**
+	 * @var string
+	 */
+	protected $email = 'test@test.test';
+
+	/**
+	 * @var string
+	 */
+	protected $password = 'password';
 
 	public function setUp(): void
 	{
@@ -140,7 +147,7 @@ class AuthControllerTest extends BaseTestCase
 		]);
 		$userModel->save();
 
-		$response = $this->request('get', '/api/en/activate/'. $activationToken);
+		$response = $this->request('get', '/api/en/activate/' . $activationToken);
 
 		$this->assertEquals('success', $response->get('status'));
 		$this->assertEquals('Account is activated', $response->get('message'));
@@ -167,7 +174,7 @@ class AuthControllerTest extends BaseTestCase
 		]);
 		$userModel->save();
 
-		$response = $this->request('post', '/api/en/reset/'. $resetToken, [
+		$response = $this->request('post', '/api/en/reset/' . $resetToken, [
 			'password' => $this->password,
 			'repeat_password' => $this->password,
 		]);
@@ -196,7 +203,7 @@ class AuthControllerTest extends BaseTestCase
 			'otp_token' => $otpToken
 		]);
 		$userModel->save();
-		$response = $this->request('get', '/api/en/resend/'. $otpToken);
+		$response = $this->request('get', '/api/en/resend/' . $otpToken);
 
 		$this->assertEquals('success', $response->get('status'));
 		$this->assertArrayHasKey('code', $response->all());

@@ -15,11 +15,15 @@ use Quantum\App;
 
 class BaseTestCase extends TestCase
 {
-	protected HttpClient $client;
+	/**
+	 * @var HttpClient
+	 */
+	protected $client;
 
-	protected static bool $isDatabasePrepared = false;
-
-	protected string $baseUrl;
+	/**
+	 * @var string
+	 */
+	protected $baseUrl;
 
 	public function setUp(): void
 	{
@@ -60,10 +64,10 @@ class BaseTestCase extends TestCase
 		TestData::deleteUserData();
 		TestData::deletePostData();
 
-		foreach (array_diff(scandir(uploads_dir()), array('.', '..', '.gitkeep')) as $item){
+		foreach (array_diff(scandir(uploads_dir()), array('.', '..', '.gitkeep')) as $item) {
 			if (is_dir(uploads_dir() . DS . $item)) {
 				rmdir(uploads_dir() . DS . $item);
-			}elseif (is_file(uploads_dir() . DS . $item)) {
+			} elseif (is_file(uploads_dir() . DS . $item)) {
 				unlink(uploads_dir() . DS . $item);
 			}
 		}

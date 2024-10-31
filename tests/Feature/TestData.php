@@ -11,11 +11,26 @@ use Faker\Factory;
 
 class TestData
 {
-	protected static Generator $faker;
+	/**
+	 * @var Generator
+	 */
+	protected static $faker;
 
-	protected static string $email = 'test@test.test';
-	protected static string $role = 'editor';
-	protected static string $password = 'password';
+	/**
+	 * @var string
+	 */
+	protected static $email = 'test@test.test';
+
+	/**
+	 * @var string
+	 */
+	protected static $role = 'editor';
+
+	/**
+	 * @var string
+	 */
+	protected static $password = 'password';
+
 	public static function createUserData()
 	{
 		self::$faker = Factory::create();
@@ -37,8 +52,8 @@ class TestData
 		$users = ServiceFactory::get(AuthService::class)->getAll();
 		$postService = ServiceFactory::get(PostService::class);
 
-		foreach ($users as $user){
-			for ($i = 0; $i < 10; $i++){
+		foreach ($users as $user) {
+			for ($i = 0; $i < 10; $i++) {
 				$title = str_replace(['"', '\'', '-'], '', self::$faker->realText(50));
 
 				$postData = [

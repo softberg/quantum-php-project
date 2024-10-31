@@ -12,8 +12,15 @@ use Faker\Factory;
 
 class PostControllerTest extends BaseTestCase
 {
-	protected string $email = 'test@test.test';
-	protected string $password = 'password';
+	/**
+	 * @var string
+	 */
+	protected $email = 'test@test.test';
+
+	/**
+	 * @var string
+	 */
+	protected $password = 'password';
 
 	public function setUp(): void
 	{
