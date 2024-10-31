@@ -61,4 +61,8 @@ return [
     '2fa' => '2 Factor Authentication',
     'resend_otp' => 'Resend otp',
     'yes' => 'Yes',
+    'pagination' => [
+        'next' => 'Next &raquo;',
+        'prev' => '&laquo; Prev'
+    ]
 ];
