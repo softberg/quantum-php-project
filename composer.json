@@ -20,6 +20,11 @@
             "Shared\\": "shared"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "post-create-project-cmd": [
             "php qt core:env",
