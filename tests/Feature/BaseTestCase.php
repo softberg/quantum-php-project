@@ -64,13 +64,7 @@ class BaseTestCase extends TestCase
 		TestData::deleteUserData();
 		TestData::deletePostData();
 
-		foreach (array_diff(scandir(uploads_dir()), array('.', '..', '.gitkeep')) as $item) {
-			if (is_dir(uploads_dir() . DS . $item)) {
-				rmdir(uploads_dir() . DS . $item);
-			} elseif (is_file(uploads_dir() . DS . $item)) {
-				unlink(uploads_dir() . DS . $item);
-			}
-		}
+		$this->deleteDirectory(uploads_dir());
 	}
 
 	private function loadAppFunctionality()
@@ -85,6 +79,28 @@ class BaseTestCase extends TestCase
 		$loader->loadDir(base_dir() . DS . 'hooks');
 
 		Environment::getInstance()->load(new Setup('config', 'env'));
+	}
+
+	private function deleteDirectory(string $dir)
+	{
+		if (!is_dir($dir)) {
+			return;
+		}
+
+		$files = array_diff(scandir($dir), array('.', '..', '.gitkeep'));
+
+		foreach ($files as $file) {
+			$path = "$dir/$file";
+			if (is_dir($path)) {
+				$this->deleteDirectory($path);
+			} else {
+				unlink($path);
+			}
+		}
+
+		if ($dir != uploads_dir()) {
+			rmdir($dir);
+		}
 	}
 }
 
