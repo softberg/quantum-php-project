@@ -3,12 +3,9 @@
 namespace Quantum\Tests\Feature\Api;
 
 use Quantum\Tests\Feature\BaseTestCase;
-use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Factory\ModelFactory;
 use Quantum\Router\Router;
 use Shared\Models\Post;
-use Shared\Models\User;
-use Faker\Factory;
 
 class PostControllerTest extends BaseTestCase
 {
