@@ -2,13 +2,12 @@
 
 namespace Quantum\Tests\Feature\Api;
 
-use Quantum\Tests\Feature\BaseTestCase;
+use Quantum\Tests\Feature\AppTestCase;
 use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Factory\ModelFactory;
-use Quantum\Router\Router;
 use Shared\Models\User;
 
-class AuthControllerTest extends BaseTestCase
+class AuthControllerTest extends AppTestCase
 {
 	/**
 	 * @var string
@@ -51,10 +50,7 @@ class AuthControllerTest extends BaseTestCase
 
 	public function testMeApi()
 	{
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-		$tokens = auth()->signin($this->email, $this->password);
+		$tokens = $this->signInAndReturnTokens();
 
 		$response = $this->request('get', '/api/en/me', [], ['Authorization' => 'Bearer ' . $tokens['access_token']]);
 
@@ -79,10 +75,7 @@ class AuthControllerTest extends BaseTestCase
 
 	public function testSignoutApi()
 	{
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-		$tokens = auth()->signin($this->email, $this->password);
+		$tokens = $this->signInAndReturnTokens();
 
 		$response = $this->request('get', '/api/en/signout', [], [
 			'Authorization' => 'Bearer ' . $tokens['access_token'],

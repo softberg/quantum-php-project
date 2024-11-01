@@ -11,8 +11,9 @@ use Quantum\Http\Request;
 use Quantum\Loader\Setup;
 use Quantum\Di\Di;
 use Quantum\App;
+use Quantum\Router\Router;
 
-class BaseTestCase extends TestCase
+class AppTestCase extends TestCase
 {
 	/**
 	 * @var HttpClient
@@ -38,8 +39,6 @@ class BaseTestCase extends TestCase
 		$_SERVER['REQUEST_METHOD'] = strtoupper($method);
 		$_SERVER['CONTENT_TYPE'] = $contentType;
 		$_SERVER['REQUEST_URI'] = $url;
-		$_SERVER['SERVER_NAME'] = '127.0.0.1';
-		$_SERVER['SERVER_PORT'] = '8000';
 
 		if (!empty($headers)) {
 			foreach ($headers as $name => $value) {
@@ -63,6 +62,14 @@ class BaseTestCase extends TestCase
 		TestData::deletePostData();
 
 		$this->deleteDirectory(uploads_dir());
+	}
+
+	protected function signInAndReturnTokens(): array
+	{
+		Router::setCurrentRoute([
+			'module' => 'Api',
+		]);
+		return auth()->signin($this->email, $this->password);
 	}
 
 	private function loadAppFunctionality()

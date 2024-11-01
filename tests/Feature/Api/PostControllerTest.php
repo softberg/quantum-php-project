@@ -2,12 +2,11 @@
 
 namespace Quantum\Tests\Feature\Api;
 
-use Quantum\Tests\Feature\BaseTestCase;
+use Quantum\Tests\Feature\AppTestCase;
 use Quantum\Factory\ModelFactory;
-use Quantum\Router\Router;
 use Shared\Models\Post;
 
-class PostControllerTest extends BaseTestCase
+class PostControllerTest extends AppTestCase
 {
 	/**
 	 * @var string
@@ -68,10 +67,7 @@ class PostControllerTest extends BaseTestCase
 
 	public function testMyPostsApi()
 	{
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-		$tokens = auth()->signin($this->email, $this->password);
+		$tokens = $this->signInAndReturnTokens();
 
 		$response = $this->request('get', '/api/en/my-posts', [], [
 			'Authorization' => 'Bearer ' . $tokens['access_token'],
@@ -92,10 +88,7 @@ class PostControllerTest extends BaseTestCase
 
 	public function testPostCreateApi()
 	{
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-		$tokens = auth()->signin($this->email, $this->password);
+		$tokens = $this->signInAndReturnTokens();
 
 		$response = $this->request('post', '/api/en/my-posts/create',
 			[
@@ -115,12 +108,7 @@ class PostControllerTest extends BaseTestCase
 	public function testAmendPostApi()
 	{
 		$post = ModelFactory::get(Post::class)->first();
-
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-
-		$tokens = auth()->signin($this->email, $this->password);
+		$tokens = $this->signInAndReturnTokens();
 
 		$response = $this->request('put', '/api/en/my-posts/amend/' . $post->uuid,
 			[
@@ -138,12 +126,7 @@ class PostControllerTest extends BaseTestCase
 	public function testDeletePostApi()
 	{
 		$post = ModelFactory::get(Post::class)->first();
-
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-
-		$tokens = auth()->signin($this->email, $this->password);
+		$tokens = $this->signInAndReturnTokens();
 
 		$response = $this->request('delete', '/api/en/my-posts/delete/' . $post->uuid, [], [
 			'Authorization' => 'Bearer ' . $tokens['access_token']
@@ -157,11 +140,7 @@ class PostControllerTest extends BaseTestCase
 	public function testDeleteImagePostApi()
 	{
 		$post = ModelFactory::get(Post::class)->first();
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-
-		$tokens = auth()->signin($this->email, $this->password);
+		$tokens = $this->signInAndReturnTokens();
 
 		$response = $this->request('delete', '/api/en/my-posts/delete-image/' . $post->uuid, [], [
 			'Authorization' => 'Bearer ' . $tokens['access_token']
