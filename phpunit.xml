@@ -6,7 +6,7 @@
         colors="true"
         verbose="true"
         stderr="true"
-        processIsolation="true"
+
     >
     <testsuites>
         <testsuite name="Feature">
