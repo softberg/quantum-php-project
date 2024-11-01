@@ -148,7 +148,7 @@ class AuthControllerTest extends AppTestCase
 		$response = $this->request('get', '/api/en/activate/incorrect-activation-token');
 
 		$this->assertEquals('error', $response->get('status'));
-		$this->assertEquals('There is no record matched to token', $response->get('message')[0]);
+		$this->assertEquals('There is no record matched to the token', $response->get('message')[0]);
 	}
 
 	public function testResetApi()
@@ -177,7 +177,7 @@ class AuthControllerTest extends AppTestCase
 		$response = $this->request('post', '/api/en/reset/incorrect-activation-token');
 
 		$this->assertEquals('error', $response->get('status'));
-		$this->assertEquals('There is no record matched to token', $response->get('message')[0]);
+		$this->assertEquals('There is no record matched to the token', $response->get('message')[0]);
 	}
 
 	public function testResendApi()
