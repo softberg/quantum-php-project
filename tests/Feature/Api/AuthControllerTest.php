@@ -52,9 +52,6 @@ class AuthControllerTest extends BaseTestCase
 	public function testMeApi()
 	{
 		Router::setCurrentRoute([
-			'route' => '/api/en/signin',
-			'prefix' => 'api',
-			'method' => 'POST',
 			'module' => 'Api',
 		]);
 		$tokens = auth()->signin($this->email, $this->password);
@@ -83,9 +80,6 @@ class AuthControllerTest extends BaseTestCase
 	public function testSignoutApi()
 	{
 		Router::setCurrentRoute([
-			'route' => '/api/en/signin',
-			'prefix' => 'api',
-			'method' => 'POST',
 			'module' => 'Api',
 		]);
 		$tokens = auth()->signin($this->email, $this->password);

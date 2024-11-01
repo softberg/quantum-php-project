@@ -8,7 +8,6 @@ use Quantum\Libraries\Config\Config;
 use PHPUnit\Framework\TestCase;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Quantum\Loader\Loader;
 use Quantum\Loader\Setup;
 use Quantum\Di\Di;
 use Quantum\App;
@@ -45,7 +44,6 @@ class BaseTestCase extends TestCase
 		if (!empty($headers)) {
 			foreach ($headers as $name => $value) {
 				$_SERVER['HTTP_' . strtoupper($name)] = $value;
-				Request::setHeader($name, $value);
 			}
 		}
 
@@ -72,11 +70,6 @@ class BaseTestCase extends TestCase
 		App::setBaseDir(dirname(__DIR__, 2));
 		App::loadCoreFunctions(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'Helpers');
 		Di::loadDefinitions();
-
-		$loader = Di::get(Loader::class);
-		$loader->loadDir(base_dir() . DS . 'helpers');
-		$loader->loadDir(base_dir() . DS . 'libraries');
-		$loader->loadDir(base_dir() . DS . 'hooks');
 
 		Environment::getInstance()->load(new Setup('config', 'env'));
 	}
