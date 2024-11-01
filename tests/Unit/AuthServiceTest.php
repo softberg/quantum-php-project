@@ -1,6 +1,6 @@
 <?php
 
-namespace Quantum\Tests;
+namespace Quantum\Tests\Unit;
 
 use Quantum\Libraries\Storage\FileSystem;
 use Quantum\Factory\ServiceFactory;

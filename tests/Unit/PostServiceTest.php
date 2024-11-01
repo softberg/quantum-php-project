@@ -1,6 +1,6 @@
 <?php
 
-namespace Quantum\Tests;
+namespace Quantum\Tests\Unit;
 
 use Quantum\Libraries\Database\PaginatorInterface;
 use Quantum\Libraries\Storage\UploadedFile;

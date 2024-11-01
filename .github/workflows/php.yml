@@ -42,5 +42,14 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Create env
+      run: php qt core:env
+
+    - name: Create APP key
+      run: php qt core:key --length=64
+
+    - name: Install demo
+      run: php qt install:demo --yes
+
     - name: Run tests
       run: composer test

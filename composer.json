@@ -22,7 +22,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Quantum\\Tests\\": "tests/unit/"
+            "Quantum\\Tests\\": "tests/"
         }
     },
     "scripts": {
