@@ -7,6 +7,9 @@ use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Factory\ModelFactory;
 use Shared\Models\User;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class AuthControllerTest extends AppTestCase
 {
 	/**

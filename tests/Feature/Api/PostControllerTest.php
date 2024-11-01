@@ -6,6 +6,9 @@ use Quantum\Tests\Feature\AppTestCase;
 use Quantum\Factory\ModelFactory;
 use Shared\Models\Post;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class PostControllerTest extends AppTestCase
 {
 	/**
