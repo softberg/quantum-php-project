@@ -54,4 +54,4 @@ php qt serve
 <h3>Learn More</h3>
 
 - [Website](https://quantumphp.io/)
-- [Blog](http://blog.softberg.org/category/quantum-php-framework/)
+- [Blog](https://medium.com/@softberg)
