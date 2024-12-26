@@ -9,11 +9,14 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.0
+ * @since 2.9.5
  */
 
 use Quantum\Libraries\Storage\FileSystem;
+use Quantum\Libraries\Curl\HttpClient;
 use Quantum\Exceptions\LangException;
+use Quantum\Exceptions\HttpException;
+use Quantum\Exceptions\AppException;
 use Quantum\Exceptions\DiException;
 use Quantum\Di\Di;
 
@@ -66,7 +69,11 @@ function url_with_lang(string $lang): string
  * @param string $imageName
  * @return string
  * @throws DiException
+ * @throws ErrorException
+ * @throws LangException
  * @throws ReflectionException
+ * @throws AppException
+ * @throws HttpException
  */
 function save_remote_image(string $imageUrl, string $userDirectory, string $imageName): string
 {
@@ -74,7 +81,13 @@ function save_remote_image(string $imageUrl, string $userDirectory, string $imag
 
     $imageName = slugify($imageName) . '.jpg';
 
-    $fs->put(uploads_dir() . DS . $userDirectory . DS . $imageName, $fs->get($imageUrl));
+    $httpClient = new HttpClient();
+    $httpClient->createRequest($imageUrl);
+    $httpClient->setMethod('GET');
+    $httpClient->setOpt(CURLOPT_FOLLOWLOCATION, true);
+    $httpClient->start();
+
+    $fs->put(uploads_dir() . DS . $userDirectory . DS . $imageName, $httpClient->getResponseBody());
 
     return $imageName;
 }
