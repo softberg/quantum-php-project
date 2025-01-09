@@ -51,7 +51,7 @@ class PostService extends QtService
      * @throws ModelException
      * @throws ReflectionException
      */
-    public function getPosts(int $perPage, int $currentPage, $search): PaginatorInterface
+    public function getPosts(int $perPage, int $currentPage, ?string $search = null): PaginatorInterface
     {
         $query = ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
