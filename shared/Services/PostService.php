@@ -51,9 +51,9 @@ class PostService extends QtService
      * @throws ModelException
      * @throws ReflectionException
      */
-    public function getPosts(int $perPage, int $currentPage): PaginatorInterface
+    public function getPosts(int $perPage, int $currentPage, ?string $search = null): PaginatorInterface
     {
-        return ModelFactory::get(Post::class)
+        $query = ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
             ->select(
                 'posts.uuid',
@@ -65,8 +65,20 @@ class PostService extends QtService
                 ['users.lastname' => 'lastname'],
                 ['users.uuid' => 'user_directory']
             )
-            ->orderBy('updated_at', 'desc')
-            ->paginate($perPage, $currentPage);
+            ->orderBy('updated_at', 'desc');
+
+        if (!empty($search)) {
+            $searchTerm = '%' . $search . '%';
+
+            $criterias = [
+                ['title', 'LIKE', $searchTerm],
+                ['content', 'LIKE', $searchTerm]
+            ];
+
+            $query->criterias($criterias);
+        }
+
+        return $query->paginate($perPage, $currentPage);
     }
 
     /**
