@@ -1,30 +1,54 @@
-jQuery(document).ready(function ($) {
+class Custom {
+    constructor() {
+        this.timeOut = null;
 
-    $(".dropdown-trigger").dropdown();
+        this.initPlugins();
+        this.events();
+    }
 
-    $('textarea#content').characterCounter();
+    initPlugins() {
+        $(".dropdown-trigger").dropdown();
+        $('textarea#content').characterCounter();
+        $('.modal').modal();
+        $('.sidenav').sidenav();
+    }
 
-    $('.modal').modal();
-
-    $('.modal-trigger').on('click', function () {
-        $('#modal-confirm').attr('href', $(this).data('url'));
+    modalTrigger(e) {
+        $('#modal-confirm').attr('href', $(e.currentTarget).data('url'));
         $('.modal').modal('open');
-    });
+    }
 
-    $('.visibility-icon').on('click', function () {
-        if ($(this).hasClass('on')) {
+    visibilityIcon(e) {
+        if ($(e.currentTarget).hasClass('on')) {
             $('.off').removeClass('hide');
-            $(this).parent('.input-field').find('input[type=text]').attr('type', 'password');
+            $(e.currentTarget).parent('.input-field').find('input[type=text]').attr('type', 'password');
 
         } else {
             $('.on').removeClass('hide');
-            $(this).parent('.input-field').find('input[type=password]').attr('type', 'text');
+            $(e.currentTarget).parent('.input-field').find('input[type=password]').attr('type', 'text');
         }
 
-        $(this).addClass('hide');
-    })
+        $(e.currentTarget).addClass('hide');
+    }
 
-    $('.sidenav').sidenav();
+    search(e) {
+        if (this.timeOut) {
+            clearTimeout(this.timeOut);
+        }
+
+        this.timeOut = setTimeout(() => {
+            $(e.currentTarget).closest('form.form-search').submit();
+        }, 1000)
+    }
+
+    events() {
+        $(document).on('click', '.modal-trigger', this.modalTrigger.bind(this));
+        $(document).on('click', '.visibility-icon', this.visibilityIcon.bind(this));
+        $(document).on('input', '.search-bar', this.search.bind(this));
+    }
+}
+
+jQuery(document).ready(function ($) {
+    new Custom();
 });
-
 
