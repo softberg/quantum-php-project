@@ -2,105 +2,139 @@
 
 namespace Quantum\Tests\Feature;
 
-use Quantum\Libraries\Curl\HttpClient;
-use Quantum\Environment\Environment;
-use Quantum\Libraries\Config\Config;
+use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Libraries\Auth\User as AuthUser;
+use Quantum\Libraries\Hasher\Hasher;
+use Quantum\Factory\ServiceFactory;
+use Shared\Services\AuthService;
+use Shared\Services\PostService;
 use PHPUnit\Framework\TestCase;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
-use Quantum\Loader\Setup;
-use Quantum\Di\Di;
-use Quantum\App;
-use Quantum\Router\Router;
+use Faker\Factory;
 
 class AppTestCase extends TestCase
 {
-	/**
-	 * @var HttpClient
-	 */
-	protected $client;
 
-	/**
-	 * @var string
-	 */
-	protected $baseUrl;
+    const POST_COUNT_PER_USER = 10;
 
-	public function setUp(): void
-	{
-		parent::setUp();
-		ob_start();
-		$this->loadAppFunctionality();
-		TestData::createUserData();
-		TestData::createPostData();
-	}
+    protected static $app;
 
-	public function request(string $method, string $url, array $options = [], array $headers = [], string $contentType = 'application/x-www-form-urlencoded'): Response
-	{
-		$_SERVER['REQUEST_METHOD'] = strtoupper($method);
-		$_SERVER['CONTENT_TYPE'] = $contentType;
-		$_SERVER['REQUEST_URI'] = $url;
+    protected static $faker;
 
-		if (!empty($headers)) {
-			foreach ($headers as $name => $value) {
-				$_SERVER['HTTP_' . strtoupper($name)] = $value;
-			}
-		}
+    protected static $fs;
 
-		Request::create(strtoupper($method), $url, $options);
+    protected static $defaultRole = 'editor';
 
-		Config::getInstance()->flush();
-		App::start(dirname(__DIR__, 2));
+    protected static $defaultEmail = 'tester@quantumphp.io';
 
-		return new Response();
-	}
+    protected static $defaultPassword = 'password';
 
-	public function tearDown(): void
-	{
-		parent::tearDown();
-		ob_end_clean();
-		TestData::deleteUserData();
-		TestData::deletePostData();
+    protected static $authService;
 
-		$this->deleteDirectory(uploads_dir());
-	}
+    protected static $postService;
 
-	protected function signInAndReturnTokens(): array
-	{
-		Router::setCurrentRoute([
-			'module' => 'Api',
-		]);
-		return auth()->signin($this->email, $this->password);
-	}
+    protected $baseUrl;
 
-	private function loadAppFunctionality()
-	{
-		App::setBaseDir(dirname(__DIR__, 2));
-		App::loadCoreFunctions(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'Helpers');
-		Di::loadDefinitions();
+    public static function setUpBeforeClass(): void
+    {
+        self::$fs = FileSystemFactory::get();
 
-		Environment::getInstance()->load(new Setup('config', 'env'));
-	}
+        self::$faker = Factory::create();
 
-	private function deleteDirectory(string $dir)
-	{
-		if (!is_dir($dir)) {
-			return;
-		}
+        self::$app = $GLOBALS['app'];
 
-		$files = array_diff(scandir($dir), array('.', '..', '.gitkeep'));
+        self::$authService = ServiceFactory::get(AuthService::class);
 
-		foreach ($files as $file) {
-			$path = "$dir/$file";
-			if (is_dir($path)) {
-				$this->deleteDirectory($path);
-			} else {
-				unlink($path);
-			}
-		}
+        self::$postService = ServiceFactory::get(PostService::class);
 
-		if ($dir != uploads_dir()) {
-			rmdir($dir);
-		}
-	}
+        $user = self::createUser();
+
+        self::createUserPosts($user->uuid);
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        self::cleanUp();
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        ob_start();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        ob_end_clean();
+    }
+
+    public function request(
+        string $method,
+        string $url,
+        array  $options = [],
+        array  $headers = [],
+        string $contentType = 'application/x-www-form-urlencoded'
+    ): Response
+    {
+        $_SERVER['REQUEST_METHOD'] = strtoupper($method);
+        $_SERVER['CONTENT_TYPE'] = $contentType;
+        $_SERVER['REQUEST_URI'] = $url;
+
+        if (!empty($headers)) {
+            foreach ($headers as $name => $value) {
+                $_SERVER['HTTP_' . strtoupper($name)] = $value;
+            }
+        }
+
+        Request::create(strtoupper($method), $url, $options);
+
+        self::$app->start();
+
+        return new Response();
+    }
+
+    protected function signInAndGetTokens(): array
+    {
+        $response = $this->request('post', '/api/en/signin', [
+            'email' => self::$defaultEmail,
+            'password' => self::$defaultPassword
+        ]);
+
+        return $response->get('tokens');
+    }
+
+    protected static function createUser(): AuthUser
+    {
+        return self::$authService->add([
+            'firstname' => self::$faker->firstName,
+            'lastname' => self::$faker->lastName,
+            'role' => self::$defaultRole,
+            'email' => self::$defaultEmail,
+            'password' => (new Hasher())->hash(self::$defaultPassword),
+        ]);
+    }
+
+    protected static function createUserPosts(string $userUuid)
+    {
+        $user = self::$authService->getUserByUuid($userUuid);
+
+        for ($i = 0; $i < self::POST_COUNT_PER_USER; $i++) {
+            $title = str_replace(['"', '\'', '-'], '', self::$faker->realText(50));
+
+            self::$postService->addPost([
+                'title' => $title,
+                'content' => str_replace(['"', '\'', '-'], '', self::$faker->realText(100)),
+                'image' => slugify($title) . '.jpg',
+                'user_id' => $user->id,
+            ]);
+        }
+    }
+
+    protected static function cleanUp()
+    {
+        self::$authService->deleteTable();
+        self::$postService->deleteTable();
+    }
 }
-

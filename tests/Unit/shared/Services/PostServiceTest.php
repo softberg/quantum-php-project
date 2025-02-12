@@ -1,25 +1,20 @@
 <?php
 
-namespace Quantum\Tests\Unit;
+namespace Quantum\Tests\Unit\shared\Services;
 
-use Quantum\Libraries\Database\PaginatorInterface;
+use \Quantum\Libraries\Database\Contracts\PaginatorInterface;
 use Quantum\Libraries\Storage\UploadedFile;
-use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Factory\ServiceFactory;
-use Shared\Services\AuthService;
-use Shared\Services\PostService;
-use PHPUnit\Framework\TestCase;
+use Quantum\Tests\Unit\AppTestCase;
 use Shared\Models\Post;
-use Quantum\Di\Di;
-use Quantum\App;
 
-class PostServiceTest extends TestCase
+class PostServiceTest extends AppTestCase
 {
     const PER_PAGE = 10;
+
     const CURRENT_PAGE = 1;
-    public $authService;
-    public $postService;
-    public $userId = 1;
+
+    private $user;
+
     private $initialUser = [
         'email' => 'anonymous@qt.com',
         'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
@@ -35,6 +30,7 @@ class PostServiceTest extends TestCase
         'otp_expires' => '',
         'otp_token' => '',
     ];
+
     private $initialPosts = [
         [
             'user_id' => 1,
@@ -51,38 +47,26 @@ class PostServiceTest extends TestCase
             'updated_at' => '2021-05-08 23:12:00',
         ],
         [
-            'user_id' => 1,
+            'user_id' => 2,
             'title' => 'Aenean dui turpis',
             'content' => 'Etiam aliquet urna luctus, venenatis justo aliquam, hendrerit arcu.',
             'image' => '',
             'updated_at' => '2021-05-08 23:13:00',
         ],
         [
-            'user_id' => 1,
+            'user_id' => 2,
             'title' => 'James Cameron',
             'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
             'image' => '',
             'updated_at' => '2021-05-08 23:14:00',
         ]
     ];
-    private $fs;
-    private $user;
 
     public function setUp(): void
     {
-        App::loadCoreFunctions(dirname(__DIR__, 2) . DS . 'vendor' . DS . 'quantum' . DS . 'framework' . DS . 'src' . DS . 'Helpers');
-
-        App::setBaseDir(__DIR__ . DS . '_root');
-
-        Di::loadDefinitions();
-
-        $this->fs = Di::get(FileSystem::class);
-
-        $this->authService = ServiceFactory::get(AuthService::class, ['shared' . DS . 'store', 'users']);
+        parent::setUp();
 
         $this->user = $this->authService->add($this->initialUser);
-
-        $this->postService = ServiceFactory::get(PostService::class, ['shared' . DS . 'store', 'posts']);
 
         foreach ($this->initialPosts as $post) {
             $this->postService->addPost($post);
@@ -91,12 +75,13 @@ class PostServiceTest extends TestCase
 
     public function tearDown(): void
     {
+        parent::tearDown();
+
         $this->authService->deleteTable();
         $this->postService->deleteTable();
-        $this->removeFolders();
     }
 
-    public function testGetPosts()
+    public function testPostServiceGetPosts()
     {
         $this->assertIsObject($this->postService);
 
@@ -113,13 +98,24 @@ class PostServiceTest extends TestCase
         $this->assertIsObject($post);
     }
 
-    public function testGetSinglePost()
+    public function testPostServiceGetPostsWithSearch()
+    {
+        $searchTerm = 'James Cameron';
+
+        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE, $searchTerm);
+
+        $this->assertInstanceOf(PaginatorInterface::class, $posts);
+
+        $this->assertIsArray($posts->data());
+
+        $this->assertCount(1, $posts->data());
+    }
+
+    public function testPostServiceGetSinglePost()
     {
         $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
-        $uuid = $posts->data()[0]->uuid;
-
-        $post = $this->postService->getPost($uuid);
+        $post = $this->postService->getPost($posts->data()[0]->uuid);
 
         $this->assertInstanceOf(Post::class, $post);
 
@@ -133,7 +129,16 @@ class PostServiceTest extends TestCase
 
     }
 
-    public function testAddNewPost()
+    public function testPostServiceGetMyPosts()
+    {
+        $myPosts = $this->postService->getMyPosts(1);
+
+        $this->assertIsArray($myPosts);
+
+        $this->assertCount(2, $myPosts);
+    }
+
+    public function testPostServiceAddNewPost()
     {
         $date = date('Y-m-d H:i:s');
 
@@ -156,7 +161,7 @@ class PostServiceTest extends TestCase
         $this->assertEquals($date, $post->updated_at);
     }
 
-    public function testUpdatePost()
+    public function testPostServiceUpdatePost()
     {
         $date = date('Y-m-d H:i:s');
 
@@ -184,7 +189,7 @@ class PostServiceTest extends TestCase
         $this->assertEquals($date, $post->updated_at);
     }
 
-    public function testDeletePost()
+    public function testPostServiceDeletePost()
     {
         $this->assertCount(4, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
 
@@ -203,9 +208,8 @@ class PostServiceTest extends TestCase
         $this->assertCount(4, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
     }
 
-    public function testSaveDeleteImage()
+    public function testPostServiceSaveAndDeleteImage()
     {
-
         $this->fileMeta = [
             'size' => 500,
             'name' => 'foo.jpg',
@@ -223,14 +227,5 @@ class PostServiceTest extends TestCase
         $this->postService->deleteImage($this->user->uuid . DS . $image);
 
         $this->assertFileDoesNotExist(uploads_dir() . DS . $this->user->uuid . DS . $image);
-    }
-
-    private function removeFolders()
-    {
-        $uploadsFolder = $this->fs->glob(uploads_dir() . DS . '*');
-
-        foreach ($uploadsFolder as $user_uuid) {
-            $this->fs->removeDirectory($user_uuid);
-        }
     }
 }
