@@ -88,7 +88,5 @@ return [
     'layout_not_set' => 'Layout is not set',
     'view_file_not_found' => 'File `{%1}.php` does not exists',
     'template_engine_config_missing' => 'Missing Template engine configurations',
-    'non_iterable_value' => 'The argument {%1} is not iterable',
-    'immutable_environment' => 'The environment is immutable. Modifications are not allowed.',
-    'environment_not_loaded' => 'Environment not loaded. Call `load()` method first.',
+    'non_iterable_value' => 'The argument {%1} is not iterable'
 ];
