@@ -7,15 +7,22 @@
 */
 require __DIR__ . '/vendor/autoload.php';
 
-use Quantum\Console\QtConsole;
+use Quantum\App\Factories\AppFactory;
+use Quantum\App\App;
+
+/*
+ * -----------------------------------------------------------------------------
+ * Directory separator
+ * -----------------------------------------------------------------------------
+ */
+if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
+
 
 /*
 * ---------------------------------------------------------
 * Run the console application
 * ---------------------------------------------------------
 */
-$console = new QtConsole();
-
-$status = $console->init(__DIR__);
+$status = AppFactory::create(APP::CONSOLE, __DIR__)->start();
 
 exit($status);
