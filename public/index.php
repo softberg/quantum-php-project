@@ -7,7 +7,8 @@
 */
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use Quantum\App;
+use Quantum\App\Factories\AppFactory;
+use Quantum\App\App;
 
 /*
  * -----------------------------------------------------------------------------
@@ -17,4 +18,9 @@ use Quantum\App;
 if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
 
 
-App::start(dirname(__DIR__));
+/*
+ * -----------------------------------------------------------------------------
+ * Starting the app
+ * -----------------------------------------------------------------------------
+ */
+AppFactory::create(APP::WEB, dirname(__DIR__))->start();
