@@ -14,25 +14,28 @@
 
 namespace Shared\Commands;
 
+use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
+use Quantum\Libraries\Database\Exceptions\DatabaseException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
+use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Libraries\Database\Exceptions\ModelException;
+use Quantum\Libraries\Config\Exceptions\ConfigException;
+use Quantum\Libraries\Database\Factories\TableFactory;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
-use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Exceptions\DatabaseException;
-use Quantum\Exceptions\ConfigException;
 use Bluemmb\Faker\PicsumPhotosProvider;
-use Quantum\Exceptions\ModelException;
+use Quantum\Di\Exceptions\DiException;
+use Quantum\Exceptions\BaseException;
 use Quantum\Migration\MigrationTable;
 use Quantum\Factory\ServiceFactory;
-use Quantum\Exceptions\DiException;
-use Quantum\Factory\TableFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Loader\Setup;
 use ReflectionException;
+use Faker\Generator;
+use ErrorException;
 use Faker\Factory;
-use Quantum\Di\Di;
 use Exception;
 
 /**
@@ -79,7 +82,7 @@ class DemoCommand extends QtCommand
     protected $postService;
 
     /**
-     * @var \Faker\Generator
+     * @var Generator
      */
     protected $faker;
 
@@ -124,21 +127,25 @@ class DemoCommand extends QtCommand
     public function __construct()
     {
         parent::__construct();
+
         $this->faker = Factory::create();
         $this->faker->addProvider(new PicsumPhotosProvider($this->faker));
+
         $this->authService = ServiceFactory::get(AuthService::class);
         $this->postService = ServiceFactory::get(PostService::class);
     }
 
     /**
      * Executes the command
+     * @throws BaseException
+     * @throws ConfigException
      * @throws DatabaseException
      * @throws DiException
-     * @throws ReflectionException
-     * @throws ConfigException
-     * @throws ModelException
-     * @throws Exception
+     * @throws ErrorException
      * @throws ExceptionInterface
+     * @throws HttpClientException
+     * @throws ModelException
+     * @throws ReflectionException
      */
     public function exec()
     {
@@ -216,8 +223,9 @@ class DemoCommand extends QtCommand
      * Post data
      * @param $user
      * @return array
-     * @throws DiException
-     * @throws ReflectionException
+     * @throws ErrorException
+     * @throws BaseException
+     * @throws HttpClientException
      */
     private function newPostData($user): array
     {
@@ -239,10 +247,9 @@ class DemoCommand extends QtCommand
 
     /**
      * Cleanups the database
+     * @throws BaseException
      * @throws DatabaseException
-     * @throws DiException
      * @throws ExceptionInterface
-     * @throws ReflectionException
      */
     private function cleanUp()
     {
@@ -278,12 +285,12 @@ class DemoCommand extends QtCommand
 
     /**
      * Removes users folders
-     * @throws DiException
-     * @throws ReflectionException
+     * @return void
+     * @throws BaseException
      */
     private function removeFolders()
     {
-        $fs = Di::get(FileSystem::class);
+        $fs = FileSystemFactory::get();
 
         $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
 

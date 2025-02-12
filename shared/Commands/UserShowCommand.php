@@ -9,14 +9,14 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.0
+ * @since 2.9.5
  */
 
 namespace Shared\Commands;
 
 use Symfony\Component\Console\Helper\Table;
 use Quantum\Exceptions\ServiceException;
-use Quantum\Exceptions\DiException;
+use Quantum\Di\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
@@ -45,43 +45,44 @@ class UserShowCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to display user(s):' . PHP_EOL . 'php qt user:show `[User id]`';
+    protected $help = 'Use the following format to display user(s):' . PHP_EOL . 'php qt user:show `[User uuid]`';
 
     /**
      * Command arguments
      * @var array
      */
     protected $args = [
-        ['id', 'optional', 'User id']
+        ['uuid', 'optional', 'User uuid']
     ];
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ServiceException
      * @throws ReflectionException
+     * @throws ServiceException
+     * @throws DiException
      */
     public function exec()
     {
         $userService = ServiceFactory::get(AuthService::class);
 
-        $uuid = $this->getArgument('id');
+        $uuid = $this->getArgument('uuid');
 
         $rows = [];
 
         if ($uuid) {
-            $user = $userService->getUser($uuid);
+            $user = $userService->getUserByUuid($uuid);
 
             if (!empty($user)) {
-                $rows[] = $this->composeTableRow($user);
+                $rows[] = $this->composeTableRow($user->asArray());
             } else {
                 $this->error('The user is not found');
                 return;
             }
         } else {
             $users = $userService->getAll();
+
             foreach ($users as $user) {
-                $rows[] = $this->composeTableRow($user);
+                $rows[] = $this->composeTableRow($user->asArray());
             }
         }
 
@@ -89,7 +90,6 @@ class UserShowCommand extends QtCommand
 
         $table->setHeaderTitle('Users')
             ->setHeaders([
-                'ID',
                 'UUID',
                 'Firstname',
                 'Lastname',
@@ -108,7 +108,6 @@ class UserShowCommand extends QtCommand
     private function composeTableRow(array $item): array
     {
         return [
-            $item['id'] ?? '',
             $item['uuid'] ?? '',
             $item['firstname'] ?? '',
             $item['lastname'] ?? '',
