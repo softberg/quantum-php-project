@@ -14,7 +14,7 @@
 
 namespace Shared\Transformers;
 
-use Quantum\Libraries\Transformer\TransformerInterface;
+use Quantum\Libraries\Transformer\Contracts\TransformerInterface;
 
 /**
  * Class PostTransformer
@@ -31,7 +31,7 @@ class PostTransformer implements TransformerInterface
     public function transform($item): array
     {
         return [
-            'id' => $item->uuid,
+            'uuid' => $item->uuid,
             'title' => $item->title,
             'content' => $item->content,
             'image' => $item->image ? $item->user_directory . '/' . $item->image : null,
@@ -39,5 +39,4 @@ class PostTransformer implements TransformerInterface
             'author' => $item->firstname . ' ' . $item->lastname
         ];
     }
-
 }
