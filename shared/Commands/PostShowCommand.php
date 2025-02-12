@@ -9,14 +9,15 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.0
+ * @since 2.9.5
  */
 
 namespace Shared\Commands;
 
 use Symfony\Component\Console\Helper\Table;
+use Shared\Transformers\PostTransformer;
 use Quantum\Exceptions\ServiceException;
-use Quantum\Exceptions\DiException;
+use Quantum\Di\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -28,6 +29,16 @@ use ReflectionException;
  */
 class PostShowCommand extends QtCommand
 {
+
+    /**
+     * Posts per page
+     */
+    const POSTS_PER_PAGE = 20;
+
+    /**
+     * Current page
+     */
+    const CURRENT_PAGE = 1;
 
     /**
      * Command name
@@ -45,7 +56,7 @@ class PostShowCommand extends QtCommand
      * Command help text
      * @var string
      */
-    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post id]`';
+    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post uuid]`';
 
     /**
      * Command arguments
@@ -57,13 +68,15 @@ class PostShowCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ServiceException
      * @throws ReflectionException
+     * @throws ServiceException
+     * @throws DiException
      */
     public function exec()
     {
         $postService = ServiceFactory::get(PostService::class);
+
+        $postTransformer = new PostTransformer();
 
         $uuid = $this->getArgument('uuid');
 
@@ -72,14 +85,17 @@ class PostShowCommand extends QtCommand
         if ($uuid) {
             $post = $postService->getPost($uuid);
 
-            if (!empty($post)) {
-                $rows[] = $this->composeTableRow($post);
+            if ($post) {
+                $rows[] = $this->composeTableRow(current(transform([$post], $postTransformer)));
             } else {
                 $this->error('The post is not found');
                 return;
             }
         } else {
-            $posts = $postService->getPosts();
+            $paginatedPosts = $postService->getPosts(self::POSTS_PER_PAGE, self::CURRENT_PAGE);
+
+            $posts = transform($paginatedPosts->data(), $postTransformer);
+
             foreach ($posts as $post) {
                 $rows[] = $this->composeTableRow($post);
             }
@@ -88,7 +104,7 @@ class PostShowCommand extends QtCommand
         $table = new Table($this->output);
 
         $table->setHeaderTitle('Posts')
-            ->setHeaders(['ID', 'Title', 'Description', 'Author', 'Date'])
+            ->setHeaders(['UUID', 'Title', 'Description', 'Author', 'Date'])
             ->setRows($rows)
             ->render();
     }
@@ -101,7 +117,7 @@ class PostShowCommand extends QtCommand
     private function composeTableRow(array $item): array
     {
         return [
-            $item['id'] ?? '',
+            $item['uuid'] ?? '',
             $item['title'] ?? '',
             strlen($item['content']) < 50 ? $item['content'] : mb_substr($item['content'], 0, 50) . '...' ?? '',
             $item['author'],
