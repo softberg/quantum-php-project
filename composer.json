@@ -4,14 +4,8 @@
     "keywords": ["framework", "php", "quantum", "project"],
     "license": "MIT",
     "type": "project",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/armanist/quantum-php-core"
-        }
-    ],
     "require": {
-        "quantum/framework": "dev-big_refactoring",
+        "quantum/framework": "dev-master",
         "fakerphp/faker": "^1.15",
         "bluemmb/faker-picsum-photos-provider": "^2.0",
         "doctrine/annotations": "^2.0",
