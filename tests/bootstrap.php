@@ -8,7 +8,7 @@ if (!defined('PROJECT_ROOT')) define("PROJECT_ROOT", __DIR__ . DS . '_root');
 
 require_once dirname(__DIR__) . DS . 'vendor' . DS . 'autoload.php';
 
-require_once __DIR__ . DS . 'helpers' . DS . 'functions.php';
+require_once __DIR__ . DS . 'Helpers' . DS . 'functions.php';
 
 createEnvFile();
 
