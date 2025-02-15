@@ -1,13 +1,6 @@
 <?php
 
 return [
-    /**
-     * ---------------------------------------------------------
-     * Mailer settings
-     * ---------------------------------------------------------
-     *
-     * Current configuration to use.
-     */
     'current' => 'smtp',
 
     'mail_trap' => true,
