@@ -12,19 +12,15 @@
  * @since 2.9.5
  */
 
-use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Libraries\Curl\HttpClient;
-use Quantum\Exceptions\LangException;
-use Quantum\Exceptions\HttpException;
-use Quantum\Exceptions\AppException;
-use Quantum\Exceptions\DiException;
-use Quantum\Di\Di;
+use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
+use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Libraries\HttpClient\HttpClient;
+use Quantum\Exceptions\BaseException;
 
 /**
  * Gets the url with selected language
  * @param string $lang
  * @return string
- * @throws LangException
  */
 function url_with_lang(string $lang): string
 {
@@ -64,20 +60,18 @@ function url_with_lang(string $lang): string
 }
 
 /**
+ * Saves remote image
  * @param string $imageUrl
  * @param string $userDirectory
  * @param string $imageName
  * @return string
- * @throws DiException
  * @throws ErrorException
- * @throws LangException
- * @throws ReflectionException
- * @throws AppException
- * @throws HttpException
+ * @throws HttpClientException
+ * @throws BaseException
  */
 function save_remote_image(string $imageUrl, string $userDirectory, string $imageName): string
 {
-    $fs = Di::get(FileSystem::class);
+    $fs = FileSystemFactory::get();
 
     $imageName = slugify($imageName) . '.jpg';
 

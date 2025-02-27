@@ -9,24 +9,24 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.0
+ * @since 2.9.5
  */
 
 namespace Shared\Services;
 
-use Quantum\Libraries\Auth\AuthServiceInterface;
+use Quantum\Libraries\Database\Exceptions\DatabaseException;
+use Quantum\Libraries\Auth\Contracts\AuthServiceInterface;
+use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Libraries\Database\Exceptions\ModelException;
+use Quantum\Libraries\Config\Exceptions\ConfigException;
 use Quantum\Libraries\Auth\User as AuthUser;
-use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Exceptions\DatabaseException;
-use Quantum\Exceptions\ConfigException;
-use Quantum\Exceptions\ModelException;
-use Quantum\Exceptions\DiException;
+use Quantum\Di\Exceptions\DiException;
+use Quantum\Exceptions\BaseException;
 use Quantum\Factory\ModelFactory;
 use Quantum\Mvc\QtService;
 use ReflectionException;
 use Shared\Models\User;
 use Faker\Factory;
-use Quantum\Di\Di;
 
 /**
  * Class AuthService
@@ -36,13 +36,13 @@ class AuthService extends QtService implements AuthServiceInterface
 {
 
     /**
-     * Get
+     * Get users
      * @return array|null
+     * @throws ReflectionException
+     * @throws DiException
      * @throws ConfigException
      * @throws DatabaseException
-     * @throws DiException
      * @throws ModelException
-     * @throws ReflectionException
      */
     public function getAll(): ?array
     {
@@ -59,40 +59,15 @@ class AuthService extends QtService implements AuthServiceInterface
      * @throws ModelException
      * @throws ReflectionException
      */
-    public function getUser(string $uuid): ?array
+    public function getUserByUuid(string $uuid): ?User
     {
-        $user = ModelFactory::get(User::class)->criteria('uuid', '=', $uuid)->get();
+        $user = ModelFactory::get(User::class)->findOneBy('uuid', $uuid);
 
-        if (empty($user)) {
+        if (empty($user->asArray())) {
             return null;
         }
 
-        return current($user);
-    }
-
-    /**
-     * User Schema
-     * @return array
-     */
-    public function userSchema(): array
-    {
-        return [
-            'id' => ['name' => 'id', 'visible' => true],
-            'uuid' => ['name' => 'uuid', 'visible' => true],
-            'firstname' => ['name' => 'firstname', 'visible' => true],
-            'lastname' => ['name' => 'lastname', 'visible' => true],
-            'role' => ['name' => 'role', 'visible' => true],
-            'username' => ['name' => 'email', 'visible' => true],
-            'password' => ['name' => 'password', 'visible' => false],
-            'activationToken' => ['name' => 'activation_token', 'visible' => false],
-            'rememberToken' => ['name' => 'remember_token', 'visible' => false],
-            'resetToken' => ['name' => 'reset_token', 'visible' => false],
-            'accessToken' => ['name' => 'access_token', 'visible' => false],
-            'refreshToken' => ['name' => 'refresh_token', 'visible' => false],
-            'otp' => ['name' => 'otp', 'visible' => false],
-            'otpExpiry' => ['name' => 'otp_expires', 'visible' => false],
-            'otpToken' => ['name' => 'otp_token', 'visible' => false],
-        ];
+        return $user;
     }
 
     /**
@@ -121,6 +96,7 @@ class AuthService extends QtService implements AuthServiceInterface
      * Add user
      * @param array $data
      * @return AuthUser
+     * @throws BaseException
      * @throws ConfigException
      * @throws DatabaseException
      * @throws DiException
@@ -168,6 +144,31 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
+     * User Schema
+     * @return array
+     */
+    public function userSchema(): array
+    {
+        return [
+            'id' => ['name' => 'id', 'visible' => true],
+            'uuid' => ['name' => 'uuid', 'visible' => true],
+            'firstname' => ['name' => 'firstname', 'visible' => true],
+            'lastname' => ['name' => 'lastname', 'visible' => true],
+            'role' => ['name' => 'role', 'visible' => true],
+            'username' => ['name' => 'email', 'visible' => true],
+            'password' => ['name' => 'password', 'visible' => false],
+            'activationToken' => ['name' => 'activation_token', 'visible' => false],
+            'rememberToken' => ['name' => 'remember_token', 'visible' => false],
+            'resetToken' => ['name' => 'reset_token', 'visible' => false],
+            'accessToken' => ['name' => 'access_token', 'visible' => false],
+            'refreshToken' => ['name' => 'refresh_token', 'visible' => false],
+            'otp' => ['name' => 'otp', 'visible' => false],
+            'otpExpiry' => ['name' => 'otp_expires', 'visible' => false],
+            'otpToken' => ['name' => 'otp_token', 'visible' => false],
+        ];
+    }
+
+    /**
      * Delete users table
      */
     public function deleteTable()
@@ -176,13 +177,15 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
+     * Creates user directory
      * @param string $uuid
-     * @throws DiException
-     * @throws ReflectionException
+     * @return void
+     * @throws BaseException
      */
     private function createUserDirectory(string $uuid)
     {
-        $fs = Di::get(FileSystem::class);
+        $fs = FileSystemFactory::get();
+
         $fs->makeDirectory(uploads_dir() . DS . $uuid);
     }
 }

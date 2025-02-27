@@ -9,13 +9,13 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.0
+ * @since 2.9.5
  */
 
 namespace Shared\Commands;
 
 use Quantum\Exceptions\ServiceException;
-use Quantum\Exceptions\DiException;
+use Quantum\Di\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -66,9 +66,9 @@ class PostUpdateCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ServiceException
      * @throws ReflectionException
+     * @throws ServiceException
+     * @throws DiException
      */
     public function exec()
     {

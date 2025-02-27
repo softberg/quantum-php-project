@@ -45,11 +45,8 @@ jobs:
     - name: Create env
       run: php qt core:env
 
-    - name: Create APP key
+    - name: Create app key
       run: php qt core:key --length=64
-
-    - name: Install demo
-      run: php qt install:demo --yes
 
     - name: Run tests
       run: composer test

@@ -1,19 +1,21 @@
 <?php
 
+
 return [
     /**
      * ---------------------------------------------------------
-     * Session settings
+     * View configurations
      * ---------------------------------------------------------
      */
-    'current' => 'native',
+    'current' => 'html',
 
-    'native' => [
-        'timeout' => 300
+    'html' => [
+
     ],
 
-    'database' => [
-        'table' => 'sessions',
-        'timeout' => 300,
+    'twig' => [
+        'charset' => 'UTF-8',
+        'debug' => false,
+        'cache' => false,
     ]
 ];

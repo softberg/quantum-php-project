@@ -9,28 +9,28 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.0
+ * @since 2.9.5
  */
 
 namespace Shared\Services;
 
-use Quantum\Libraries\Database\PaginatorInterface;
-use Quantum\Exceptions\FileSystemException;
-use Quantum\Exceptions\FileUploadException;
+use Quantum\Libraries\Storage\Exceptions\FileUploadException;
+use Quantum\Libraries\Storage\Exceptions\FileSystemException;
+use Quantum\Libraries\Database\Contracts\PaginatorInterface;
+use Quantum\Libraries\Database\Exceptions\DatabaseException;
+use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Libraries\Database\Exceptions\ModelException;
+use Quantum\Libraries\Config\Exceptions\ConfigException;
+use Quantum\Environment\Exceptions\EnvException;
 use Quantum\Libraries\Storage\UploadedFile;
-use Quantum\Exceptions\DatabaseException;
-use Quantum\Libraries\Storage\FileSystem;
-use Quantum\Exceptions\ConfigException;
-use Quantum\Exceptions\ModelException;
-use Quantum\Exceptions\LangException;
-use Quantum\Exceptions\DiException;
+use Quantum\Di\Exceptions\DiException;
+use Quantum\Exceptions\BaseException;
 use Quantum\Factory\ModelFactory;
 use Gumlet\ImageResizeException;
 use Quantum\Mvc\QtService;
 use ReflectionException;
 use Shared\Models\User;
 use Shared\Models\Post;
-use Quantum\Di\Di;
 use Faker\Factory;
 
 /**
@@ -44,12 +44,13 @@ class PostService extends QtService
      * Get posts
      * @param int $perPage
      * @param int $currentPage
+     * @param string|null $search
      * @return PaginatorInterface
+     * @throws ReflectionException
+     * @throws DiException
      * @throws ConfigException
      * @throws DatabaseException
-     * @throws DiException
      * @throws ModelException
-     * @throws ReflectionException
      */
     public function getPosts(int $perPage, int $currentPage, ?string $search = null): PaginatorInterface
     {
@@ -67,7 +68,7 @@ class PostService extends QtService
             )
             ->orderBy('updated_at', 'desc');
 
-        if (!empty($search)) {
+        if ($search) {
             $searchTerm = '%' . $search . '%';
 
             $criterias = [
@@ -111,7 +112,7 @@ class PostService extends QtService
     }
 
     /**
-     *  Get post
+     *  Get my posts
      * @param int $userId
      * @return array|null
      * @throws ConfigException
@@ -177,7 +178,7 @@ class PostService extends QtService
     }
 
     /**
-     * Deletes the post
+     * Deletes post
      * @param string $uuid
      * @return bool
      * @throws ConfigException
@@ -205,10 +206,11 @@ class PostService extends QtService
      * @param string $imageDirectory
      * @param string $imageName
      * @return string
-     * @throws ImageResizeException
+     * @throws EnvException
      * @throws FileSystemException
      * @throws FileUploadException
-     * @throws LangException
+     * @throws ImageResizeException
+     * @throws BaseException
      */
     public function saveImage(UploadedFile $uploadedFile, string $imageDirectory, string $imageName): string
     {
@@ -221,16 +223,15 @@ class PostService extends QtService
     /**
      * Deletes the post image
      * @param string $imagePath
-     * @throws DiException
-     * @throws ReflectionException
+     * @return void
+     * @throws BaseException
      */
     public function deleteImage(string $imagePath)
     {
-        $fs = Di::get(FileSystem::class);
+        $fs = FileSystemFactory::get();
 
         if ($fs->exists(uploads_dir() . DS . $imagePath)) {
             $fs->remove(uploads_dir() . DS . $imagePath);
         }
     }
-
 }

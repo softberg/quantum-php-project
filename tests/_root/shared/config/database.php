@@ -4,29 +4,9 @@ use Quantum\Libraries\Database\Adapters\Idiorm\IdiormDbal;
 use Quantum\Libraries\Database\Adapters\Sleekdb\SleekDbal;
 
 return [
-    /**
-     * ---------------------------------------------------------
-     * Database settings
-     * ---------------------------------------------------------
-     *
-     * Current configuration to use.
-     */
+
     'current' => 'sleekdb',
 
-    /**
-     * ---------------------------------------------------------
-     * Database Connections
-     * ---------------------------------------------------------
-     *
-     * You can define as many database configurations as you want.
-     *
-     * driver: mysql, pgsql, sqlite, sleekdb
-     * host: The database server (localhost)
-     * dbname: The database name
-     * username: Username of the database server
-     * password: Password of the database server
-     * charset: Default charset
-     */
     'mysql' => [
         'driver' => env("DB_DRIVER", "mysql"),
         'host' => env("DB_HOST", "localhost"),
@@ -42,9 +22,8 @@ return [
         'prefix' => '',
     ],
     'sleekdb' => [
-        'driver' => 'sleekdb',
         'config' => [
-            'auto_cache' => false,
+            'auto_cache' => true,
             'cache_lifetime' => null,
             'timeout' => false,
             'search' => [
