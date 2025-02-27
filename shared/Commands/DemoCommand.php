@@ -188,7 +188,6 @@ class DemoCommand extends QtCommand
             "--demo" => "yes"
         ]);
 
-
         $this->info('Demo project created successfully');
     }
 
