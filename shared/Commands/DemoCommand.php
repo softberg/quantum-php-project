@@ -175,16 +175,16 @@ class DemoCommand extends QtCommand
         }
 
         $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
-            "module" => "Web",
+            "module" => "Api",
             "--yes" => true,
-            "--template" => "web",
+            "--template" => "api",
             "--demo" => "yes"
         ]);
 
         $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
-            "module" => "Api",
+            "module" => "Web",
             "--yes" => true,
-            "--template" => "api",
+            "--template" => "web",
             "--demo" => "yes"
         ]);
 
