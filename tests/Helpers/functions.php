@@ -29,12 +29,7 @@ function createModule(string $moduleName, string $template)
 {
     ob_start();
 
-    $moduleManager = ModuleManager::createInstance(
-        $moduleName,
-        $template,
-        'yes',
-        true
-    );
+    $moduleManager = new ModuleManager($moduleName, $template, 'yes', true);
 
     $moduleManager->addModuleConfig();
 
