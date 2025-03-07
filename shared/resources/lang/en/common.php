@@ -61,6 +61,10 @@ return [
     '2fa' => '2 Factor Authentication',
     'resend_otp' => 'Resend otp',
     'yes' => 'Yes',
+    'account_settings' => 'Account Settings',
+    'profile' => 'Profile',
+    'current_password' => 'Current Password',
+    'confirm_password' => 'Confirm Password',
     'pagination' => [
         'next' => 'Next &raquo;',
         'prev' => '&laquo; Prev'
