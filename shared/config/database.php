@@ -1,8 +1,5 @@
 <?php
 
-use Quantum\Libraries\Database\Adapters\Idiorm\IdiormDbal;
-use Quantum\Libraries\Database\Adapters\Sleekdb\SleekDbal;
-
 return [
     /**
      * ---------------------------------------------------------
@@ -34,7 +31,6 @@ return [
         'username' => env("DB_USERNAME", "root"),
         'password' => env("DB_PASSWORD"),
         'charset' => env("DB_CHARSET", 'utf8'),
-        'orm' => IdiormDbal::class
     ],
     'sqlite' => [
         'driver' => 'sqlite',
@@ -55,6 +51,5 @@ return [
             ],
         ],
         'database_dir' => base_dir() . DS . 'shared' . DS . 'store',
-        'orm' => SleekDbal::class
     ]
 ];
