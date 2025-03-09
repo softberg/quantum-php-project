@@ -3,6 +3,7 @@ class Custom {
         this.timeOut = null;
 
         this.initPlugins();
+        this.initTabs();
         this.events();
     }
 
@@ -39,6 +40,10 @@ class Custom {
         this.timeOut = setTimeout(() => {
             $(e.currentTarget).closest('form.form-search').submit();
         }, 1000)
+    }
+
+    initTabs() {
+        $('.account-tabs').tabs();
     }
 
     events() {

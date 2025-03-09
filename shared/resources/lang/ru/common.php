@@ -60,6 +60,10 @@ return [
     '2fa' => 'Двухфакторная аутентификация',
     'resend_otp' => 'Отправить повторно',
     'yes' => 'Да',
+    'account_settings' => 'Настройки учетной записи',
+    'profile' => 'Профиль',
+    'current_password' => 'Текущий пароль',
+    'confirm_password' => 'Подтвердите пароль',
     'pagination' => [
         'next' => 'Следующий &raquo;',
         'prev' => '&laquo; Предыдущий'
