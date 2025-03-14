@@ -6,9 +6,9 @@ return [
      * Mailer settings
      * ---------------------------------------------------------
      *
-     * Current configuration to use.
+     * Default configuration to use.
      */
-    'current' => 'smtp',
+    'default' => 'smtp',
 
     'mail_trap' => true,
     

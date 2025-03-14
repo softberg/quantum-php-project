@@ -45,7 +45,7 @@ return [
     'unauthorizedRequest' => 'Unauthorized request',
     'uniqueUser' => 'The value of {%1} field is already exists in our database',
     'passwordsDoNotMatch' => 'Passwords do not match',
-    'incorrect_password' => 'The current password is incorrect',
+    'password_check' => 'The current password is incorrect',
     'new_password' => 'New password',
     'current_password' => 'Current Password',
     'confirm_password' => 'Confirm Password',

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'current' => 'smtp',
+    'default' => 'smtp',
 
     'mail_trap' => true,
     

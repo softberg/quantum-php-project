@@ -6,7 +6,7 @@ return [
      * Session settings
      * ---------------------------------------------------------
      */
-    'current' => 'native',
+    'default' => 'native',
 
     'native' => [
         'timeout' => 300
