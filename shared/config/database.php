@@ -6,9 +6,9 @@ return [
      * Database settings
      * ---------------------------------------------------------
      *
-     * Current configuration to use.
+     * Default configuration to use.
      */
-    'current' => 'sleekdb',
+    'default' => 'sleekdb',
 
     /**
      * ---------------------------------------------------------

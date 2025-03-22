@@ -5,7 +5,7 @@ use Quantum\Libraries\Database\Adapters\Sleekdb\SleekDbal;
 
 return [
 
-    'current' => 'sleekdb',
+    'default' => 'sleekdb',
 
     'mysql' => [
         'driver' => env("DB_DRIVER", "mysql"),

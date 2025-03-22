@@ -131,7 +131,9 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function update(string $field, ?string $value, array $data): ?AuthUser
     {
-        $user = ModelFactory::get(User::class)->findOneBy($field, $value);
+        $userModel = ModelFactory::get(User::class);
+
+        $user = $userModel->findOneBy($field, $value);
 
         if (empty($user->asArray())) {
             return null;
@@ -140,7 +142,7 @@ class AuthService extends QtService implements AuthServiceInterface
         $user->fillObjectProps($data);
         $user->save();
 
-        return (new AuthUser())->setData($user->asArray());
+        return (new AuthUser())->setData($userModel->findOneBy($field, $value)->asArray());
     }
 
     /**

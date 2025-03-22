@@ -149,7 +149,7 @@ class DemoCommand extends QtCommand
      */
     public function exec()
     {
-        if (!config()->has('database') || !config()->has('database.current')) {
+        if (!config()->has('database') || !config()->has('database.default')) {
             config()->import(new Setup('config', 'database'));
         }
 
@@ -254,7 +254,7 @@ class DemoCommand extends QtCommand
     {
         $this->removeFolders();
 
-        switch (config()->get('database')['current']) {
+        switch (config()->get('database')['default']) {
             case 'mysql':
                 $tableFactory = new TableFactory();
 

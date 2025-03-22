@@ -45,7 +45,7 @@ return [
     'unauthorizedRequest' => 'Չարտոնված հարցում',
     'uniqueUser' => '{%1} դաշտի արժեքն արդեն առկա է մեր տվյալների բազայում',
     'passwordsDoNotMatch' => 'Գաղտնաբառերը չեն համընկնում',
-    'incorrect_password' => 'Ներկայիս գաղտնաբառը սխալ է',
+    'password_check' => 'Ներկայիս գաղտնաբառը սխալ է',
     'new_password' => 'Նոր գաղտնաբառ',
     'current_password' => 'Ընթացիկ գաղտնաբառը',
     'confirm_password' => 'Հաստատեք գաղտնաբառը',
