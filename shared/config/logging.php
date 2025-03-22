@@ -5,7 +5,7 @@ return [
      * Logging configurations
      * ---------------------------------------------------------
      */
-    'current' => 'single',
+    'default' => 'single',
 
     'level' => 'info',
 

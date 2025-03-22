@@ -7,7 +7,7 @@ return [
      * View configurations
      * ---------------------------------------------------------
      */
-    'current' => 'html',
+    'default' => 'html',
 
     'html' => [
 

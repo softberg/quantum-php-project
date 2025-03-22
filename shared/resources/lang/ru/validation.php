@@ -45,7 +45,7 @@ return [
     'unauthorizedRequest' => 'Несанкционированный запрос',
     'uniqueUser' => 'Значение поля {%1} уже существует в нашей базе данных',
     'passwordsDoNotMatch' => 'Пароли не совпадают',
-    'incorrect_password' => 'Текущий пароль неверный',
+    'password_check' => 'Текущий пароль неверный',
     'new_password' => 'Новый пароль',
     'current_password' => 'Текущий пароль',
     'confirm_password' => 'Подтвердите пароль',

@@ -1,6 +1,6 @@
 <?php
 return [
-    'current' => 'html',
+    'default' => 'html',
 
     'html' => [],
 

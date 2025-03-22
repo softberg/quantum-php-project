@@ -6,9 +6,9 @@ return [
      * Cache settings
      * ---------------------------------------------------------
      *
-     * Current configuration to use.
+     * Default configuration to use.
      */
-    'current' => 'file',
+    'default' => 'file',
     /**
      * ---------------------------------------------------------
      * Cache Connections

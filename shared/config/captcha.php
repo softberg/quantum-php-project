@@ -6,7 +6,7 @@ return [
      * Captcha configurations
      * ---------------------------------------------------------
      */
-    'current' => 'recaptcha',
+    'default' => 'recaptcha',
 
     'recaptcha' => [
         'type' => 'avisible',
