@@ -14,7 +14,7 @@ createEnvFile();
 
 $GLOBALS['app'] = createApp();
 
-createModule('Api', 'api');
+createModule('Api', 'DemoApi');
 
 register_shutdown_function(function () {
     removeEnvFile();

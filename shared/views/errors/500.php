@@ -6,12 +6,12 @@
     <title>Error Page 500</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="shortcut icon" href="/assets/images/favicon.ico">
-    <link rel='stylesheet' href="/assets/css/materialize.min.css"
+    <link rel="shortcut icon" href="/shared/assets/images/favicon.ico">
+    <link rel='stylesheet' href="/shared/assets/css/materialize.min.css"
           type="text/css"
           media="screen,projection"
     />
-    <link rel="stylesheet" href="/assets/css/custom.css" type="text/css"/>
+    <link rel="stylesheet" href="/shared/assets/css/custom.css" type="text/css"/>
 </head>
 
 <body>
