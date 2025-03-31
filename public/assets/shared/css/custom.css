@@ -1,0 +1,68 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    font-size: 17px;
+}
+
+main {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+main>div:first-child {
+    padding-top: 50px;
+}
+
+#dropdown1 {
+    min-width: 210px !important;
+}
+
+#dropdown2 {
+    min-width: 120px !important;
+}
+
+.material-alert {
+    position: relative;
+    min-width: 150px;
+    padding: 15px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.1s linear;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.material-alert .material-icons {
+    margin-right: 10px;
+}
+
+.material-alert.error {
+    background-color: #c62828;
+    color: #fff;
+}
+
+a:hover {
+    opacity: .9;
+}
+
+@media only screen and (max-width: 992px) {
+    main>div:first-child {
+        padding-top: 15px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+}
