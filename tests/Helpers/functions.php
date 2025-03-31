@@ -25,11 +25,11 @@ function createApp() {
     return AppFactory::create(App::WEB, dirname(__DIR__) . DS . '_root');
 }
 
-function createModule(string $moduleName, string $template)
+function createModule(string $moduleName, string $template, bool $withAssets = false)
 {
     ob_start();
 
-    $moduleManager = new ModuleManager($moduleName, $template, 'yes', true);
+    $moduleManager = new ModuleManager($moduleName, $template, 'yes', $withAssets);
 
     $moduleManager->addModuleConfig();
 

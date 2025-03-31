@@ -6,13 +6,13 @@
     <title>Error Page 400</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="shortcut icon" href="<?php echo asset()->url('images/favicon.ico') ?>">
-    <link rel="stylesheet" href="<?php echo asset()->url('css/materialize.min.css') ?>"
+    <link rel="shortcut icon" href="<?php echo asset()->url('shared/images/favicon.ico') ?>">
+    <link rel="stylesheet" href="<?php echo asset()->url('shared/css/materialize.min.css') ?>"
           type="text/css"
           media="screen,projection"
     />
-    <link rel="stylesheet" href="<?php echo asset()->url('css/custom.css') ?>" type="text/css"/>
-    <link rel='stylesheet' href="<?php echo asset()->url('css/robot.css') ?>" type="text/css"/>
+    <link rel="stylesheet" href="<?php echo asset()->url('shared/css/custom.css') ?>" type="text/css"/>
+    <link rel='stylesheet' href="<?php echo asset()->url('shared/css/robot.css') ?>" type="text/css"/>
 </head>
 
 <body>
@@ -77,6 +77,6 @@
     </div>
 </main>
 
-<script type='text/javascript' src="<?php echo asset()->url('js/materialize.min.js') ?>"></script>
+<script type='text/javascript' src="<?php echo asset()->url('shared/js/materialize.min.js') ?>"></script>
 </body>
 </html>
