@@ -31,9 +31,9 @@ function createModule(string $moduleName, string $template, bool $withAssets = f
 
     $moduleManager = new ModuleManager($moduleName, $template, 'yes', $withAssets);
 
-    $moduleManager->addModuleConfig();
-
     $moduleManager->writeContents();
+
+    $moduleManager->addModuleConfig();
 
     ob_end_clean();
 }
