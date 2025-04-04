@@ -1,4 +1,5 @@
 <?php
+
 return [
     /**
      * ---------------------------------------------------------
@@ -7,13 +8,13 @@ return [
      */
     'default' => 'single',
 
-    'level' => 'info',
-
     'single' => [
         'path' => logs_dir() . DS . 'app.log',
+        'level' => 'info',
     ],
 
     'daily' => [
         'path' => logs_dir(),
+        'level' => 'warning',
     ]
 ];
