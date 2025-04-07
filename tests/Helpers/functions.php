@@ -2,6 +2,7 @@
 
 use Quantum\Libraries\Module\ModuleManager;
 use Quantum\App\Factories\AppFactory;
+use Quantum\Router\Router;
 use Quantum\App\App;
 
 function createEnvFile()
@@ -34,6 +35,8 @@ function createModule(string $moduleName, string $template, bool $withAssets = f
     $moduleManager->writeContents();
 
     $moduleManager->addModuleConfig();
+
+    Router::setCurrentRoute(['module' => $moduleName]);
 
     ob_end_clean();
 }
