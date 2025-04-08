@@ -4,6 +4,7 @@ namespace Quantum\Tests\Unit\shared\Services;
 
 use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Tests\Unit\AppTestCase;
+use Quantum\Model\ModelCollection;
 use Shared\Models\User;
 
 class AuthServiceTest extends AppTestCase
@@ -45,20 +46,18 @@ class AuthServiceTest extends AppTestCase
     {
         $users = $this->authService->getAll();
 
-        $this->assertIsArray($users);
+        $this->assertInstanceOf(ModelCollection::class, $users);
 
-        $user = $users[0];
+        $this->assertInstanceOf(User::class, $users->first());
 
-        $this->assertIsObject($user);
-
-        $this->assertEquals('anonymous@qt.com', $user->email);
+        $this->assertEquals('anonymous@qt.com', $users->first()->email);
     }
 
     public function testAuthServiceGetUserByUuid()
     {
         $users = $this->authService->getAll();
 
-        $user = $this->authService->getUserByUuid($users[0]->uuid);
+        $user = $this->authService->getUserByUuid($users->first()->uuid);
 
         $this->assertInstanceOf(User::class, $user);
 

@@ -9,20 +9,20 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.5
+ * @since 2.9.6
  */
 
 namespace Shared\Services;
 
-use Quantum\Libraries\Database\Exceptions\DatabaseException;
 use Quantum\Libraries\Auth\Contracts\AuthServiceInterface;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
-use Quantum\Libraries\Database\Exceptions\ModelException;
 use Quantum\Libraries\Config\Exceptions\ConfigException;
+use Quantum\Model\Exceptions\ModelException;
 use Quantum\Libraries\Auth\User as AuthUser;
+use Quantum\Model\Factories\ModelFactory;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Exceptions\BaseException;
-use Quantum\Factory\ModelFactory;
+use Quantum\Model\ModelCollection;
 use Quantum\Mvc\QtService;
 use ReflectionException;
 use Shared\Models\User;
@@ -37,14 +37,10 @@ class AuthService extends QtService implements AuthServiceInterface
 
     /**
      * Get users
-     * @return array|null
-     * @throws ReflectionException
-     * @throws DiException
-     * @throws ConfigException
-     * @throws DatabaseException
+     * @return ModelCollection
      * @throws ModelException
      */
-    public function getAll(): ?array
+    public function getAll(): ModelCollection
     {
         return ModelFactory::get(User::class)->get();
     }
@@ -52,40 +48,26 @@ class AuthService extends QtService implements AuthServiceInterface
     /**
      * Get user
      * @param string $uuid
-     * @return array|null
-     * @throws ConfigException
-     * @throws DatabaseException
-     * @throws DiException
+     * @return User
      * @throws ModelException
-     * @throws ReflectionException
      */
-    public function getUserByUuid(string $uuid): ?User
+    public function getUserByUuid(string $uuid): User
     {
-        $user = ModelFactory::get(User::class)->findOneBy('uuid', $uuid);
-
-        if (empty($user->asArray())) {
-            return null;
-        }
-
-        return $user;
+        return ModelFactory::get(User::class)->findOneBy('uuid', $uuid);
     }
 
     /**
-     *  Get
+     * Get user
      * @param string $field
      * @param $value
      * @return AuthUser|null
-     * @throws ConfigException
-     * @throws DatabaseException
-     * @throws DiException
      * @throws ModelException
-     * @throws ReflectionException
      */
     public function get(string $field, $value): ?AuthUser
     {
         $user = ModelFactory::get(User::class)->findOneBy($field, $value);
 
-        if (empty($user->asArray())) {
+        if ($user->isEmpty()) {
             return null;
         }
 
@@ -98,7 +80,6 @@ class AuthService extends QtService implements AuthServiceInterface
      * @return AuthUser
      * @throws BaseException
      * @throws ConfigException
-     * @throws DatabaseException
      * @throws DiException
      * @throws ModelException
      * @throws ReflectionException
@@ -123,11 +104,7 @@ class AuthService extends QtService implements AuthServiceInterface
      * @param string|null $value
      * @param array $data
      * @return AuthUser|null
-     * @throws ConfigException
-     * @throws DatabaseException
-     * @throws DiException
      * @throws ModelException
-     * @throws ReflectionException
      */
     public function update(string $field, ?string $value, array $data): ?AuthUser
     {
@@ -172,6 +149,7 @@ class AuthService extends QtService implements AuthServiceInterface
 
     /**
      * Delete users table
+     * @throws ModelException
      */
     public function deleteTable()
     {
@@ -183,6 +161,9 @@ class AuthService extends QtService implements AuthServiceInterface
      * @param string $uuid
      * @return void
      * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ReflectionException
      */
     private function createUserDirectory(string $uuid)
     {

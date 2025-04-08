@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.0
+ * @since 2.9.6
  */
 
 namespace Shared\Commands;
@@ -18,11 +18,13 @@ use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
 use Quantum\Libraries\Database\Exceptions\DatabaseException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
-use Quantum\Libraries\Database\Exceptions\ModelException;
 use Quantum\Libraries\Config\Exceptions\ConfigException;
 use Quantum\Libraries\Database\Factories\TableFactory;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
+use Quantum\Model\Exceptions\ModelException;
+use Quantum\Exceptions\ServiceException;
+use Quantum\Libraries\Database\Database;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Exceptions\BaseException;
@@ -122,7 +124,9 @@ class DemoCommand extends QtCommand
     const COMMAND_CREATE_MODULE = 'module:generate';
 
     /**
-     * Command constructor
+     * @throws DiException
+     * @throws ReflectionException
+     * @throws ServiceException
      */
     public function __construct()
     {
@@ -144,7 +148,6 @@ class DemoCommand extends QtCommand
      * @throws ErrorException
      * @throws ExceptionInterface
      * @throws HttpClientException
-     * @throws ModelException
      * @throws ReflectionException
      */
     public function exec()
@@ -247,14 +250,20 @@ class DemoCommand extends QtCommand
     /**
      * Cleanups the database
      * @throws BaseException
+     * @throws ConfigException
      * @throws DatabaseException
+     * @throws DiException
      * @throws ExceptionInterface
+     * @throws ReflectionException
+     * @throws ModelException
      */
     private function cleanUp()
     {
         $this->removeFolders();
 
-        switch (config()->get('database')['default']) {
+        $databaseDriver = Database::getInstance()->getConfigs()['driver'];
+
+        switch ($databaseDriver) {
             case 'mysql':
                 $tableFactory = new TableFactory();
 
@@ -284,8 +293,10 @@ class DemoCommand extends QtCommand
 
     /**
      * Removes users folders
-     * @return void
      * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ReflectionException
      */
     private function removeFolders()
     {
