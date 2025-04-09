@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.5
+ * @since 2.9.6
  */
 
 namespace Shared\Commands;
@@ -76,17 +76,17 @@ class PostUpdateCommand extends QtCommand
 
         $postId = $this->getArgument('uuid');
 
-        $post = $postService->getPost($postId, false);
+        $post = $postService->getPost($postId);
 
-        if (!$post) {
+        if ($post->isEmpty()) {
             $this->error('The post is not found');
             return;
         }
 
         $postData = [
-            'title' => $this->getOption('title') ?: $post['title'],
-            'content' => $this->getOption('description') ?: $post['content'],
-            'image' => $this->getOption('image') ?: $post['image'] ?? '',
+            'title' => $this->getOption('title') ?: $post->title,
+            'content' => $this->getOption('description') ?: $post->content,
+            'image' => $this->getOption('image') ?: $post->image ?? '',
             'updated_at' => date('Y-m-d H:i:s')
         ];
 

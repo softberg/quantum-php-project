@@ -9,16 +9,16 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.7.0
+ * @since 2.9.6
  */
 
 namespace Shared\Models;
 
-use Quantum\Mvc\QtModel;
+use Quantum\Model\QtModel;
 
 /**
  * Class User
- * @package Modules\Web\Models
+ * @package Shared\Models
  */
 class Post extends QtModel
 {
@@ -51,5 +51,4 @@ class Post extends QtModel
         'image',
         'updated_at'
     ];
-
 }

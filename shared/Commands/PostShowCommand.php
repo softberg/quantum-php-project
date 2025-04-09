@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.5
+ * @since 2.9.6
  */
 
 namespace Shared\Commands;
@@ -19,6 +19,7 @@ use Shared\Transformers\PostTransformer;
 use Quantum\Exceptions\ServiceException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
+use Quantum\Model\ModelCollection;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use ReflectionException;
@@ -76,29 +77,30 @@ class PostShowCommand extends QtCommand
     {
         $postService = ServiceFactory::get(PostService::class);
 
-        $postTransformer = new PostTransformer();
-
         $uuid = $this->getArgument('uuid');
-
-        $rows = [];
 
         if ($uuid) {
             $post = $postService->getPost($uuid);
 
-            if ($post) {
-                $rows[] = $this->composeTableRow(current(transform([$post], $postTransformer)));
-            } else {
+            if ($post->isEmpty()) {
                 $this->error('The post is not found');
                 return;
             }
+
+            $postCollection = new ModelCollection();
+            $postCollection->add($post);
         } else {
-            $paginatedPosts = $postService->getPosts(self::POSTS_PER_PAGE, self::CURRENT_PAGE);
+            $postCollection = $postService
+                ->getPosts(self::POSTS_PER_PAGE, self::CURRENT_PAGE)
+                ->data();
+        }
 
-            $posts = transform($paginatedPosts->data(), $postTransformer);
+        $transformedPosts = transform($postCollection->all(), new PostTransformer());
 
-            foreach ($posts as $post) {
-                $rows[] = $this->composeTableRow($post);
-            }
+        $rows = [];
+
+        foreach ($transformedPosts as $post) {
+            $rows[] = $this->composeTableRow($post);
         }
 
         $table = new Table($this->output);

@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.5
+ * @since 2.9.6
  */
 
 namespace Shared\Commands;
@@ -18,6 +18,7 @@ use Symfony\Component\Console\Helper\Table;
 use Quantum\Exceptions\ServiceException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Factory\ServiceFactory;
+use Quantum\Model\ModelCollection;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
 use ReflectionException;
@@ -67,35 +68,30 @@ class UserShowCommand extends QtCommand
 
         $uuid = $this->getArgument('uuid');
 
-        $rows = [];
-
         if ($uuid) {
             $user = $userService->getUserByUuid($uuid);
 
-            if (!empty($user)) {
-                $rows[] = $this->composeTableRow($user->asArray());
-            } else {
+            if ($user->isEmpty()) {
                 $this->error('The user is not found');
                 return;
             }
-        } else {
-            $users = $userService->getAll();
 
-            foreach ($users as $user) {
-                $rows[] = $this->composeTableRow($user->asArray());
-            }
+            $usersCollection = new ModelCollection();
+            $usersCollection->add($user);
+        } else {
+            $usersCollection = $userService->getAll();
+        }
+
+        $rows = [];
+
+        foreach ($usersCollection as $user) {
+            $rows[] = $this->composeTableRow($user->asArray());
         }
 
         $table = new Table($this->output);
 
         $table->setHeaderTitle('Users')
-            ->setHeaders([
-                'UUID',
-                'Firstname',
-                'Lastname',
-                'Email',
-                'Role',
-            ])
+            ->setHeaders(['UUID', 'Firstname', 'Lastname', 'Email', 'Role'])
             ->setRows($rows)
             ->render();
     }

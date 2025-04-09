@@ -2,9 +2,10 @@
 
 namespace Quantum\Tests\Unit\shared\Services;
 
-use \Quantum\Libraries\Database\Contracts\PaginatorInterface;
+use Quantum\Paginator\Contracts\PaginatorInterface;
 use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\Tests\Unit\AppTestCase;
+use Quantum\Model\ModelCollection;
 use Shared\Models\Post;
 
 class PostServiceTest extends AppTestCase
@@ -89,13 +90,13 @@ class PostServiceTest extends AppTestCase
 
         $this->assertInstanceOf(PaginatorInterface::class, $posts);
 
-        $this->assertIsArray($posts->data());
+        $this->assertInstanceOf(ModelCollection::class, $posts->data());
 
         $this->assertCount(4, $posts->data());
 
-        $post = $posts->data()[0];
+        $post = $posts->data()->first();
 
-        $this->assertIsObject($post);
+        $this->assertInstanceOf(Post::class, $post);
     }
 
     public function testPostServiceGetPostsWithSearch()
@@ -106,7 +107,7 @@ class PostServiceTest extends AppTestCase
 
         $this->assertInstanceOf(PaginatorInterface::class, $posts);
 
-        $this->assertIsArray($posts->data());
+        $this->assertInstanceOf(ModelCollection::class, $posts->data());
 
         $this->assertCount(1, $posts->data());
     }
@@ -115,7 +116,7 @@ class PostServiceTest extends AppTestCase
     {
         $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
-        $post = $this->postService->getPost($posts->data()[0]->uuid);
+        $post = $this->postService->getPost($posts->data()->first()->uuid);
 
         $this->assertInstanceOf(Post::class, $post);
 
@@ -133,7 +134,7 @@ class PostServiceTest extends AppTestCase
     {
         $myPosts = $this->postService->getMyPosts(1);
 
-        $this->assertIsArray($myPosts);
+        $this->assertInstanceOf(ModelCollection::class, $myPosts);
 
         $this->assertCount(2, $myPosts);
     }
@@ -167,7 +168,7 @@ class PostServiceTest extends AppTestCase
 
         $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
-        $uuid = $posts->data()[0]->uuid;
+        $uuid = $posts->data()->first()->uuid;
 
         $this->postService->updatePost($uuid, [
             'title' => 'Walt Disney Jr.',

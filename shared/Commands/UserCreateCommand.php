@@ -9,18 +9,18 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.5
+ * @since 2.9.6
  */
 
 namespace Shared\Commands;
 
 use Quantum\Libraries\Validation\Validator;
+use Quantum\Model\Factories\ModelFactory;
 use Quantum\Exceptions\ServiceException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Factory\ServiceFactory;
-use Quantum\Factory\ModelFactory;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
 use ReflectionException;
