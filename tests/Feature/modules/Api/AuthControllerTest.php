@@ -2,15 +2,14 @@
 
 namespace Quantum\Tests\Feature\modules\Api;
 
+use Quantum\Model\Factories\ModelFactory;
 use Quantum\Tests\Feature\AppTestCase;
 use Quantum\Libraries\Hasher\Hasher;
-use Quantum\Factory\ModelFactory;
 use Quantum\Http\Request;
 use Shared\Models\User;
 
 class AuthControllerTest extends AppTestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
