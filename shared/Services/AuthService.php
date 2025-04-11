@@ -112,7 +112,7 @@ class AuthService extends QtService implements AuthServiceInterface
 
         $user = $userModel->findOneBy($field, $value);
 
-        if (empty($user->asArray())) {
+        if ($user->isEmpty()) {
             return null;
         }
 
