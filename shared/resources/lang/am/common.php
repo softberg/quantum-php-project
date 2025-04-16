@@ -60,7 +60,7 @@ return [
     '2fa' => 'Երկու գործոնով նույնականացում',
     'resend_otp' => 'Կրկին ուղարկել',
     'yes' => 'Այո',
-    'profile' => 'Profile',
+    'profile' => 'Պրոֆիլ',
     'account_settings' => 'Հաշվի կարգավորումներ',
     'current_password' => 'Ընթացիկ գաղտնաբառը',
     'confirm_password' => 'Հաստատեք գաղտնաբառը',
