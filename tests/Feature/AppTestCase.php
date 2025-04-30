@@ -3,9 +3,9 @@
 namespace Quantum\Tests\Feature;
 
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Libraries\Hasher\Hasher;
-use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use PHPUnit\Framework\TestCase;
