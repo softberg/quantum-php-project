@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.6
+ * @since 2.9.7
  */
 
 namespace Shared\Services;
@@ -23,7 +23,7 @@ use Quantum\Model\Factories\ModelFactory;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Exceptions\BaseException;
 use Quantum\Model\ModelCollection;
-use Quantum\Mvc\QtService;
+use Quantum\Service\QtService;
 use ReflectionException;
 use Shared\Models\User;
 use Faker\Factory;
