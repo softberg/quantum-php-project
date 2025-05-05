@@ -10,7 +10,7 @@
         "bluemmb/faker-picsum-photos-provider": "^2.0",
         "doctrine/annotations": "^2.0",
         "voku/html-min": "^4.5",
-        "league/commonmark": "2.0",
+        "league/commonmark": "1.6",
         "ezyang/htmlpurifier": "^4.18"
     },
     "require-dev": {
