@@ -20,6 +20,7 @@ use Symfony\Component\Console\Exception\ExceptionInterface;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
 use Quantum\Libraries\Config\Exceptions\ConfigException;
 use Quantum\Libraries\Database\Factories\TableFactory;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\NullOutput;
 use Quantum\Service\Exceptions\ServiceException;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -163,11 +164,33 @@ class DemoCommand extends QtCommand
             }
         }
 
+        $progressBar = new ProgressBar($this->output, 5);
+
+        $progressBar->setFormat(sprintf('%s <info>%%item%%</info>', $progressBar->getFormatDefinition('verbose')));
+
+        $progressBar->start();
+
+        $progressBar->setMessage("Cleaning up the database", 'item');
+
+        $progressBar->display();
+
         $this->cleanUp();
+
+        $progressBar->advance();
+
+        $progressBar->setMessage("Adding new users into database...", 'item');
+
+        $progressBar->display();
 
         for ($i = 1; $i <= self::USER_COUNT; $i++) {
             $this->runExternalCommand(self::COMMAND_USER_CREATE, $this->newUserData('editor'));
         }
+
+        $progressBar->advance();
+
+        $progressBar->setMessage("Adding posts for each user into database...", 'item');
+
+        $progressBar->display();
 
         $users = $this->authService->getAll();
 
@@ -177,12 +200,24 @@ class DemoCommand extends QtCommand
             }
         }
 
+        $progressBar->advance();
+
+        $progressBar->setMessage("Creating demo api module...", 'item');
+
+        $progressBar->display();
+
         $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
             "module" => "Api",
             "--yes" => true,
             "--template" => "DemoApi",
             "--with-assets" => false
         ]);
+
+        $progressBar->advance();
+
+        $progressBar->setMessage("Creating demo web module...", 'item');
+
+        $progressBar->display();
 
         $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
             "module" => "Web",
@@ -191,7 +226,15 @@ class DemoCommand extends QtCommand
             "--with-assets" => true
         ]);
 
-        $this->info('Demo project created successfully');
+        $progressBar->advance();
+
+        $progressBar->setMessage("Done", 'item');
+
+        $progressBar->display();
+
+        $progressBar->finish();
+
+        $this->info("\nDemo project created successfully");
     }
 
     /**
