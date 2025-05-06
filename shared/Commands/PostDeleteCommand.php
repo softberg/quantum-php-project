@@ -9,14 +9,14 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.5
+ * @since 2.9.7
  */
 
 namespace Shared\Commands;
 
-use Quantum\Exceptions\ServiceException;
+use Quantum\Service\Exceptions\ServiceException;
+use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Di\Exceptions\DiException;
-use Quantum\Factory\ServiceFactory;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use ReflectionException;

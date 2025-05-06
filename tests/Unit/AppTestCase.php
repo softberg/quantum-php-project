@@ -3,10 +3,10 @@
 namespace Quantum\Tests\Unit;
 
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Service\Factories\ServiceFactory;
 use Quantum\App\Factories\AppFactory;
 use Quantum\Environment\Environment;
 use Quantum\Libraries\Config\Config;
-use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use PHPUnit\Framework\TestCase;
