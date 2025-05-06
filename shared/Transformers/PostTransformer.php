@@ -33,7 +33,7 @@ class PostTransformer implements TransformerInterface
         return [
             'uuid' => $item->uuid,
             'title' => $item->title,
-            'content' => $item->content,
+            'content' => markdown_to_html($item->content, true),
             'image' => $item->image ? $item->user_directory . '/' . $item->image : null,
             'date' => date('Y/m/d H:i', strtotime($item->updated_at)),
             'author' => $item->firstname . ' ' . $item->lastname
