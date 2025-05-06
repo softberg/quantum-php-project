@@ -27,7 +27,7 @@ use Quantum\Di\Exceptions\DiException;
 use Quantum\Exceptions\BaseException;
 use Quantum\Model\ModelCollection;
 use Gumlet\ImageResizeException;
-use Quantum\Mvc\QtService;
+use Quantum\Service\QtService;
 use ReflectionException;
 use Shared\Models\User;
 use Shared\Models\Post;

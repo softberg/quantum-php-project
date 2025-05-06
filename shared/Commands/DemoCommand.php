@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.6
+ * @since 2.9.7
  */
 
 namespace Shared\Commands;
@@ -22,15 +22,15 @@ use Quantum\Libraries\Config\Exceptions\ConfigException;
 use Quantum\Libraries\Database\Factories\TableFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\NullOutput;
+use Quantum\Service\Exceptions\ServiceException;
 use Symfony\Component\Console\Input\ArrayInput;
+use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Model\Exceptions\ModelException;
-use Quantum\Exceptions\ServiceException;
 use Quantum\Libraries\Database\Database;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Exceptions\BaseException;
 use Quantum\Migration\MigrationTable;
-use Quantum\Factory\ServiceFactory;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
