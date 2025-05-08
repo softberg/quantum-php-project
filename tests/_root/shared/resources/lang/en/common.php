@@ -58,7 +58,7 @@ return [
     'ru' => 'Russian',
     'am' => 'Armenian',
     'otp' => 'One Time Password',
-    '2fa' => '2 Factor Authentication',
+    'two_fa' => '2 Factor Authentication',
     'resend_otp' => 'Resend otp',
     'yes' => 'Yes',
     'pagination' => [

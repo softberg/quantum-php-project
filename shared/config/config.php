@@ -66,7 +66,7 @@ return [
      * 
      * Enables or disables 2-factor authentication
      */
-    '2FA' => env('2FA', true),
+    'TWO_FA' => env('TWO_FA', true),
 
       /**
        * ---------------------------------------------------------
