@@ -16,12 +16,12 @@ namespace Shared\Services;
 
 use Quantum\Libraries\Auth\Contracts\AuthServiceInterface;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
-use Quantum\Libraries\Config\Exceptions\ConfigException;
+use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Model\Exceptions\ModelException;
 use Quantum\Libraries\Auth\User as AuthUser;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\Di\Exceptions\DiException;
-use Quantum\Exceptions\BaseException;
 use Quantum\Model\ModelCollection;
 use Quantum\Service\QtService;
 use ReflectionException;
@@ -160,10 +160,10 @@ class AuthService extends QtService implements AuthServiceInterface
      * Creates user directory
      * @param string $uuid
      * @return void
-     * @throws BaseException
-     * @throws ConfigException
      * @throws DiException
      * @throws ReflectionException
+     * @throws BaseException
+     * @throws ConfigException
      */
     private function createUserDirectory(string $uuid)
     {

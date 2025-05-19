@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.6
+ * @since 2.9.7
  */
 
 namespace Shared\Services;
@@ -17,16 +17,16 @@ namespace Shared\Services;
 use Quantum\Libraries\Storage\Exceptions\FileUploadException;
 use Quantum\Libraries\Storage\Exceptions\FileSystemException;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
-use Quantum\Libraries\Config\Exceptions\ConfigException;
-use Quantum\Paginator\Contracts\PaginatorInterface;
 use Quantum\Environment\Exceptions\EnvException;
+use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Model\Exceptions\ModelException;
 use Quantum\Libraries\Storage\UploadedFile;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\Di\Exceptions\DiException;
-use Quantum\Exceptions\BaseException;
 use Quantum\Model\ModelCollection;
 use Gumlet\ImageResizeException;
+use Quantum\Paginator\Paginator;
 use Quantum\Service\QtService;
 use ReflectionException;
 use Shared\Models\User;
@@ -45,10 +45,10 @@ class PostService extends QtService
      * @param int $perPage
      * @param int $currentPage
      * @param string|null $search
-     * @return PaginatorInterface
+     * @return Paginator
      * @throws ModelException
      */
-    public function getPosts(int $perPage, int $currentPage, ?string $search = null): PaginatorInterface
+    public function getPosts(int $perPage, int $currentPage, ?string $search = null): Paginator
     {
         $query = ModelFactory::get(Post::class)
             ->joinThrough(ModelFactory::get(User::class))
@@ -106,7 +106,7 @@ class PostService extends QtService
     /**
      * Get my posts
      * @param int $userId
-     * @return array|null
+     * @return ModelCollection|null
      * @throws ModelException
      */
     public function getMyPosts(int $userId): ?ModelCollection
@@ -183,11 +183,11 @@ class PostService extends QtService
      * @param string $imageDirectory
      * @param string $imageName
      * @return string
-     * @throws BaseException
      * @throws EnvException
      * @throws FileSystemException
      * @throws FileUploadException
      * @throws ImageResizeException
+     * @throws BaseException
      */
     public function saveImage(UploadedFile $uploadedFile, string $imageDirectory, string $imageName): string
     {
@@ -202,9 +202,9 @@ class PostService extends QtService
      * @param string $imagePath
      * @return void
      * @throws BaseException
-     * @throws ConfigException
      * @throws DiException
      * @throws ReflectionException
+     * @throws ConfigException
      */
     public function deleteImage(string $imagePath)
     {

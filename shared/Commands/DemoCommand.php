@@ -18,18 +18,18 @@ use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
 use Quantum\Libraries\Database\Exceptions\DatabaseException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
-use Quantum\Libraries\Config\Exceptions\ConfigException;
 use Quantum\Libraries\Database\Factories\TableFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\NullOutput;
 use Quantum\Service\Exceptions\ServiceException;
 use Symfony\Component\Console\Input\ArrayInput;
+use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Model\Exceptions\ModelException;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Libraries\Database\Database;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
-use Quantum\Exceptions\BaseException;
 use Quantum\Migration\MigrationTable;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
@@ -336,10 +336,10 @@ class DemoCommand extends QtCommand
 
     /**
      * Removes users folders
-     * @throws BaseException
-     * @throws ConfigException
      * @throws DiException
      * @throws ReflectionException
+     * @throws BaseException
+     * @throws ConfigException
      */
     private function removeFolders()
     {

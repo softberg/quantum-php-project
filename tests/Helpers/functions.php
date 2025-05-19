@@ -1,7 +1,7 @@
 <?php
 
-use Quantum\Libraries\Module\ModuleManager;
 use Quantum\App\Factories\AppFactory;
+use Quantum\Module\ModuleManager;
 use Quantum\Router\Router;
 use Quantum\App\App;
 
