@@ -2,10 +2,10 @@
 
 namespace Quantum\Tests\Unit\shared\Services;
 
-use Quantum\Paginator\Contracts\PaginatorInterface;
 use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\Tests\Unit\AppTestCase;
 use Quantum\Model\ModelCollection;
+use Quantum\Paginator\Paginator;
 use Shared\Models\Post;
 
 class PostServiceTest extends AppTestCase
@@ -88,7 +88,7 @@ class PostServiceTest extends AppTestCase
 
         $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
-        $this->assertInstanceOf(PaginatorInterface::class, $posts);
+        $this->assertInstanceOf(Paginator::class, $posts);
 
         $this->assertInstanceOf(ModelCollection::class, $posts->data());
 
@@ -105,10 +105,10 @@ class PostServiceTest extends AppTestCase
 
         $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE, $searchTerm);
 
-        $this->assertInstanceOf(PaginatorInterface::class, $posts);
+        $this->assertInstanceOf(Paginator::class, $posts);
 
         $this->assertInstanceOf(ModelCollection::class, $posts->data());
-
+//dump($posts->data());
         $this->assertCount(1, $posts->data());
     }
 

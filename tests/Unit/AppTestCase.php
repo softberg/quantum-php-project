@@ -6,10 +6,10 @@ use Quantum\Libraries\Storage\Factories\FileSystemFactory;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\App\Factories\AppFactory;
 use Quantum\Environment\Environment;
-use Quantum\Libraries\Config\Config;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use PHPUnit\Framework\TestCase;
+use Quantum\Config\Config;
 use Quantum\Loader\Setup;
 use Quantum\App\App;
 
