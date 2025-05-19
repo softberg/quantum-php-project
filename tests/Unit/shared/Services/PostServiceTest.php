@@ -108,7 +108,7 @@ class PostServiceTest extends AppTestCase
         $this->assertInstanceOf(Paginator::class, $posts);
 
         $this->assertInstanceOf(ModelCollection::class, $posts->data());
-//dump($posts->data());
+
         $this->assertCount(1, $posts->data());
     }
 
