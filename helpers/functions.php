@@ -9,13 +9,15 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.5
+ * @since 2.9.7
  */
 
 use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Libraries\HttpClient\HttpClient;
-use Quantum\Exceptions\BaseException;
+use Quantum\App\Exceptions\BaseException;
+use Quantum\Di\Exceptions\DiException;
 
 /**
  * Gets the url with selected language
@@ -67,7 +69,10 @@ function url_with_lang(string $lang): string
  * @return string
  * @throws ErrorException
  * @throws HttpClientException
+ * @throws ReflectionException
  * @throws BaseException
+ * @throws ConfigException
+ * @throws DiException
  */
 function save_remote_image(string $imageUrl, string $userDirectory, string $imageName): string
 {
