@@ -86,15 +86,17 @@ class PostServiceTest extends AppTestCase
     {
         $this->assertIsObject($this->postService);
 
-        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
+        $paginatedPosts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
-        $this->assertInstanceOf(Paginator::class, $posts);
+        $this->assertInstanceOf(Paginator::class, $paginatedPosts);
 
-        $this->assertInstanceOf(ModelCollection::class, $posts->data());
+        $posts = $paginatedPosts->data();
 
-        $this->assertCount(4, $posts->data());
+        $this->assertInstanceOf(ModelCollection::class, $posts);
 
-        $post = $posts->data()->first();
+        $this->assertCount(4, $posts);
+
+        $post = $posts->first();
 
         $this->assertInstanceOf(Post::class, $post);
     }
@@ -103,20 +105,22 @@ class PostServiceTest extends AppTestCase
     {
         $searchTerm = 'James Cameron';
 
-        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE, $searchTerm);
+        $paginatedPosts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE, $searchTerm);
 
-        $this->assertInstanceOf(Paginator::class, $posts);
+        $this->assertInstanceOf(Paginator::class, $paginatedPosts);
 
-        $this->assertInstanceOf(ModelCollection::class, $posts->data());
+        $posts = $paginatedPosts->data();
 
-        $this->assertCount(1, $posts->data());
+        $this->assertInstanceOf(ModelCollection::class, $posts);
+
+        $this->assertCount(1, $posts);
     }
 
     public function testPostServiceGetSinglePost()
     {
-        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
+        $paginatedPosts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
 
-        $post = $this->postService->getPost($posts->data()->first()->uuid);
+        $post = $this->postService->getPost($paginatedPosts->data()->first()->uuid);
 
         $this->assertInstanceOf(Post::class, $post);
 
