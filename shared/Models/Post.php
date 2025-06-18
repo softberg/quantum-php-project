@@ -9,11 +9,12 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.6
+ * @since 2.9.7
  */
 
 namespace Shared\Models;
 
+use Quantum\Model\Traits\SoftDeletes;
 use Quantum\Model\QtModel;
 
 /**
@@ -22,6 +23,8 @@ use Quantum\Model\QtModel;
  */
 class Post extends QtModel
 {
+
+    use SoftDeletes;
 
     /**
      * ID column of table
