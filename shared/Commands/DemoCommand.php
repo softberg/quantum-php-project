@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 namespace Shared\Commands;
@@ -268,9 +268,12 @@ class DemoCommand extends QtCommand
      * Post data
      * @param $user
      * @return array
-     * @throws ErrorException
      * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ErrorException
      * @throws HttpClientException
+     * @throws ReflectionException
      */
     private function newPostData($user): array
     {
