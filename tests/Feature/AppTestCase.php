@@ -73,25 +73,13 @@ class AppTestCase extends TestCase
     public function request(
         string $method,
         string $url,
-        array  $options = [],
+        array  $params = [],
         array  $headers = [],
-        string $contentType = 'application/x-www-form-urlencoded'
+        array  $files = []
     ): Response
     {
-        $_SERVER['REQUEST_METHOD'] = strtoupper($method);
-        $_SERVER['CONTENT_TYPE'] = $contentType;
-        $_SERVER['REQUEST_URI'] = $url;
-
-        if (!empty($headers)) {
-            foreach ($headers as $name => $value) {
-                $_SERVER['HTTP_' . strtoupper($name)] = $value;
-            }
-        }
-
-        Request::create(strtoupper($method), $url, $options);
-
+        Request::create($method, $url, $params, $headers, $files);
         self::$app->start();
-
         return new Response();
     }
 
