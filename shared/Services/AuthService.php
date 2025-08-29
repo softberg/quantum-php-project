@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 namespace Shared\Services;
@@ -24,9 +24,9 @@ use Quantum\Model\Factories\ModelFactory;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Quantum\Service\QtService;
+use Quantum\Model\QtModel;
 use ReflectionException;
 use Shared\Models\User;
-use Faker\Factory;
 
 /**
  * Class AuthService
@@ -36,36 +36,46 @@ class AuthService extends QtService implements AuthServiceInterface
 {
 
     /**
+     * @var QtModel
+     */
+    private $model;
+
+    /**
+     * @throws ModelException
+     */
+    public function __construct()
+    {
+        $this->model = ModelFactory::get(User::class);
+    }
+
+    /**
      * Get users
      * @return ModelCollection
-     * @throws ModelException
      */
     public function getAll(): ModelCollection
     {
-        return ModelFactory::get(User::class)->get();
+        return $this->model->get();
     }
 
     /**
      * Get user
      * @param string $uuid
      * @return User
-     * @throws ModelException
      */
     public function getUserByUuid(string $uuid): User
     {
-        return ModelFactory::get(User::class)->findOneBy('uuid', $uuid);
+        return$this->model->findOneBy('uuid', $uuid);
     }
 
     /**
-     * Get user
+     * Gets the user
      * @param string $field
      * @param $value
      * @return AuthUser|null
-     * @throws ModelException
      */
     public function get(string $field, $value): ?AuthUser
     {
-        $user = ModelFactory::get(User::class)->findOneBy($field, $value);
+        $user = $this->model->findOneBy($field, $value);
 
         if ($user->isEmpty()) {
             return null;
@@ -75,23 +85,22 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
-     * Add user
+     * Adds a user
      * @param array $data
      * @return AuthUser
      * @throws BaseException
      * @throws ConfigException
      * @throws DiException
-     * @throws ModelException
      * @throws ReflectionException
      */
     public function add(array $data): AuthUser
     {
-        $data['uuid'] = Factory::create()->uuid();
+        $data['uuid'] = $data['uuid'] ?? uuid_ordered();
         $data['role'] = $data['role'] ?? 'editor';
 
         $this->createUserDirectory($data['uuid']);
 
-        $user = ModelFactory::get(User::class)->create();
+        $user = $this->model->create();
         $user->fillObjectProps($data);
         $user->save();
 
@@ -99,18 +108,15 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
-     * Update user
+     * Updates the user
      * @param string $field
      * @param string|null $value
      * @param array $data
      * @return AuthUser|null
-     * @throws ModelException
      */
     public function update(string $field, ?string $value, array $data): ?AuthUser
     {
-        $userModel = ModelFactory::get(User::class);
-
-        $user = $userModel->findOneBy($field, $value);
+        $user = $this->model->findOneBy($field, $value);
 
         if ($user->isEmpty()) {
             return null;
@@ -119,7 +125,25 @@ class AuthService extends QtService implements AuthServiceInterface
         $user->fillObjectProps($data);
         $user->save();
 
-        return (new AuthUser())->setData($userModel->findOneBy($field, $value)->asArray());
+        return (new AuthUser())->setData($this->model->findOneBy($field, $value)->asArray());
+    }
+
+    /**
+     * Deletes the user
+     * @param string $uuid
+     * @return bool
+     */
+    public function delete(string $uuid): bool
+    {
+        return $this->model->findOneBy('uuid', $uuid)->delete();
+    }
+
+    /**
+     * Delete users table
+     */
+    public function deleteTable()
+    {
+        $this->model->deleteTable();
     }
 
     /**
@@ -148,18 +172,8 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
-     * Delete users table
-     * @throws ModelException
-     */
-    public function deleteTable()
-    {
-        ModelFactory::get(User::class)->deleteTable();
-    }
-
-    /**
      * Creates user directory
      * @param string $uuid
-     * @return void
      * @throws DiException
      * @throws ReflectionException
      * @throws BaseException
