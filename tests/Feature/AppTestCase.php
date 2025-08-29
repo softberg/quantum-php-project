@@ -3,20 +3,18 @@
 namespace Quantum\Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
-use Quantum\App\App;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
+use Quantum\App\App;
 
 class AppTestCase extends TestCase
 {
-
-    protected static $app;
 
     protected static $defaultEmail = 'tester@quantumphp.io';
 
     protected static $defaultPassword = 'password';
 
-    protected $baseUrl;
+    protected static $app;
 
     public static function setUpBeforeClass(): void
     {
