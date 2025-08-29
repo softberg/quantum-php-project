@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 /**
  * Quantum PHP Framework
@@ -15,26 +15,18 @@
 namespace Shared\Commands;
 
 use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
-use Quantum\Libraries\Database\Exceptions\DatabaseException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Quantum\Libraries\Storage\Factories\FileSystemFactory;
-use Quantum\Libraries\Database\Factories\TableFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\NullOutput;
 use Quantum\Service\Exceptions\ServiceException;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Quantum\Config\Exceptions\ConfigException;
-use Quantum\Service\Factories\ServiceFactory;
-use Quantum\Model\Exceptions\ModelException;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Libraries\Database\Database;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
-use Quantum\Migration\MigrationTable;
-use Shared\Services\AuthService;
-use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
-use Quantum\Loader\Setup;
 use ReflectionException;
 use Faker\Generator;
 use ErrorException;
@@ -75,29 +67,9 @@ class DemoCommand extends QtCommand
     ];
 
     /**
-     * @var AuthService
-     */
-    protected $authService;
-
-    /**
-     * @var PostService
-     */
-    protected $postService;
-
-    /**
      * @var Generator
      */
     protected $faker;
-
-    /**
-     * How many users to create
-     */
-    const USER_COUNT = 3;
-
-    /**
-     * How many posts to create
-     */
-    const POST_COUNT_PER_USER = 8;
 
     /**
      * Default password for generated users
@@ -105,58 +77,46 @@ class DemoCommand extends QtCommand
     const DEFAULT_PASSWORD = 'password';
 
     /**
-     * Command name to run migrations
+     * Static values for user and post counts.
      */
-    const COMMAND_MIGRATE = 'migration:migrate';
+    private const COUNTS = [
+        'users' => 3,
+        'posts_per_user' => 8,
+    ];
 
     /**
-     * Command name to create users
+     * Predefined command mappings.
      */
-    const COMMAND_USER_CREATE = 'user:create';
+    private const COMMANDS = [
+        'migrate' => 'migration:migrate',
+        'user_create' => 'user:create',
+        'post_create' => 'post:create',
+        'user_delete' => 'user:delete',
+        'post_delete' => 'post:delete',
+        'module_generate' => 'module:generate',
+    ];
 
-    /**
-     * Command name to create posts
-     */
-    const COMMAND_POST_CREATE = 'post:create';
-
-    /**
-     * Command name to generate modules
-     */
-    const COMMAND_CREATE_MODULE = 'module:generate';
-
-    /**
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
-     */
     public function __construct()
     {
         parent::__construct();
 
         $this->faker = Factory::create();
         $this->faker->addProvider(new PicsumPhotosProvider($this->faker));
-
-        $this->authService = ServiceFactory::get(AuthService::class);
-        $this->postService = ServiceFactory::get(PostService::class);
     }
 
     /**
      * Executes the command
      * @throws BaseException
      * @throws ConfigException
-     * @throws DatabaseException
      * @throws DiException
      * @throws ErrorException
      * @throws ExceptionInterface
      * @throws HttpClientException
      * @throws ReflectionException
+     * @throws ServiceException
      */
     public function exec()
     {
-        if (!config()->has('database') || !config()->has('database.default')) {
-            config()->import(new Setup('config', 'database'));
-        }
-
         if (!$this->getOption('yes')) {
             if (!$this->confirm('The operation will remove all previously created data and will create new dataset. Continue?')) {
                 $this->info('Operation was canceled!');
@@ -164,77 +124,111 @@ class DemoCommand extends QtCommand
             }
         }
 
-        $progressBar = new ProgressBar($this->output, 5);
+        $progress = $this->initProgressBar(5);
 
-        $progressBar->setFormat(sprintf('%s <info>%%item%%</info>', $progressBar->getFormatDefinition('verbose')));
+        $this->createModules($progress);
+        $this->resetDatabase($progress);
+        $this->generateDemoData($progress);
 
-        $progressBar->start();
+        $progress->finish();
 
-        $progressBar->setMessage("Cleaning up the database", 'item');
+        $this->info(PHP_EOL . "Demo project created successfully");
+    }
 
-        $progressBar->display();
+    /**
+     * Initializes a progress bar.
+     * @param int $steps
+     * @return ProgressBar
+     */
+    private function initProgressBar(int $steps): ProgressBar
+    {
+        $progress = new ProgressBar($this->output, $steps);
+        $progress->setFormat(sprintf('%s <info>%%item%%</info>', $progress->getFormatDefinition('verbose')));
+        $progress->start();
+        return $progress;
+    }
 
-        $this->cleanUp();
+    /**
+     * Creates demo modules.
+     * @param ProgressBar $progress
+     * @throws ExceptionInterface
+     */
+    private function createModules(ProgressBar $progress): void
+    {
+        $this->updateProgress($progress, "Creating demo api module...");
 
-        $progressBar->advance();
+        $this->runExternalCommand(self::COMMANDS['module_generate'], [
+            'module' => 'Api',
+            '--yes' => true,
+            '--template' => 'DemoApi',
+            '--with-assets' => false
+        ]);
 
-        $progressBar->setMessage("Adding new users into database...", 'item');
+        $this->updateProgress($progress, "Creating demo web module...");
 
-        $progressBar->display();
+        $this->runExternalCommand(self::COMMANDS['module_generate'], [
+            'module' => 'Web',
+            '--yes' => true,
+            '--template' => 'DemoWeb',
+            '--with-assets' => true
+        ]);
+    }
 
-        for ($i = 1; $i <= self::USER_COUNT; $i++) {
-            $this->runExternalCommand(self::COMMAND_USER_CREATE, $this->newUserData('editor'));
-        }
+    /**
+     * Cleans the uploads and resets the database.
+     * @param ProgressBar $progress
+     * @return void
+     * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ExceptionInterface
+     * @throws ReflectionException
+     * @throws ServiceException
+     */
+    private function resetDatabase(ProgressBar $progress): void
+    {
+        $this->updateProgress($progress, "Cleaning up the database");
+        $this->removeUploads();
+        $this->rebuildDatabase();
+    }
 
-        $progressBar->advance();
+    /**
+     * Generates demo users and posts.
+     * @param ProgressBar $progress
+     * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ErrorException
+     * @throws ExceptionInterface
+     * @throws HttpClientException
+     * @throws ReflectionException
+     */
+    private function generateDemoData(ProgressBar $progress): void
+    {
+        $this->updateProgress($progress, "Generating and adding demo users and posts into database...");
 
-        $progressBar->setMessage("Adding posts for each user into database...", 'item');
+        for ($i = 0; $i < self::COUNTS['users']; $i++) {
+            $user = $this->generateUserData();
+            $this->runExternalCommand(self::COMMANDS['user_create'], $user);
 
-        $progressBar->display();
-
-        $users = $this->authService->getAll();
-
-        foreach ($users as $user) {
-            for ($i = 1; $i <= self::POST_COUNT_PER_USER; $i++) {
-                $this->runExternalCommand(self::COMMAND_POST_CREATE, $this->newPostData($user));
+            for ($j = 0; $j < self::COUNTS['posts_per_user']; $j++) {
+                $this->runExternalCommand(self::COMMANDS['post_create'], $this->generatePostData($user));
             }
         }
 
-        $progressBar->advance();
+        $this->updateProgress($progress, "Done");
+    }
 
-        $progressBar->setMessage("Creating demo api module...", 'item');
-
-        $progressBar->display();
-
-        $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
-            "module" => "Api",
-            "--yes" => true,
-            "--template" => "DemoApi",
-            "--with-assets" => false
-        ]);
-
-        $progressBar->advance();
-
-        $progressBar->setMessage("Creating demo web module...", 'item');
-
-        $progressBar->display();
-
-        $this->runExternalCommand(self::COMMAND_CREATE_MODULE, [
-            "module" => "Web",
-            "--yes" => true,
-            "--template" => "DemoWeb",
-            "--with-assets" => true
-        ]);
-
-        $progressBar->advance();
-
-        $progressBar->setMessage("Done", 'item');
-
-        $progressBar->display();
-
-        $progressBar->finish();
-
-        $this->info("\nDemo project created successfully");
+    /**
+     * Generates demo users and posts.
+     * @param ProgressBar $progress
+     * @param string $message
+     */
+    private function updateProgress(ProgressBar $progress, string $message): void
+    {
+        $progress->setMessage($message, 'item');
+        $progress->display();
+        $progress->advance();
     }
 
     /**
@@ -242,30 +236,30 @@ class DemoCommand extends QtCommand
      * @throws Exception
      * @throws ExceptionInterface
      */
-    protected function runExternalCommand($commandName, $arguments)
+    protected function runExternalCommand(string $commandName, ?array $arguments = [])
     {
         $command = $this->getApplication()->find($commandName);
         $command->run(new ArrayInput($arguments), new NullOutput);
     }
 
     /**
-     * User data
-     * @param string $role
+     * Generates data for user
      * @return array
      */
-    private function newUserData(string $role = ''): array
+    private function generateUserData(): array
     {
         return [
+            'uuid' => $this->faker->uuid(),
             'firstname' => $this->faker->name(),
             'lastname' => $this->faker->lastName(),
-            'role' => $role,
+            'role' => 'editor',
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_PASSWORD,
         ];
     }
 
     /**
-     * Post data
+     * Generates data for post
      * @param $user
      * @return array
      * @throws BaseException
@@ -275,85 +269,56 @@ class DemoCommand extends QtCommand
      * @throws HttpClientException
      * @throws ReflectionException
      */
-    private function newPostData($user): array
+    private function generatePostData($user): array
     {
-        $title = $this->textCleanUp($this->faker->realText(50));
+        $title = textCleanUp($this->faker->realText(50));
 
         $imageName = save_remote_image(
             $this->faker->imageUrl(640, 480, true, 0),
-            $user->uuid,
+            $user['uuid'],
             $title
         );
 
         return [
             'title' => $title,
-            'description' => $this->textCleanUp($this->faker->realText(1000)),
+            'description' => textCleanUp($this->faker->realText(1000)),
             'image' => $imageName,
-            'user_id' => $user->id,
+            'user_uuid' => $user['uuid'],
         ];
     }
 
     /**
-     * Cleanups the database
-     * @throws BaseException
-     * @throws ConfigException
-     * @throws DatabaseException
-     * @throws DiException
+     * Rebuilds the database
      * @throws ExceptionInterface
-     * @throws ReflectionException
-     * @throws ModelException
      */
-    private function cleanUp()
+    private function rebuildDatabase(): void
     {
-        $this->removeFolders();
-
-        $databaseDriver = Database::getInstance()->getConfigs()['driver'];
-
-        switch ($databaseDriver) {
+        switch (Database::getInstance()->getConfigs()['driver']) {
             case 'mysql':
-                $tableFactory = new TableFactory();
-
-                if (!$tableFactory->checkTableExists(MigrationTable::TABLE)) {
-                    $migrationTable = new MigrationTable();
-                    $migrationTable->up($tableFactory);
-                }
-
-                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'down']);
-                $this->runExternalCommand(self::COMMAND_MIGRATE, ['direction' => 'up']);
+                $this->runExternalCommand(self::COMMANDS['migrate'], ['direction' => 'down']);
+                $this->runExternalCommand(self::COMMANDS['migrate'], ['direction' => 'up']);
                 break;
+
             case 'sleekdb':
-                $this->postService->deleteTable();
-                $this->authService->deleteTable();
+                $this->runExternalCommand(self::COMMANDS['post_delete'], ['--yes' => true]);
+                $this->runExternalCommand(self::COMMANDS['user_delete'], ['--yes' => true]);
                 break;
         }
     }
 
     /**
-     * @param string $text
-     * @return array|string|string[]
-     */
-    private function textCleanUp(string $text)
-    {
-        return str_replace(['"', '\'', '-'], '', $text);
-    }
-
-    /**
-     * Removes users folders
-     * @throws DiException
-     * @throws ReflectionException
+     * Removes uploaded folders and files.
      * @throws BaseException
      * @throws ConfigException
+     * @throws DiException
+     * @throws ReflectionException
      */
-    private function removeFolders()
+    private function removeUploads(): void
     {
         $fs = FileSystemFactory::get();
 
-        $uploadsFolder = $fs->glob(uploads_dir() . DS . '*');
-
-        foreach ($uploadsFolder as $folder) {
-            $userImages = $fs->glob($folder . DS . '*');
-
-            foreach ($userImages as $file) {
+        foreach ($fs->glob(uploads_dir() . DS . '*') as $folder) {
+            foreach ($fs->glob($folder . DS . '*') as $file) {
                 $fs->remove($file);
             }
 
