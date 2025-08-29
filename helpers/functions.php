@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
@@ -89,4 +89,14 @@ function save_remote_image(string $imageUrl, string $userDirectory, string $imag
     $fs->put(uploads_dir() . DS . $userDirectory . DS . $imageName, $httpClient->getResponseBody());
 
     return $imageName;
+}
+
+/**
+ * Cleans up text for titles/descriptions.
+ * @param string $text
+ * @return array|string|string[]
+ */
+function textCleanUp(string $text)
+{
+    return str_replace(['"', '\'', '-'], '', $text);
 }
