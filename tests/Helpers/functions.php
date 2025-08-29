@@ -27,8 +27,9 @@ function removeEnvFile()
     }
 }
 
-function createApp() {
-    return AppFactory::create(App::WEB, dirname(__DIR__) . DS . '_root');
+function createApp(string $type): App
+{
+    return AppFactory::create($type, dirname(__DIR__) . DS . '_root');
 }
 
 function createModule(string $moduleName, string $template, bool $withAssets = false)
@@ -115,13 +116,4 @@ function dbCleanUp()
 {
     ServiceFactory::get(AuthService::class)->deleteTable();
     ServiceFactory::get(PostService::class)->deleteTable();
-}
-
-function removeFolders()
-{
-    $uploadsFolder = $this->fs->glob(uploads_dir() . DS . '*');
-
-    foreach ($uploadsFolder as $folder) {
-        $this->fs->removeDirectory($folder);
-    }
 }

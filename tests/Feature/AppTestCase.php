@@ -3,6 +3,7 @@
 namespace Quantum\Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
+use Quantum\App\App;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 
@@ -19,7 +20,7 @@ class AppTestCase extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$app = $GLOBALS['app'];
+        self::$app = createApp(App::WEB);
     }
 
     public function setUp(): void

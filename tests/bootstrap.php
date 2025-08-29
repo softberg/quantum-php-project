@@ -1,5 +1,7 @@
 <?php
 
+use Quantum\App\App;
+
 error_reporting(E_ALL | E_STRICT);
 
 if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
@@ -12,7 +14,8 @@ require_once __DIR__ . DS . 'Helpers' . DS . 'functions.php';
 
 createEnvFile();
 
-$GLOBALS['app'] = createApp();
+
+$GLOBALS['app'] = createApp(App::CONSOLE);
 
 createModule('Api', 'DemoApi');
 
