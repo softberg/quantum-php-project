@@ -14,75 +14,39 @@ class PostServiceTest extends AppTestCase
 
     const CURRENT_PAGE = 1;
 
-    private $user;
-
-    private $initialUser = [
-        'email' => 'anonymous@qt.com',
-        'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
-        'firstname' => 'Tom',
-        'lastname' => 'Hunter',
-        'role' => 'admin',
-        'activation_token' => '',
-        'remember_token' => '',
-        'reset_token' => '',
-        'access_token' => '',
-        'refresh_token' => '',
-        'otp' => '',
-        'otp_expires' => '',
-        'otp_token' => '',
-    ];
-
-    private $initialPosts = [
-        [
-            'user_id' => 1,
-            'title' => 'Walt Disney',
-            'content' => 'The way to get started is to quit talking and begin doing.',
-            'image' => '',
-            'updated_at' => '2021-05-08 23:11:00',
-        ],
-        [
-            'user_id' => 1,
-            'title' => 'Lorem ipsum dolor sit amet',
-            'content' => 'Praesent hendrerit lobortis malesuada. Proin bibendum lacinia nunc ac aliquet.',
-            'image' => '',
-            'updated_at' => '2021-05-08 23:12:00',
-        ],
-        [
-            'user_id' => 2,
-            'title' => 'Aenean dui turpis',
-            'content' => 'Etiam aliquet urna luctus, venenatis justo aliquam, hendrerit arcu.',
-            'image' => '',
-            'updated_at' => '2021-05-08 23:13:00',
-        ],
-        [
-            'user_id' => 2,
-            'title' => 'James Cameron',
-            'content' => 'If you set your goals ridiculously high and it is a failure, you will fail above everyone else success.',
-            'image' => '',
-            'updated_at' => '2021-05-08 23:14:00',
-        ]
-    ];
+    private $initialPosts;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->user = $this->authService->add($this->initialUser);
-
-        foreach ($this->initialPosts as $post) {
-            $this->postService->addPost($post);
-        }
+        $this->initialPosts = $this->postService
+            ->getPosts(self::PER_PAGE, self::CURRENT_PAGE)
+            ->data()
+            ->all();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-
-        $this->authService->deleteTable();
-        $this->postService->deleteTable();
     }
 
-    public function testPostServiceGetPosts()
+    public function testPostServiceGetAllPosts()
+    {
+        $this->assertIsObject($this->postService);
+
+        $posts = $this->postService->getPosts();
+
+        $this->assertInstanceOf(ModelCollection::class, $posts);
+
+        $this->assertCount(10, $posts);
+
+        $post = $posts->first();
+
+        $this->assertInstanceOf(Post::class, $post);
+    }
+
+    public function testPostServiceGetPaginatedPosts()
     {
         $this->assertIsObject($this->postService);
 
@@ -94,7 +58,7 @@ class PostServiceTest extends AppTestCase
 
         $this->assertInstanceOf(ModelCollection::class, $posts);
 
-        $this->assertCount(4, $posts);
+        $this->assertCount(10, $posts);
 
         $post = $posts->first();
 
@@ -103,7 +67,11 @@ class PostServiceTest extends AppTestCase
 
     public function testPostServiceGetPostsWithSearch()
     {
-        $searchTerm = 'James Cameron';
+        $randomKey = array_rand($this->initialPosts);
+
+        $post = $this->initialPosts[$randomKey];
+
+        $searchTerm = substr($post->title, 10, 10);
 
         $paginatedPosts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE, $searchTerm);
 
@@ -136,19 +104,27 @@ class PostServiceTest extends AppTestCase
 
     public function testPostServiceGetMyPosts()
     {
-        $myPosts = $this->postService->getMyPosts(1);
+        $users = $this->authService->getAll();
+
+        $userUuid = $users->first()->uuid;
+
+        $myPosts = $this->postService->getMyPosts($userUuid);
 
         $this->assertInstanceOf(ModelCollection::class, $myPosts);
 
-        $this->assertCount(2, $myPosts);
+        $this->assertCount(10, $myPosts);
     }
 
     public function testPostServiceAddNewPost()
     {
         $date = date('Y-m-d H:i:s');
 
+        $users = $this->authService->getAll();
+
+        $userUuid = $users->first()->uuid;
+
         $newPost = $this->postService->addPost([
-            'user_id' => 1,
+            'user_uuid' => $userUuid,
             'title' => 'Just another post',
             'content' => 'Content of just another post',
             'image' => '',
@@ -164,15 +140,17 @@ class PostServiceTest extends AppTestCase
         $this->assertEquals('Content of just another post', $post->content);
 
         $this->assertEquals($date, $post->updated_at);
+
+        $this->postService->deletePost($uuid);
     }
 
     public function testPostServiceUpdatePost()
     {
         $date = date('Y-m-d H:i:s');
 
-        $posts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE);
+        $posts = $this->postService->getPosts();
 
-        $uuid = $posts->data()->first()->uuid;
+        $uuid = $posts->first()->uuid;
 
         $this->postService->updatePost($uuid, [
             'title' => 'Walt Disney Jr.',
@@ -196,21 +174,25 @@ class PostServiceTest extends AppTestCase
 
     public function testPostServiceDeletePost()
     {
-        $this->assertCount(4, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
+        $this->assertCount(10, $this->postService->getPosts());
+
+        $users = $this->authService->getAll();
+
+        $userUuid = $users->first()->uuid;
 
         $post = $this->postService->addPost([
-            'user_id' => 1,
+            'user_uuid' => $userUuid,
             'title' => 'Just another post',
             'content' => 'Content of just another post',
             'image' => '',
             'updated_at' => date('Y-m-d H:i:s')
         ]);
 
-        $this->assertCount(5, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
+        $this->assertCount(11, $this->postService->getPosts());
 
         $this->postService->deletePost($post['uuid']);
 
-        $this->assertCount(4, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
+        $this->assertCount(10, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
     }
 
     public function testPostServiceSaveAndDeleteImage()
@@ -223,14 +205,18 @@ class PostServiceTest extends AppTestCase
             'error' => 0,
         ];
 
+        $users = $this->authService->getAll();
+
+        $userUuid = $users->first()->uuid;
+
         $uploadedFile = new UploadedFile($this->fileMeta);
 
-        $image = $this->postService->saveImage($uploadedFile, $this->user->uuid, 'poster');
+        $image = $this->postService->saveImage($uploadedFile, $userUuid, 'poster');
 
-        $this->assertFileExists(uploads_dir() . DS . $this->user->uuid . DS . $image);
+        $this->assertFileExists(uploads_dir() . DS . $userUuid . DS . $image);
 
-        $this->postService->deleteImage($this->user->uuid . DS . $image);
+        $this->postService->deleteImage($userUuid . DS . $image);
 
-        $this->assertFileDoesNotExist(uploads_dir() . DS . $this->user->uuid . DS . $image);
+        $this->assertFileDoesNotExist(uploads_dir() . DS . $userUuid . DS . $image);
     }
 }

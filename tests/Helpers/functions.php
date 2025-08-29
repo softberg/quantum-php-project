@@ -1,9 +1,14 @@
 <?php
 
+use Quantum\Service\Factories\ServiceFactory;
 use Quantum\App\Factories\AppFactory;
+use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Module\ModuleManager;
+use Shared\Services\PostService;
+use Shared\Services\AuthService;
 use Quantum\Router\Router;
 use Quantum\App\App;
+use Faker\Factory;
 
 function createEnvFile()
 {
@@ -67,5 +72,56 @@ function deleteDirectory(string $dir)
 
     if ($dir != uploads_dir()) {
         rmdir($dir);
+    }
+}
+
+function createUser()
+{
+    $defaultRole = 'editor';
+    $defaultEmail = 'tester@quantumphp.io';
+    $defaultPassword = 'password';
+
+    $faker = Factory::create();
+
+    return ServiceFactory::get(AuthService::class)->add([
+        'uuid' => $faker->uuid(),
+        'firstname' => $faker->firstName,
+        'lastname' => $faker->lastName,
+        'role' => $defaultRole,
+        'email' => $defaultEmail,
+        'password' => (new Hasher())->hash($defaultPassword),
+    ]);
+}
+
+function createUserPosts($user)
+{
+    $postCountPerUser = 10;
+
+    $faker = Factory::create();
+
+    for ($i = 0; $i < $postCountPerUser; $i++) {
+        $title = textCleanUp($faker->realText(50));
+
+        ServiceFactory::get(PostService::class)->addPost([
+            'title' => $title,
+            'content' => textCleanUp($faker->realText(100)),
+            'image' => slugify($title) . '.jpg',
+            'user_uuid' => $user->uuid,
+        ]);
+    }
+}
+
+function dbCleanUp()
+{
+    ServiceFactory::get(AuthService::class)->deleteTable();
+    ServiceFactory::get(PostService::class)->deleteTable();
+}
+
+function removeFolders()
+{
+    $uploadsFolder = $this->fs->glob(uploads_dir() . DS . '*');
+
+    foreach ($uploadsFolder as $folder) {
+        $this->fs->removeDirectory($folder);
     }
 }

@@ -12,34 +12,14 @@ class AuthServiceTest extends AppTestCase
 
     public $authService;
 
-    private $initialUser = [
-        'email' => 'anonymous@qt.com',
-        'password' => '$2y$12$4Y4/1a4308KEiGX/xo6vgO41szJuDHC7KhpG5nknx/xxnLZmvMyGi',
-        'firstname' => 'Tom',
-        'lastname' => 'Hunter',
-        'role' => 'admin',
-        'activation_token' => '',
-        'remember_token' => '',
-        'reset_token' => '',
-        'access_token' => '',
-        'refresh_token' => '',
-        'otp' => '',
-        'otp_expires' => '',
-        'otp_token' => '',
-    ];
-
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->authService->add($this->initialUser);
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-
-        $this->authService->deleteTable();
     }
 
     public function testAuthServiceGetAll()
@@ -50,7 +30,7 @@ class AuthServiceTest extends AppTestCase
 
         $this->assertInstanceOf(User::class, $users->first());
 
-        $this->assertEquals('anonymous@qt.com', $users->first()->email);
+        $this->assertEquals('tester@quantumphp.io', $users->first()->email);
     }
 
     public function testAuthServiceGetUserByUuid()
@@ -61,12 +41,12 @@ class AuthServiceTest extends AppTestCase
 
         $this->assertInstanceOf(User::class, $user);
 
-        $this->assertEquals('anonymous@qt.com', $user->email);
+        $this->assertEquals('tester@quantumphp.io', $user->email);
     }
 
     public function testAuthServiceGet()
     {
-        $user = $this->authService->get('email', 'anonymous@qt.com');
+        $user = $this->authService->get('email', 'tester@quantumphp.io');
 
         $this->assertInstanceOf(AuthUser::class, $user);
 
@@ -80,9 +60,9 @@ class AuthServiceTest extends AppTestCase
 
         $this->assertArrayHasKey('lastname', $userData);
 
-        $this->assertArrayHasKey('role',$userData);
+        $this->assertArrayHasKey('role', $userData);
 
-        $this->assertEquals('admin', $user->getFieldValue('role'));
+        $this->assertEquals('editor', $user->getFieldValue('role'));
     }
 
     public function testAuthServiceAdd()
@@ -103,7 +83,7 @@ class AuthServiceTest extends AppTestCase
 
     public function testAuthServiceUpdate()
     {
-        $user = $this->authService->get('email', 'anonymous@qt.com');
+        $user = $this->authService->get('email', 'tester@quantumphp.io');
 
         $this->assertEmpty($user->getFieldValue('remember_token'));
 
@@ -115,7 +95,7 @@ class AuthServiceTest extends AppTestCase
             ['remember_token' => $rememberToken]
         );
 
-        $user = $this->authService->get('email', 'anonymous@qt.com');
+        $user = $this->authService->get('email', 'tester@quantumphp.io');
 
         $this->assertNotEmpty($user->getFieldValue('remember_token'));
 

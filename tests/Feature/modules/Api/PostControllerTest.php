@@ -76,12 +76,14 @@ class PostControllerTest extends AppTestCase
 		$this->assertEquals('success', $response->get('status'));
 		$this->assertArrayHasKey('data', $response->all());
 
-		$this->assertArrayHasKey('uuid', $response->get('data'));
-		$this->assertArrayHasKey('title', $response->get('data'));
-		$this->assertArrayHasKey('content', $response->get('data'));
-		$this->assertArrayHasKey('image', $response->get('data'));
-		$this->assertArrayHasKey('date', $response->get('data'));
-		$this->assertArrayHasKey('author', $response->get('data'));
+        $rawData = $response->get('data')->getValue();
+
+		$this->assertArrayHasKey('uuid', $rawData);
+		$this->assertArrayHasKey('title', $rawData);
+		$this->assertArrayHasKey('content', $rawData);
+		$this->assertArrayHasKey('image', $rawData);
+		$this->assertArrayHasKey('date', $rawData);
+		$this->assertArrayHasKey('author', $rawData);
 	}
 
 	public function testModuleApiMyPostsEndpoint()

@@ -108,7 +108,7 @@ class AuthControllerTest extends AppTestCase
         ]);
 
         $this->assertEquals('error', $response->get('status'));
-        $this->assertEquals('The value of Email field is already exists in our database', $response->get('message')['email'][0]);
+        $this->assertEquals('The Email field should contain only unique value', $response->get('message')['email'][0]);
     }
 
     public function testModuleApiActivateEndpoint()
@@ -137,7 +137,7 @@ class AuthControllerTest extends AppTestCase
         $response = $this->request('get', '/api/en/activate/incorrect-activation-token');
 
         $this->assertEquals('error', $response->get('status'));
-        $this->assertEquals('There is no record matched to the token', $response->get('message')[0]);
+        $this->assertEquals('The Token does not exist in our records', $response->get('message')['token'][0]);
     }
 
     public function testModuleApiForgetEndpoint()
@@ -173,10 +173,13 @@ class AuthControllerTest extends AppTestCase
 
     public function testModuleApiResetEndpointWithIncorrectToken()
     {
-        $response = $this->request('post', '/api/en/reset/incorrect-reset-token');
+        $response = $this->request('post', '/api/en/reset/incorrect-reset-token', [
+            'password' => self::$defaultPassword,
+            'repeat_password' => self::$defaultPassword,
+        ]);
 
         $this->assertEquals('error', $response->get('status'));
-        $this->assertEquals('There is no record matched to the token', $response->get('message')[0]);
+        $this->assertEquals('The Token does not exist in our records', $response->get('message')['token'][0]);
     }
 
     public function testModuleApiVerifyEndpoint()

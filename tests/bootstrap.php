@@ -16,9 +16,13 @@ $GLOBALS['app'] = createApp();
 
 createModule('Api', 'DemoApi');
 
+$user = createUser();
+createUserPosts($user);
+
 register_shutdown_function(function () {
     removeEnvFile();
     removeModule();
+    dbCleanUp();
 });
 
 
