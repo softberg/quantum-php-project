@@ -10,9 +10,13 @@ use Quantum\App\App;
 class AppTestCase extends TestCase
 {
 
-    protected static $defaultEmail = 'tester@quantumphp.io';
+    protected $defaultEmail = 'default@quantumphp.io';
 
-    protected static $defaultPassword = 'password';
+    protected $defaultPassword = 'password';
+
+    protected $firstname = 'John';
+
+    protected $lastname = 'Doe';
 
     protected static $app;
 
@@ -49,8 +53,8 @@ class AppTestCase extends TestCase
     protected function signInAndGetTokens(): array
     {
         $response = $this->request('post', '/api/en/signin', [
-            'email' => self::$defaultEmail,
-            'password' => self::$defaultPassword
+            'email' => $this->defaultEmail,
+            'password' => $this->defaultPassword
         ]);
 
         return $response->get('tokens');

@@ -1,12 +1,14 @@
 <?php
 
 use Quantum\Service\Factories\ServiceFactory;
+use Quantum\Model\Factories\ModelFactory;
 use Quantum\App\Factories\AppFactory;
 use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Module\ModuleManager;
 use Shared\Services\PostService;
 use Shared\Services\AuthService;
 use Quantum\Router\Router;
+use Shared\Models\User;
 use Quantum\App\App;
 use Faker\Factory;
 
@@ -76,22 +78,17 @@ function deleteDirectory(string $dir)
     }
 }
 
-function createUser()
+function createUser(array $overrides = [])
 {
-    $defaultRole = 'editor';
-    $defaultEmail = 'tester@quantumphp.io';
-    $defaultPassword = 'password';
-
-    $faker = Factory::create();
-
-    return ServiceFactory::get(AuthService::class)->add([
-        'uuid' => $faker->uuid(),
-        'firstname' => $faker->firstName,
-        'lastname' => $faker->lastName,
-        'role' => $defaultRole,
-        'email' => $defaultEmail,
-        'password' => (new Hasher())->hash($defaultPassword),
-    ]);
+    return ServiceFactory::get(AuthService::class)->add(
+        array_merge([
+            'uuid' => uuid_ordered(),
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'role' => 'admin',
+            'email' => 'default@quantumphp.io',
+            'password' => (new Hasher())->hash('password'),
+        ], $overrides));
 }
 
 function createUserPosts($user)
@@ -110,6 +107,13 @@ function createUserPosts($user)
             'user_uuid' => $user->uuid,
         ]);
     }
+}
+
+function deleteUserByEmail(string $email)
+{
+    ModelFactory::get(User::class)
+        ->findOneBy('email', $email)
+        ->delete();
 }
 
 function dbCleanUp()

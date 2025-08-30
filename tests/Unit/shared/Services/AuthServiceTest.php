@@ -30,7 +30,7 @@ class AuthServiceTest extends AppTestCase
 
         $this->assertInstanceOf(User::class, $users->first());
 
-        $this->assertEquals('tester@quantumphp.io', $users->first()->email);
+        $this->assertEquals('default@quantumphp.io', $users->first()->email);
     }
 
     public function testAuthServiceGetUserByUuid()
@@ -41,12 +41,12 @@ class AuthServiceTest extends AppTestCase
 
         $this->assertInstanceOf(User::class, $user);
 
-        $this->assertEquals('tester@quantumphp.io', $user->email);
+        $this->assertEquals('default@quantumphp.io', $user->email);
     }
 
     public function testAuthServiceGet()
     {
-        $user = $this->authService->get('email', 'tester@quantumphp.io');
+        $user = $this->authService->get('email', 'default@quantumphp.io');
 
         $this->assertInstanceOf(AuthUser::class, $user);
 
@@ -62,7 +62,7 @@ class AuthServiceTest extends AppTestCase
 
         $this->assertArrayHasKey('role', $userData);
 
-        $this->assertEquals('editor', $user->getFieldValue('role'));
+        $this->assertEquals('admin', $user->getFieldValue('role'));
     }
 
     public function testAuthServiceAdd()
@@ -79,11 +79,13 @@ class AuthServiceTest extends AppTestCase
         $this->assertArrayHasKey('email', $user->getData());
 
         $this->assertEquals('guest@qt.com', $user->getFieldValue('email'));
+
+        deleteUserByEmail('guest@qt.com');
     }
 
     public function testAuthServiceUpdate()
     {
-        $user = $this->authService->get('email', 'tester@quantumphp.io');
+        $user = $this->authService->get('email', 'default@quantumphp.io');
 
         $this->assertEmpty($user->getFieldValue('remember_token'));
 
@@ -95,7 +97,7 @@ class AuthServiceTest extends AppTestCase
             ['remember_token' => $rememberToken]
         );
 
-        $user = $this->authService->get('email', 'tester@quantumphp.io');
+        $user = $this->authService->get('email', 'default@quantumphp.io');
 
         $this->assertNotEmpty($user->getFieldValue('remember_token'));
 
