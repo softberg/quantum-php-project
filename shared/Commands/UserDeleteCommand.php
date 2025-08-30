@@ -17,7 +17,7 @@ namespace Shared\Commands;
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Di\Exceptions\DiException;
-use Shared\Services\PostService;
+use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
 use ReflectionException;
 
@@ -25,20 +25,20 @@ use ReflectionException;
  * Class PostDeleteCommand
  * @package Shared\Commands
  */
-class PostDeleteCommand extends QtCommand
+class UserDeleteCommand extends QtCommand
 {
 
     /**
      * Command name
      * @var string
      */
-    protected $name = 'post:delete';
+    protected $name = 'user:delete';
 
     /**
      * Command description
      * @var string
      */
-    protected $description = 'Deletes a post by UUID or clears the entire posts table with confirmation';
+    protected $description = 'Deletes a user by UUID or clears the entire posts table with confirmation';
 
     /**
      * Command help text
@@ -46,17 +46,17 @@ class PostDeleteCommand extends QtCommand
      */
     protected $help = <<<HELP
 Usage:
-- Delete a specific post: php qt post:delete `{post_uuid}`
-- Delete all posts (with confirmation): php qt post:delete
-- Delete all posts (without confirmation): php qt post:delete --yes
+- Delete a specific user: php qt user:delete `{user_uuid}`
+- Delete all users (with confirmation): php qt user:delete
+- Delete all users (without confirmation): php qt user:delete --yes
 HELP;
-
     /**
      * Command arguments
      * @var array[]
      */
+
     protected $args = [
-        ['uuid', 'optional', 'Post uuid'],
+        ['uuid', 'optional', 'User uuid'],
     ];
 
     /**
@@ -64,7 +64,7 @@ HELP;
      * @var array[]
      */
     protected $options = [
-        ['yes', 'y', 'none', 'Skip confirmation and delete all posts'],
+        ['yes', 'y', 'none', 'Skip confirmation and delete all users'],
     ];
 
     /**
@@ -78,30 +78,30 @@ HELP;
         $uuid = $this->getArgument('uuid');
 
         if ($uuid) {
-            $this->deleteSinglePost($uuid);
+            $this->deleteSingleUser($uuid);
             return;
         }
 
         if (!$this->getOption('yes')) {
-            if (!$this->confirm('This will delete all posts. Are you sure? (yes/no)')) {
+            if (!$this->confirm('This will delete all users. Are you sure? (yes/no)')) {
                 $this->info('Operation was canceled!');
                 return;
             }
         }
 
-        $this->deleteAllPosts();
+        $this->deleteAllUsers();
     }
 
     /**
-     * Deletes a single post
+     * Deletes a single user
      * @param string $uuid
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
      */
-    private function deleteSinglePost(string $uuid)
+    private function deleteSingleUser(string $uuid)
     {
-        $postService = ServiceFactory::get(PostService::class);
+        $postService = ServiceFactory::get(AuthService::class);
 
         $post = $postService->getPost($uuid);
 
@@ -112,19 +112,19 @@ HELP;
 
         $postService->deletePost($uuid);
 
-        $this->info("Post with UUID '{$uuid}' deleted successfully");
+        $this->info("User with UUID '{$uuid}' deleted successfully");
     }
 
     /**
-     * Deletes all posts
+     * Deletes all users
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
      */
-    private function deleteAllPosts()
+    private function deleteAllUsers()
     {
-        ServiceFactory::create(PostService::class)->deleteTable();
+        ServiceFactory::create(AuthService::class)->deleteTable();
 
-        $this->info('All posts have been deleted successfully');
+        $this->info('All users have been deleted successfully');
     }
 }

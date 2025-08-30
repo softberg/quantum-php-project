@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 namespace Shared\Services;
@@ -23,15 +23,16 @@ use Quantum\Model\Exceptions\ModelException;
 use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Model\Factories\ModelFactory;
+use Shared\Transformers\PostTransformer;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Gumlet\ImageResizeException;
 use Quantum\Paginator\Paginator;
 use Quantum\Service\QtService;
+use Quantum\Model\QtModel;
 use ReflectionException;
 use Shared\Models\User;
 use Shared\Models\Post;
-use Faker\Factory;
 
 /**
  * Class PostService
@@ -41,16 +42,38 @@ class PostService extends QtService
 {
 
     /**
+     * @var QtModel
+     */
+    private $model;
+
+    /**
+     * @var PostTransformer
+     */
+    private $transformer;
+
+    /**
+     * @param PostTransformer $transformer
+     * @throws ModelException
+     *
+     */
+    public function __construct(PostTransformer $transformer)
+    {
+        $this->model = ModelFactory::get(Post::class);
+
+        $this->transformer = $transformer;
+    }
+
+    /**
      * Get posts
-     * @param int $perPage
-     * @param int $currentPage
+     * @param int|null $perPage
+     * @param int|null $currentPage
      * @param string|null $search
-     * @return Paginator
+     * @return Paginator|ModelCollection
      * @throws ModelException
      */
-    public function getPosts(int $perPage, int $currentPage, ?string $search = null): Paginator
+    public function getPosts(?int $perPage = null, ?int $currentPage = null, ?string $search = null)
     {
-        $query = ModelFactory::get(Post::class)
+        $query = $this->model
             ->joinThrough(ModelFactory::get(User::class))
             ->select(
                 'posts.uuid',
@@ -75,7 +98,7 @@ class PostService extends QtService
             $query->criterias($criterias);
         }
 
-        return $query->paginate($perPage, $currentPage);
+        return $perPage ? $query->paginate($perPage, $currentPage) : $query->get();
     }
 
     /**
@@ -86,12 +109,12 @@ class PostService extends QtService
      */
     public function getPost(string $uuid): Post
     {
-        return ModelFactory::get(Post::class)
+        return $this->model
             ->joinThrough(ModelFactory::get(User::class))
             ->criteria('uuid', '=', $uuid)
             ->select(
                 'posts.uuid',
-                'user_id',
+                'user_uuid',
                 'title',
                 'content',
                 'image',
@@ -105,15 +128,15 @@ class PostService extends QtService
 
     /**
      * Get my posts
-     * @param int $userId
+     * @param string $userUuid
      * @return ModelCollection|null
      * @throws ModelException
      */
-    public function getMyPosts(int $userId): ?ModelCollection
+    public function getMyPosts(string $userUuid): ?ModelCollection
     {
-        return ModelFactory::get(Post::class)
+        return $this->model
             ->joinThrough(ModelFactory::get(User::class))
-            ->criteria('user_id', '=', $userId)
+            ->criteria('user_uuid', '=', $userUuid)
             ->select(
                 'posts.uuid',
                 'title',
@@ -135,9 +158,9 @@ class PostService extends QtService
      */
     public function addPost(array $data): array
     {
-        $data['uuid'] = Factory::create()->uuid();
+        $data['uuid'] = $data['uuid'] ?? uuid_ordered();
 
-        $post = ModelFactory::get(Post::class)->create();
+        $post = $this->model->create();
         $post->fillObjectProps($data);
         $post->save();
 
@@ -152,7 +175,7 @@ class PostService extends QtService
      */
     public function updatePost(string $uuid, array $data)
     {
-        $post = ModelFactory::get(Post::class)->findOneBy('uuid', $uuid);
+        $post = $this->model->findOneBy('uuid', $uuid);
         $post->fillObjectProps($data);
         $post->save();
     }
@@ -165,7 +188,7 @@ class PostService extends QtService
      */
     public function deletePost(string $uuid): bool
     {
-        return ModelFactory::get(Post::class)->findOneBy('uuid', $uuid)->delete();
+        return $this->model->findOneBy('uuid', $uuid)->delete();
     }
 
     /**
@@ -174,7 +197,7 @@ class PostService extends QtService
      */
     public function deleteTable()
     {
-        ModelFactory::get(Post::class)->deleteTable();
+        $this->model->deleteTable();
     }
 
     /**
@@ -200,7 +223,6 @@ class PostService extends QtService
     /**
      * Deletes the post image
      * @param string $imagePath
-     * @return void
      * @throws BaseException
      * @throws DiException
      * @throws ReflectionException
@@ -213,5 +235,15 @@ class PostService extends QtService
         if ($fs->exists(uploads_dir() . DS . $imagePath)) {
             $fs->remove(uploads_dir() . DS . $imagePath);
         }
+    }
+
+    /**
+     * Transforms the data
+     * @param array $posts
+     * @return array
+     */
+    public function transformData(array $posts): array
+    {
+        return transform($posts, $this->transformer);
     }
 }

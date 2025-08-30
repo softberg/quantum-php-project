@@ -1,9 +1,16 @@
 <?php
 
+use Quantum\Service\Factories\ServiceFactory;
+use Quantum\Model\Factories\ModelFactory;
 use Quantum\App\Factories\AppFactory;
+use Quantum\Libraries\Hasher\Hasher;
 use Quantum\Module\ModuleManager;
+use Shared\Services\PostService;
+use Shared\Services\AuthService;
 use Quantum\Router\Router;
+use Shared\Models\User;
 use Quantum\App\App;
+use Faker\Factory;
 
 function createEnvFile()
 {
@@ -22,8 +29,9 @@ function removeEnvFile()
     }
 }
 
-function createApp() {
-    return AppFactory::create(App::WEB, dirname(__DIR__) . DS . '_root');
+function createApp(string $type): App
+{
+    return AppFactory::create($type, dirname(__DIR__) . DS . '_root');
 }
 
 function createModule(string $moduleName, string $template, bool $withAssets = false)
@@ -68,4 +76,48 @@ function deleteDirectory(string $dir)
     if ($dir != uploads_dir()) {
         rmdir($dir);
     }
+}
+
+function createUser(array $overrides = [])
+{
+    return ServiceFactory::get(AuthService::class)->add(
+        array_merge([
+            'uuid' => uuid_ordered(),
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'role' => 'admin',
+            'email' => 'default@quantumphp.io',
+            'password' => (new Hasher())->hash('password'),
+        ], $overrides));
+}
+
+function createUserPosts($user)
+{
+    $postCountPerUser = 10;
+
+    $faker = Factory::create();
+
+    for ($i = 0; $i < $postCountPerUser; $i++) {
+        $title = textCleanUp($faker->realText(50));
+
+        ServiceFactory::get(PostService::class)->addPost([
+            'title' => $title,
+            'content' => textCleanUp($faker->realText(100)),
+            'image' => slugify($title) . '.jpg',
+            'user_uuid' => $user->uuid,
+        ]);
+    }
+}
+
+function deleteUserByEmail(string $email)
+{
+    ModelFactory::get(User::class)
+        ->findOneBy('email', $email)
+        ->delete();
+}
+
+function dbCleanUp()
+{
+    ServiceFactory::get(AuthService::class)->deleteTable();
+    ServiceFactory::get(PostService::class)->deleteTable();
 }

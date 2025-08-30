@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 namespace Shared\Commands;
@@ -17,7 +17,6 @@ namespace Shared\Commands;
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
 use Symfony\Component\Console\Helper\Table;
-use Shared\Transformers\PostTransformer;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Shared\Services\PostService;
@@ -95,7 +94,7 @@ class PostShowCommand extends QtCommand
                 ->data();
         }
 
-        $transformedPosts = transform($postCollection->all(), new PostTransformer());
+        $transformedPosts = $postService->transformData($postCollection->all());
 
         $rows = [];
 

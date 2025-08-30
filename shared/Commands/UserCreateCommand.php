@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 namespace Shared\Commands;
@@ -64,6 +64,7 @@ class UserCreateCommand extends QtCommand
     protected $args = [
         ['email', 'required', 'User email'],
         ['password', 'required', 'User password'],
+        ['uuid', 'optional', 'User uuid'],
         ['role', 'optional', 'User role'],
         ['firstname', 'optional', 'User firstname'],
         ['lastname', 'optional', 'User lastname'],
@@ -85,6 +86,7 @@ class UserCreateCommand extends QtCommand
         $authService = ServiceFactory::get(AuthService::class);
 
         $user = [
+            'uuid' => $this->getArgument('uuid'),
             'firstname' => $this->getArgument('firstname'),
             'lastname' => $this->getArgument('lastname'),
             'role' => $this->getArgument('role'),
@@ -105,16 +107,12 @@ class UserCreateCommand extends QtCommand
     private function validateEmail(string $email): bool
     {
         $validator = new Validator();
-        $validator->addValidation('uniqueUser', function ($value) {
-            $userModel = ModelFactory::get(User::class);
-            return empty($userModel->findOneBy('email', $value)->asArray());
-        });
 
-        $validator->addRules([
+        $validator->setRules([
             'email' => [
-                Rule::set('required'),
-                Rule::set('email'),
-                Rule::set('uniqueUser')
+                Rule::required(),
+                Rule::email(),
+                Rule::unique(User::class, 'email')
             ],
         ]);
 

@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 namespace Shared\Models;
@@ -18,7 +18,7 @@ use Quantum\Model\Traits\SoftDeletes;
 use Quantum\Model\QtModel;
 
 /**
- * Class User
+ * Class Post
  * @package Shared\Models
  */
 class Post extends QtModel
@@ -38,9 +38,19 @@ class Post extends QtModel
      */
     public $table = 'posts';
 
-    public $foreignKeys = [
-        'users' => 'user_id'
-    ];
+    /**
+     * Model relations configuration
+     * @return array[]
+     */
+    public function relations(): array
+    {
+        return [
+            User::class => [
+                'foreign_key' => 'user_uuid',
+                'local_key' => 'uuid',
+            ]
+        ];
+    }
 
     /**
      * Fillable properties
@@ -48,7 +58,7 @@ class Post extends QtModel
      */
     public $fillable = [
         'uuid',
-        'user_id',
+        'user_uuid',
         'title',
         'content',
         'image',

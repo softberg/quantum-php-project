@@ -27,6 +27,7 @@ return [
     'check_email_signup' => 'Registration was successful, please check your email',
     'check_email' => 'Check your email to reset your password',
     'email' => 'Email',
+    'token' => 'Token',
     'password' => 'Password',
     'verification_code' =>'Verification Code',
     'new_password' => 'New password',

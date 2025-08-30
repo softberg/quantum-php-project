@@ -9,10 +9,10 @@
         stopOnFailure="false"
 >
     <testsuites>
-        <testsuite name="Feature Test Suite">
+        <testsuite name="Feature">
             <directory>./tests/Feature</directory>
         </testsuite>
-        <testsuite name="Unit Test Suite">
+        <testsuite name="Unit">
             <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>

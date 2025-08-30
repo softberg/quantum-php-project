@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.7
+ * @since 2.9.8
  */
 
 namespace Shared\Commands;
@@ -53,7 +53,7 @@ class PostCreateCommand extends QtCommand
     protected $args = [
         ['title', 'required', 'Post title'],
         ['description', 'required', 'Post description'],
-        ['user_id', 'required', 'Post user_id'],
+        ['user_uuid', 'required', 'Author uuid'],
         ['image', 'optional', 'Post image'],
     ];
 
@@ -68,7 +68,7 @@ class PostCreateCommand extends QtCommand
         $postService = ServiceFactory::get(PostService::class);
 
         $post = [
-            'user_id' => $this->getArgument('user_id'),
+            'user_uuid' => $this->getArgument('user_uuid'),
             'title' => $this->getArgument('title'),
             'content' => $this->getArgument('description'),
             'image' => $this->getArgument('image'),
