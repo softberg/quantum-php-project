@@ -128,7 +128,7 @@ class PostShowCommand extends QtCommand
         return [
             $item['uuid'] ?? '',
             $item['title'] ?? '',
-            strlen($item['content']) < 50 ? $item['content'] : mb_substr($item['content'], 0, 50) . '...' ?? '',
+            $content,
             $item['author'],
             $item['date'] ?? ''
         ];
