@@ -76,7 +76,7 @@ class PostControllerTest extends AppTestCase
 		$this->assertEquals('success', $response->get('status'));
 		$this->assertArrayHasKey('data', $response->all());
 
-        $rawData = $response->get('data')->getValue();
+        $rawData = $response->get('data');
 
 		$this->assertArrayHasKey('uuid', $rawData);
 		$this->assertArrayHasKey('title', $rawData);
