@@ -99,7 +99,7 @@ class PostShowCommand extends QtCommand
         $rows = [];
 
         foreach ($transformedPosts as $post) {
-            $rows[] = $this->composeTableRow($post);
+            $rows[] = $this->composeTableRow($post, 50);
         }
 
         $table = new Table($this->output);
@@ -113,10 +113,18 @@ class PostShowCommand extends QtCommand
     /**
      * Composes a table row
      * @param array $item
+     * @param int $maxContentLength
      * @return array
      */
-    private function composeTableRow(array $item): array
+    private function composeTableRow(array $item, int $maxContentLength = 25): array
     {
+        $content = strip_tags($item['content'] ?? '');
+
+        $content = str_replace(["\r", "\n"], ' ', $content);
+        if (mb_strlen($content) > $maxContentLength) {
+            $content = mb_substr($content, 0, $maxContentLength) . '...';
+        }
+
         return [
             $item['uuid'] ?? '',
             $item['title'] ?? '',
