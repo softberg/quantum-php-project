@@ -101,16 +101,9 @@ HELP;
      */
     private function deleteSingleUser(string $uuid)
     {
-        $postService = ServiceFactory::get(AuthService::class);
+        $authService = ServiceFactory::get(AuthService::class);
 
-        $post = $postService->getPost($uuid);
-
-        if ($post->isEmpty()) {
-            $this->error('The post is not found');
-            return;
-        }
-
-        $postService->deletePost($uuid);
+        $authService->delete($uuid);
 
         $this->info("User with UUID '{$uuid}' deleted successfully");
     }

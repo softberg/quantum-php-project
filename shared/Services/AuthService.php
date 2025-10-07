@@ -95,7 +95,7 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function add(array $data): AuthUser
     {
-        $data['uuid'] = $data['uuid'] ?? uuid_ordered();
+        $data['uuid'] = !empty($data['uuid']) ? $data['uuid'] :  uuid_ordered();
         $data['role'] = $data['role'] ?? 'editor';
 
         $this->createUserDirectory($data['uuid']);

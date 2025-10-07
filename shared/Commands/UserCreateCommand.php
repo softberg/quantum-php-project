@@ -17,7 +17,6 @@ namespace Shared\Commands;
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Libraries\Validation\Validator;
-use Quantum\Model\Factories\ModelFactory;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Hasher\Hasher;
