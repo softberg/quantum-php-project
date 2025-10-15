@@ -235,8 +235,6 @@ class AuthControllerTest extends AppTestCase
         $this->assertError($response, 'Incorrect credentials');
     }
 
-
-
     protected function assertSuccess($response, string $message = null): void
     {
         $this->assertEquals('success', $response->get('status'));
