@@ -26,8 +26,8 @@ use Quantum\Di\Exceptions\DiException;
  */
 function url_with_lang(string $lang): string
 {
-    if (!in_array($lang, (array)config()->get('langs'))) {
-        $lang = config()->get('lang_default');
+    if (!in_array($lang, (array)config()->get('lang.supported'))) {
+        $lang = config()->get('lang.default');
     }
 
     if (trim(route_uri()) == '/') {
@@ -40,7 +40,7 @@ function url_with_lang(string $lang): string
 
     $url = base_url(true);
 
-    $langSegmentIndex = config()->get('lang_segment');
+    $langSegmentIndex = config()->get('lang.url_segment');
 
     $uri = '';
 
@@ -57,7 +57,7 @@ function url_with_lang(string $lang): string
             $url .= '/' . ($index == $langSegmentIndex ? $lang : $segment);
         }
     }
-
+dd($url);
     return $url;
 }
 
