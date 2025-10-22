@@ -22,7 +22,7 @@ class AppTestCase extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$app = createApp(App::WEB);
+        self::$app = createApp(App::WEB, PROJECT_ROOT);
     }
 
     public function setUp(): void

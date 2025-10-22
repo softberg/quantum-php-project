@@ -29,9 +29,9 @@ function removeEnvFile()
     }
 }
 
-function createApp(string $type): App
+function createApp(string $type, string $baseDir): App
 {
-    return AppFactory::create($type, dirname(__DIR__) . DS . '_root');
+    return AppFactory::create($type, $baseDir);
 }
 
 function createModule(string $moduleName, string $template, bool $withAssets = false)

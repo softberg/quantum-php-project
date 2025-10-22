@@ -14,7 +14,7 @@ require_once __DIR__ . DS . 'Helpers' . DS . 'functions.php';
 
 createEnvFile();
 
-createApp(App::CONSOLE);
+createApp(App::CONSOLE, PROJECT_ROOT);
 
 createModule('Api', 'DemoApi');
 
