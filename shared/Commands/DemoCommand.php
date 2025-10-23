@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Commands;
@@ -27,7 +27,9 @@ use Quantum\Libraries\Database\Database;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Console\QtCommand;
+use Ottaviano\Faker\Gravatar;
 use ReflectionException;
+use Shared\Enums\Role;
 use Faker\Generator;
 use ErrorException;
 use Faker\Factory;
@@ -102,6 +104,7 @@ class DemoCommand extends QtCommand
 
         $this->faker = Factory::create();
         $this->faker->addProvider(new PicsumPhotosProvider($this->faker));
+        $this->faker->addProvider(new Gravatar($this->faker));
     }
 
     /**
@@ -248,13 +251,25 @@ class DemoCommand extends QtCommand
      */
     private function generateUserData(): array
     {
+        $userUuid = $this->faker->uuid();
+        $email = textCleanUp($this->faker->email());
+
+        create_user_directory($userUuid);
+
+        $imageName = save_remote_image(
+            $this->faker->gravatarUrl(),
+            $userUuid,
+            $email
+        );
+
         return [
-            'uuid' => $this->faker->uuid(),
+            'uuid' => $userUuid,
             'firstname' => $this->faker->name(),
             'lastname' => $this->faker->lastName(),
-            'role' => 'editor',
-            'email' => $this->faker->email(),
+            'role' => Role::EDITOR,
+            'email' => $email,
             'password' => self::DEFAULT_PASSWORD,
+            'image' => $imageName
         ];
     }
 

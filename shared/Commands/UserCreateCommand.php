@@ -67,6 +67,7 @@ class UserCreateCommand extends QtCommand
         ['role', 'optional', 'User role'],
         ['firstname', 'optional', 'User firstname'],
         ['lastname', 'optional', 'User lastname'],
+        ['image', 'optional', 'User image'],
     ];
 
     /**
@@ -91,6 +92,7 @@ class UserCreateCommand extends QtCommand
             'role' => $this->getArgument('role'),
             'email' => $this->getArgument('email'),
             'password' => (new Hasher())->hash($this->getArgument('password')),
+            'image' => $this->getArgument('image'),
         ];
 
         $authService->add($user);
