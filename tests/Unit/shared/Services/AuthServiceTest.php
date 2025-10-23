@@ -68,6 +68,7 @@ class AuthServiceTest extends AppTestCase
     public function testAuthServiceAdd()
     {
         $user = $this->authService->add([
+            'uuid' => uuid_ordered(),
             'email' => 'guest@qt.com',
             'password' => '$2y$12$0M78WcmUZYQq85vHZLoNW.CyDUezRxh9Ye8/Z8oWCwJmBrz8p.j7C',
             'firstname' => 'Guest',
