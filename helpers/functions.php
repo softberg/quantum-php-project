@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
@@ -89,6 +89,23 @@ function save_remote_image(string $imageUrl, string $userDirectory, string $imag
     $fs->put(uploads_dir() . DS . $userDirectory . DS . $imageName, $httpClient->getResponseBody());
 
     return $imageName;
+}
+
+/**
+ * Creates user directory
+ * @param string $uuid
+ * @throws DiException
+ * @throws ReflectionException
+ * @throws BaseException
+ * @throws ConfigException
+ */
+function create_user_directory(string $uuid)
+{
+    $userDirectory = uploads_dir() . DS . $uuid;
+
+    if(!fs()->isDirectory($userDirectory)) {
+        fs()->makeDirectory($userDirectory);
+    }
 }
 
 /**

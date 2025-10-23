@@ -57,6 +57,14 @@ a:hover {
     opacity: .9;
 }
 
+.user-avatar {
+    width:32px;
+    height:32px;
+    object-fit:cover;
+    margin-top: 18px;
+    margin-right:8px;
+}
+
 @media only screen and (max-width: 992px) {
     main>div:first-child {
         padding-top: 15px;

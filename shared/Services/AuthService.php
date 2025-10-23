@@ -9,13 +9,12 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Services;
 
 use Quantum\Libraries\Auth\Contracts\AuthServiceInterface;
-use Quantum\Libraries\Storage\Factories\FileSystemFactory;
 use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Model\Exceptions\ModelException;
 use Quantum\Libraries\Auth\User as AuthUser;
@@ -95,9 +94,6 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function add(array $data): AuthUser
     {
-        $data['uuid'] = !empty($data['uuid']) ? $data['uuid'] :  uuid_ordered();
-        $data['role'] = $data['role'] ?? 'editor';
-
         $this->createUserDirectory($data['uuid']);
 
         $user = $this->model->create();
@@ -160,6 +156,7 @@ class AuthService extends QtService implements AuthServiceInterface
             'role' => ['name' => 'role', 'visible' => true],
             'username' => ['name' => 'email', 'visible' => true],
             'password' => ['name' => 'password', 'visible' => false],
+            'image' => ['name' => 'image', 'visible' => true],
             'activationToken' => ['name' => 'activation_token', 'visible' => false],
             'rememberToken' => ['name' => 'remember_token', 'visible' => false],
             'resetToken' => ['name' => 'reset_token', 'visible' => false],
@@ -181,8 +178,10 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     private function createUserDirectory(string $uuid)
     {
-        $fs = FileSystemFactory::get();
+        $userDirectory = uploads_dir() . DS . $uuid;
 
-        $fs->makeDirectory(uploads_dir() . DS . $uuid);
+        if(!fs()->isDirectory($userDirectory)) {
+            fs()->makeDirectory($userDirectory);
+        }
     }
 }
