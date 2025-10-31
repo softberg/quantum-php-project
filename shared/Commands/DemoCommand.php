@@ -74,6 +74,16 @@ class DemoCommand extends QtCommand
     protected $faker;
 
     /**
+     * @var array
+     */
+    private $generatedUsers = [];
+
+    /**
+     * @var array
+     */
+    private $generatedPosts = [];
+
+    /**
      * Default password for generated users
      */
     const DEFAULT_PASSWORD = 'password';
@@ -130,15 +140,62 @@ class DemoCommand extends QtCommand
             }
         }
 
-        $progress = $this->initProgressBar(6);
+        $steps = $this->getSteps();
+        $progress = $this->initProgressBar(count($steps));
 
-        $this->createModules($progress);
-        $this->resetDatabase($progress);
-        $this->generateDemoData($progress);
+        foreach ($steps as $step) {
+            $this->updateProgress($progress, $step['message']);
+            $step['action']();
+        }
 
         $progress->finish();
-
         $this->info(PHP_EOL . "Demo project created successfully");
+    }
+
+    /**
+     * Provides the sequence of defined tasks to be executed.
+     * @return array[]
+     */
+    private function getSteps(): array
+    {
+        return [
+            [
+                'message' => 'Creating API module',
+                'action' => function() {
+                    $this->createModule('Api', 'DemoApi', false);
+                }
+            ],
+            [
+                'message' => 'Creating Web module',
+                'action' => function() {
+                    $this->createModule('Web', 'DemoWeb', true);
+                }
+            ],
+            [
+                'message' => 'Cleaning up uploads & rebuilding database',
+                'action' => function() {
+                    $this->resetDatabase();
+                }
+            ],
+            [
+                'message' => 'Generating users',
+                'action' => function() {
+                    $this->generatedUsers = $this->generateUsers();
+                }
+            ],
+            [
+                'message' => 'Generating posts',
+                'action' => function() {
+                    $this->generatedPosts = $this->generatePosts($this->generatedUsers);
+                }
+            ],
+            [
+                'message' => 'Generating comments',
+                'action' => function() {
+                    $this->generateComments($this->generatedUsers, $this->generatedPosts);
+                }
+            ],
+        ];
     }
 
     /**
@@ -150,39 +207,34 @@ class DemoCommand extends QtCommand
     {
         $progress = new ProgressBar($this->output, $steps);
         $progress->setFormat(sprintf('%s <info>%%item%%</info>', $progress->getFormatDefinition('verbose')));
+        $progress->setBarCharacter('■');
+        $progress->setEmptyBarCharacter('-');
+        $progress->setProgressCharacter('►');
         $progress->start();
         return $progress;
     }
 
     /**
-     * Creates demo modules.
-     * @param ProgressBar $progress
+     * Creates module
+     * @param string $moduleName
+     * @param string $template
+     * @param bool $withAssets
+     * @return void
      * @throws ExceptionInterface
      */
-    private function createModules(ProgressBar $progress): void
+    private function createModule(string $moduleName, string $template, bool $withAssets): void
     {
-        $this->updateProgress($progress, "Creating demo api module...");
-
         $this->runExternalCommand(self::COMMANDS['module_generate'], [
-            'module' => 'Api',
+            'module' => $moduleName,
             '--yes' => true,
-            '--template' => 'DemoApi',
-            '--with-assets' => false
-        ]);
-
-        $this->updateProgress($progress, "Creating demo web module...");
-
-        $this->runExternalCommand(self::COMMANDS['module_generate'], [
-            'module' => 'Web',
-            '--yes' => true,
-            '--template' => 'DemoWeb',
-            '--with-assets' => true
+            '--template' => $template,
+            '--with-assets' => $withAssets
         ]);
     }
 
     /**
-     * Generates demo users and posts.
-     * @param ProgressBar $progress
+     * Generate demo users.
+     * @return array
      * @throws BaseException
      * @throws ConfigException
      * @throws DiException
@@ -190,24 +242,6 @@ class DemoCommand extends QtCommand
      * @throws ExceptionInterface
      * @throws HttpClientException
      * @throws ReflectionException
-     */
-    private function generateDemoData(ProgressBar $progress): void
-    {
-        $this->updateProgress($progress, "Generating demo users...");
-        $createdUsers = $this->generateUsers();
-
-        $this->updateProgress($progress, "Generating demo posts...");
-        $createdPosts = $this->generatePosts($createdUsers);
-
-        $this->updateProgress($progress, "Generating demo comments...");
-        $this->generateComments($createdUsers, $createdPosts);
-    }
-
-    /**
-     * Generate demo users.
-     * @param ProgressBar $progress
-     * @return array
-     * @throws ExceptionInterface
      */
     private function generateUsers(): array
     {
@@ -224,10 +258,18 @@ class DemoCommand extends QtCommand
      * Generate demo posts for each user.
      * @param array $users
      * @return array
+     * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ErrorException
+     * @throws ExceptionInterface
+     * @throws HttpClientException
+     * @throws ReflectionException
      */
     private function generatePosts(array $users): array
     {
         $posts = [];
+
         foreach ($users as $user) {
             for ($i = 0; $i < self::COUNTS['posts_per_user']; $i++) {
                 $post = $this->generatePostData($user);
@@ -235,6 +277,7 @@ class DemoCommand extends QtCommand
                 $posts[] = $post;
             }
         }
+
         return $posts;
     }
 
@@ -242,6 +285,8 @@ class DemoCommand extends QtCommand
      * Generate demo comments for each post.
      * @param array $users
      * @param array $posts
+     * @return void
+     * @throws ExceptionInterface
      */
     private function generateComments(array $users, array $posts): void
     {
@@ -261,6 +306,12 @@ class DemoCommand extends QtCommand
     /**
      * Generates data for user
      * @return array
+     * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ErrorException
+     * @throws HttpClientException
+     * @throws ReflectionException
      */
     private function generateUserData(): array
     {
@@ -318,6 +369,7 @@ class DemoCommand extends QtCommand
     }
 
     /**
+     * Get random user for comment except post owner
      * @param array $users
      * @param string $excludeUuid
      * @return array
@@ -333,21 +385,15 @@ class DemoCommand extends QtCommand
     }
 
     /**
-     * Cleans the uploads and resets the database.
+     * Generates demo users and posts.
      * @param ProgressBar $progress
-     * @return void
-     * @throws BaseException
-     * @throws ConfigException
-     * @throws DiException
-     * @throws ExceptionInterface
-     * @throws ReflectionException
-     * @throws ServiceException
+     * @param string $message
      */
-    private function resetDatabase(ProgressBar $progress): void
+    private function updateProgress(ProgressBar $progress, string $message): void
     {
-        $this->updateProgress($progress, "Cleaning up the database");
-        $this->removeUploads();
-        $this->rebuildDatabase();
+        $progress->setMessage($message, 'item');
+        $progress->display();
+        $progress->advance();
     }
 
     /**
@@ -391,15 +437,18 @@ class DemoCommand extends QtCommand
     }
 
     /**
-     * Generates demo users and posts.
-     * @param ProgressBar $progress
-     * @param string $message
+     * Cleans the uploads and resets the database.
+     * @return void
+     * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ExceptionInterface
+     * @throws ReflectionException
      */
-    private function updateProgress(ProgressBar $progress, string $message): void
+    private function resetDatabase(): void
     {
-        $progress->setMessage($message, 'item');
-        $progress->display();
-        $progress->advance();
+        $this->removeUploads();
+        $this->rebuildDatabase();
     }
 
     /**
