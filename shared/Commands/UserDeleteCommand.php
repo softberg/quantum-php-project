@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Commands;
@@ -116,7 +116,7 @@ HELP;
      */
     private function deleteAllUsers()
     {
-        ServiceFactory::create(AuthService::class)->deleteTable();
+        ServiceFactory::create(AuthService::class)->deleteAllUsers();
 
         $this->info('All users have been deleted successfully');
     }

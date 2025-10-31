@@ -17,28 +17,27 @@ namespace Shared\Commands;
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Di\Exceptions\DiException;
-use Shared\Services\PostService;
+use Shared\Services\CommentService;
 use Quantum\Console\QtCommand;
 use ReflectionException;
 
 /**
- * Class PostDeleteCommand
+ * Class CommentDeleteCommand
  * @package Shared\Commands
  */
-class PostDeleteCommand extends QtCommand
+class CommentDeleteCommand extends QtCommand
 {
-
     /**
      * Command name
      * @var string
      */
-    protected $name = 'post:delete';
+    protected $name = 'comment:delete';
 
     /**
      * Command description
      * @var string
      */
-    protected $description = 'Deletes a post by UUID or clears the entire posts table with confirmation';
+    protected $description = 'Deletes a comment by UUID or clears the entire comments table with confirmation';
 
     /**
      * Command help text
@@ -46,9 +45,9 @@ class PostDeleteCommand extends QtCommand
      */
     protected $help = <<<HELP
 Usage:
-- Delete a specific post: php qt post:delete `{post_uuid}`
-- Delete all posts (with confirmation): php qt post:delete
-- Delete all posts (without confirmation): php qt post:delete --yes
+- Delete a specific comment: php qt comment:delete `{comment_uuid}`
+- Delete all comments (with confirmation): php qt comment:delete
+- Delete all comments (without confirmation): php qt comment:delete --yes
 HELP;
 
     /**
@@ -56,7 +55,7 @@ HELP;
      * @var array[]
      */
     protected $args = [
-        ['uuid', 'optional', 'Post uuid'],
+        ['uuid', 'optional', 'Comment uuid'],
     ];
 
     /**
@@ -64,7 +63,7 @@ HELP;
      * @var array[]
      */
     protected $options = [
-        ['yes', 'y', 'none', 'Skip confirmation and delete all posts'],
+        ['yes', 'y', 'none', 'Skip confirmation and delete all comments'],
     ];
 
     /**
@@ -78,53 +77,53 @@ HELP;
         $uuid = $this->getArgument('uuid');
 
         if ($uuid) {
-            $this->deleteSinglePost($uuid);
+            $this->deleteSingleComment($uuid);
             return;
         }
 
         if (!$this->getOption('yes')) {
-            if (!$this->confirm('This will delete all posts. Are you sure? (yes/no)')) {
+            if (!$this->confirm('This will delete all comments. Are you sure? (yes/no)')) {
                 $this->info('Operation was canceled!');
                 return;
             }
         }
 
-        $this->deleteAllPosts();
+        $this->deleteAllComments();
     }
 
     /**
-     * Deletes a single post
+     * Deletes a single comment
      * @param string $uuid
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
      */
-    private function deleteSinglePost(string $uuid)
+    private function deleteSingleComment(string $uuid)
     {
-        $postService = ServiceFactory::get(PostService::class);
+        $commentService = ServiceFactory::get(CommentService::class);
 
-        $post = $postService->getPost($uuid);
+        $comment = $commentService->getComment($uuid);
 
-        if ($post->isEmpty()) {
-            $this->error('The post is not found');
+        if ($comment->isEmpty()) {
+            $this->error('The comment is not found');
             return;
         }
 
-        $postService->deletePost($uuid);
+        $commentService->deleteComment($uuid);
 
-        $this->info("Post with UUID '{$uuid}' deleted successfully");
+        $this->info("Comment with UUID '{$uuid}' deleted successfully");
     }
 
     /**
-     * Deletes all posts
+     * Deletes all comments
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
      */
-    private function deleteAllPosts()
+    private function deleteAllComments()
     {
-        ServiceFactory::create(PostService::class)->deleteAllPosts();
+        ServiceFactory::create(CommentService::class)->deleteAllComments();
 
-        $this->info('All posts have been deleted successfully');
+        $this->info('All comments have been deleted successfully');
     }
 }

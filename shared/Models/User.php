@@ -55,5 +55,7 @@ class User extends QtModel
         'otp',
         'otp_expires',
         'otp_token',
+        'created_at',
+        'updated_at',
     ];
 }

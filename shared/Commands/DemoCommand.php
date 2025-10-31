@@ -1,4 +1,4 @@
-<?php /** @noinspection ALL */
+<?php
 
 /**
  * Quantum PHP Framework
@@ -84,6 +84,7 @@ class DemoCommand extends QtCommand
     private const COUNTS = [
         'users' => 3,
         'posts_per_user' => 8,
+        'comments_per_post' => 3,
     ];
 
     /**
@@ -93,8 +94,10 @@ class DemoCommand extends QtCommand
         'migrate' => 'migration:migrate',
         'user_create' => 'user:create',
         'post_create' => 'post:create',
+        'comment_create' => 'comment:create',
         'user_delete' => 'user:delete',
         'post_delete' => 'post:delete',
+        'comment_delete' => 'comment:delete',
         'module_generate' => 'module:generate',
     ];
 
@@ -127,7 +130,7 @@ class DemoCommand extends QtCommand
             }
         }
 
-        $progress = $this->initProgressBar(5);
+        $progress = $this->initProgressBar(6);
 
         $this->createModules($progress);
         $this->resetDatabase($progress);
@@ -178,24 +181,6 @@ class DemoCommand extends QtCommand
     }
 
     /**
-     * Cleans the uploads and resets the database.
-     * @param ProgressBar $progress
-     * @return void
-     * @throws BaseException
-     * @throws ConfigException
-     * @throws DiException
-     * @throws ExceptionInterface
-     * @throws ReflectionException
-     * @throws ServiceException
-     */
-    private function resetDatabase(ProgressBar $progress): void
-    {
-        $this->updateProgress($progress, "Cleaning up the database");
-        $this->removeUploads();
-        $this->rebuildDatabase();
-    }
-
-    /**
      * Generates demo users and posts.
      * @param ProgressBar $progress
      * @throws BaseException
@@ -208,41 +193,69 @@ class DemoCommand extends QtCommand
      */
     private function generateDemoData(ProgressBar $progress): void
     {
-        $this->updateProgress($progress, "Generating and adding demo users and posts into database...");
+        $this->updateProgress($progress, "Generating demo users...");
+        $createdUsers = $this->generateUsers();
 
+        $this->updateProgress($progress, "Generating demo posts...");
+        $createdPosts = $this->generatePosts($createdUsers);
+
+        $this->updateProgress($progress, "Generating demo comments...");
+        $this->generateComments($createdUsers, $createdPosts);
+    }
+
+    /**
+     * Generate demo users.
+     * @param ProgressBar $progress
+     * @return array
+     * @throws ExceptionInterface
+     */
+    private function generateUsers(): array
+    {
+        $users = [];
         for ($i = 0; $i < self::COUNTS['users']; $i++) {
             $user = $this->generateUserData();
             $this->runExternalCommand(self::COMMANDS['user_create'], $user);
+            $users[] = $user;
+        }
+        return $users;
+    }
 
-            for ($j = 0; $j < self::COUNTS['posts_per_user']; $j++) {
-                $this->runExternalCommand(self::COMMANDS['post_create'], $this->generatePostData($user));
+    /**
+     * Generate demo posts for each user.
+     * @param array $users
+     * @return array
+     */
+    private function generatePosts(array $users): array
+    {
+        $posts = [];
+        foreach ($users as $user) {
+            for ($i = 0; $i < self::COUNTS['posts_per_user']; $i++) {
+                $post = $this->generatePostData($user);
+                $this->runExternalCommand(self::COMMANDS['post_create'], $post);
+                $posts[] = $post;
             }
         }
-
-        $this->updateProgress($progress, "Done");
+        return $posts;
     }
 
     /**
-     * Generates demo users and posts.
-     * @param ProgressBar $progress
-     * @param string $message
+     * Generate demo comments for each post.
+     * @param array $users
+     * @param array $posts
      */
-    private function updateProgress(ProgressBar $progress, string $message): void
+    private function generateComments(array $users, array $posts): void
     {
-        $progress->setMessage($message, 'item');
-        $progress->display();
-        $progress->advance();
-    }
+        foreach ($posts as $post) {
+            for ($i = 0; $i < self::COUNTS['comments_per_post']; $i++) {
+                $commentUser = $this->getRandomUserExcept($users, $post['user_uuid']);
 
-    /**
-     * Runs an external command
-     * @throws Exception
-     * @throws ExceptionInterface
-     */
-    protected function runExternalCommand(string $commandName, ?array $arguments = [])
-    {
-        $command = $this->getApplication()->find($commandName);
-        $command->run(new ArrayInput($arguments), new NullOutput);
+                $this->runExternalCommand(self::COMMANDS['comment_create'], [
+                    'post_uuid' => $post['uuid'],
+                    'user_uuid' => $commentUser['uuid'],
+                    'content'   => textCleanUp($this->faker->realText(rand(20, 100))),
+                ]);
+            }
+        }
     }
 
     /**
@@ -286,6 +299,7 @@ class DemoCommand extends QtCommand
      */
     private function generatePostData($user): array
     {
+        $postUuid = $this->faker->uuid();
         $title = textCleanUp($this->faker->realText(50));
 
         $imageName = save_remote_image(
@@ -295,11 +309,45 @@ class DemoCommand extends QtCommand
         );
 
         return [
+            'uuid' => $postUuid,
             'title' => $title,
             'description' => textCleanUp($this->faker->realText(1000)),
             'image' => $imageName,
             'user_uuid' => $user['uuid'],
         ];
+    }
+
+    /**
+     * @param array $users
+     * @param string $excludeUuid
+     * @return array
+     */
+    private function getRandomUserExcept(array $users, string $excludeUuid): array
+    {
+        $candidates = array_filter($users, function($u) use ($excludeUuid) {
+            return $u['uuid'] !== $excludeUuid;
+        });
+
+        $candidates = array_values($candidates);
+        return $candidates[array_rand($candidates)];
+    }
+
+    /**
+     * Cleans the uploads and resets the database.
+     * @param ProgressBar $progress
+     * @return void
+     * @throws BaseException
+     * @throws ConfigException
+     * @throws DiException
+     * @throws ExceptionInterface
+     * @throws ReflectionException
+     * @throws ServiceException
+     */
+    private function resetDatabase(ProgressBar $progress): void
+    {
+        $this->updateProgress($progress, "Cleaning up the database");
+        $this->removeUploads();
+        $this->rebuildDatabase();
     }
 
     /**
@@ -315,6 +363,7 @@ class DemoCommand extends QtCommand
                 break;
 
             case 'sleekdb':
+                $this->runExternalCommand(self::COMMANDS['comment_delete'], ['--yes' => true]);
                 $this->runExternalCommand(self::COMMANDS['post_delete'], ['--yes' => true]);
                 $this->runExternalCommand(self::COMMANDS['user_delete'], ['--yes' => true]);
                 break;
@@ -339,5 +388,28 @@ class DemoCommand extends QtCommand
 
             $fs->removeDirectory($folder);
         }
+    }
+
+    /**
+     * Generates demo users and posts.
+     * @param ProgressBar $progress
+     * @param string $message
+     */
+    private function updateProgress(ProgressBar $progress, string $message): void
+    {
+        $progress->setMessage($message, 'item');
+        $progress->display();
+        $progress->advance();
+    }
+
+    /**
+     * Runs an external command
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    private function runExternalCommand(string $commandName, ?array $arguments = [])
+    {
+        $command = $this->getApplication()->find($commandName);
+        $command->run(new ArrayInput($arguments), new NullOutput);
     }
 }

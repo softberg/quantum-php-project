@@ -94,6 +94,9 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function add(array $data): AuthUser
     {
+        $data['uuid'] = $data['uuid'] ?? uuid_ordered();
+        $data['created_at'] = date('Y-m-d H:i:s');
+
         $this->createUserDirectory($data['uuid']);
 
         $user = $this->model->create();
@@ -118,6 +121,8 @@ class AuthService extends QtService implements AuthServiceInterface
             return null;
         }
 
+        $data['updated_at'] = date('Y-m-d H:i:s');
+
         $user->fillObjectProps($data);
         $user->save();
 
@@ -135,9 +140,9 @@ class AuthService extends QtService implements AuthServiceInterface
     }
 
     /**
-     * Delete users table
+     * Delete all users
      */
-    public function deleteTable()
+    public function deleteAllUsers()
     {
         $this->model->deleteTable();
     }

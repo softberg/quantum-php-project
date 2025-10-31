@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Commands;
@@ -54,6 +54,7 @@ class PostCreateCommand extends QtCommand
         ['title', 'required', 'Post title'],
         ['description', 'required', 'Post description'],
         ['user_uuid', 'required', 'Author uuid'],
+        ['uuid', 'optional', 'Post uuid'],
         ['image', 'optional', 'Post image'],
     ];
 
@@ -68,11 +69,11 @@ class PostCreateCommand extends QtCommand
         $postService = ServiceFactory::get(PostService::class);
 
         $post = [
+            'uuid' => $this->getArgument('uuid'),
             'user_uuid' => $this->getArgument('user_uuid'),
             'title' => $this->getArgument('title'),
             'content' => $this->getArgument('description'),
             'image' => $this->getArgument('image'),
-            'updated_at' => date('Y-m-d H:i:s')
         ];
 
         $postService->addPost($post);
