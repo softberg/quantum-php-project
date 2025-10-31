@@ -118,6 +118,6 @@ function deleteUserByEmail(string $email)
 
 function dbCleanUp()
 {
-    ServiceFactory::get(AuthService::class)->deleteTable();
-    ServiceFactory::get(PostService::class)->deleteTable();
+    ServiceFactory::get(AuthService::class)->deleteAllUsers();
+    ServiceFactory::get(PostService::class)->deleteAllPosts();
 }
