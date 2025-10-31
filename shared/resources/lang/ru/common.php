@@ -67,5 +67,12 @@ return [
     'pagination' => [
         'next' => 'Следующий &raquo;',
         'prev' => '&laquo; Предыдущий'
+    ],
+    'comments' => [
+        'submit_comment' => 'Комментировать',
+        'title' => 'Комментарии',
+        'login_to_comment' => 'Войдите, чтобы оставить комментарий',
+        'leave_a_comment' => 'Оставьте комментарий',
+        'no_comments' => 'Комментариев нет',
     ]
 ];

@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Services;
@@ -59,7 +59,6 @@ class PostService extends QtService
     public function __construct(PostTransformer $transformer)
     {
         $this->model = ModelFactory::get(Post::class);
-
         $this->transformer = $transformer;
     }
 
@@ -159,6 +158,7 @@ class PostService extends QtService
     public function addPost(array $data): array
     {
         $data['uuid'] = $data['uuid'] ?? uuid_ordered();
+        $data['created_at'] = date('Y-m-d H:i:s');
 
         $post = $this->model->create();
         $post->fillObjectProps($data);
@@ -175,6 +175,8 @@ class PostService extends QtService
      */
     public function updatePost(string $uuid, array $data)
     {
+        $data['updated_at'] = date('Y-m-d H:i:s');
+
         $post = $this->model->findOneBy('uuid', $uuid);
         $post->fillObjectProps($data);
         $post->save();
@@ -192,10 +194,10 @@ class PostService extends QtService
     }
 
     /**
-     * Delete posts table
+     * Delete all posts
      * @throws ModelException
      */
-    public function deleteTable()
+    public function deleteAllPosts()
     {
         $this->model->deleteTable();
     }

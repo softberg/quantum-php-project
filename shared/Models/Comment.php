@@ -18,10 +18,10 @@ use Quantum\Model\Traits\SoftDeletes;
 use Quantum\Model\QtModel;
 
 /**
- * Class Post
+ * Class Comment
  * @package Shared\Models
  */
-class Post extends QtModel
+class Comment extends QtModel
 {
 
     use SoftDeletes;
@@ -36,7 +36,7 @@ class Post extends QtModel
      * The table name
      * @var string
      */
-    public $table = 'posts';
+    public $table = 'comments';
 
     /**
      * Model relations configuration
@@ -45,6 +45,10 @@ class Post extends QtModel
     public function relations(): array
     {
         return [
+            Post::class => [
+                'foreign_key' => 'post_uuid',
+                'local_key' => 'uuid',
+            ],
             User::class => [
                 'foreign_key' => 'user_uuid',
                 'local_key' => 'uuid',
@@ -58,11 +62,10 @@ class Post extends QtModel
      */
     public $fillable = [
         'uuid',
+        'post_uuid',
         'user_uuid',
-        'title',
         'content',
-        'image',
         'created_at',
-        'updated_at',
+        'updated_at'
     ];
 }
