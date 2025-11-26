@@ -16,6 +16,7 @@ namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
+use Quantum\Libraries\Validation\Rule;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -27,6 +28,8 @@ use ReflectionException;
  */
 class PostCreateCommand extends QtCommand
 {
+
+    use CommandValidationTrait;
 
     /**
      * Command name
@@ -66,6 +69,18 @@ class PostCreateCommand extends QtCommand
      */
     public function exec()
     {
+        $this->initValidator();
+
+        $data = [
+            'title' => $this->getArgument('title'),
+            'content' => $this->getArgument('description'),
+        ];
+
+        if (!$this->validate($this->validationRules(), $data)) {
+            $this->error($this->firstError() ?? 'Validation failed');
+            return;
+        }
+
         $postService = ServiceFactory::get(PostService::class);
 
         $post = [
@@ -79,5 +94,25 @@ class PostCreateCommand extends QtCommand
         $postService->addPost($post);
 
         $this->info('Post created successfully');
+    }
+
+    /**
+     * Validation rules
+     * @return array[]
+     */
+    protected function validationRules(): array
+    {
+        return [
+            'title' => [
+                Rule::required(),
+                Rule::minLen(10),
+                Rule::maxLen(50),
+            ],
+            'content' => [
+                Rule::required(),
+                Rule::minLen(10),
+                Rule::maxLen(1000),
+            ],
+        ];
     }
 }

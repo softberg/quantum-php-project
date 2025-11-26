@@ -9,13 +9,14 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
+use Quantum\Libraries\Validation\Rule;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -27,6 +28,8 @@ use ReflectionException;
  */
 class PostUpdateCommand extends QtCommand
 {
+
+    use CommandValidationTrait;
 
     /**
      * Command name
@@ -72,6 +75,8 @@ class PostUpdateCommand extends QtCommand
      */
     public function exec()
     {
+        $this->initValidator();
+
         $postService = ServiceFactory::get(PostService::class);
 
         $postId = $this->getArgument('uuid');
@@ -80,6 +85,16 @@ class PostUpdateCommand extends QtCommand
 
         if ($post->isEmpty()) {
             $this->error('The post is not found');
+            return;
+        }
+
+        $data = [
+            'title' => $this->getOption('title') ?: $post->title,
+            'content' => $this->getOption('description') ?: $post->content,
+        ];
+
+        if (!$this->validate($this->validationRules(), $data)) {
+            $this->error($this->firstError() ?? 'Validation failed');
             return;
         }
 
@@ -95,4 +110,21 @@ class PostUpdateCommand extends QtCommand
         $this->info('Post updated successfully');
     }
 
+    /**
+     * Validation rules
+     * @return array[]
+     */
+    protected function validationRules(): array
+    {
+        return [
+            'title' => [
+                Rule::minLen(10),
+                Rule::maxLen(50),
+            ],
+            'content' => [
+                Rule::minLen(10),
+                Rule::maxLen(1000),
+            ],
+        ];
+    }
 }

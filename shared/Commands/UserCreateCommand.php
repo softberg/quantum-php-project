@@ -9,14 +9,13 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
-use Quantum\Libraries\Validation\Validator;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Hasher\Hasher;
@@ -31,6 +30,8 @@ use Shared\Models\User;
  */
 class UserCreateCommand extends QtCommand
 {
+
+    use CommandValidationTrait;
 
     /**
      * Command name
@@ -50,11 +51,7 @@ class UserCreateCommand extends QtCommand
      */
     protected $help = 'Use the following format to create a user record:' . PHP_EOL . 'php qt user:create `Email` `Password` `[Role]` `[Firstname]` `[Lastname]`';
 
-    /**
-     * Error message
-     * @var string
-     */
-    protected $errorMessage;
+    protected $validator;
 
     /**
      * Command arguments
@@ -63,10 +60,10 @@ class UserCreateCommand extends QtCommand
     protected $args = [
         ['email', 'required', 'User email'],
         ['password', 'required', 'User password'],
+        ['firstname', 'required', 'User firstname'],
+        ['lastname', 'required', 'User lastname'],
         ['uuid', 'optional', 'User uuid'],
         ['role', 'optional', 'User role'],
-        ['firstname', 'optional', 'User firstname'],
-        ['lastname', 'optional', 'User lastname'],
         ['image', 'optional', 'User image'],
     ];
 
@@ -78,8 +75,17 @@ class UserCreateCommand extends QtCommand
      */
     public function exec()
     {
-        if (!$this->validateEmail($this->getArgument('email'))) {
-            $this->error($this->errorMessage);
+        $this->initValidator();
+
+        $data = [
+            'email' => $this->getArgument('email'),
+            'password' => $this->getArgument('password'),
+            'firstname' => $this->getArgument('firstname'),
+            'lastname' => $this->getArgument('lastname'),
+        ];
+
+        if (!$this->validate($this->validationRules(), $data)) {
+            $this->error($this->firstError() ?? 'Validation failed');
             return;
         }
 
@@ -101,27 +107,27 @@ class UserCreateCommand extends QtCommand
     }
 
     /**
-     * Validate email
-     * @param string $email
-     * @return boolean
+     * Validation rules
+     * @return array[]
      */
-    private function validateEmail(string $email): bool
+    protected function validationRules(): array
     {
-        $validator = new Validator();
-
-        $validator->setRules([
+        return [
             'email' => [
                 Rule::required(),
                 Rule::email(),
-                Rule::unique(User::class, 'email')
+                Rule::unique(User::class, 'email'),
             ],
-        ]);
-
-        if (!$validator->isValid(['email' => $email])) {
-            $this->errorMessage = $validator->getErrors()['email'][0];
-            return false;
-        }
-
-        return true;
+            'password' => [
+                Rule::required(),
+                Rule::minLen(6),
+            ],
+            'firstname' => [
+                Rule::required(),
+            ],
+            'lastname' => [
+                Rule::required(),
+            ],
+        ];
     }
 }
