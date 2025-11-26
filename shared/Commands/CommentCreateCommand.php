@@ -14,9 +14,13 @@
 
 namespace Shared\Commands;
 
+use Quantum\Service\Exceptions\ServiceException;
 use Quantum\Service\Factories\ServiceFactory;
+use Quantum\Libraries\Validation\Rule;
+use Quantum\Di\Exceptions\DiException;
 use Shared\Services\CommentService;
 use Quantum\Console\QtCommand;
+use ReflectionException;
 
 /**
  * Class CommentCreateCommand
@@ -24,20 +28,56 @@ use Quantum\Console\QtCommand;
  */
 class CommentCreateCommand extends QtCommand
 {
+
+    use CommandValidationTrait;
+
+    /**
+     * Command name
+     * @var string
+     */
     protected $name = 'comment:create';
 
+    /**
+     * Command description
+     * @var string
+     */
     protected $description = 'Allows to create a comment record';
 
+    /**
+     * Command help text
+     * @var string
+     */
     protected $help = 'Use the following format to create a comment record:' . PHP_EOL . 'php qt comment:create `Post UUID` `User UUID` `Content`';
 
+    /**
+     * Command arguments
+     * @var array[]
+     */
     protected $args = [
         ['post_uuid', 'required', 'The post uuid the comment belongs to'],
         ['user_uuid', 'required', 'The user uuid who writes the comment'],
         ['content', 'required', 'Comment text'],
     ];
 
+    /**
+     * Executes the command
+     * @throws DiException
+     * @throws ServiceException
+     * @throws ReflectionException
+     */
     public function exec()
     {
+        $this->initValidator();
+
+        $data = [
+            'content' => $this->getArgument('content'),
+        ];
+
+        if (!$this->validate($this->validationRules(), $data)) {
+            $this->error($this->firstError() ?? 'Validation failed');
+            return;
+        }
+
         $commentService = ServiceFactory::create(CommentService::class);
 
         $comment = [
@@ -49,5 +89,20 @@ class CommentCreateCommand extends QtCommand
         $commentService->addComment($comment);
 
         $this->info('Comment created successfully');
+    }
+
+    /**
+     * Validation rules
+     * @return array[]
+     */
+    protected function validationRules(): array
+    {
+        return [
+            'content' => [
+                Rule::required(),
+                Rule::minLen(2),
+                Rule::maxLen(100),
+            ],
+        ];
     }
 }
