@@ -39,5 +39,10 @@
             "php qt core:version"
         ],
         "test": "vendor/bin/phpunit --stderr --coverage-clover coverage.xml"
+    },
+    "config": {
+        "audit": {
+            "block-insecure": false
+        }
     }
 }
