@@ -1,9 +1,11 @@
 <?php
 
+use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\App\Factories\AppFactory;
 use Quantum\Libraries\Hasher\Hasher;
+use Shared\Services\CommentService;
 use Quantum\Module\ModuleManager;
 use Shared\Services\PostService;
 use Shared\Services\AuthService;
@@ -78,7 +80,7 @@ function deleteDirectory(string $dir)
     }
 }
 
-function createUser(array $overrides = [])
+function createUser(array $overrides = []): AuthUser
 {
     return ServiceFactory::get(AuthService::class)->add(
         array_merge([
@@ -91,22 +93,47 @@ function createUser(array $overrides = [])
         ], $overrides));
 }
 
-function createUserPosts($user)
+function createUserPosts(AuthUser $user): array
 {
     $postCountPerUser = 10;
 
     $faker = Factory::create();
 
+    $posts = [];
+
     for ($i = 0; $i < $postCountPerUser; $i++) {
         $title = textCleanUp($faker->realText(50));
 
-        ServiceFactory::get(PostService::class)->addPost([
+        $posts[] = ServiceFactory::create(PostService::class)->addPost([
             'title' => $title,
             'content' => textCleanUp($faker->realText(100)),
             'image' => slugify($title) . '.jpg',
             'user_uuid' => $user->uuid,
         ]);
     }
+
+    return $posts;
+}
+
+function createPostComments(AuthUser $user, array $posts): array
+{
+    $commentCountPerUser = 3;
+
+    $faker = Factory::create();
+
+    $comments = [];
+
+    foreach ($posts as $post) {
+        for ($i = 0; $i < $commentCountPerUser; $i++) {
+            $comments[] = ServiceFactory::create(CommentService::class)->addComment([
+                'post_uuid' => $post->uuid,
+                'user_uuid' => $user->uuid,
+                'content'   => textCleanUp($faker->realText(rand(20, 100))),
+            ]);
+        }
+    }
+
+    return $comments;
 }
 
 function deleteUserByEmail(string $email)
@@ -120,4 +147,5 @@ function dbCleanUp()
 {
     ServiceFactory::get(AuthService::class)->deleteAllUsers();
     ServiceFactory::get(PostService::class)->deleteAllPosts();
+    ServiceFactory::get(CommentService::class)->deleteAllComments();
 }
