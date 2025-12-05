@@ -52,7 +52,7 @@ class AppTestCase extends TestCase
 
     protected function signInAndGetTokens(): array
     {
-        $response = $this->request('post', '/api/en/signin', [
+        $response = $this->request('post', '/api/signin', [
             'email' => $this->defaultEmail,
             'password' => $this->defaultPassword
         ]);

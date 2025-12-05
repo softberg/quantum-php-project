@@ -3,16 +3,23 @@
 namespace Quantum\Tests\Unit\shared\Services;
 
 use Quantum\Libraries\Storage\UploadedFile;
-use Quantum\Tests\Unit\AppTestCase;
+use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Model\ModelCollection;
 use Quantum\Paginator\Paginator;
+use Shared\Services\AuthService;
+use Shared\Services\PostService;
+use PHPUnit\Framework\TestCase;
 use Shared\Models\Post;
 
-class PostServiceTest extends AppTestCase
+class PostServiceTest extends TestCase
 {
     const PER_PAGE = 10;
 
     const CURRENT_PAGE = 1;
+
+    protected $authService;
+
+    protected $postService;
 
     private $initialPosts;
 
@@ -20,10 +27,8 @@ class PostServiceTest extends AppTestCase
     {
         parent::setUp();
 
-        $this->initialPosts = $this->postService
-            ->getPosts(self::PER_PAGE, self::CURRENT_PAGE)
-            ->data()
-            ->all();
+        $this->authService = ServiceFactory::create(AuthService::class);
+        $this->postService = ServiceFactory::create(PostService::class);
     }
 
     public function tearDown(): void
@@ -67,21 +72,33 @@ class PostServiceTest extends AppTestCase
 
     public function testPostServiceGetPostsWithSearch()
     {
-        $randomKey = array_rand($this->initialPosts);
+        $users = $this->authService->getAll();
+        $userUuid = $users->first()->uuid;
 
-        $post = $this->initialPosts[$randomKey];
+        $uniqueKeyword = 'SEARCH_TOKEN_' . uniqid();
+        $title = "Title with {$uniqueKeyword}";
+        $content = "Some content";
 
-        $searchTerm = substr($post->title, 10, 10);
+        $post = $this->postService->addPost([
+            'user_uuid'   => $userUuid,
+            'title'       => $title,
+            'content'     => $content,
+            'image'       => '',
+            'updated_at'  => date('Y-m-d H:i:s'),
+        ]);
 
-        $paginatedPosts = $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE, $searchTerm);
+        $searchTerm = 'SEARCH_TOKEN';
 
-        $this->assertInstanceOf(Paginator::class, $paginatedPosts);
+        $results = $this->postService
+            ->getPosts(self::PER_PAGE, self::CURRENT_PAGE, $searchTerm)
+            ->data();
 
-        $posts = $paginatedPosts->data();
+        $this->assertInstanceOf(ModelCollection::class, $results);
 
-        $this->assertInstanceOf(ModelCollection::class, $posts);
+        $this->assertCount(1, $results);
+        $this->assertEquals($post->uuid, $results->first()->uuid);
 
-        $this->assertCount(1, $posts);
+        $this->postService->deletePost($post->uuid);
     }
 
     public function testPostServiceGetSinglePost()
@@ -131,9 +148,7 @@ class PostServiceTest extends AppTestCase
             'updated_at' => $date
         ]);
 
-        $uuid = $newPost['uuid'];
-
-        $post = $this->postService->getPost($uuid);
+        $post = $this->postService->getPost($newPost->uuid);
 
         $this->assertEquals('Just another post', $post->title);
 
@@ -141,7 +156,7 @@ class PostServiceTest extends AppTestCase
 
         $this->assertEquals($date, $post->updated_at);
 
-        $this->postService->deletePost($uuid);
+        $this->postService->deletePost($newPost->uuid);
     }
 
     public function testPostServiceUpdatePost()
@@ -190,7 +205,7 @@ class PostServiceTest extends AppTestCase
 
         $this->assertCount(11, $this->postService->getPosts());
 
-        $this->postService->deletePost($post['uuid']);
+        $this->postService->deletePost($post->uuid);
 
         $this->assertCount(10, $this->postService->getPosts(self::PER_PAGE, self::CURRENT_PAGE)->data());
     }

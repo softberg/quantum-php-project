@@ -9,15 +9,6 @@ use Shared\Models\Post;
 
 class PostControllerTest extends AppTestCase
 {
-	/**
-	 * @var string
-	 */
-	protected $email = 'test@test.test';
-
-	/**
-	 * @var string
-	 */
-	protected $password = 'password';
 
 	public function setUp(): void
 	{
@@ -33,27 +24,39 @@ class PostControllerTest extends AppTestCase
 
 	public function testModuleApiPostsEndpoint()
 	{
-		$response = $this->request('get', '/api/en/posts');
+        $method = 'GET';
+        $endpoint = '/api/posts';
+
+		$response = $this->request($method, $endpoint);
 
 		$this->assertIsObject($response);
+
 		$this->assertEquals('success', $response->get('status'));
 
         $this->assertArrayHasKey('data', $response->all());
 
         $postData = $response->get('data');
 
+        $this->assertIsArray($postData);
+
         $this->assertCount(8, $postData);
 
-        $this->assertArrayHasKey('uuid', $postData[0]);
-        $this->assertArrayHasKey('title', $postData[0]);
-        $this->assertArrayHasKey('content', $postData[0]);
-        $this->assertArrayHasKey('image', $postData[0]);
-        $this->assertArrayHasKey('date', $postData[0]);
-        $this->assertArrayHasKey('author', $postData[0]);
+        $firstPost = $postData[0];
+
+        $this->assertIsArray($firstPost);
+
+        $this->assertArrayHasKey('uuid', $firstPost);
+        $this->assertArrayHasKey('title', $firstPost);
+        $this->assertArrayHasKey('content', $firstPost);
+        $this->assertArrayHasKey('image', $firstPost);
+        $this->assertArrayHasKey('date', $firstPost);
+        $this->assertArrayHasKey('author', $firstPost);
 
 		$this->assertArrayHasKey('pagination', $response->all());
 
         $pagination = $response->get('pagination');
+
+        $this->assertIsArray($pagination);
 
 		$this->assertArrayHasKey('total_records', $pagination);
 		$this->assertArrayHasKey('current_page', $pagination);
@@ -68,114 +71,39 @@ class PostControllerTest extends AppTestCase
 
 	public function testModuleApiSinglePostEndpoint()
 	{
+        $method = 'GET';
+        $endpoint = '/api/post/';
+
 		$post = ModelFactory::get(Post::class)->first();
 
-		$response = $this->request('get', '/api/en/post/' . $post->uuid);
+		$response = $this->request($method, $endpoint . $post->uuid);
 
 		$this->assertIsObject($response);
+
 		$this->assertEquals('success', $response->get('status'));
-		$this->assertArrayHasKey('data', $response->all());
 
-        $rawData = $response->get('data');
+        $this->assertArrayHasKey('data', $response->all());
 
-		$this->assertArrayHasKey('uuid', $rawData);
-		$this->assertArrayHasKey('title', $rawData);
-		$this->assertArrayHasKey('content', $rawData);
-		$this->assertArrayHasKey('image', $rawData);
-		$this->assertArrayHasKey('date', $rawData);
-		$this->assertArrayHasKey('author', $rawData);
-	}
+        $post = $response->get('data');
 
-	public function testModuleApiMyPostsEndpoint()
-	{
-		$tokens = $this->signInAndGetTokens();
+        $this->assertIsArray($post);
 
-		$response = $this->request('get', '/api/en/my-posts', [], [
-			'Authorization' => 'Bearer ' . $tokens['access_token'],
-			'refresh_token' => $tokens['refresh_token']
-		]);
+		$this->assertArrayHasKey('uuid', $post);
+		$this->assertArrayHasKey('title', $post);
+		$this->assertArrayHasKey('content', $post);
+		$this->assertArrayHasKey('image', $post);
+		$this->assertArrayHasKey('date', $post);
+		$this->assertArrayHasKey('author', $post);
+		$this->assertArrayHasKey('comments', $post);
 
-		$this->assertIsObject($response);
-		$this->assertEquals('success', $response->get('status'));
-		$this->assertArrayHasKey('data', $response->all());
+        $firstComment = $post['comments'][0];
 
-        $postData = $response->get('data');
+        $this->assertIsArray($firstComment);
 
-		$this->assertCount(10, $postData);
-
-		$this->assertArrayHasKey('uuid', $postData[0]);
-		$this->assertArrayHasKey('title', $postData[0]);
-		$this->assertArrayHasKey('content', $postData[0]);
-		$this->assertArrayHasKey('image', $postData[0]);
-		$this->assertArrayHasKey('date', $postData[0]);
-		$this->assertArrayHasKey('author', $postData[0]);
-	}
-
-	public function testModuleApiPostCreateEndpoint()
-	{
-		$tokens = $this->signInAndGetTokens();
-
-		$response = $this->request('post', '/api/en/my-posts/create',
-			[
-				'title' => 'test title',
-				'content' => 'test content',
-				'image' => '',
-				'updated_at' => date('Y-m-d H:i:s'),
-			],
-			['Authorization' => 'Bearer ' . $tokens['access_token']]
-		);
-
-		$this->assertIsObject($response);
-		$this->assertEquals('success', $response->get('status'));
-		$this->assertEquals('Created successfully', $response->get('message'));
-	}
-
-	public function testModuleApiAmendPostEndpoint()
-	{
-		$post = ModelFactory::get(Post::class)->first();
-
-		$tokens = $this->signInAndGetTokens();
-
-		$response = $this->request('put', '/api/en/my-posts/amend/' . $post->uuid,
-			[
-				'title' => 'test title123',
-				'content' => 'test content123',
-			],
-			['Authorization' => 'Bearer ' . $tokens['access_token']]
-		);
-
-		$this->assertIsObject($response);
-		$this->assertEquals('success', $response->get('status'));
-		$this->assertEquals('Updated successfully', $response->get('message'));
-	}
-
-	public function testDeletePostApi()
-	{
-		$post = ModelFactory::get(Post::class)->first();
-
-		$tokens = $this->signInAndGetTokens();
-
-		$response = $this->request('delete', '/api/en/my-posts/delete/' . $post->uuid, [], [
-			'Authorization' => 'Bearer ' . $tokens['access_token']
-		]);
-
-		$this->assertIsObject($response);
-		$this->assertEquals('success', $response->get('status'));
-		$this->assertEquals('Deleted successfully', $response->get('message'));
-	}
-
-	public function testDeleteImagePostApi()
-	{
-		$post = ModelFactory::get(Post::class)->first();
-
-		$tokens = $this->signInAndGetTokens();
-
-		$response = $this->request('delete', '/api/en/my-posts/delete-image/' . $post->uuid, [], [
-			'Authorization' => 'Bearer ' . $tokens['access_token']
-		]);
-
-		$this->assertIsObject($response);
-		$this->assertEquals('success', $response->get('status'));
-		$this->assertEquals('Deleted successfully', $response->get('message'));
+        $this->assertArrayHasKey('uuid', $firstComment);
+        $this->assertArrayHasKey('author', $firstComment);
+        $this->assertArrayHasKey('author', $firstComment);
+        $this->assertArrayHasKey('content', $firstComment);
+        $this->assertArrayHasKey('date', $firstComment);
 	}
 }

@@ -19,7 +19,8 @@ createApp(App::CONSOLE, PROJECT_ROOT);
 createModule('Api', 'DemoApi');
 
 $user = createUser();
-createUserPosts($user);
+$posts = createUserPosts($user);
+createPostComments($user, $posts);
 
 register_shutdown_function(function () {
     removeEnvFile();
