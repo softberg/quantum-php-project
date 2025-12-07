@@ -7,7 +7,7 @@ return [
      * ---------------------------------------------------------
      */
     'enabled' => true,
-    'supported' => ['en', 'ru', 'am'],
+    'supported' => ['en', 'es'],
     'default' => 'en',
     'url_segment' => 1,
 ];
