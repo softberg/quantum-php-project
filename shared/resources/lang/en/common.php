@@ -34,6 +34,7 @@ return [
     'repeat_password' => 'Repeat password',
     'check_email_signup' => 'Registration was successful, please check your email',
     'check_email' => 'Check your email to reset your password',
+    'successfully_signed_up' => 'Successfully signed up',
 
     // ───── User fields ─────────────────────────────────────────
     'email' => 'Email',

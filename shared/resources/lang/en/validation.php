@@ -43,6 +43,7 @@ return [
     'same' => 'The {%1} field should be same as the {%2}',
     'same_password' => 'The {%1} field should match the new password',
     'nonEqualValues' => 'Values are not equal',
+    'unique' => 'The {%1} field should contain only unique value',
 
     // ───── Contains rules ────────────────────────────────────
     'contains' => 'The {%1} can only be one of: {%2}',
