@@ -15,7 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\CommentService;
@@ -62,8 +62,9 @@ class CommentCreateCommand extends QtCommand
     /**
      * Executes the command
      * @throws DiException
-     * @throws ServiceException
      * @throws ReflectionException
+     * @throws ServiceException
+     * @throws BaseException
      */
     public function exec()
     {
@@ -78,15 +79,11 @@ class CommentCreateCommand extends QtCommand
             return;
         }
 
-        $commentService = ServiceFactory::create(CommentService::class);
-
-        $comment = [
+        service(CommentService::class)->addComment([
             'post_uuid' => $this->getArgument('post_uuid'),
             'user_uuid' => $this->getArgument('user_uuid'),
             'content' => $this->getArgument('content'),
-        ];
-
-        $commentService->addComment($comment);
+        ]);
 
         $this->info('Comment created successfully');
     }

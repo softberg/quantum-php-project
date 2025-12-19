@@ -9,14 +9,14 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.8
+ * @since 2.9.9
  */
 
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
 use Symfony\Component\Console\Helper\Table;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Shared\Services\AuthService;
@@ -58,13 +58,14 @@ class UserShowCommand extends QtCommand
 
     /**
      * Executes the command
+     * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
-     * @throws DiException
+     * @throws BaseException
      */
     public function exec()
     {
-        $userService = ServiceFactory::get(AuthService::class);
+        $userService = service(AuthService::class);
 
         $uuid = $this->getArgument('uuid');
 

@@ -15,7 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
@@ -63,9 +63,10 @@ class PostCreateCommand extends QtCommand
 
     /**
      * Executes the command
+     * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
-     * @throws DiException
+     * @throws BaseException
      */
     public function exec()
     {
@@ -81,17 +82,13 @@ class PostCreateCommand extends QtCommand
             return;
         }
 
-        $postService = ServiceFactory::get(PostService::class);
-
-        $post = [
+        service(PostService::class)->addPost([
             'uuid' => $this->getArgument('uuid'),
             'user_uuid' => $this->getArgument('user_uuid'),
             'title' => $this->getArgument('title'),
             'content' => $this->getArgument('description'),
             'image' => $this->getArgument('image'),
-        ];
-
-        $postService->addPost($post);
+        ]);
 
         $this->info('Post created successfully');
     }

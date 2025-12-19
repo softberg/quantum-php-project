@@ -16,9 +16,7 @@ namespace Shared\Services;
 
 use Quantum\Model\Exceptions\ModelException;
 use Shared\Transformers\CommentTransformer;
-use Quantum\Model\Factories\ModelFactory;
-use Quantum\Model\ModelCollection;
-use Quantum\Paginator\Paginator;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Service\QtService;
 use Shared\Models\Comment;
 use Shared\Models\User;
@@ -41,26 +39,27 @@ class CommentService extends QtService
     private $transformer;
 
     /**
-     * CommentService constructor.
      * @param CommentTransformer $transformer
      * @throws ModelException
+     * @throws BaseException
      */
     public function __construct(CommentTransformer $transformer)
     {
-        $this->model = ModelFactory::get(Comment::class);
+        $this->model = model(Comment::class);
         $this->transformer = $transformer;
     }
 
     /**
      * Get comments by post
      * @param string $postUuid
-     * @return ModelCollection|Paginator
+     * @return mixed
+     * @throws BaseException
      * @throws ModelException
      */
     public function getCommentsByPost(string $postUuid)
     {
         return $this->model
-            ->joinThrough(ModelFactory::get(User::class))
+            ->joinTo(model(User::class))
             ->criteria('post_uuid', '=', $postUuid)
             ->select(
                 'comments.uuid',

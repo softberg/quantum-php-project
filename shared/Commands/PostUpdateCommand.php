@@ -15,7 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
@@ -69,15 +69,16 @@ class PostUpdateCommand extends QtCommand
 
     /**
      * Executes the command
+     * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
-     * @throws DiException
+     * @throws BaseException
      */
     public function exec()
     {
         $this->initValidator();
 
-        $postService = ServiceFactory::get(PostService::class);
+        $postService = service(PostService::class);
 
         $postId = $this->getArgument('uuid');
 

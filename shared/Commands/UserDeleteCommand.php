@@ -15,7 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
@@ -98,10 +98,11 @@ HELP;
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
+     * @throws BaseException
      */
     private function deleteSingleUser(string $uuid)
     {
-        $authService = ServiceFactory::get(AuthService::class);
+        $authService = service(AuthService::class);
 
         $authService->delete($uuid);
 
@@ -110,13 +111,14 @@ HELP;
 
     /**
      * Deletes all users
+     * @throws BaseException
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
      */
     private function deleteAllUsers()
     {
-        ServiceFactory::create(AuthService::class)->deleteAllUsers();
+        service(AuthService::class)->deleteAllUsers();
 
         $this->info('All users have been deleted successfully');
     }

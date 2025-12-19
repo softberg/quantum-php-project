@@ -19,7 +19,6 @@ use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Model\Exceptions\ModelException;
 use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\App\Exceptions\BaseException;
-use Quantum\Model\Factories\ModelFactory;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Quantum\Service\QtService;
@@ -40,11 +39,12 @@ class AuthService extends QtService implements AuthServiceInterface
     private $model;
 
     /**
+     * @throws BaseException
      * @throws ModelException
      */
     public function __construct()
     {
-        $this->model = ModelFactory::get(User::class);
+        $this->model = model(User::class);
     }
 
     /**

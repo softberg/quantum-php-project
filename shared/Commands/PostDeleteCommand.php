@@ -15,7 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
@@ -98,10 +98,11 @@ HELP;
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
+     * @throws BaseException
      */
     private function deleteSinglePost(string $uuid)
     {
-        $postService = ServiceFactory::get(PostService::class);
+        $postService = service(PostService::class);
 
         $post = $postService->getPost($uuid);
 
@@ -117,13 +118,14 @@ HELP;
 
     /**
      * Deletes all posts
+     * @throws BaseException
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
      */
     private function deleteAllPosts()
     {
-        ServiceFactory::create(PostService::class)->deleteAllPosts();
+       service(PostService::class)->deleteAllPosts();
 
         $this->info('All posts have been deleted successfully');
     }
