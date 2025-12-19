@@ -15,7 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Libraries\Validation\Rule;
 use Quantum\Libraries\Hasher\Hasher;
@@ -69,9 +69,10 @@ class UserCreateCommand extends QtCommand
 
     /**
      * Executes the command
+     * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
-     * @throws DiException
+     * @throws BaseException
      */
     public function exec()
     {
@@ -89,9 +90,7 @@ class UserCreateCommand extends QtCommand
             return;
         }
 
-        $authService = ServiceFactory::get(AuthService::class);
-
-        $user = [
+        service(AuthService::class)->add([
             'uuid' => $this->getArgument('uuid'),
             'firstname' => $this->getArgument('firstname'),
             'lastname' => $this->getArgument('lastname'),
@@ -99,9 +98,7 @@ class UserCreateCommand extends QtCommand
             'email' => $this->getArgument('email'),
             'password' => (new Hasher())->hash($this->getArgument('password')),
             'image' => $this->getArgument('image'),
-        ];
-
-        $authService->add($user);
+        ]);
 
         $this->info('User created successfully');
     }

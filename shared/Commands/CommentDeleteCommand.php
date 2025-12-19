@@ -15,7 +15,7 @@
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
-use Quantum\Service\Factories\ServiceFactory;
+use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\CommentService;
 use Quantum\Console\QtCommand;
@@ -68,9 +68,10 @@ HELP;
 
     /**
      * Executes the command
+     * @throws BaseException
+     * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
-     * @throws DiException
      */
     public function exec()
     {
@@ -97,10 +98,11 @@ HELP;
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
+     * @throws BaseException
      */
     private function deleteSingleComment(string $uuid)
     {
-        $commentService = ServiceFactory::get(CommentService::class);
+        $commentService = service(CommentService::class);
 
         $comment = $commentService->getComment($uuid);
 
@@ -119,10 +121,11 @@ HELP;
      * @throws DiException
      * @throws ReflectionException
      * @throws ServiceException
+     * @throws BaseException
      */
     private function deleteAllComments()
     {
-        ServiceFactory::create(CommentService::class)->deleteAllComments();
+        service(CommentService::class)->deleteAllComments();
 
         $this->info('All comments have been deleted successfully');
     }
