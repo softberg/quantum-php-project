@@ -228,7 +228,7 @@ class DemoCommand extends QtCommand
             '--yes' => true,
             '--template' => $template,
             '--with-assets' => $withAssets
-        ], true);
+        ]);
     }
 
     /**
