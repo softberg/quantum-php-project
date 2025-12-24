@@ -26,6 +26,7 @@ use Quantum\App\Exceptions\BaseException;
 use Quantum\Libraries\Database\Database;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
+use Symfony\Component\Process\Process;
 use Quantum\Console\QtCommand;
 use Ottaviano\Faker\Gravatar;
 use ReflectionException;
@@ -33,7 +34,6 @@ use Shared\Enums\Role;
 use Faker\Generator;
 use ErrorException;
 use Faker\Factory;
-use Exception;
 
 /**
  * Class DemoCommand
@@ -146,6 +146,7 @@ class DemoCommand extends QtCommand
         foreach ($steps as $step) {
             $this->updateProgress($progress, $step['message']);
             $step['action']();
+            $progress->advance();
         }
 
         $progress->finish();
@@ -219,17 +220,15 @@ class DemoCommand extends QtCommand
      * @param string $moduleName
      * @param string $template
      * @param bool $withAssets
-     * @return void
-     * @throws ExceptionInterface
      */
     private function createModule(string $moduleName, string $template, bool $withAssets): void
     {
-        $this->runExternalCommand(self::COMMANDS['module_generate'], [
+        $this->runCommandExternally(self::COMMANDS['module_generate'], [
             'module' => $moduleName,
             '--yes' => true,
             '--template' => $template,
             '--with-assets' => $withAssets
-        ]);
+        ], true);
     }
 
     /**
@@ -248,7 +247,7 @@ class DemoCommand extends QtCommand
         $users = [];
         for ($i = 0; $i < self::COUNTS['users']; $i++) {
             $user = $this->generateUserData();
-            $this->runExternalCommand(self::COMMANDS['user_create'], $user);
+            $this->runCommandInternally(self::COMMANDS['user_create'], $user);
             $users[] = $user;
         }
         return $users;
@@ -273,7 +272,7 @@ class DemoCommand extends QtCommand
         foreach ($users as $user) {
             for ($i = 0; $i < self::COUNTS['posts_per_user']; $i++) {
                 $post = $this->generatePostData($user);
-                $this->runExternalCommand(self::COMMANDS['post_create'], $post);
+                $this->runCommandInternally(self::COMMANDS['post_create'], $post);
                 $posts[] = $post;
             }
         }
@@ -294,7 +293,7 @@ class DemoCommand extends QtCommand
             for ($i = 0; $i < self::COUNTS['comments_per_post']; $i++) {
                 $commentUser = $this->getRandomUserExcept($users, $post['user_uuid']);
 
-                $this->runExternalCommand(self::COMMANDS['comment_create'], [
+                $this->runCommandInternally(self::COMMANDS['comment_create'], [
                     'post_uuid' => $post['uuid'],
                     'user_uuid' => $commentUser['uuid'],
                     'content'   => textCleanUp($this->faker->realText(rand(20, 100))),
@@ -316,7 +315,7 @@ class DemoCommand extends QtCommand
     private function generateUserData(): array
     {
         $userUuid = $this->faker->uuid();
-        $email = textCleanUp($this->faker->email());
+        $email = $this->faker->safeEmail();
 
         create_user_directory($userUuid);
 
@@ -327,19 +326,19 @@ class DemoCommand extends QtCommand
         );
 
         return [
-            'uuid' => $userUuid,
-            'firstname' => $this->faker->name(),
-            'lastname' => $this->faker->lastName(),
-            'role' => Role::EDITOR,
             'email' => $email,
             'password' => self::DEFAULT_PASSWORD,
+            'firstname' => $this->faker->name(),
+            'lastname' => $this->faker->lastName(),
+            'uuid' => $userUuid,
+            'role' => Role::EDITOR,
             'image' => $imageName
         ];
     }
 
     /**
      * Generates data for post
-     * @param $user
+     * @param array $user
      * @return array
      * @throws BaseException
      * @throws ConfigException
@@ -348,7 +347,7 @@ class DemoCommand extends QtCommand
      * @throws HttpClientException
      * @throws ReflectionException
      */
-    private function generatePostData($user): array
+    private function generatePostData(array $user): array
     {
         $postUuid = $this->faker->uuid();
         $title = textCleanUp($this->faker->realText(50));
@@ -360,11 +359,11 @@ class DemoCommand extends QtCommand
         );
 
         return [
-            'uuid' => $postUuid,
             'title' => $title,
             'description' => textCleanUp($this->faker->realText(1000)),
-            'image' => $imageName,
             'user_uuid' => $user['uuid'],
+            'uuid' => $postUuid,
+            'image' => $imageName,
         ];
     }
 
@@ -393,25 +392,25 @@ class DemoCommand extends QtCommand
     {
         $progress->setMessage($message, 'item');
         $progress->display();
-        $progress->advance();
     }
 
     /**
      * Rebuilds the database
+     * @return void
      * @throws ExceptionInterface
      */
     private function rebuildDatabase(): void
     {
         switch (Database::getInstance()->getConfigs()['driver']) {
             case 'mysql':
-                $this->runExternalCommand(self::COMMANDS['migrate'], ['direction' => 'down']);
-                $this->runExternalCommand(self::COMMANDS['migrate'], ['direction' => 'up']);
+                $this->runCommandInternally(self::COMMANDS['migrate'], ['direction' => 'down']);
+                $this->runCommandInternally(self::COMMANDS['migrate'], ['direction' => 'up']);
                 break;
 
             case 'sleekdb':
-                $this->runExternalCommand(self::COMMANDS['comment_delete'], ['--yes' => true]);
-                $this->runExternalCommand(self::COMMANDS['post_delete'], ['--yes' => true]);
-                $this->runExternalCommand(self::COMMANDS['user_delete'], ['--yes' => true]);
+                $this->runCommandInternally(self::COMMANDS['comment_delete'], ['--yes' => true]);
+                $this->runCommandInternally(self::COMMANDS['post_delete'], ['--yes' => true]);
+                $this->runCommandInternally(self::COMMANDS['user_delete'], ['--yes' => true]);
                 break;
         }
     }
@@ -452,13 +451,78 @@ class DemoCommand extends QtCommand
     }
 
     /**
-     * Runs an external command
-     * @throws Exception
+     * @param string $commandName
+     * @param array $arguments
      * @throws ExceptionInterface
      */
-    private function runExternalCommand(string $commandName, ?array $arguments = [])
+    private function runCommandInternally(string $commandName, array $arguments = [])
     {
         $command = $this->getApplication()->find($commandName);
         $command->run(new ArrayInput($arguments), new NullOutput);
+    }
+
+    /**
+     * @param string $commandName
+     * @param array $arguments
+     */
+    private function runCommandExternally(string $commandName, array $arguments = [])
+    {
+        $command = $this->buildCommand($commandName, $arguments);
+        $this->runExternalProcess($command);
+    }
+
+    /**
+     * Runs separate process
+     * @param array $command
+     * @return void
+     */
+    private function runExternalProcess(array $command): void
+    {
+        $process = new Process($command, base_dir());
+        $process->setTimeout(null);
+
+        $process->mustRun();
+    }
+
+    /**
+     * Builds command string
+     * @param string $commandName
+     * @param array $arguments
+     * @return string[]
+     */
+    private function buildCommand(string $commandName, array $arguments): array
+    {
+        $command = ['php', 'qt', $commandName];
+
+        foreach ($arguments as $key => $value) {
+
+            if (!is_int($key) && !str_starts_with($key, '--')) {
+                $command[] = (string)$value;
+                continue;
+            }
+
+            if (is_bool($value)) {
+                if ($value) $command[] = $key;
+                continue;
+            }
+
+            if (is_array($value)) {
+                foreach ($value as $item) {
+                    $command[] = $key;
+                    $command[] = (string)$item;
+                }
+                continue;
+            }
+
+            $command[] = $key;
+
+            if ($value === null) {
+                continue;
+            }
+
+            $command[] = (string)$value;
+        }
+
+        return $command;
     }
 }
