@@ -495,8 +495,7 @@ class DemoCommand extends QtCommand
         $command = ['php', 'qt', $commandName];
 
         foreach ($arguments as $key => $value) {
-
-            if (!is_int($key) && !str_starts_with($key, '--')) {
+            if (!is_int($key) && substr($key, 0, 2) !== '--') {
                 $command[] = (string)$value;
                 continue;
             }
