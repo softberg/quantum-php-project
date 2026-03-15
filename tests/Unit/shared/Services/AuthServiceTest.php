@@ -21,8 +21,14 @@ class AuthServiceTest extends TestCase
         $this->authService = ServiceFactory::create(AuthService::class);
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     public function testAuthServiceGetAll()
     {
+        $this->authService = ServiceFactory::create(AuthService::class);
         $users = $this->authService->getAll();
 
         $this->assertInstanceOf(ModelCollection::class, $users);

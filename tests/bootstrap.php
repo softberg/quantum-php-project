@@ -16,6 +16,8 @@ createEnvFile();
 
 createApp(App::CONSOLE, PROJECT_ROOT);
 
+removeModule();
+
 createModule('Api', 'DemoApi');
 
 $user = createUser();
