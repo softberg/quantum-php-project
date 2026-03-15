@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Quantum\App\App;
+use Quantum\Di\Di;
 
 class AppTestCase extends TestCase
 {
@@ -42,6 +43,7 @@ class AppTestCase extends TestCase
         array  $files = []
     ): Response
     {
+        Di::resetContainer();
         Request::create($method, $url, $params, $headers, $files);
         self::$app->start();
         return new Response();

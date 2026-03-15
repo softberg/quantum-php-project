@@ -15,6 +15,7 @@ use Quantum\Http\Request;
 use Shared\Models\User;
 use Quantum\App\App;
 use Faker\Factory;
+use Quantum\Di\Di;
 
 function createEnvFile()
 {
