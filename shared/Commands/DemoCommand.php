@@ -9,24 +9,24 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Commands;
 
-use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
-use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\HttpClient\Exceptions\HttpClientException;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Quantum\Storage\Factories\FileSystemFactory;
 use Quantum\Service\Exceptions\ServiceException;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Quantum\Config\Exceptions\ConfigException;
 use Quantum\App\Exceptions\BaseException;
-use Quantum\Libraries\Database\Database;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
 use Symfony\Component\Process\Process;
+use Quantum\Database\Database;
 use Quantum\Console\QtCommand;
 use Ottaviano\Faker\Gravatar;
 use ReflectionException;
@@ -43,50 +43,50 @@ class DemoCommand extends QtCommand
 {
 
     /**
-     * Command name
-     * @var string
+     * Default password for generated users
      */
-    protected $name = 'install:demo';
+    const DEFAULT_PASSWORD = 'password';
+
+    /**
+     * Command name
+     * @var string|null
+     */
+    protected ?string $name = 'install:demo';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Generates demo users and posts';
+    protected ?string $description = 'Generates demo users and posts';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = 'The command will create demo users and posts for your project';
+    protected ?string $help = 'The command will create demo users and posts for your project';
 
     /**
      * The default action for all confirmations
      * @var array
      */
-    protected $options = [
+    protected array $options = [
         ['yes', 'y', 'none', 'Acceptance of the confirmations']
     ];
 
     /**
      * @var Generator
      */
-    protected $faker;
+    protected Generator $faker;
 
     /**
      * @var array
      */
-    private $generatedUsers = [];
+    private array $generatedUsers = [];
 
     /**
      * @var array
      */
-    private $generatedPosts = [];
-
-    /**
-     * Default password for generated users
-     */
-    const DEFAULT_PASSWORD = 'password';
+    private array $generatedPosts = [];
 
     /**
      * Static values for user and post counts.

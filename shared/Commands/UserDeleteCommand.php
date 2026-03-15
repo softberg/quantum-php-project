@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Commands;
@@ -30,21 +30,21 @@ class UserDeleteCommand extends QtCommand
 
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'user:delete';
+    protected ?string $name = 'user:delete';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Deletes a user by UUID or clears the entire posts table with confirmation';
+    protected ?string $description = 'Deletes a user by UUID or clears the entire posts table with confirmation';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = <<<HELP
+    protected ?string $help = <<<HELP
 Usage:
 - Delete a specific user: php qt user:delete `{user_uuid}`
 - Delete all users (with confirmation): php qt user:delete
@@ -55,7 +55,7 @@ HELP;
      * @var array[]
      */
 
-    protected $args = [
+    protected array $args = [
         ['uuid', 'optional', 'User uuid'],
     ];
 
@@ -63,15 +63,13 @@ HELP;
      * Command options
      * @var array[]
      */
-    protected $options = [
+    protected array $options = [
         ['yes', 'y', 'none', 'Skip confirmation and delete all users'],
     ];
 
     /**
      * Executes the command
-     * @throws ReflectionException
-     * @throws ServiceException
-     * @throws DiException
+     * @throws BaseException|DiException|ServiceException|ReflectionException
      */
     public function exec()
     {
@@ -95,10 +93,7 @@ HELP;
     /**
      * Deletes a single user
      * @param string $uuid
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
-     * @throws BaseException
+     * @throws BaseException|DiException|ServiceException|ReflectionException
      */
     private function deleteSingleUser(string $uuid)
     {
@@ -111,10 +106,7 @@ HELP;
 
     /**
      * Deletes all users
-     * @throws BaseException
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
+     * @throws BaseException|DiException|ServiceException|ReflectionException
      */
     private function deleteAllUsers()
     {

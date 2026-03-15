@@ -42,36 +42,33 @@ class PostShowCommand extends QtCommand
 
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'post:show';
+    protected ?string $name = 'post:show';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Displays all posts or a single post';
+    protected ?string $description = 'Displays all posts or a single post';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post uuid]`';
+    protected ?string $help = 'Use the following format to display post(s):' . PHP_EOL . 'php qt post:show `[Post uuid]`';
 
     /**
      * Command arguments
      * @var array
      */
-    protected $args = [
+    protected array $args = [
         ['uuid', 'optional', 'Post uuid']
     ];
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
-     * @throws BaseException
+     * @throws BaseException|DiException|ServiceException|ReflectionException
      */
     public function exec()
     {

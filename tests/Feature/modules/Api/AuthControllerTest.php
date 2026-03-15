@@ -7,12 +7,13 @@ use Quantum\Tests\Feature\AppTestCase;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Shared\Models\User;
+use Faker\Generator;
 use Faker\Factory;
 
 class AuthControllerTest extends AppTestCase
 {
 
-    private $faker;
+    private Generator $faker;
 
     public function setUp(): void
     {
@@ -180,16 +181,17 @@ class AuthControllerTest extends AppTestCase
     public function testModuleApiVerifyEndpoint()
     {
         $email = $this->faker->email();
-        $otp   = $this->faker->uuid();
+        $otp   = random_int(100000, 999999); // Generate 6-digit integer OTP
 
         $user  = createUser([
             'email'     => $email,
             'otp_token' => base64_encode($otp),
-            'otp'       => $otp,
+            'otp'       => (string)$otp,
+            'otp_expires' => date('Y-m-d H:i:s', time() + 300), // 5 minutes from now
         ]);
 
         $response = $this->request('post', '/api/en/verify', [
-            'otp'  => $otp,
+            'otp'  => (string)$otp,
             'code' => base64_encode($otp),
         ]);
 

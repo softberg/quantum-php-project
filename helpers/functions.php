@@ -12,16 +12,15 @@
  * @since 2.9.9
  */
 
-use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
-use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\HttpClient\Exceptions\HttpClientException;
+use Quantum\Storage\Factories\FileSystemFactory;
 use Quantum\Config\Exceptions\ConfigException;
-use Quantum\Libraries\HttpClient\HttpClient;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
-use Quantum\Http\Request;
+use Quantum\HttpClient\HttpClient;
 
 /**
- * Gets the url with selected language
+ * Gets the url with the selected language
  * @param string $lang
  * @return string
  */
@@ -132,7 +131,7 @@ function nav_ref_encode(?string $query): string
 /**
  * Decodes a URL-safe base64 reference back to query string.
  *
- * @param string $ref
+ * @param string|null $ref
  * @return string
  */
 function nav_ref_decode(?string $ref): string

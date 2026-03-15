@@ -2,8 +2,8 @@
 
 namespace Quantum\Tests\Unit\shared\Services;
 
-use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Service\Factories\ServiceFactory;
+use Quantum\Auth\User as AuthUser;
 use Quantum\Model\ModelCollection;
 use Shared\Services\AuthService;
 use PHPUnit\Framework\TestCase;

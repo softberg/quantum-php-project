@@ -2,7 +2,6 @@
 
 namespace Quantum\Tests\Feature\modules\Api;
 
-
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\Tests\Feature\AppTestCase;
 use Shared\Models\Comment;
@@ -12,7 +11,7 @@ use Quantum\Http\Request;
 class CommentControllerTest extends AppTestCase
 {
 
-    private $tokens = [];
+    private array $tokens = [];
 
     private $post = null;
 
@@ -58,7 +57,6 @@ class CommentControllerTest extends AppTestCase
         $this->assertArrayHasKey('user_uuid', $comment);
         $this->assertArrayHasKey('post_uuid', $comment);
         $this->assertArrayHasKey('content', $comment);
-        $this->assertArrayHasKey('created_at', $comment);
 	}
 
     public function testModuleApiCommentDeleteEndpoint()

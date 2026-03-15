@@ -9,17 +9,17 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\App\Exceptions\BaseException;
-use Quantum\Libraries\Validation\Rule;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
+use Quantum\Validation\Rule;
 use ReflectionException;
 
 /**
@@ -33,27 +33,27 @@ class PostUpdateCommand extends QtCommand
 
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'post:update';
+    protected ?string $name = 'post:update';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Allows to update a post record';
+    protected ?string $description = 'Allows to update a post record';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = 'Use the following format to update the post:' . PHP_EOL . 'php qt post:update `[Post uuid]` -t `Title` -d `Description` [-i `Image`] [-a `Author`]';
+    protected ?string $help = 'Use the following format to update the post:' . PHP_EOL . 'php qt post:update `[Post uuid]` -t `Title` -d `Description` [-i `Image`] [-a `Author`]';
 
     /**
      * Command arguments
      * @var array
      */
-    protected $args = [
+    protected array $args = [
         ['uuid', 'required', 'Post uuid']
     ];
 
@@ -61,7 +61,7 @@ class PostUpdateCommand extends QtCommand
      * Command options
      * @var array
      */
-    protected $options = [
+    protected array $options = [
         ['title', 't', 'optional', 'Post title'],
         ['description', 'd', 'optional', 'Post description'],
         ['image', 'i', 'optional', 'Post image'],
@@ -69,10 +69,7 @@ class PostUpdateCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
-     * @throws BaseException
+     * @throws BaseException|DiException|ServiceException|ReflectionException
      */
     public function exec()
     {

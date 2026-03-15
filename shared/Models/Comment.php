@@ -9,47 +9,47 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Models;
 
-use Quantum\Libraries\Database\Enums\Relation;
+use Quantum\Model\Traits\HasTimestamps;
 use Quantum\Model\Traits\SoftDeletes;
-use Quantum\Model\QtModel;
+use Quantum\Database\Enums\Relation;
+use Quantum\Model\DbModel;
 
 /**
  * Class Comment
  * @package Shared\Models
  */
-class Comment extends QtModel
+class Comment extends DbModel
 {
 
+    use HasTimestamps;
     use SoftDeletes;
 
     /**
      * ID column of table
      * @var string
      */
-    public $idColumn = 'id';
+    public string $idColumn = 'id';
 
     /**
      * The table name
      * @var string
      */
-    public $table = 'comments';
+    public string $table = 'comments';
 
     /**
      * Fillable properties
      * @var array
      */
-    public $fillable = [
+    public array $fillable = [
         'uuid',
         'post_uuid',
         'user_uuid',
         'content',
-        'created_at',
-        'updated_at'
     ];
 
     /**

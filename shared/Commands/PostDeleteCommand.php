@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Commands;
@@ -30,21 +30,21 @@ class PostDeleteCommand extends QtCommand
 
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'post:delete';
+    protected ?string $name = 'post:delete';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Deletes a post by UUID or clears the entire posts table with confirmation';
+    protected ?string $description = 'Deletes a post by UUID or clears the entire posts table with confirmation';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = <<<HELP
+    protected ?string $help = <<<HELP
 Usage:
 - Delete a specific post: php qt post:delete `{post_uuid}`
 - Delete all posts (with confirmation): php qt post:delete
@@ -55,7 +55,7 @@ HELP;
      * Command arguments
      * @var array[]
      */
-    protected $args = [
+    protected array $args = [
         ['uuid', 'optional', 'Post uuid'],
     ];
 
@@ -63,7 +63,7 @@ HELP;
      * Command options
      * @var array[]
      */
-    protected $options = [
+    protected array $options = [
         ['yes', 'y', 'none', 'Skip confirmation and delete all posts'],
     ];
 

@@ -14,32 +14,35 @@
 
 namespace Shared\Models;
 
-use Quantum\Model\QtModel;
+use Quantum\Model\Traits\HasTimestamps;
+use Quantum\Model\DbModel;
 
 /**
  * Class User
  * @package Shared\Models
  */
-class User extends QtModel
+class User extends DbModel
 {
+
+    use HasTimestamps;
 
     /**
      * ID column of table
      * @var string
      */
-    public $idColumn = 'id';
+    public string $idColumn = 'id';
 
     /**
      * The table name
      * @var string
      */
-    public $table = 'users';
+    public string $table = 'users';
 
     /**
      * Fillable properties
      * @var array
      */
-    public $fillable = [
+    public array $fillable = [
         'uuid',
         'firstname',
         'lastname',
@@ -55,7 +58,5 @@ class User extends QtModel
         'otp',
         'otp_expires',
         'otp_token',
-        'created_at',
-        'updated_at',
     ];
 }

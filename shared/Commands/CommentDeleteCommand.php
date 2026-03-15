@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Commands;
@@ -29,21 +29,21 @@ class CommentDeleteCommand extends QtCommand
 {
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'comment:delete';
+    protected ?string $name = 'comment:delete';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Deletes a comment by UUID or clears the entire comments table with confirmation';
+    protected ?string $description = 'Deletes a comment by UUID or clears the entire comments table with confirmation';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = <<<HELP
+    protected ?string $help = <<<HELP
 Usage:
 - Delete a specific comment: php qt comment:delete `{comment_uuid}`
 - Delete all comments (with confirmation): php qt comment:delete
@@ -54,7 +54,7 @@ HELP;
      * Command arguments
      * @var array[]
      */
-    protected $args = [
+    protected array $args = [
         ['uuid', 'optional', 'Comment uuid'],
     ];
 
@@ -62,16 +62,13 @@ HELP;
      * Command options
      * @var array[]
      */
-    protected $options = [
+    protected array $options = [
         ['yes', 'y', 'none', 'Skip confirmation and delete all comments'],
     ];
 
     /**
      * Executes the command
-     * @throws BaseException
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
+     * @throws BaseException|DiException|ServiceException|ReflectionException
      */
     public function exec()
     {

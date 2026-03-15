@@ -1,15 +1,17 @@
 <?php
 
-use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\App\Factories\AppFactory;
-use Quantum\Libraries\Hasher\Hasher;
 use Shared\Services\CommentService;
+use Quantum\Auth\User as AuthUser;
 use Quantum\Module\ModuleManager;
+use Quantum\Router\MatchedRoute;
 use Shared\Services\PostService;
 use Shared\Services\AuthService;
-use Quantum\Router\Router;
+use Quantum\Hasher\Hasher;
+use Quantum\Router\Route;
+use Quantum\Http\Request;
 use Shared\Models\User;
 use Quantum\App\App;
 use Faker\Factory;
@@ -33,6 +35,7 @@ function removeEnvFile()
 
 function createApp(string $type, string $baseDir): App
 {
+    AppFactory::destroy($type);
     return AppFactory::create($type, $baseDir);
 }
 
@@ -46,7 +49,10 @@ function createModule(string $moduleName, string $template, bool $withAssets = f
 
     $moduleManager->addModuleConfig();
 
-    Router::setCurrentRoute(['module' => $moduleName]);
+    $route = new Route(['GET'], 'dummy', null, null, function () {});
+    $route->module($moduleName);
+    $matchedRoute = new MatchedRoute($route, []);
+    Request::setMatchedRoute($matchedRoute);
 
     ob_end_clean();
 }
