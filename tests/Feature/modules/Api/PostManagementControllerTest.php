@@ -91,6 +91,7 @@ class PostManagementControllerTest extends AppTestCase
         $this->assertArrayHasKey('date', $post);
         $this->assertArrayHasKey('author', $post);
 
+        ModelFactory::get(Post::class)->findOneBy('uuid', $post['uuid'])->delete();
     }
 
 	public function testModuleApiAmendPostEndpoint()
@@ -127,20 +128,30 @@ class PostManagementControllerTest extends AppTestCase
 
 	public function testModuleApiDeletePostEndpoint()
 	{
+        $method = 'POST';
+        $endpoint = '/api/my-posts/create';
+        $body = [
+            'title' => 'Post to be deleted',
+            'content' => 'Temporary post for deletion test',
+            'image' => '',
+        ];
+        $headers = ['Authorization' => 'Bearer ' . $this->tokens['access_token']];
+
+        $response = $this->request($method, $endpoint, $body, $headers);
+
+        $post = $response->get('data');
+
         $method = 'DELETE';
         $endpoint = '/api/my-posts/delete/';
         $body = [];
-        $headers = ['Authorization' => 'Bearer ' . $this->tokens['access_token']];
 
-		$post = ModelFactory::get(Post::class)->first();
+        $response = $this->request($method, $endpoint . $post['uuid'], $body, $headers);
 
-		$response = $this->request($method, $endpoint . $post->uuid, $body, $headers);
+        $this->assertIsObject($response);
 
-		$this->assertIsObject($response);
+        $this->assertEquals('success', $response->get('status'));
 
-		$this->assertEquals('success', $response->get('status'));
-
-		$this->assertEquals('Deleted successfully', $response->get('message'));
+        $this->assertEquals('Deleted successfully', $response->get('message'));
 	}
 
 	public function testModuleApiDeletePostImageEndpoint()
