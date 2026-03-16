@@ -93,13 +93,12 @@ class CommentService extends QtService
     public function addComment(array $data): array
     {
         $data['uuid'] = $data['uuid'] ?? uuid_ordered();
-        $data['created_at'] = date('Y-m-d H:i:s');
 
         $comment = $this->model->create();
-        $comment->fillObjectProps($data);
+        $comment->fill($data);
         $comment->save();
 
-        return $data;
+        return $comment->asArray();
     }
 
     /**
@@ -118,7 +117,7 @@ class CommentService extends QtService
      */
     public function deleteAllComments()
     {
-        $this->model->deleteTable();
+        $this->model->truncate();
     }
 
     /**

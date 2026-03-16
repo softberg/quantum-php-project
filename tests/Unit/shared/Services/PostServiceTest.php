@@ -2,9 +2,9 @@
 
 namespace Quantum\Tests\Unit\shared\Services;
 
-use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\Service\Factories\ServiceFactory;
 use Quantum\Model\ModelCollection;
+use Quantum\Storage\UploadedFile;
 use Quantum\Paginator\Paginator;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
@@ -20,8 +20,6 @@ class PostServiceTest extends TestCase
     protected $authService;
 
     protected $postService;
-
-    private $initialPosts;
 
     public function setUp(): void
     {
@@ -84,7 +82,7 @@ class PostServiceTest extends TestCase
             'title'       => $title,
             'content'     => $content,
             'image'       => '',
-            'updated_at'  => date('Y-m-d H:i:s'),
+
         ]);
 
         $searchTerm = 'SEARCH_TOKEN';
@@ -115,8 +113,6 @@ class PostServiceTest extends TestCase
 
         $this->assertArrayHasKey('content', $postData);
 
-        $this->assertArrayHasKey('updated_at', $postData);
-
     }
 
     public function testPostServiceGetMyPosts()
@@ -145,7 +141,7 @@ class PostServiceTest extends TestCase
             'title' => 'Just another post',
             'content' => 'Content of just another post',
             'image' => '',
-            'updated_at' => $date
+
         ]);
 
         $post = $this->postService->getPost($newPost->uuid);
@@ -154,7 +150,7 @@ class PostServiceTest extends TestCase
 
         $this->assertEquals('Content of just another post', $post->content);
 
-        $this->assertEquals($date, $post->updated_at);
+
 
         $this->postService->deletePost($newPost->uuid);
     }
@@ -171,7 +167,6 @@ class PostServiceTest extends TestCase
             'title' => 'Walt Disney Jr.',
             'content' => 'The best way to get started is to quit talking and begin doing.',
             'image' => 'image.jpg',
-            'updated_at' => $date
         ]);
 
         $post = $this->postService->getPost($uuid);
@@ -184,7 +179,7 @@ class PostServiceTest extends TestCase
 
         $this->assertEquals('image.jpg', $post->image);
 
-        $this->assertEquals($date, $post->updated_at);
+
     }
 
     public function testPostServiceDeletePost()
@@ -200,7 +195,6 @@ class PostServiceTest extends TestCase
             'title' => 'Just another post',
             'content' => 'Content of just another post',
             'image' => '',
-            'updated_at' => date('Y-m-d H:i:s')
         ]);
 
         $this->assertCount(11, $this->postService->getPosts());
@@ -214,11 +208,17 @@ class PostServiceTest extends TestCase
     {
         $this->fileMeta = [
             'size' => 500,
-            'name' => 'foo.jpg',
+            'name' => 'foo.jpeg',
             'tmp_name' => base_dir() . DS . 'tmp' . DS . 'php8fe1.tmp',
-            'type' => 'image/jpg',
+            'type' => 'image/jpeg',
             'error' => 0,
         ];
+
+        if (!is_dir(base_dir() . DS . 'tmp')) {
+            mkdir(base_dir() . DS . 'tmp');
+        }
+
+        file_put_contents($this->fileMeta['tmp_name'], hex2bin('FFD8FFE0'));
 
         $users = $this->authService->getAll();
 

@@ -9,26 +9,25 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Services;
 
-use Quantum\Libraries\Storage\Exceptions\FileUploadException;
-use Quantum\Libraries\Storage\Exceptions\FileSystemException;
-use Quantum\Libraries\Storage\Factories\FileSystemFactory;
+use Quantum\Storage\Exceptions\FileUploadException;
+use Quantum\Storage\Exceptions\FileSystemException;
+use Quantum\Storage\Factories\FileSystemFactory;
 use Quantum\Environment\Exceptions\EnvException;
 use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Model\Exceptions\ModelException;
-use Quantum\Libraries\Storage\UploadedFile;
 use Quantum\App\Exceptions\BaseException;
-use Quantum\Model\Factories\ModelFactory;
 use Shared\Transformers\PostTransformer;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
+use Quantum\Storage\UploadedFile;
 use Gumlet\ImageResizeException;
 use Quantum\Service\QtService;
-use Quantum\Model\QtModel;
+use Quantum\Model\DbModel;
 use ReflectionException;
 use Shared\Models\User;
 use Shared\Models\Post;
@@ -41,14 +40,14 @@ class PostService extends QtService
 {
 
     /**
-     * @var QtModel
+     * @var DbModel
      */
     private $model;
 
     /**
      * @var PostTransformer
      */
-    private $transformer;
+    private PostTransformer $transformer;
 
     /**
      * @param PostTransformer $transformer
@@ -161,10 +160,9 @@ class PostService extends QtService
     public function addPost(array $data): Post
     {
         $data['uuid'] = $data['uuid'] ?? uuid_ordered();
-        $data['created_at'] = date('Y-m-d H:i:s');
 
         $post = $this->model->create();
-        $post->fillObjectProps($data);
+        $post->fill($data);
         $post->save();
 
         return $this->getPost($data['uuid']);
@@ -180,10 +178,8 @@ class PostService extends QtService
      */
     public function updatePost(string $uuid, array $data): Post
     {
-        $data['updated_at'] = date('Y-m-d H:i:s');
-
         $post = $this->model->findOneBy('uuid', $uuid);
-        $post->fillObjectProps($data);
+        $post->fill($data);
         $post->save();
 
         return $this->getPost($post->uuid);
@@ -193,7 +189,7 @@ class PostService extends QtService
      * Deletes post
      * @param string $uuid
      * @return bool
-     * @throws ModelException
+     * @throws ModelException|BaseException
      */
     public function deletePost(string $uuid): bool
     {
@@ -206,7 +202,7 @@ class PostService extends QtService
      */
     public function deleteAllPosts()
     {
-        $this->model->deleteTable();
+        $this->model->truncate();
     }
 
     /**

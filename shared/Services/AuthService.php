@@ -9,20 +9,19 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Services;
 
-use Quantum\Libraries\Auth\Contracts\AuthServiceInterface;
+use Quantum\Auth\Contracts\AuthServiceInterface;
 use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Model\Exceptions\ModelException;
-use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
+use Quantum\Auth\User as AuthUser;
 use Quantum\Model\ModelCollection;
 use Quantum\Service\QtService;
-use Quantum\Model\QtModel;
 use ReflectionException;
 use Shared\Models\User;
 
@@ -34,9 +33,9 @@ class AuthService extends QtService implements AuthServiceInterface
 {
 
     /**
-     * @var QtModel
+     * @var User
      */
-    private $model;
+    private User $model;
 
     /**
      * @throws BaseException
@@ -95,12 +94,11 @@ class AuthService extends QtService implements AuthServiceInterface
     public function add(array $data): AuthUser
     {
         $data['uuid'] = $data['uuid'] ?? uuid_ordered();
-        $data['created_at'] = date('Y-m-d H:i:s');
 
         $this->createUserDirectory($data['uuid']);
 
         $user = $this->model->create();
-        $user->fillObjectProps($data);
+        $user->fill($data);
         $user->save();
 
         return (new AuthUser())->setData($data);
@@ -121,9 +119,9 @@ class AuthService extends QtService implements AuthServiceInterface
             return null;
         }
 
-        $data['updated_at'] = date('Y-m-d H:i:s');
+        unset($data['id']);
 
-        $user->fillObjectProps($data);
+        $user->fill($data);
         $user->save();
 
         return (new AuthUser())->setData($this->model->findOneBy($field, $value)->asArray());
@@ -144,7 +142,7 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function deleteAllUsers()
     {
-        $this->model->deleteTable();
+        $this->model->truncate();
     }
 
     /**

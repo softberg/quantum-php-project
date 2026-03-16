@@ -2,7 +2,9 @@
 
 namespace Quantum\Tests\Unit\shared\Services;
 
+use Quantum\Model\Factories\ModelFactory;
 use Quantum\Service\Factories\ServiceFactory;
+use Shared\Models\Comment;
 use Shared\Services\CommentService;
 use Quantum\Model\ModelCollection;
 use Shared\Services\AuthService;

@@ -2,8 +2,8 @@
 
 namespace Quantum\Tests\Unit\shared\Services;
 
-use Quantum\Libraries\Auth\User as AuthUser;
 use Quantum\Service\Factories\ServiceFactory;
+use Quantum\Auth\User as AuthUser;
 use Quantum\Model\ModelCollection;
 use Shared\Services\AuthService;
 use PHPUnit\Framework\TestCase;
@@ -21,8 +21,14 @@ class AuthServiceTest extends TestCase
         $this->authService = ServiceFactory::create(AuthService::class);
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     public function testAuthServiceGetAll()
     {
+        $this->authService = ServiceFactory::create(AuthService::class);
         $users = $this->authService->getAll();
 
         $this->assertInstanceOf(ModelCollection::class, $users);

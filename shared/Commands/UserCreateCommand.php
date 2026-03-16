@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Commands;
@@ -17,10 +17,11 @@ namespace Shared\Commands;
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
-use Quantum\Libraries\Validation\Rule;
-use Quantum\Libraries\Hasher\Hasher;
+use Quantum\Validation\Validator;
 use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
+use Quantum\Validation\Rule;
+use Quantum\Hasher\Hasher;
 use ReflectionException;
 use Shared\Models\User;
 
@@ -35,29 +36,29 @@ class UserCreateCommand extends QtCommand
 
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'user:create';
+    protected ?string $name = 'user:create';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Allows to create a user';
+    protected ?string $description = 'Allows to create a user';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = 'Use the following format to create a user record:' . PHP_EOL . 'php qt user:create `Email` `Password` `[Role]` `[Firstname]` `[Lastname]`';
+    protected ?string $help = 'Use the following format to create a user record:' . PHP_EOL . 'php qt user:create `Email` `Password` `[Role]` `[Firstname]` `[Lastname]`';
 
-    protected $validator;
+    protected Validator $validator;
 
     /**
      * Command arguments
      * @var array[]
      */
-    protected $args = [
+    protected array $args = [
         ['email', 'required', 'User email'],
         ['password', 'required', 'User password'],
         ['firstname', 'required', 'User firstname'],

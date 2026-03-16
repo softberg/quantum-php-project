@@ -1,29 +1,8 @@
 <?php
 
-/**
- * Quantum PHP Framework
- *
- * An open source software development framework for PHP
- *
- * @package Quantum
- * @author Arman Ag. <arman.ag@softberg.org>
- * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
- * @link http://quantum.softberg.org/
- * @since 2.9.8
- */
+use Quantum\Storage\Factories\FileSystemFactory;
+use Quantum\HttpClient\HttpClient;
 
-use Quantum\Libraries\HttpClient\Exceptions\HttpClientException;
-use Quantum\Libraries\Storage\Factories\FileSystemFactory;
-use Quantum\Config\Exceptions\ConfigException;
-use Quantum\Libraries\HttpClient\HttpClient;
-use Quantum\App\Exceptions\BaseException;
-use Quantum\Di\Exceptions\DiException;
-
-/**
- * Gets the url with selected language
- * @param string $lang
- * @return string
- */
 function url_with_lang(string $lang): string
 {
     if (!in_array($lang, (array)config()->get('lang.supported'))) {
@@ -57,23 +36,10 @@ function url_with_lang(string $lang): string
             $url .= '/' . ($index == $langSegmentIndex ? $lang : $segment);
         }
     }
-dd($url);
+
     return $url;
 }
 
-/**
- * Saves remote image
- * @param string $imageUrl
- * @param string $userDirectory
- * @param string $imageName
- * @return string
- * @throws ErrorException
- * @throws HttpClientException
- * @throws ReflectionException
- * @throws BaseException
- * @throws ConfigException
- * @throws DiException
- */
 function save_remote_image(string $imageUrl, string $userDirectory, string $imageName): string
 {
     $fs = FileSystemFactory::get();
@@ -91,11 +57,6 @@ function save_remote_image(string $imageUrl, string $userDirectory, string $imag
     return $imageName;
 }
 
-/**
- * Cleans up text for titles/descriptions.
- * @param string $text
- * @return array|string|string[]
- */
 function textCleanUp(string $text)
 {
     return str_replace(['"', '\'', '-'], '', $text);

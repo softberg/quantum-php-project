@@ -6,29 +6,27 @@ use PHPUnit\Framework\TestCase;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Quantum\App\App;
+use Quantum\Di\Di;
 
 class AppTestCase extends TestCase
 {
 
-    protected $defaultEmail = 'default@quantumphp.io';
+    protected string $defaultEmail = 'default@quantumphp.io';
 
-    protected $defaultPassword = 'password';
+    protected string $defaultPassword = 'password';
 
-    protected $firstname = 'John';
+    protected string $firstname = 'John';
 
-    protected $lastname = 'Doe';
+    protected string $lastname = 'Doe';
 
-    protected static $app;
-
-    public static function setUpBeforeClass(): void
-    {
-        self::$app = createApp(App::WEB, PROJECT_ROOT);
-    }
+    protected static App $app;
 
     public function setUp(): void
     {
         parent::setUp();
         ob_start();
+        
+        self::$app = createApp(App::WEB, PROJECT_ROOT);
     }
 
     public function tearDown(): void
@@ -45,6 +43,7 @@ class AppTestCase extends TestCase
         array  $files = []
     ): Response
     {
+        Di::resetContainer();
         Request::create($method, $url, $params, $headers, $files);
         self::$app->start();
         return new Response();

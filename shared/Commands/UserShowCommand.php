@@ -32,36 +32,33 @@ class UserShowCommand extends QtCommand
 
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'user:show';
+    protected ?string $name = 'user:show';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Displays all users or a single user';
+    protected ?string $description = 'Displays all users or a single user';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = 'Use the following format to display user(s):' . PHP_EOL . 'php qt user:show `[User uuid]`';
+    protected ?string $help = 'Use the following format to display user(s):' . PHP_EOL . 'php qt user:show `[User uuid]`';
 
     /**
      * Command arguments
      * @var array
      */
-    protected $args = [
+    protected array $args = [
         ['uuid', 'optional', 'User uuid']
     ];
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
-     * @throws BaseException
+     * @throws DiException|ServiceException|BaseException|ReflectionException
      */
     public function exec()
     {

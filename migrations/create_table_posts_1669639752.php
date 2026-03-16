@@ -1,6 +1,6 @@
 <?php
 
-use Quantum\Libraries\Database\Factories\TableFactory;
+use Quantum\Database\Factories\TableFactory;
 use Quantum\Migration\QtMigration;
 
 class Create_table_posts_1669639752 extends QtMigration

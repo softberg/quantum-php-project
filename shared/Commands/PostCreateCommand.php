@@ -9,17 +9,17 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Commands;
 
 use Quantum\Service\Exceptions\ServiceException;
 use Quantum\App\Exceptions\BaseException;
-use Quantum\Libraries\Validation\Rule;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
+use Quantum\Validation\Rule;
 use ReflectionException;
 
 /**
@@ -33,27 +33,27 @@ class PostCreateCommand extends QtCommand
 
     /**
      * Command name
-     * @var string
+     * @var string|null
      */
-    protected $name = 'post:create';
+    protected ?string $name = 'post:create';
 
     /**
      * Command description
-     * @var string
+     * @var string|null
      */
-    protected $description = 'Allows to create a post record';
+    protected ?string $description = 'Allows to create a post record';
 
     /**
      * Command help text
-     * @var string
+     * @var string|null
      */
-    protected $help = 'Use the following format to create a post record:' . PHP_EOL . 'php qt post:create `Title` `Description` `[Image]` `[Author]`';
+    protected ?string $help = 'Use the following format to create a post record:' . PHP_EOL . 'php qt post:create `Title` `Description` `[Image]` `[Author]`';
 
     /**
      * Command arguments
      * @var array[]
      */
-    protected $args = [
+    protected array $args = [
         ['title', 'required', 'Post title'],
         ['description', 'required', 'Post description'],
         ['user_uuid', 'required', 'Author uuid'],
@@ -63,10 +63,7 @@ class PostCreateCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
-     * @throws BaseException
+     * @throws BaseException|DiException|ServiceException|ReflectionException
      */
     public function exec()
     {
