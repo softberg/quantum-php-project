@@ -15,9 +15,9 @@ class CommentControllerTest extends AppTestCase
 
     private $post = null;
 
-	public function setUp(): void
-	{
-		parent::setUp();
+    public function setUp(): void
+    {
+        parent::setUp();
 
         $this->tokens = $this->signInAndGetTokens();
 
@@ -29,15 +29,15 @@ class CommentControllerTest extends AppTestCase
 
         Request::flush();
         Response::flush();
-	}
+    }
 
     public function tearDown(): void
     {
         parent::tearDown();
     }
 
-	public function testModuleApiCommentCreateEndpoint()
-	{
+    public function testModuleApiCommentCreateEndpoint()
+    {
         $method = 'POST';
         $endpoint = '/api/comments/create/';
         $body = ['content' => 'My first comment'];
@@ -57,18 +57,26 @@ class CommentControllerTest extends AppTestCase
         $this->assertArrayHasKey('user_uuid', $comment);
         $this->assertArrayHasKey('post_uuid', $comment);
         $this->assertArrayHasKey('content', $comment);
-	}
+
+        ModelFactory::get(Comment::class)->findOneBy('uuid', $comment['uuid'])->delete();
+    }
 
     public function testModuleApiCommentDeleteEndpoint()
     {
+        $method = 'POST';
+        $endpoint = '/api/comments/create/';
+        $body = ['content' => 'Comment to be deleted'];
+        $headers = ['Authorization' => 'Bearer ' . $this->tokens['access_token']];
+
+        $response = $this->request($method, $endpoint . $this->post['uuid'], $body, $headers);
+
+        $comment = $response->get('data');
+
         $method = 'DELETE';
         $endpoint = '/api/comments/delete/';
         $body = [];
-        $headers = ['Authorization' => 'Bearer ' . $this->tokens['access_token']];
 
-        $comment = ModelFactory::get(Comment::class)->first();
-
-        $response = $this->request($method, $endpoint . $comment->uuid, $body, $headers);
+        $response = $this->request($method, $endpoint . $comment['uuid'], $body, $headers);
 
         $this->assertIsObject($response);
 
