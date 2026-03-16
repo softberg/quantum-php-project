@@ -181,17 +181,17 @@ class AuthControllerTest extends AppTestCase
     public function testModuleApiVerifyEndpoint()
     {
         $email = $this->faker->email();
-        $otp   = random_int(100000, 999999); // Generate 6-digit integer OTP
+        $otp = random_int(100000, 999999);
 
-        $user  = createUser([
-            'email'     => $email,
+        createUser([
+            'email' => $email,
             'otp_token' => base64_encode($otp),
-            'otp'       => (string)$otp,
+            'otp' => (string)$otp,
             'otp_expires' => date('Y-m-d H:i:s', time() + 300), // 5 minutes from now
         ]);
 
         $response = $this->request('post', '/api/en/verify', [
-            'otp'  => (string)$otp,
+            'otp' => (string)$otp,
             'code' => base64_encode($otp),
         ]);
 
@@ -207,7 +207,7 @@ class AuthControllerTest extends AppTestCase
     public function testModuleApiVerifyEndpointWithIncorrectOtp()
     {
         $response = $this->request('post', '/api/en/verify', [
-            'otp'  => 'wrong-otp',
+            'otp' => 'wrong-otp',
             'code' => 'wrong-code',
         ]);
 
