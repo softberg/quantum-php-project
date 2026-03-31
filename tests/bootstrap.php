@@ -1,6 +1,6 @@
 <?php
 
-use Quantum\App\App;
+use Quantum\App\Enums\AppType;
 
 error_reporting(E_ALL | E_STRICT);
 
@@ -14,7 +14,7 @@ require_once __DIR__ . DS . 'Helpers' . DS . 'functions.php';
 
 createEnvFile();
 
-createApp(App::CONSOLE, PROJECT_ROOT);
+createApp(AppType::CONSOLE, PROJECT_ROOT);
 
 removeModule();
 
