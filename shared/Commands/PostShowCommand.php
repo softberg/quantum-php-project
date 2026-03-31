@@ -70,7 +70,7 @@ class PostShowCommand extends QtCommand
      * Executes the command
      * @throws BaseException|DiException|ServiceException|ReflectionException
      */
-    public function exec()
+    public function exec(): void
     {
         $postService = service(PostService::class);
 

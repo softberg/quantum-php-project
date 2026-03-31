@@ -8,7 +8,7 @@
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 use Quantum\App\Factories\AppFactory;
-use Quantum\App\App;
+use Quantum\App\Enums\AppType;
 
 /*
  * -----------------------------------------------------------------------------
@@ -23,4 +23,4 @@ if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
  * Starting the app
  * -----------------------------------------------------------------------------
  */
-AppFactory::create(APP::WEB, dirname(__DIR__))->start();
+AppFactory::create(AppType::WEB, dirname(__DIR__))->start();

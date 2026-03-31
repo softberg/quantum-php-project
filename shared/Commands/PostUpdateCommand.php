@@ -47,7 +47,7 @@ class PostUpdateCommand extends QtCommand
      * Command help text
      * @var string|null
      */
-    protected ?string $help = 'Use the following format to update the post:' . PHP_EOL . 'php qt post:update `[Post uuid]` -t `Title` -d `Description` [-i `Image`] [-a `Author`]';
+    protected ?string $help = 'Use the following format to update the post:' . PHP_EOL . 'php qt post:update `[Post uuid]` -t `Title` -d `Description` [-i `Image`]';
 
     /**
      * Command arguments
@@ -71,7 +71,7 @@ class PostUpdateCommand extends QtCommand
      * Executes the command
      * @throws BaseException|DiException|ServiceException|ReflectionException
      */
-    public function exec()
+    public function exec(): void
     {
         $this->initValidator();
 

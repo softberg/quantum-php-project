@@ -14,7 +14,11 @@
 
 namespace Shared\Commands;
 
+use Quantum\Config\Exceptions\ConfigException;
+use Quantum\Lang\Exceptions\LangException;
+use Quantum\Di\Exceptions\DiException;
 use Quantum\Validation\Validator;
+use ReflectionException;
 
 /**
  * Trait CommandValidationTrait
@@ -56,6 +60,11 @@ trait CommandValidationTrait
     /**
      * Gets the first validation error
      * @return string|null
+     */
+
+    /**
+     * @return string|null
+     * @throws ConfigException|DiException|LangException|ReflectionException
      */
     public function firstError(): ?string
     {

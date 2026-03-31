@@ -68,9 +68,9 @@ HELP;
 
     /**
      * Executes the command
-     * @throws BaseException|DiException|ServiceException|ReflectionException
+     * @throws DiException|ServiceException|BaseException|ReflectionException
      */
-    public function exec()
+    public function exec(): void
     {
         $uuid = $this->getArgument('uuid');
 
