@@ -2,14 +2,13 @@
 
 namespace Quantum\Tests\Unit\shared\Services;
 
-use Quantum\Model\Factories\ModelFactory;
 use Quantum\Service\Factories\ServiceFactory;
-use Shared\Models\Comment;
 use Shared\Services\CommentService;
 use Quantum\Model\ModelCollection;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use PHPUnit\Framework\TestCase;
+use Shared\DTOs\CommentDTO;
 
 class CommentServiceTest extends TestCase
 {
@@ -65,11 +64,11 @@ class CommentServiceTest extends TestCase
         $post = $this->postService->getPosts()->first();
         $user = $this->authService->getAll()->first();
 
-        $data = $this->commentService->addComment([
-            'user_uuid' => $user->uuid,
-            'post_uuid' => $post->uuid,
-            'content'   => 'New comment content',
-        ]);
+        $data = $this->commentService->addComment(new CommentDTO(
+            $post->uuid,
+            $user->uuid,
+            'New comment content'
+        ));
 
         $this->assertArrayHasKey('uuid', $data);
 
@@ -84,11 +83,11 @@ class CommentServiceTest extends TestCase
         $post = $this->postService->getPosts()->first();
         $user = $this->authService->getAll()->first();
 
-        $data = $this->commentService->addComment([
-            'user_uuid' => $user->uuid,
-            'post_uuid' => $post->uuid,
-            'content' => 'To be deleted'
-        ]);
+        $data = $this->commentService->addComment(new CommentDTO(
+            $post->uuid,
+            $user->uuid,
+            'To be deleted'
+        ));
 
         $uuid = $data['uuid'];
 

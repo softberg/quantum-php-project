@@ -9,6 +9,7 @@ use Quantum\Paginator\Paginator;
 use Shared\Services\AuthService;
 use Shared\Services\PostService;
 use PHPUnit\Framework\TestCase;
+use Shared\DTOs\PostDTO;
 use Shared\Models\Post;
 
 class PostServiceTest extends TestCase
@@ -77,13 +78,12 @@ class PostServiceTest extends TestCase
         $title = "Title with {$uniqueKeyword}";
         $content = "Some content";
 
-        $post = $this->postService->addPost([
-            'user_uuid'   => $userUuid,
-            'title'       => $title,
-            'content'     => $content,
-            'image'       => '',
-
-        ]);
+        $post = $this->postService->addPost(new PostDTO(
+            $title,
+            $content,
+            $userUuid,
+            ''
+        ));
 
         $searchTerm = 'SEARCH_TOKEN';
 
@@ -136,13 +136,12 @@ class PostServiceTest extends TestCase
 
         $userUuid = $users->first()->uuid;
 
-        $newPost = $this->postService->addPost([
-            'user_uuid' => $userUuid,
-            'title' => 'Just another post',
-            'content' => 'Content of just another post',
-            'image' => '',
-
-        ]);
+        $newPost = $this->postService->addPost(new PostDTO(
+            'Just another post',
+            'Content of just another post',
+            $userUuid,
+            ''
+        ));
 
         $post = $this->postService->getPost($newPost->uuid);
 
@@ -163,11 +162,12 @@ class PostServiceTest extends TestCase
 
         $uuid = $posts->first()->uuid;
 
-        $this->postService->updatePost($uuid, [
-            'title' => 'Walt Disney Jr.',
-            'content' => 'The best way to get started is to quit talking and begin doing.',
-            'image' => 'image.jpg',
-        ]);
+        $this->postService->updatePost($uuid, new PostDTO(
+            'Walt Disney Jr.',
+            'The best way to get started is to quit talking and begin doing.',
+            null,
+            'image.jpg'
+        ));
 
         $post = $this->postService->getPost($uuid);
 
@@ -190,12 +190,12 @@ class PostServiceTest extends TestCase
 
         $userUuid = $users->first()->uuid;
 
-        $post = $this->postService->addPost([
-            'user_uuid' => $userUuid,
-            'title' => 'Just another post',
-            'content' => 'Content of just another post',
-            'image' => '',
-        ]);
+        $post = $this->postService->addPost(new PostDTO(
+            'Just another post',
+            'Content of just another post',
+            $userUuid,
+            ''
+        ));
 
         $this->assertCount(11, $this->postService->getPosts());
 

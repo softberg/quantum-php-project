@@ -20,6 +20,7 @@ use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Validation\Rule;
+use Shared\DTOs\PostDTO;
 use ReflectionException;
 
 /**
@@ -96,14 +97,14 @@ class PostUpdateCommand extends QtCommand
             return;
         }
 
-        $postData = [
-            'title' => $this->getOption('title') ?: $post->title,
-            'content' => $this->getOption('description') ?: $post->content,
-            'image' => $this->getOption('image') ?: $post->image ?? '',
-            'updated_at' => date('Y-m-d H:i:s')
-        ];
+        $postDto = new PostDTO(
+            $this->getOption('title') ?: $post->title,
+            $this->getOption('description') ?: $post->content,
+            null,
+            $this->getOption('image') ?: $post->image ?? ''
+        );
 
-        $postService->updatePost($postId, $postData);
+        $postService->updatePost($postId, $postDto);
 
         $this->info('Post updated successfully');
     }
