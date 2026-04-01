@@ -70,12 +70,9 @@ class UserCreateCommand extends QtCommand
 
     /**
      * Executes the command
-     * @throws DiException
-     * @throws ReflectionException
-     * @throws ServiceException
-     * @throws BaseException
+     * @throws DiException|ServiceException|BaseException|ReflectionException
      */
-    public function exec()
+    public function exec(): void
     {
         $this->initValidator();
 

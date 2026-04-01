@@ -60,7 +60,7 @@ class UserShowCommand extends QtCommand
      * Executes the command
      * @throws DiException|ServiceException|BaseException|ReflectionException
      */
-    public function exec()
+    public function exec(): void
     {
         $userService = service(AuthService::class);
 

@@ -38,7 +38,7 @@ class UserDeleteCommand extends QtCommand
      * Command description
      * @var string|null
      */
-    protected ?string $description = 'Deletes a user by UUID or clears the entire posts table with confirmation';
+    protected ?string $description = 'Deletes a user by UUID or clears the entire users table with confirmation';
 
     /**
      * Command help text
@@ -69,9 +69,9 @@ HELP;
 
     /**
      * Executes the command
-     * @throws BaseException|DiException|ServiceException|ReflectionException
+     * @throws DiException|ServiceException|BaseException|ReflectionException
      */
-    public function exec()
+    public function exec(): void
     {
         $uuid = $this->getArgument('uuid');
 

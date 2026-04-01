@@ -131,7 +131,7 @@ class DemoCommand extends QtCommand
      * @throws ReflectionException
      * @throws ServiceException
      */
-    public function exec()
+    public function exec(): void
     {
         if (!$this->getOption('yes')) {
             if (!$this->confirm('The operation will remove all previously created data and will create new dataset. Continue?')) {

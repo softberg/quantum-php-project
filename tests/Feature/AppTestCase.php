@@ -3,6 +3,7 @@
 namespace Quantum\Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
+use Quantum\App\Enums\AppType;
 use Quantum\Http\Response;
 use Quantum\Http\Request;
 use Quantum\App\App;
@@ -26,7 +27,7 @@ class AppTestCase extends TestCase
         parent::setUp();
         ob_start();
         
-        self::$app = createApp(App::WEB, PROJECT_ROOT);
+        self::$app = createApp(AppType::WEB, PROJECT_ROOT);
     }
 
     public function tearDown(): void

@@ -8,7 +8,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Quantum\App\Factories\AppFactory;
-use Quantum\App\App;
+use Quantum\App\Enums\AppType;
 
 /*
  * -----------------------------------------------------------------------------
@@ -23,6 +23,6 @@ if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
 * Run the console application
 * ---------------------------------------------------------
 */
-$status = AppFactory::create(APP::CONSOLE, __DIR__)->start();
+$status = AppFactory::create(AppType::CONSOLE, __DIR__)->start();
 
 exit($status);
