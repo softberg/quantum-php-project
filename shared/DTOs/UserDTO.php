@@ -152,7 +152,7 @@ class UserDTO
             'role' => $this->role,
             'image' => $this->image,
         ], function ($value) {
-            return $value !== null && $value !== '';
+            return $value !== null;
         });
     }
 }

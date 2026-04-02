@@ -80,7 +80,7 @@ class CommentCreateCommand extends QtCommand
         $commentDto = new CommentDTO(
             $this->getArgument('post_uuid'),
             $this->getArgument('user_uuid'),
-            $this->getArgument('content')
+            trim($this->getArgument('content'))
         );
 
         service(CommentService::class)->addComment($commentDto);

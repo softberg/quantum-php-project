@@ -160,7 +160,7 @@ class PostService extends QtService
      */
     public function addPost(PostDTO $postDto): Post
     {
-        $uuid = uuid_ordered();
+        $uuid = $postDto->getUuid() ?? uuid_ordered();
 
         $post = $this->model->create();
         $post->fill(array_merge(['uuid' => $uuid], $postDto->toArray()));

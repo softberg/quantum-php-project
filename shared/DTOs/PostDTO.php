@@ -43,21 +43,29 @@ class PostDTO
     private ?string $image;
 
     /**
+     * @var string|null
+     */
+    private ?string $uuid;
+
+    /**
      * @param string $title
      * @param string $content
      * @param string|null $userUuid
      * @param string|null $image
+     * @param string|null $uuid
      */
     public function __construct(
         string $title,
         string $content,
         ?string $userUuid = null,
-        ?string $image = null
+        ?string $image = null,
+        ?string $uuid = null
     ) {
         $this->title = $title;
         $this->content = $content;
         $this->userUuid = $userUuid;
         $this->image = $image;
+        $this->uuid = $uuid;
     }
 
     /**
@@ -96,12 +104,18 @@ class PostDTO
         return $this->image;
     }
 
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
+    }
+
     /**
      * @return array
      */
     public function toArray(): array
     {
         return array_filter([
+            'uuid' => $this->uuid,
             'user_uuid' => $this->userUuid,
             'title' => $this->title,
             'content' => $this->content,

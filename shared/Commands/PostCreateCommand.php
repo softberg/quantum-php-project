@@ -84,7 +84,8 @@ class PostCreateCommand extends QtCommand
             $this->getArgument('title'),
             $this->getArgument('description'),
             $this->getArgument('user_uuid'),
-            $this->getArgument('image') ?? ''
+            $this->getArgument('image') ?? '',
+            $this->getArgument('uuid')
         );
 
         service(PostService::class)->addPost($postDto);
