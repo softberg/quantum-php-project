@@ -115,7 +115,6 @@ class PostDTO
     public function toArray(): array
     {
         return array_filter([
-            'uuid' => $this->uuid,
             'user_uuid' => $this->userUuid,
             'title' => $this->title,
             'content' => $this->content,
