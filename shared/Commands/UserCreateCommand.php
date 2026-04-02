@@ -22,6 +22,7 @@ use Shared\Services\AuthService;
 use Quantum\Console\QtCommand;
 use Quantum\Validation\Rule;
 use Quantum\Hasher\Hasher;
+use Shared\DTOs\UserDTO;
 use ReflectionException;
 use Shared\Models\User;
 
@@ -88,15 +89,17 @@ class UserCreateCommand extends QtCommand
             return;
         }
 
-        service(AuthService::class)->add([
-            'uuid' => $this->getArgument('uuid'),
-            'firstname' => $this->getArgument('firstname'),
-            'lastname' => $this->getArgument('lastname'),
-            'role' => $this->getArgument('role'),
-            'email' => $this->getArgument('email'),
-            'password' => (new Hasher())->hash($this->getArgument('password')),
-            'image' => $this->getArgument('image'),
-        ]);
+        $userDto = new UserDTO(
+            $this->getArgument('email'),
+            (new Hasher())->hash($this->getArgument('password')),
+            $this->getArgument('firstname'),
+            $this->getArgument('lastname'),
+            $this->getArgument('role') ?? '',
+            $this->getArgument('uuid'),
+            $this->getArgument('image') ?? ''
+        );
+
+        service(AuthService::class)->add($userDto->toArray());
 
         $this->info('User created successfully');
     }

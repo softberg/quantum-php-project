@@ -9,13 +9,14 @@ use Quantum\Module\ModuleManager;
 use Quantum\Router\MatchedRoute;
 use Shared\Services\PostService;
 use Shared\Services\AuthService;
+use Shared\DTOs\CommentDTO;
 use Quantum\Hasher\Hasher;
+use Shared\DTOs\PostDTO;
 use Quantum\Router\Route;
 use Quantum\Http\Request;
 use Shared\Models\User;
 use Quantum\App\App;
 use Faker\Factory;
-use Quantum\Di\Di;
 
 function createEnvFile()
 {
@@ -111,12 +112,12 @@ function createUserPosts(AuthUser $user): array
     for ($i = 0; $i < $postCountPerUser; $i++) {
         $title = textCleanUp($faker->realText(50));
 
-        $posts[] = ServiceFactory::create(PostService::class)->addPost([
-            'title' => $title,
-            'content' => textCleanUp($faker->realText(100)),
-            'image' => slugify($title) . '.jpg',
-            'user_uuid' => $user->uuid,
-        ]);
+        $posts[] = ServiceFactory::create(PostService::class)->addPost(new PostDTO(
+            $title,
+            textCleanUp($faker->realText(100)),
+            $user->uuid,
+            slugify($title) . '.jpg'
+        ));
     }
 
     return $posts;
@@ -132,11 +133,11 @@ function createPostComments(AuthUser $user, array $posts): array
 
     foreach ($posts as $post) {
         for ($i = 0; $i < $commentCountPerUser; $i++) {
-            $comments[] = ServiceFactory::create(CommentService::class)->addComment([
-                'post_uuid' => $post->uuid,
-                'user_uuid' => $user->uuid,
-                'content'   => textCleanUp($faker->realText(rand(20, 100))),
-            ]);
+            $comments[] = ServiceFactory::create(CommentService::class)->addComment(new CommentDTO(
+                $post->uuid,
+                $user->uuid,
+                textCleanUp($faker->realText(rand(20, 100)))
+            ));
         }
     }
 

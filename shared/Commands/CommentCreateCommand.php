@@ -20,6 +20,7 @@ use Quantum\Di\Exceptions\DiException;
 use Shared\Services\CommentService;
 use Quantum\Console\QtCommand;
 use Quantum\Validation\Rule;
+use Shared\DTOs\CommentDTO;
 use ReflectionException;
 
 /**
@@ -76,11 +77,13 @@ class CommentCreateCommand extends QtCommand
             return;
         }
 
-        service(CommentService::class)->addComment([
-            'post_uuid' => $this->getArgument('post_uuid'),
-            'user_uuid' => $this->getArgument('user_uuid'),
-            'content' => $this->getArgument('content'),
-        ]);
+        $commentDto = new CommentDTO(
+            $this->getArgument('post_uuid'),
+            $this->getArgument('user_uuid'),
+            trim($this->getArgument('content'))
+        );
+
+        service(CommentService::class)->addComment($commentDto);
 
         $this->info('Comment created successfully');
     }

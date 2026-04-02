@@ -18,6 +18,7 @@ use Quantum\Model\Exceptions\ModelException;
 use Shared\Transformers\CommentTransformer;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Service\QtService;
+use Shared\DTOs\CommentDTO;
 use Shared\Models\Comment;
 use Shared\Models\User;
 
@@ -86,16 +87,16 @@ class CommentService extends QtService
 
     /**
      * Add a new comment
-     * @param array $data
+     * @param CommentDTO $commentDto
      * @return array
      * @throws ModelException
      */
-    public function addComment(array $data): array
+    public function addComment(CommentDTO $commentDto): array
     {
-        $data['uuid'] = $data['uuid'] ?? uuid_ordered();
+        $uuid = uuid_ordered();
 
         $comment = $this->model->create();
-        $comment->fill($data);
+        $comment->fill(array_merge(['uuid' => $uuid], $commentDto->toArray()));
         $comment->save();
 
         return $comment->asArray();

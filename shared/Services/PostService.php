@@ -29,6 +29,7 @@ use Gumlet\ImageResizeException;
 use Quantum\Service\QtService;
 use Quantum\Model\DbModel;
 use ReflectionException;
+use Shared\DTOs\PostDTO;
 use Shared\Models\User;
 use Shared\Models\Post;
 
@@ -152,34 +153,34 @@ class PostService extends QtService
 
     /**
      * Add post
-     * @param array $data
+     * @param PostDTO $postDto
      * @return Post
      * @throws BaseException
      * @throws ModelException
      */
-    public function addPost(array $data): Post
+    public function addPost(PostDTO $postDto): Post
     {
-        $data['uuid'] = $data['uuid'] ?? uuid_ordered();
+        $uuid = $postDto->getUuid() ?? uuid_ordered();
 
         $post = $this->model->create();
-        $post->fill($data);
+        $post->fill(array_merge(['uuid' => $uuid], $postDto->toArray()));
         $post->save();
 
-        return $this->getPost($data['uuid']);
+        return $this->getPost($uuid);
     }
 
     /**
      * Update post
      * @param string $uuid
-     * @param array $data
+     * @param PostDTO $postDto
      * @return Post
      * @throws BaseException
      * @throws ModelException
      */
-    public function updatePost(string $uuid, array $data): Post
+    public function updatePost(string $uuid, PostDTO $postDto): Post
     {
         $post = $this->model->findOneBy('uuid', $uuid);
-        $post->fill($data);
+        $post->fill($postDto->toArray());
         $post->save();
 
         return $this->getPost($post->uuid);

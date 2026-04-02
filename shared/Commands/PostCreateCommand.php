@@ -20,6 +20,7 @@ use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
 use Quantum\Console\QtCommand;
 use Quantum\Validation\Rule;
+use Shared\DTOs\PostDTO;
 use ReflectionException;
 
 /**
@@ -79,13 +80,15 @@ class PostCreateCommand extends QtCommand
             return;
         }
 
-        service(PostService::class)->addPost([
-            'uuid' => $this->getArgument('uuid'),
-            'user_uuid' => $this->getArgument('user_uuid'),
-            'title' => $this->getArgument('title'),
-            'content' => $this->getArgument('description'),
-            'image' => $this->getArgument('image'),
-        ]);
+        $postDto = new PostDTO(
+            $this->getArgument('title'),
+            $this->getArgument('description'),
+            $this->getArgument('user_uuid'),
+            $this->getArgument('image') ?? '',
+            $this->getArgument('uuid')
+        );
+
+        service(PostService::class)->addPost($postDto);
 
         $this->info('Post created successfully');
     }
