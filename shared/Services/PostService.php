@@ -39,7 +39,6 @@ use Shared\Models\Post;
  */
 class PostService extends QtService
 {
-
     /**
      * @var DbModel
      */
@@ -91,7 +90,7 @@ class PostService extends QtService
 
             $criterias = [
                 ['title', 'LIKE', $searchTerm],
-                ['content', 'LIKE', $searchTerm]
+                ['content', 'LIKE', $searchTerm],
             ];
 
             $query->criterias($criterias);

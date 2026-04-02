@@ -25,7 +25,6 @@ use Quantum\Model\DbModel;
  */
 class Post extends DbModel
 {
-
     use HasTimestamps;
     use SoftDeletes;
 
@@ -64,7 +63,7 @@ class Post extends DbModel
                 'type' => Relation::BELONGS_TO,
                 'foreign_key' => 'user_uuid',
                 'local_key' => 'uuid',
-            ]
+            ],
         ];
     }
 }

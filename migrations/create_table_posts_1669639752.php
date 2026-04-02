@@ -5,7 +5,6 @@ use Quantum\Migration\QtMigration;
 
 class Create_table_posts_1669639752 extends QtMigration
 {
-
     public function up(?TableFactory $tableFactory)
     {
         $table = $tableFactory->create('posts');

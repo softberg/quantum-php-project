@@ -26,7 +26,6 @@ use ReflectionException;
  */
 trait CommandValidationTrait
 {
-
     /**
      * @var Validator
      */

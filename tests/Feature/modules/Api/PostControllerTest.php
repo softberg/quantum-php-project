@@ -9,29 +9,28 @@ use Shared\Models\Post;
 
 class PostControllerTest extends AppTestCase
 {
-
-	public function setUp(): void
-	{
-		parent::setUp();
+    public function setUp(): void
+    {
+        parent::setUp();
 
         Request::flush();
-	}
+    }
 
     public function tearDown(): void
     {
         parent::tearDown();
     }
 
-	public function testModuleApiPostsEndpoint()
-	{
+    public function testModuleApiPostsEndpoint()
+    {
         $method = 'GET';
         $endpoint = '/api/posts';
 
-		$response = $this->request($method, $endpoint);
+        $response = $this->request($method, $endpoint);
 
-		$this->assertIsObject($response);
+        $this->assertIsObject($response);
 
-		$this->assertEquals('success', $response->get('status'));
+        $this->assertEquals('success', $response->get('status'));
 
         $this->assertArrayHasKey('data', $response->all());
 
@@ -52,35 +51,35 @@ class PostControllerTest extends AppTestCase
         $this->assertArrayHasKey('date', $firstPost);
         $this->assertArrayHasKey('author', $firstPost);
 
-		$this->assertArrayHasKey('pagination', $response->all());
+        $this->assertArrayHasKey('pagination', $response->all());
 
         $pagination = $response->get('pagination');
 
         $this->assertIsArray($pagination);
 
-		$this->assertArrayHasKey('total_records', $pagination);
-		$this->assertArrayHasKey('current_page', $pagination);
-		$this->assertArrayHasKey('next_page', $pagination);
-		$this->assertArrayHasKey('prev_page', $pagination);
+        $this->assertArrayHasKey('total_records', $pagination);
+        $this->assertArrayHasKey('current_page', $pagination);
+        $this->assertArrayHasKey('next_page', $pagination);
+        $this->assertArrayHasKey('prev_page', $pagination);
 
         $this->assertEquals(10, $pagination['total_records']);
-		$this->assertEquals(1, $pagination['current_page']);
-		$this->assertEquals(2, $pagination['next_page']);
-		$this->assertEquals(1,$pagination['prev_page']);
-	}
+        $this->assertEquals(1, $pagination['current_page']);
+        $this->assertEquals(2, $pagination['next_page']);
+        $this->assertEquals(1, $pagination['prev_page']);
+    }
 
-	public function testModuleApiSinglePostEndpoint()
-	{
+    public function testModuleApiSinglePostEndpoint()
+    {
         $method = 'GET';
         $endpoint = '/api/post/';
 
-		$post = ModelFactory::get(Post::class)->first();
+        $post = ModelFactory::get(Post::class)->first();
 
-		$response = $this->request($method, $endpoint . $post->uuid);
+        $response = $this->request($method, $endpoint . $post->uuid);
 
-		$this->assertIsObject($response);
+        $this->assertIsObject($response);
 
-		$this->assertEquals('success', $response->get('status'));
+        $this->assertEquals('success', $response->get('status'));
 
         $this->assertArrayHasKey('data', $response->all());
 
@@ -88,13 +87,13 @@ class PostControllerTest extends AppTestCase
 
         $this->assertIsArray($post);
 
-		$this->assertArrayHasKey('uuid', $post);
-		$this->assertArrayHasKey('title', $post);
-		$this->assertArrayHasKey('content', $post);
-		$this->assertArrayHasKey('image', $post);
-		$this->assertArrayHasKey('date', $post);
-		$this->assertArrayHasKey('author', $post);
-		$this->assertArrayHasKey('comments', $post);
+        $this->assertArrayHasKey('uuid', $post);
+        $this->assertArrayHasKey('title', $post);
+        $this->assertArrayHasKey('content', $post);
+        $this->assertArrayHasKey('image', $post);
+        $this->assertArrayHasKey('date', $post);
+        $this->assertArrayHasKey('author', $post);
+        $this->assertArrayHasKey('comments', $post);
 
         $firstComment = $post['comments'][0];
 
@@ -105,5 +104,5 @@ class PostControllerTest extends AppTestCase
         $this->assertArrayHasKey('author', $firstComment);
         $this->assertArrayHasKey('content', $firstComment);
         $this->assertArrayHasKey('date', $firstComment);
-	}
+    }
 }

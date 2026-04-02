@@ -29,7 +29,6 @@ use ReflectionException;
  */
 class PostCreateCommand extends QtCommand
 {
-
     use CommandValidationTrait;
 
     /**

@@ -27,7 +27,6 @@ use ReflectionException;
  */
 class UserDeleteCommand extends QtCommand
 {
-
     /**
      * Command name
      * @var string|null

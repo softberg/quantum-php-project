@@ -8,7 +8,7 @@ return [
         'params' => [
             'app_key' => '',
             'app_secret' => '',
-        ]
+        ],
     ],
 
     'gdrive' => [
@@ -16,6 +16,6 @@ return [
         'params' => [
             'app_key' => '',
             'app_secret' => '',
-        ]
-    ]
+        ],
+    ],
 ];

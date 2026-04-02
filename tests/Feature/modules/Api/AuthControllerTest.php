@@ -12,7 +12,6 @@ use Faker\Factory;
 
 class AuthControllerTest extends AppTestCase
 {
-
     private Generator $faker;
 
     public function setUp(): void
@@ -186,12 +185,12 @@ class AuthControllerTest extends AppTestCase
         createUser([
             'email' => $email,
             'otp_token' => base64_encode($otp),
-            'otp' => (string)$otp,
+            'otp' => (string) $otp,
             'otp_expires' => date('Y-m-d H:i:s', time() + 300), // 5 minutes from now
         ]);
 
         $response = $this->request('post', '/api/en/verify', [
-            'otp' => (string)$otp,
+            'otp' => (string) $otp,
             'code' => base64_encode($otp),
         ]);
 

@@ -41,11 +41,10 @@ use Faker\Factory;
  */
 class DemoCommand extends QtCommand
 {
-
     /**
      * Default password for generated users
      */
-    const DEFAULT_PASSWORD = 'password';
+    public const DEFAULT_PASSWORD = 'password';
 
     /**
      * Command name
@@ -70,7 +69,7 @@ class DemoCommand extends QtCommand
      * @var array
      */
     protected array $options = [
-        ['yes', 'y', 'none', 'Acceptance of the confirmations']
+        ['yes', 'y', 'none', 'Acceptance of the confirmations'],
     ];
 
     /**
@@ -150,7 +149,7 @@ class DemoCommand extends QtCommand
         }
 
         $progress->finish();
-        $this->info(PHP_EOL . "Demo project created successfully");
+        $this->info(PHP_EOL . 'Demo project created successfully');
     }
 
     /**
@@ -162,39 +161,39 @@ class DemoCommand extends QtCommand
         return [
             [
                 'message' => 'Creating API module',
-                'action' => function() {
+                'action' => function () {
                     $this->createModule('Api', 'DemoApi', false);
-                }
+                },
             ],
             [
                 'message' => 'Creating Web module',
-                'action' => function() {
+                'action' => function () {
                     $this->createModule('Web', 'DemoWeb', true);
-                }
+                },
             ],
             [
                 'message' => 'Cleaning up uploads & rebuilding database',
-                'action' => function() {
+                'action' => function () {
                     $this->resetDatabase();
-                }
+                },
             ],
             [
                 'message' => 'Generating users',
-                'action' => function() {
+                'action' => function () {
                     $this->generatedUsers = $this->generateUsers();
-                }
+                },
             ],
             [
                 'message' => 'Generating posts',
-                'action' => function() {
+                'action' => function () {
                     $this->generatedPosts = $this->generatePosts($this->generatedUsers);
-                }
+                },
             ],
             [
                 'message' => 'Generating comments',
-                'action' => function() {
+                'action' => function () {
                     $this->generateComments($this->generatedUsers, $this->generatedPosts);
-                }
+                },
             ],
         ];
     }
@@ -227,7 +226,7 @@ class DemoCommand extends QtCommand
             'module' => $moduleName,
             '--yes' => true,
             '--template' => $template,
-            '--with-assets' => $withAssets
+            '--with-assets' => $withAssets,
         ]);
     }
 
@@ -296,7 +295,7 @@ class DemoCommand extends QtCommand
                 $this->runCommandInternally(self::COMMANDS['comment_create'], [
                     'post_uuid' => $post['uuid'],
                     'user_uuid' => $commentUser['uuid'],
-                    'content'   => textCleanUp($this->faker->realText(rand(20, 100))),
+                    'content' => textCleanUp($this->faker->realText(rand(20, 100))),
                 ]);
             }
         }
@@ -332,7 +331,7 @@ class DemoCommand extends QtCommand
             'lastname' => $this->faker->lastName(),
             'uuid' => $userUuid,
             'role' => Role::EDITOR,
-            'image' => $imageName
+            'image' => $imageName,
         ];
     }
 
@@ -375,7 +374,7 @@ class DemoCommand extends QtCommand
      */
     private function getRandomUserExcept(array $users, string $excludeUuid): array
     {
-        $candidates = array_filter($users, function($u) use ($excludeUuid) {
+        $candidates = array_filter($users, function ($u) use ($excludeUuid) {
             return $u['uuid'] !== $excludeUuid;
         });
 
@@ -458,7 +457,7 @@ class DemoCommand extends QtCommand
     private function runCommandInternally(string $commandName, array $arguments = [])
     {
         $command = $this->getApplication()->find($commandName);
-        $command->run(new ArrayInput($arguments), new NullOutput);
+        $command->run(new ArrayInput($arguments), new NullOutput());
     }
 
     /**
@@ -496,19 +495,21 @@ class DemoCommand extends QtCommand
 
         foreach ($arguments as $key => $value) {
             if (!is_int($key) && substr($key, 0, 2) !== '--') {
-                $command[] = (string)$value;
+                $command[] = (string) $value;
                 continue;
             }
 
             if (is_bool($value)) {
-                if ($value) $command[] = $key;
+                if ($value) {
+                    $command[] = $key;
+                }
                 continue;
             }
 
             if (is_array($value)) {
                 foreach ($value as $item) {
                     $command[] = $key;
-                    $command[] = (string)$item;
+                    $command[] = (string) $item;
                 }
                 continue;
             }
@@ -519,7 +520,7 @@ class DemoCommand extends QtCommand
                 continue;
             }
 
-            $command[] = (string)$value;
+            $command[] = (string) $value;
         }
 
         return $command;

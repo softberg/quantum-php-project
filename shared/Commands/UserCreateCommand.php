@@ -32,7 +32,6 @@ use Shared\Models\User;
  */
 class UserCreateCommand extends QtCommand
 {
-
     use CommandValidationTrait;
 
     /**

@@ -20,7 +20,7 @@ namespace Shared\Enums;
  */
 class Role
 {
-    const ADMIN = 'admin';
+    public const ADMIN = 'admin';
 
-    const EDITOR = 'editor';
+    public const EDITOR = 'editor';
 }

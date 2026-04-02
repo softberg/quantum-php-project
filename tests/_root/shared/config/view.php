@@ -1,4 +1,5 @@
 <?php
+
 return [
     'default' => 'html',
 
@@ -8,5 +9,5 @@ return [
         'charset' => 'UTF-8',
         'debug' => false,
         'cache' => false,
-    ]
+    ],
 ];

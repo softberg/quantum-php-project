@@ -4,9 +4,13 @@ use Quantum\App\Enums\AppType;
 
 error_reporting(E_ALL | E_STRICT);
 
-if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
 
-if (!defined('PROJECT_ROOT')) define("PROJECT_ROOT", __DIR__ . DS . '_root');
+if (!defined('PROJECT_ROOT')) {
+    define('PROJECT_ROOT', __DIR__ . DS . '_root');
+}
 
 require_once dirname(__DIR__) . DS . 'vendor' . DS . 'autoload.php';
 
@@ -29,5 +33,3 @@ register_shutdown_function(function () {
     removeModule();
     dbCleanUp();
 });
-
-

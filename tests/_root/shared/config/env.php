@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'app_env' => 'testing'
+    'app_env' => 'testing',
 ];

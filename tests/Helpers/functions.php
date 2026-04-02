@@ -51,7 +51,8 @@ function createModule(string $moduleName, string $template, bool $withAssets = f
 
     $moduleManager->addModuleConfig();
 
-    $route = new Route(['GET'], 'dummy', null, null, function () {});
+    $route = new Route(['GET'], 'dummy', null, null, function () {
+    });
     $route->module($moduleName);
     $matchedRoute = new MatchedRoute($route, []);
     Request::setMatchedRoute($matchedRoute);
@@ -63,6 +64,14 @@ function removeModule()
 {
     deleteDirectory(uploads_dir());
     deleteDirectory(modules_dir());
+
+    if (!is_dir(uploads_dir())) {
+        mkdir(uploads_dir(), 0777, true);
+    }
+
+    if (!file_exists(uploads_dir() . DS . '.gitkeep')) {
+        file_put_contents(uploads_dir() . DS . '.gitkeep', '');
+    }
 
     file_put_contents(
         base_dir() . DS . 'shared' . DS . 'config' . DS . 'modules.php',
@@ -76,7 +85,7 @@ function deleteDirectory(string $dir)
         return;
     }
 
-    $files = array_diff(scandir($dir), array('.', '..'));
+    $files = array_diff(scandir($dir), ['.', '..']);
 
     foreach ($files as $file) {
         $path = $dir . DS . $file;
@@ -98,7 +107,8 @@ function createUser(array $overrides = []): AuthUser
             'role' => 'admin',
             'email' => 'default@quantumphp.io',
             'password' => (new Hasher())->hash('password'),
-        ], $overrides));
+        ], $overrides)
+    );
 }
 
 function createUserPosts(AuthUser $user): array

@@ -23,7 +23,6 @@ use Quantum\Model\DbModel;
  */
 class User extends DbModel
 {
-
     use HasTimestamps;
 
     /**

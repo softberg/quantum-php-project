@@ -27,7 +27,6 @@ use ReflectionException;
  */
 class PostDeleteCommand extends QtCommand
 {
-
     /**
      * Command name
      * @var string|null
@@ -123,7 +122,7 @@ HELP;
      */
     private function deleteAllPosts()
     {
-       service(PostService::class)->deleteAllPosts();
+        service(PostService::class)->deleteAllPosts();
 
         $this->info('All posts have been deleted successfully');
     }

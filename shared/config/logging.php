@@ -16,5 +16,5 @@ return [
     'daily' => [
         'path' => logs_dir(),
         'level' => 'warning',
-    ]
+    ],
 ];

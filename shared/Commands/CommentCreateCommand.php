@@ -29,7 +29,6 @@ use ReflectionException;
  */
 class CommentCreateCommand extends QtCommand
 {
-
     use CommandValidationTrait;
 
     /**

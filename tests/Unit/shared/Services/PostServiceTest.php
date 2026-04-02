@@ -14,9 +14,9 @@ use Shared\Models\Post;
 
 class PostServiceTest extends TestCase
 {
-    const PER_PAGE = 10;
+    public const PER_PAGE = 10;
 
-    const CURRENT_PAGE = 1;
+    public const CURRENT_PAGE = 1;
 
     protected $authService;
 
@@ -76,7 +76,7 @@ class PostServiceTest extends TestCase
 
         $uniqueKeyword = 'SEARCH_TOKEN_' . uniqid();
         $title = "Title with {$uniqueKeyword}";
-        $content = "Some content";
+        $content = 'Some content';
 
         $post = $this->postService->addPost(new PostDTO(
             $title,
@@ -149,8 +149,6 @@ class PostServiceTest extends TestCase
 
         $this->assertEquals('Content of just another post', $post->content);
 
-
-
         $this->postService->deletePost($newPost->uuid);
     }
 
@@ -178,7 +176,6 @@ class PostServiceTest extends TestCase
         $this->assertEquals('The best way to get started is to quit talking and begin doing.', $post->content);
 
         $this->assertEquals('image.jpg', $post->image);
-
 
     }
 
