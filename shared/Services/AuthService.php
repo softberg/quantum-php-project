@@ -31,7 +31,6 @@ use Shared\Models\User;
  */
 class AuthService extends QtService implements AuthServiceInterface
 {
-
     /**
      * @var User
      */
@@ -183,7 +182,7 @@ class AuthService extends QtService implements AuthServiceInterface
     {
         $userDirectory = uploads_dir() . DS . $uuid;
 
-        if(!fs()->isDirectory($userDirectory)) {
+        if (!fs()->isDirectory($userDirectory)) {
             fs()->makeDirectory($userDirectory);
         }
     }

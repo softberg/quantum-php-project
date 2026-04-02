@@ -29,7 +29,6 @@ use ReflectionException;
  */
 class PostUpdateCommand extends QtCommand
 {
-
     use CommandValidationTrait;
 
     /**
@@ -55,7 +54,7 @@ class PostUpdateCommand extends QtCommand
      * @var array
      */
     protected array $args = [
-        ['uuid', 'required', 'Post uuid']
+        ['uuid', 'required', 'Post uuid'],
     ];
 
     /**

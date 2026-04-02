@@ -28,7 +28,6 @@ use Shared\Models\User;
  */
 class CommentService extends QtService
 {
-
     /**
      * @var Comment
      */

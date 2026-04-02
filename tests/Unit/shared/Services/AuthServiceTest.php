@@ -11,7 +11,6 @@ use Shared\Models\User;
 
 class AuthServiceTest extends TestCase
 {
-
     protected $authService;
 
     public function setUp(): void

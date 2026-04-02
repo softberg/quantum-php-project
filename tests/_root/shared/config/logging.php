@@ -1,4 +1,5 @@
 <?php
+
 return [
     'default' => 'single',
 
@@ -10,5 +11,5 @@ return [
     'daily' => [
         'path' => logs_dir(),
         'level' => 'warning',
-    ]
+    ],
 ];

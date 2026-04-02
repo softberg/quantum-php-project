@@ -29,16 +29,15 @@ use ReflectionException;
  */
 class PostShowCommand extends QtCommand
 {
-
     /**
      * Posts per page
      */
-    const POSTS_PER_PAGE = 20;
+    public const POSTS_PER_PAGE = 20;
 
     /**
      * Current page
      */
-    const CURRENT_PAGE = 1;
+    public const CURRENT_PAGE = 1;
 
     /**
      * Command name
@@ -63,7 +62,7 @@ class PostShowCommand extends QtCommand
      * @var array
      */
     protected array $args = [
-        ['uuid', 'optional', 'Post uuid']
+        ['uuid', 'optional', 'Post uuid'],
     ];
 
     /**
@@ -128,7 +127,7 @@ class PostShowCommand extends QtCommand
             $item['title'] ?? '',
             $content,
             $item['author'],
-            $item['date'] ?? ''
+            $item['date'] ?? '',
         ];
     }
 }

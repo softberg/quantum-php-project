@@ -5,7 +5,7 @@ use Quantum\HttpClient\HttpClient;
 
 function url_with_lang(string $lang): string
 {
-    if (!in_array($lang, (array)config()->get('lang.supported'))) {
+    if (!in_array($lang, (array) config()->get('lang.supported'))) {
         $lang = config()->get('lang.default');
     }
 
@@ -14,7 +14,7 @@ function url_with_lang(string $lang): string
     }
 
     if (preg_match('/' . preg_quote(current_lang()) . '/', route_uri())) {
-        return base_url() . preg_replace('/' . preg_quote(current_lang(), '/') . "/", $lang, route_uri(), 1);
+        return base_url() . preg_replace('/' . preg_quote(current_lang(), '/') . '/', $lang, route_uri(), 1);
     }
 
     $url = base_url(true);
@@ -26,7 +26,7 @@ function url_with_lang(string $lang): string
     if (!empty(route_prefix()) && $langSegmentIndex == 1) {
         $langSegmentIndex += 1;
 
-        $uri = preg_replace('/' . preg_quote(route_prefix(), '/') . "/", '', route_uri(), 1);
+        $uri = preg_replace('/' . preg_quote(route_prefix(), '/') . '/', '', route_uri(), 1);
     }
 
     $segments = explode('/', $uri);

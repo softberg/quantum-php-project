@@ -15,8 +15,9 @@ use Quantum\App\Enums\AppType;
  * Directory separator
  * -----------------------------------------------------------------------------
  */
-if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
-
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
 
 /*
  * -----------------------------------------------------------------------------

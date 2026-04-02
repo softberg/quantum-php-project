@@ -5,7 +5,6 @@ use Quantum\Migration\QtMigration;
 
 class Create_table_comments_1698145440 extends QtMigration
 {
-
     public function up(?TableFactory $tableFactory)
     {
         $table = $tableFactory->create('comments');

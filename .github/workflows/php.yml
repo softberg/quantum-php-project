@@ -42,6 +42,9 @@ jobs:
     - name: Install dependencies
       run: composer update --prefer-dist --no-progress
 
+    - name: Run PHP-CS-Fixer
+      run: composer cs:check
+
     - name: Create env
       run: php qt core:env
 

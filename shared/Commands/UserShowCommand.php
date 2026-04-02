@@ -29,7 +29,6 @@ use ReflectionException;
  */
 class UserShowCommand extends QtCommand
 {
-
     /**
      * Command name
      * @var string|null
@@ -53,7 +52,7 @@ class UserShowCommand extends QtCommand
      * @var array
      */
     protected array $args = [
-        ['uuid', 'optional', 'User uuid']
+        ['uuid', 'optional', 'User uuid'],
     ];
 
     /**

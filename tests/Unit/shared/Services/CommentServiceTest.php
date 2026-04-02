@@ -12,7 +12,6 @@ use Shared\DTOs\CommentDTO;
 
 class CommentServiceTest extends TestCase
 {
-
     protected $commentService;
 
     protected $postService;

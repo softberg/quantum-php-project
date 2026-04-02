@@ -10,7 +10,6 @@ use Quantum\Http\Request;
 
 class CommentControllerTest extends AppTestCase
 {
-
     private array $tokens = [];
 
     private $post = null;

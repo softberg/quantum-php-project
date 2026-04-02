@@ -60,7 +60,7 @@ class CommentDTO
      */
     public static function fromRequest(Request $request, string $postUuid, string $userUuid): self
     {
-        return new self($postUuid, $userUuid, trim((string)$request->get('content')));
+        return new self($postUuid, $userUuid, trim((string) $request->get('content')));
     }
 
     public function getPostUuid(): string

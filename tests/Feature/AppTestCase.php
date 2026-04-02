@@ -11,7 +11,6 @@ use Quantum\Di\Di;
 
 class AppTestCase extends TestCase
 {
-
     protected string $defaultEmail = 'default@quantumphp.io';
 
     protected string $defaultPassword = 'password';
@@ -26,7 +25,7 @@ class AppTestCase extends TestCase
     {
         parent::setUp();
         ob_start();
-        
+
         self::$app = createApp(AppType::WEB, PROJECT_ROOT);
     }
 
@@ -42,8 +41,7 @@ class AppTestCase extends TestCase
         array  $params = [],
         array  $headers = [],
         array  $files = []
-    ): Response
-    {
+    ): Response {
         Di::resetContainer();
         Request::create($method, $url, $params, $headers, $files);
         self::$app->start();
@@ -54,7 +52,7 @@ class AppTestCase extends TestCase
     {
         $response = $this->request('post', '/api/signin', [
             'email' => $this->defaultEmail,
-            'password' => $this->defaultPassword
+            'password' => $this->defaultPassword,
         ]);
 
         return $response->get('tokens');
