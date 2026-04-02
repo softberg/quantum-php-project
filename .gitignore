@@ -1,8 +1,29 @@
 /vendor
 /.idea
 /nbproject/private/
-/shared/store/*
-/shared/emails/*
 .env
 composer.lock
 .phpunit.result.cache
+.php-cs-fixer.cache
+debug.log
+
+# Runtime data
+/shared/store/*
+/shared/emails/*
+/shared/config/auth.php
+
+# Generated modules
+/modules
+
+# Published assets
+/public/assets/DebugBar
+/public/assets/OpenApiUi
+/public/assets/Web
+/public/uploads
+
+# Test runtime
+/tests/_root/.env.testing
+/tests/_root/modules
+/tests/_root/shared/store/*
+/tests/_root/shared/config/auth.php
+/tests/_root/logs
