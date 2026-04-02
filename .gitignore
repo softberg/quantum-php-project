@@ -11,6 +11,7 @@ debug.log
 /shared/store/*
 /shared/emails/*
 /shared/config/auth.php
+/shared/config/modules.php
 
 # Generated modules
 /modules
