@@ -9,7 +9,7 @@ parameters:
         - migrations
         - public/index.php
     excludePaths:
-        - modules
+        - modules (?)
         - shared/config
         - shared/views
     scanDirectories:
