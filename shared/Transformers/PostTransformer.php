@@ -35,9 +35,24 @@ class PostTransformer implements TransformerInterface
             'uuid' => $item->uuid,
             'title' => $item->title,
             'content' => markdown_to_html($item->content, true),
-            'image' => $item->image && $item->user_directory ? $item->user_directory . '/' . $item->image : null,
+            'image' => $this->buildImagePath($item),
             'date' => date('Y/m/d H:i', strtotime($item->updated_at)),
             'author' => $item->firstname . ' ' . $item->lastname,
         ];
+    }
+
+    /**
+     * Builds the image path for the given item.
+     *
+     * @param $item
+     * @return string|null
+     */
+    private function buildImagePath($item): ?string
+    {
+        if ($item->image && $item->user_directory) {
+            return $item->user_directory . '/' . $item->image;
+        }
+
+        return null;
     }
 }
