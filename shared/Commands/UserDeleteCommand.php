@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -94,7 +96,7 @@ HELP;
      * @param string $uuid
      * @throws BaseException|DiException|ServiceException|ReflectionException
      */
-    private function deleteSingleUser(string $uuid)
+    private function deleteSingleUser(string $uuid): void
     {
         $authService = service(AuthService::class);
 
@@ -107,7 +109,7 @@ HELP;
      * Deletes all users
      * @throws BaseException|DiException|ServiceException|ReflectionException
      */
-    private function deleteAllUsers()
+    private function deleteAllUsers(): void
     {
         service(AuthService::class)->deleteAllUsers();
 

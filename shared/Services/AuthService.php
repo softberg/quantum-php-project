@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -92,7 +94,7 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function add(array $data): AuthUser
     {
-        $data['uuid'] = $data['uuid'] ?? uuid_ordered();
+        $data['uuid'] ??= uuid_ordered();
 
         $this->createUserDirectory($data['uuid']);
 
@@ -139,7 +141,7 @@ class AuthService extends QtService implements AuthServiceInterface
     /**
      * Delete all users
      */
-    public function deleteAllUsers()
+    public function deleteAllUsers(): void
     {
         $this->model->truncate();
     }
@@ -178,7 +180,7 @@ class AuthService extends QtService implements AuthServiceInterface
      * @throws BaseException
      * @throws ConfigException
      */
-    private function createUserDirectory(string $uuid)
+    private function createUserDirectory(string $uuid): void
     {
         $userDirectory = uploads_dir() . DS . $uuid;
 

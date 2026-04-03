@@ -5,7 +5,7 @@ use Quantum\Migration\QtMigration;
 
 class Create_table_comments_1698145440 extends QtMigration
 {
-    public function up(?TableFactory $tableFactory)
+    public function up(?TableFactory $tableFactory): void
     {
         $table = $tableFactory->create('comments');
         $table->addColumn('id', 'integer')->primary()->autoIncrement();
@@ -16,7 +16,7 @@ class Create_table_comments_1698145440 extends QtMigration
         $table->addColumn('created_at', 'timestamp');
     }
 
-    public function down(?TableFactory $tableFactory)
+    public function down(?TableFactory $tableFactory): void
     {
         $tableFactory->drop('comments');
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -161,37 +163,37 @@ class DemoCommand extends QtCommand
         return [
             [
                 'message' => 'Creating API module',
-                'action' => function () {
+                'action' => function (): void {
                     $this->createModule('Api', 'DemoApi', false);
                 },
             ],
             [
                 'message' => 'Creating Web module',
-                'action' => function () {
+                'action' => function (): void {
                     $this->createModule('Web', 'DemoWeb', true);
                 },
             ],
             [
                 'message' => 'Cleaning up uploads & rebuilding database',
-                'action' => function () {
+                'action' => function (): void {
                     $this->resetDatabase();
                 },
             ],
             [
                 'message' => 'Generating users',
-                'action' => function () {
+                'action' => function (): void {
                     $this->generatedUsers = $this->generateUsers();
                 },
             ],
             [
                 'message' => 'Generating posts',
-                'action' => function () {
+                'action' => function (): void {
                     $this->generatedPosts = $this->generatePosts($this->generatedUsers);
                 },
             ],
             [
                 'message' => 'Generating comments',
-                'action' => function () {
+                'action' => function (): void {
                     $this->generateComments($this->generatedUsers, $this->generatedPosts);
                 },
             ],
@@ -295,7 +297,7 @@ class DemoCommand extends QtCommand
                 $this->runCommandInternally(self::COMMANDS['comment_create'], [
                     'post_uuid' => $post['uuid'],
                     'user_uuid' => $commentUser['uuid'],
-                    'content' => textCleanUp($this->faker->realText(rand(20, 100))),
+                    'content' => textCleanUp($this->faker->realText(random_int(20, 100))),
                 ]);
             }
         }
@@ -374,9 +376,7 @@ class DemoCommand extends QtCommand
      */
     private function getRandomUserExcept(array $users, string $excludeUuid): array
     {
-        $candidates = array_filter($users, function ($u) use ($excludeUuid) {
-            return $u['uuid'] !== $excludeUuid;
-        });
+        $candidates = array_filter($users, fn (array $u): bool => $u['uuid'] !== $excludeUuid);
 
         $candidates = array_values($candidates);
         return $candidates[array_rand($candidates)];
@@ -454,7 +454,7 @@ class DemoCommand extends QtCommand
      * @param array $arguments
      * @throws ExceptionInterface
      */
-    private function runCommandInternally(string $commandName, array $arguments = [])
+    private function runCommandInternally(string $commandName, array $arguments = []): void
     {
         $command = $this->getApplication()->find($commandName);
         $command->run(new ArrayInput($arguments), new NullOutput());
@@ -464,7 +464,7 @@ class DemoCommand extends QtCommand
      * @param string $commandName
      * @param array $arguments
      */
-    private function runCommandExternally(string $commandName, array $arguments = [])
+    private function runCommandExternally(string $commandName, array $arguments = []): void
     {
         $command = $this->buildCommand($commandName, $arguments);
         $this->runExternalProcess($command);

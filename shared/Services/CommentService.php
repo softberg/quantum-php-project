@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -9,7 +11,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 namespace Shared\Services;
@@ -17,6 +19,7 @@ namespace Shared\Services;
 use Quantum\Model\Exceptions\ModelException;
 use Shared\Transformers\CommentTransformer;
 use Quantum\App\Exceptions\BaseException;
+use Quantum\Model\ModelCollection;
 use Quantum\Service\QtService;
 use Shared\DTOs\CommentDTO;
 use Shared\Models\Comment;
@@ -32,11 +35,7 @@ class CommentService extends QtService
      * @var Comment
      */
     private $model;
-
-    /**
-     * @var CommentTransformer
-     */
-    private $transformer;
+    private CommentTransformer $transformer;
 
     /**
      * @param CommentTransformer $transformer
@@ -56,7 +55,7 @@ class CommentService extends QtService
      * @throws BaseException
      * @throws ModelException
      */
-    public function getCommentsByPost(string $postUuid)
+    public function getCommentsByPost(string $postUuid): ModelCollection
     {
         return $this->model
             ->joinTo(model(User::class))
@@ -115,7 +114,7 @@ class CommentService extends QtService
      * Delete all comments
      * @throws ModelException
      */
-    public function deleteAllComments()
+    public function deleteAllComments(): void
     {
         $this->model->truncate();
     }

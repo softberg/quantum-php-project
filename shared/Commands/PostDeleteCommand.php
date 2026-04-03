@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -97,7 +99,7 @@ HELP;
      * @throws ServiceException
      * @throws BaseException
      */
-    private function deleteSinglePost(string $uuid)
+    private function deleteSinglePost(string $uuid): void
     {
         $postService = service(PostService::class);
 
@@ -120,7 +122,7 @@ HELP;
      * @throws ReflectionException
      * @throws ServiceException
      */
-    private function deleteAllPosts()
+    private function deleteAllPosts(): void
     {
         service(PostService::class)->deleteAllPosts();
 
