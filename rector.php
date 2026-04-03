@@ -13,13 +13,11 @@ return RectorConfig::configure()
         __DIR__ . '/hooks',
         __DIR__ . '/libraries',
         __DIR__ . '/migrations',
-        __DIR__ . '/public',
+        __DIR__ . '/public/index.php',
         __DIR__ . '/shared',
     ])
     ->withSkip([
         __DIR__ . '/modules',
-        __DIR__ . '/public/assets',
-        __DIR__ . '/public/uploads',
     ])
     ->withSets([
         LevelSetList::UP_TO_PHP_80,

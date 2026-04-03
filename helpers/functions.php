@@ -111,7 +111,7 @@ function create_user_directory(string $uuid): void
 /**
  * Cleans up text for titles/descriptions.
  * @param string $text
- * @return array|string|string[]
+ * @return string
  */
 function textCleanUp(string $text): string
 {
@@ -120,7 +120,7 @@ function textCleanUp(string $text): string
 
 /**
  * Encodes current query string to URL-safe base64.
- * @param string $query
+ * @param string|null $query
  * @return string
  */
 function nav_ref_encode(?string $query): string
