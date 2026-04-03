@@ -110,7 +110,8 @@ class PostService extends QtService
      */
     public function getPost(string $uuid): Post
     {
-        return $this->model
+        /** @var Post $post */
+        $post = $this->model
             ->joinTo(model(User::class))
             ->criteria('uuid', '=', $uuid)
             ->select(
@@ -125,6 +126,7 @@ class PostService extends QtService
                 ['users.uuid' => 'user_directory']
             )
             ->first();
+        return $post;
     }
 
     /**

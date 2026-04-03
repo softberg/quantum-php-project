@@ -63,7 +63,9 @@ class AuthService extends QtService implements AuthServiceInterface
      */
     public function getUserByUuid(string $uuid): User
     {
-        return$this->model->findOneBy('uuid', $uuid);
+        /** @var User $user */
+        $user = $this->model->findOneBy('uuid', $uuid);
+        return $user;
     }
 
     /**

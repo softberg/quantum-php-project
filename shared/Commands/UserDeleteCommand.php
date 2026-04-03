@@ -53,16 +53,15 @@ Usage:
 HELP;
     /**
      * Command arguments
-     * @var array[]
+     * @var array<int, array<int|string, mixed>>
      */
-
     protected array $args = [
         ['uuid', 'optional', 'User uuid'],
     ];
 
     /**
      * Command options
-     * @var array[]
+     * @var array<int, array<int|string, mixed>>
      */
     protected array $options = [
         ['yes', 'y', 'none', 'Skip confirmation and delete all users'],

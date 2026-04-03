@@ -54,7 +54,7 @@ HELP;
 
     /**
      * Command arguments
-     * @var array[]
+     * @var array<int, array<int|string, mixed>>
      */
     protected array $args = [
         ['uuid', 'optional', 'Comment uuid'],
@@ -62,7 +62,7 @@ HELP;
 
     /**
      * Command options
-     * @var array[]
+     * @var array<int, array<int|string, mixed>>
      */
     protected array $options = [
         ['yes', 'y', 'none', 'Skip confirmation and delete all comments'],

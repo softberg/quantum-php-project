@@ -44,7 +44,7 @@ class Comment extends DbModel
 
     /**
      * Fillable properties
-     * @var array
+     * @var array<string>
      */
     public array $fillable = [
         'uuid',

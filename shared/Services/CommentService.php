@@ -80,7 +80,9 @@ class CommentService extends QtService
      */
     public function getComment(string $uuid): Comment
     {
-        return $this->model->criteria('uuid', '=', $uuid)->first();
+        /** @var Comment $comment */
+        $comment = $this->model->criteria('uuid', '=', $uuid)->first();
+        return $comment;
     }
 
     /**
