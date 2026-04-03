@@ -1,6 +1,6 @@
 parameters:
     phpVersion: 70400
-    level: 3
+    level: 5
     paths:
         - shared
         - helpers
