@@ -5,7 +5,7 @@ use Quantum\Migration\QtMigration;
 
 class Create_table_users_1669639740 extends QtMigration
 {
-    public function up(?TableFactory $tableFactory)
+    public function up(?TableFactory $tableFactory): void
     {
         $table = $tableFactory->create('users');
         $table->addColumn('id', 'integer')->primary()->autoIncrement();
@@ -25,7 +25,7 @@ class Create_table_users_1669639740 extends QtMigration
         $table->addColumn('otp_expires', 'timestamp')->nullable();
     }
 
-    public function down(?TableFactory $tableFactory)
+    public function down(?TableFactory $tableFactory): void
     {
         $tableFactory->drop('users');
     }

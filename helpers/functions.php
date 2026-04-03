@@ -9,7 +9,7 @@
  * @author Arman Ag. <arman.ag@softberg.org>
  * @copyright Copyright (c) 2018 Softberg LLC (https://softberg.org)
  * @link http://quantum.softberg.org/
- * @since 2.9.9
+ * @since 3.0.0
  */
 
 use Quantum\HttpClient\Exceptions\HttpClientException;
@@ -99,7 +99,7 @@ function save_remote_image(string $imageUrl, string $userDirectory, string $imag
  * @throws BaseException
  * @throws ConfigException
  */
-function create_user_directory(string $uuid)
+function create_user_directory(string $uuid): void
 {
     $userDirectory = uploads_dir() . DS . $uuid;
 
@@ -111,16 +111,16 @@ function create_user_directory(string $uuid)
 /**
  * Cleans up text for titles/descriptions.
  * @param string $text
- * @return array|string|string[]
+ * @return string
  */
-function textCleanUp(string $text)
+function textCleanUp(string $text): string
 {
     return str_replace(['"', '\'', '-'], '', $text);
 }
 
 /**
  * Encodes current query string to URL-safe base64.
- * @param string $query
+ * @param string|null $query
  * @return string
  */
 function nav_ref_encode(?string $query): string

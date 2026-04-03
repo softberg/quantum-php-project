@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -97,7 +99,7 @@ HELP;
      * @throws ServiceException
      * @throws BaseException
      */
-    private function deleteSingleComment(string $uuid)
+    private function deleteSingleComment(string $uuid): void
     {
         $commentService = service(CommentService::class);
 
@@ -120,7 +122,7 @@ HELP;
      * @throws ServiceException
      * @throws BaseException
      */
-    private function deleteAllComments()
+    private function deleteAllComments(): void
     {
         service(CommentService::class)->deleteAllComments();
 

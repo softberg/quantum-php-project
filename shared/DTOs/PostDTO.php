@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -119,8 +121,6 @@ class PostDTO
             'title' => $this->title,
             'content' => $this->content,
             'image' => $this->image,
-        ], function ($value) {
-            return $value !== null;
-        });
+        ], fn (?string $value): bool => $value !== null);
     }
 }

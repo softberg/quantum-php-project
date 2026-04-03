@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Quantum PHP Framework
  *
@@ -200,7 +202,7 @@ class PostService extends QtService
      * Delete all posts
      * @throws ModelException
      */
-    public function deleteAllPosts()
+    public function deleteAllPosts(): void
     {
         $this->model->truncate();
     }
@@ -233,7 +235,7 @@ class PostService extends QtService
      * @throws ReflectionException
      * @throws ConfigException
      */
-    public function deleteImage(string $imagePath)
+    public function deleteImage(string $imagePath): void
     {
         $fs = FileSystemFactory::get();
 
