@@ -27,7 +27,7 @@ class PostTransformer implements TransformerInterface
     /**
      * Transforms the post data
      * @param $item
-     * @return mixed
+     * @return array
      */
     public function transform($item): array
     {

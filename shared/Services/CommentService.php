@@ -51,7 +51,7 @@ class CommentService extends QtService
     /**
      * Get comments by post
      * @param string $postUuid
-     * @return mixed
+     * @return ModelCollection
      * @throws BaseException
      * @throws ModelException
      */

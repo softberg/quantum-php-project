@@ -24,6 +24,13 @@ use Quantum\Model\DbModel;
 /**
  * Class Post
  * @package Shared\Models
+ *
+ * @property string $uuid
+ * @property string $title
+ * @property string $content
+ * @property string|null $image
+ * @property string|null $user_directory
+ * @property string|null $updated_at
  */
 class Post extends DbModel
 {

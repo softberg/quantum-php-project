@@ -1,6 +1,6 @@
 parameters:
     phpVersion: 70400
-    level: 1
+    level: 2
     paths:
         - shared
         - helpers
@@ -14,3 +14,8 @@ parameters:
         - shared/views
     scanDirectories:
         - vendor/quantum/framework/src
+    ignoreErrors:
+        - identifier: property.notFound
+          path: shared/Services/PostService.php
+        - identifier: method.notFound
+          path: shared/Commands/DemoCommand.php
