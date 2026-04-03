@@ -26,10 +26,10 @@ class PostTransformer implements TransformerInterface
 {
     /**
      * Transforms the post data
-     * @param object $item
+     * @param mixed $item
      * @return array
      */
-    public function transform(object $item): array
+    public function transform($item): array
     {
         return [
             'uuid' => $item->uuid,
