@@ -1,0 +1,16 @@
+parameters:
+    phpVersion: 70400
+    level: 1
+    paths:
+        - shared
+        - helpers
+        - hooks
+        - libraries
+        - migrations
+        - public/index.php
+    excludePaths:
+        - modules
+        - shared/config
+        - shared/views
+    scanDirectories:
+        - vendor/quantum/framework/src

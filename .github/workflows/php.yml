@@ -45,6 +45,9 @@ jobs:
     - name: Run PHP-CS-Fixer
       run: composer cs:check
 
+    - name: Run PHPStan
+      run: composer phpstan
+
     - name: Create env
       run: php qt core:env
 
