@@ -68,7 +68,7 @@ class DemoCommand extends QtCommand
 
     /**
      * The default action for all confirmations
-     * @var array
+     * @var array<int, array<int|string, mixed>>
      */
     protected array $options = [
         ['yes', 'y', 'none', 'Acceptance of the confirmations'],

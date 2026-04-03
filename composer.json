@@ -16,7 +16,8 @@
         "phpunit/phpunit": "^9.0",
         "mockery/mockery": "^1.2",
         "friendsofphp/php-cs-fixer": "^3.94",
-        "rector/rector": "^2.3"
+        "rector/rector": "^2.3",
+        "phpstan/phpstan": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -42,6 +43,7 @@
         "cs:fix": "vendor/bin/php-cs-fixer fix",
         "rector:check": "vendor/bin/rector process --dry-run",
         "rector:fix": "vendor/bin/rector process",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=-1 --error-format=github",
         "test": "vendor/bin/phpunit --stderr --coverage-clover coverage.xml"
     },
     "config": {

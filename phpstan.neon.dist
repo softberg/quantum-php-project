@@ -1,0 +1,21 @@
+parameters:
+    phpVersion: 70400
+    level: 5
+    paths:
+        - shared
+        - helpers
+        - hooks
+        - libraries
+        - migrations
+        - public/index.php
+    excludePaths:
+        - modules (?)
+        - shared/config
+        - shared/views
+    scanDirectories:
+        - vendor/quantum/framework/src
+    ignoreErrors:
+        - identifier: property.notFound
+          path: shared/Services/PostService.php
+        - identifier: method.notFound
+          path: shared/Commands/DemoCommand.php

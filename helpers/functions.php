@@ -34,7 +34,7 @@ function url_with_lang(string $lang): string
         return base_url(true) . '/' . $lang;
     }
 
-    if (preg_match('/' . preg_quote(current_lang()) . '/', route_uri())) {
+    if (preg_match('/' . preg_quote(current_lang(), '/') . '/', route_uri())) {
         return base_url() . preg_replace('/' . preg_quote(current_lang(), '/') . '/', $lang, route_uri(), 1);
     }
 

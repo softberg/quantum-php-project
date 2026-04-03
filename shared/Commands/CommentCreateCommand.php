@@ -53,7 +53,7 @@ class CommentCreateCommand extends QtCommand
 
     /**
      * Command arguments
-     * @var array[]
+     * @var array<int, array<int|string, mixed>>
      */
     protected array $args = [
         ['post_uuid', 'required', 'The post uuid the comment belongs to'],
