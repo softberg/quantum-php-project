@@ -35,6 +35,7 @@ use ReflectionException;
 use Shared\Enums\Role;
 use Faker\Generator;
 use ErrorException;
+use Quantum\Di\Di;
 use Faker\Factory;
 
 /**
@@ -224,6 +225,10 @@ class DemoCommand extends QtCommand
      */
     private function createModule(string $moduleName, string $template, bool $withAssets): void
     {
+        if (is_dir(modules_dir() . DS . $moduleName)) {
+            return;
+        }
+
         $this->runCommandExternally(self::COMMANDS['module_generate'], [
             'module' => $moduleName,
             '--yes' => true,
@@ -400,7 +405,11 @@ class DemoCommand extends QtCommand
      */
     private function rebuildDatabase(): void
     {
-        switch (Database::getInstance()->getConfigs()['driver']) {
+        if (!Di::isRegistered(Database::class)) {
+            Di::register(Database::class);
+        }
+
+        switch (Di::get(Database::class)->getConfigs()['driver']) {
             case 'mysql':
                 $this->runCommandInternally(self::COMMANDS['migrate'], ['direction' => 'down']);
                 $this->runCommandInternally(self::COMMANDS['migrate'], ['direction' => 'up']);
