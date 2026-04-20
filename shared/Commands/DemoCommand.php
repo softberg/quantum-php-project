@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Shared\Commands;
 
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Quantum\HttpClient\Exceptions\HttpClientException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -33,6 +34,7 @@ use Quantum\Console\QtCommand;
 use Ottaviano\Faker\Gravatar;
 use ReflectionException;
 use Shared\Enums\Role;
+use RuntimeException;
 use Faker\Generator;
 use ErrorException;
 use Quantum\Di\Di;
@@ -225,16 +227,18 @@ class DemoCommand extends QtCommand
      */
     private function createModule(string $moduleName, string $template, bool $withAssets): void
     {
-        if (is_dir(modules_dir() . DS . $moduleName)) {
-            return;
+        try {
+            $this->runCommandExternally(self::COMMANDS['module_generate'], [
+                'module' => $moduleName,
+                '--yes' => true,
+                '--template' => $template,
+                '--with-assets' => $withAssets,
+            ]);
+        } catch (ProcessFailedException $e) {
+            throw new RuntimeException(
+                trim($e->getProcess()->getOutput()) ?: $e->getMessage()
+            );
         }
-
-        $this->runCommandExternally(self::COMMANDS['module_generate'], [
-            'module' => $moduleName,
-            '--yes' => true,
-            '--template' => $template,
-            '--with-assets' => $withAssets,
-        ]);
     }
 
     /**
