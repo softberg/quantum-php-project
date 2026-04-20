@@ -13,7 +13,6 @@ use Shared\DTOs\CommentDTO;
 use Quantum\Hasher\Hasher;
 use Shared\DTOs\PostDTO;
 use Quantum\Router\Route;
-use Quantum\Http\Request;
 use Shared\Models\User;
 use Quantum\App\App;
 use Faker\Factory;
@@ -55,7 +54,7 @@ function createModule(string $moduleName, string $template, bool $withAssets = f
     });
     $route->module($moduleName);
     $matchedRoute = new MatchedRoute($route, []);
-    Request::setMatchedRoute($matchedRoute);
+    request()->setMatchedRoute($matchedRoute);
 
     ob_end_clean();
 }

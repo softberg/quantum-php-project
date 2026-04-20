@@ -4,8 +4,6 @@ namespace Quantum\Tests\Feature\modules\Api;
 
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\Tests\Feature\AppTestCase;
-use Quantum\Http\Response;
-use Quantum\Http\Request;
 use Shared\Models\User;
 use Faker\Generator;
 use Faker\Factory;
@@ -18,8 +16,8 @@ class AuthControllerTest extends AppTestCase
     {
         parent::setUp();
 
-        Request::flush();
-        Response::flush();
+        request()->flush();
+        response()->flush();
 
         $this->faker = Factory::create();
     }
