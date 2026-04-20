@@ -5,8 +5,6 @@ namespace Quantum\Tests\Feature\modules\Api;
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\Tests\Feature\AppTestCase;
 use Shared\Models\Comment;
-use Quantum\Http\Response;
-use Quantum\Http\Request;
 
 class CommentControllerTest extends AppTestCase
 {
@@ -26,8 +24,8 @@ class CommentControllerTest extends AppTestCase
 
         $this->post = $postData[0];
 
-        Request::flush();
-        Response::flush();
+        request()->flush();
+        response()->flush();
     }
 
     public function tearDown(): void

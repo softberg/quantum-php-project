@@ -4,7 +4,6 @@ namespace Quantum\Tests\Feature\modules\Api;
 
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\Tests\Feature\AppTestCase;
-use Quantum\Http\Request;
 use Shared\Models\Post;
 
 class PostManagementControllerTest extends AppTestCase
@@ -17,7 +16,7 @@ class PostManagementControllerTest extends AppTestCase
 
         $this->tokens = $this->signInAndGetTokens();
 
-        Request::flush();
+        request()->flush();
     }
 
     public function tearDown(): void
