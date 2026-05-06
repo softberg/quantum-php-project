@@ -21,7 +21,7 @@ use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Validation\Validator;
 use Shared\Services\AuthService;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use Quantum\Validation\Rule;
 use Quantum\Hasher\Hasher;
 use Shared\DTOs\UserDTO;
@@ -32,7 +32,7 @@ use Shared\Models\User;
  * Class UserCreateCommand
  * @package Shared\Commands
  */
-class UserCreateCommand extends QtCommand
+class UserCreateCommand extends CliCommand
 {
     use CommandValidationTrait;
 

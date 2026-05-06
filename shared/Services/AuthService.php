@@ -23,7 +23,7 @@ use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Auth\User as AuthUser;
 use Quantum\Model\ModelCollection;
-use Quantum\Service\QtService;
+use Quantum\Service\Service;
 use ReflectionException;
 use Shared\Models\User;
 
@@ -31,7 +31,7 @@ use Shared\Models\User;
  * Class AuthService
  * @package Shared\Services
  */
-class AuthService extends QtService implements AuthServiceInterface
+class AuthService extends Service implements AuthServiceInterface
 {
     /**
      * @var User

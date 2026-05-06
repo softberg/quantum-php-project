@@ -23,8 +23,6 @@ class CommentControllerTest extends AppTestCase
         $postData = $response->get('data');
 
         $this->post = $postData[0];
-
-        request()->flush();
         response()->flush();
     }
 

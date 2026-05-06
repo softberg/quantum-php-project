@@ -15,8 +15,6 @@ class PostManagementControllerTest extends AppTestCase
         parent::setUp();
 
         $this->tokens = $this->signInAndGetTokens();
-
-        request()->flush();
     }
 
     public function tearDown(): void

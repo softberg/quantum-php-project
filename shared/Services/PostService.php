@@ -28,7 +28,7 @@ use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Quantum\Storage\UploadedFile;
 use Gumlet\ImageResizeException;
-use Quantum\Service\QtService;
+use Quantum\Service\Service;
 use Quantum\Model\DbModel;
 use ReflectionException;
 use Shared\DTOs\PostDTO;
@@ -39,7 +39,7 @@ use Shared\Models\Post;
  * Class PostService
  * @package Shared\Services
  */
-class PostService extends QtService
+class PostService extends Service
 {
     /**
      * @var DbModel

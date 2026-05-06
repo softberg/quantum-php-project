@@ -20,14 +20,14 @@ use Quantum\Service\Exceptions\ServiceException;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use ReflectionException;
 
 /**
  * Class PostDeleteCommand
  * @package Shared\Commands
  */
-class PostDeleteCommand extends QtCommand
+class PostDeleteCommand extends CliCommand
 {
     /**
      * Command name

@@ -20,7 +20,7 @@ use Quantum\Service\Exceptions\ServiceException;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\CommentService;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use Quantum\Validation\Rule;
 use Shared\DTOs\CommentDTO;
 use ReflectionException;
@@ -29,7 +29,7 @@ use ReflectionException;
  * Class CommentCreateCommand
  * @package Shared\Commands
  */
-class CommentCreateCommand extends QtCommand
+class CommentCreateCommand extends CliCommand
 {
     use CommandValidationTrait;
 

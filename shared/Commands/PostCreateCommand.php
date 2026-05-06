@@ -20,7 +20,7 @@ use Quantum\Service\Exceptions\ServiceException;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\PostService;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use Quantum\Validation\Rule;
 use Shared\DTOs\PostDTO;
 use ReflectionException;
@@ -29,7 +29,7 @@ use ReflectionException;
  * Class PostCreateCommand
  * @package Shared\Commands
  */
-class PostCreateCommand extends QtCommand
+class PostCreateCommand extends CliCommand
 {
     use CommandValidationTrait;
 

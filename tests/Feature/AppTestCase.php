@@ -40,7 +40,6 @@ class AppTestCase extends TestCase
         array  $headers = [],
         array  $files = []
     ): Response {
-        self::$app = createApp(AppType::WEB, PROJECT_ROOT);
         request()->create($method, $url, $params, $headers, $files);
         self::$app->start();
         return response();

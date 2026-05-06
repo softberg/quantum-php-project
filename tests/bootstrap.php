@@ -29,7 +29,7 @@ $posts = createUserPosts($user);
 createPostComments($user, $posts);
 
 register_shutdown_function(function () {
-    removeEnvFile();
-    removeModule();
     dbCleanUp();
+    removeModule();
+    removeEnvFile();
 });

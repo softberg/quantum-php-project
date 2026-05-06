@@ -11,8 +11,6 @@ class PostControllerTest extends AppTestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        request()->flush();
     }
 
     public function tearDown(): void

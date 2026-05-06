@@ -22,14 +22,14 @@ use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Shared\Services\AuthService;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use ReflectionException;
 
 /**
  * Class UserShowCommand
  * @package Shared\Commands
  */
-class UserShowCommand extends QtCommand
+class UserShowCommand extends CliCommand
 {
     /**
      * Command name
