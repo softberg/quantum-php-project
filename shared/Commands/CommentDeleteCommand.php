@@ -20,14 +20,14 @@ use Quantum\Service\Exceptions\ServiceException;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Shared\Services\CommentService;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use ReflectionException;
 
 /**
  * Class CommentDeleteCommand
  * @package Shared\Commands
  */
-class CommentDeleteCommand extends QtCommand
+class CommentDeleteCommand extends CliCommand
 {
     /**
      * Command name

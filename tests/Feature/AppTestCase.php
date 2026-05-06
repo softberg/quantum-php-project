@@ -5,9 +5,7 @@ namespace Quantum\Tests\Feature;
 use PHPUnit\Framework\TestCase;
 use Quantum\App\Enums\AppType;
 use Quantum\Http\Response;
-use Quantum\Http\Request;
 use Quantum\App\App;
-use Quantum\Di\Di;
 
 class AppTestCase extends TestCase
 {
@@ -42,10 +40,9 @@ class AppTestCase extends TestCase
         array  $headers = [],
         array  $files = []
     ): Response {
-        Di::resetContainer();
-        Request::create($method, $url, $params, $headers, $files);
+        request()->create($method, $url, $params, $headers, $files);
         self::$app->start();
-        return new Response();
+        return response();
     }
 
     protected function signInAndGetTokens(): array

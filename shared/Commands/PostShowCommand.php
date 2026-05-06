@@ -22,14 +22,14 @@ use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
 use Quantum\Model\ModelCollection;
 use Shared\Services\PostService;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use ReflectionException;
 
 /**
  * Class PostShowCommand
  * @package Shared\Commands
  */
-class PostShowCommand extends QtCommand
+class PostShowCommand extends CliCommand
 {
     /**
      * Posts per page

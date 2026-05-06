@@ -20,7 +20,7 @@ use Quantum\Model\Exceptions\ModelException;
 use Shared\Transformers\CommentTransformer;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Model\ModelCollection;
-use Quantum\Service\QtService;
+use Quantum\Service\Service;
 use Shared\DTOs\CommentDTO;
 use Shared\Models\Comment;
 use Shared\Models\User;
@@ -29,7 +29,7 @@ use Shared\Models\User;
  * Class CommentService
  * @package Shared\Services
  */
-class CommentService extends QtService
+class CommentService extends Service
 {
     /**
      * @var Comment

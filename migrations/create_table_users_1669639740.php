@@ -1,9 +1,9 @@
 <?php
 
 use Quantum\Database\Factories\TableFactory;
-use Quantum\Migration\QtMigration;
+use Quantum\Migration\Migration;
 
-class Create_table_users_1669639740 extends QtMigration
+class Create_table_users_1669639740 extends Migration
 {
     public function up(?TableFactory $tableFactory): void
     {

@@ -17,9 +17,7 @@ class AuthControllerTest extends AppTestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        Request::flush();
-        Response::flush();
+        response()->flush();
 
         $this->faker = Factory::create();
     }

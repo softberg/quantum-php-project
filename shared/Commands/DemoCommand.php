@@ -28,8 +28,7 @@ use Quantum\App\Exceptions\BaseException;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Quantum\Di\Exceptions\DiException;
 use Symfony\Component\Process\Process;
-use Quantum\Database\Database;
-use Quantum\Console\QtCommand;
+use Quantum\Console\CliCommand;
 use Ottaviano\Faker\Gravatar;
 use ReflectionException;
 use Shared\Enums\Role;
@@ -41,7 +40,7 @@ use Faker\Factory;
  * Class DemoCommand
  * @package Shared\Commands
  */
-class DemoCommand extends QtCommand
+class DemoCommand extends CliCommand
 {
     /**
      * Default password for generated users
@@ -400,7 +399,7 @@ class DemoCommand extends QtCommand
      */
     private function rebuildDatabase(): void
     {
-        switch (Database::getInstance()->getConfigs()['driver']) {
+        switch (db()->getConfigs()['driver']) {
             case 'mysql':
                 $this->runCommandInternally(self::COMMANDS['migrate'], ['direction' => 'down']);
                 $this->runCommandInternally(self::COMMANDS['migrate'], ['direction' => 'up']);
