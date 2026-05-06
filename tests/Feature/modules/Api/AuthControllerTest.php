@@ -4,8 +4,6 @@ namespace Quantum\Tests\Feature\modules\Api;
 
 use Quantum\Model\Factories\ModelFactory;
 use Quantum\Tests\Feature\AppTestCase;
-use Quantum\Http\Response;
-use Quantum\Http\Request;
 use Shared\Models\User;
 use Faker\Generator;
 use Faker\Factory;

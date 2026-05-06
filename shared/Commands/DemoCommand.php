@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Shared\Commands;
 
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Quantum\HttpClient\Exceptions\HttpClientException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -32,8 +33,10 @@ use Quantum\Console\CliCommand;
 use Ottaviano\Faker\Gravatar;
 use ReflectionException;
 use Shared\Enums\Role;
+use RuntimeException;
 use Faker\Generator;
 use ErrorException;
+use Quantum\Di\Di;
 use Faker\Factory;
 
 /**
@@ -223,12 +226,18 @@ class DemoCommand extends CliCommand
      */
     private function createModule(string $moduleName, string $template, bool $withAssets): void
     {
-        $this->runCommandExternally(self::COMMANDS['module_generate'], [
-            'module' => $moduleName,
-            '--yes' => true,
-            '--template' => $template,
-            '--with-assets' => $withAssets,
-        ]);
+        try {
+            $this->runCommandExternally(self::COMMANDS['module_generate'], [
+                'module' => $moduleName,
+                '--yes' => true,
+                '--template' => $template,
+                '--with-assets' => $withAssets,
+            ]);
+        } catch (ProcessFailedException $e) {
+            throw new RuntimeException(
+                trim($e->getProcess()->getOutput()) ?: $e->getMessage()
+            );
+        }
     }
 
     /**
