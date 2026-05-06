@@ -36,7 +36,6 @@ use Shared\Enums\Role;
 use RuntimeException;
 use Faker\Generator;
 use ErrorException;
-use Quantum\Di\Di;
 use Faker\Factory;
 
 /**
@@ -204,8 +203,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Initializes a progress bar.
-     * @param int $steps
-     * @return ProgressBar
      */
     private function initProgressBar(int $steps): ProgressBar
     {
@@ -220,9 +217,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Creates module
-     * @param string $moduleName
-     * @param string $template
-     * @param bool $withAssets
      */
     private function createModule(string $moduleName, string $template, bool $withAssets): void
     {
@@ -242,7 +236,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Generate demo users.
-     * @return array
      * @throws BaseException
      * @throws ConfigException
      * @throws DiException
@@ -264,8 +257,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Generate demo posts for each user.
-     * @param array $users
-     * @return array
      * @throws BaseException
      * @throws ConfigException
      * @throws DiException
@@ -291,9 +282,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Generate demo comments for each post.
-     * @param array $users
-     * @param array $posts
-     * @return void
      * @throws ExceptionInterface
      */
     private function generateComments(array $users, array $posts): void
@@ -313,7 +301,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Generates data for user
-     * @return array
      * @throws BaseException
      * @throws ConfigException
      * @throws DiException
@@ -347,8 +334,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Generates data for post
-     * @param array $user
-     * @return array
      * @throws BaseException
      * @throws ConfigException
      * @throws DiException
@@ -378,9 +363,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Get random user for comment except post owner
-     * @param array $users
-     * @param string $excludeUuid
-     * @return array
      */
     private function getRandomUserExcept(array $users, string $excludeUuid): array
     {
@@ -403,7 +385,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Rebuilds the database
-     * @return void
      * @throws ExceptionInterface
      */
     private function rebuildDatabase(): void
@@ -444,7 +425,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Cleans the uploads and resets the database.
-     * @return void
      * @throws BaseException
      * @throws ConfigException
      * @throws DiException
@@ -458,8 +438,6 @@ class DemoCommand extends CliCommand
     }
 
     /**
-     * @param string $commandName
-     * @param array $arguments
      * @throws ExceptionInterface
      */
     private function runCommandInternally(string $commandName, array $arguments = []): void
@@ -469,8 +447,7 @@ class DemoCommand extends CliCommand
     }
 
     /**
-     * @param string $commandName
-     * @param array $arguments
+     * Runs command externally
      */
     private function runCommandExternally(string $commandName, array $arguments = []): void
     {
@@ -480,8 +457,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Runs separate process
-     * @param array $command
-     * @return void
      */
     private function runExternalProcess(array $command): void
     {
@@ -493,8 +468,6 @@ class DemoCommand extends CliCommand
 
     /**
      * Builds command string
-     * @param string $commandName
-     * @param array $arguments
      * @return string[]
      */
     private function buildCommand(string $commandName, array $arguments): array
