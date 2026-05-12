@@ -25,10 +25,12 @@ class AppTestCase extends TestCase
         ob_start();
 
         self::$app = createApp(AppType::WEB, PROJECT_ROOT);
+        $this->clearRateLimitStorage();
     }
 
     public function tearDown(): void
     {
+        $this->clearRateLimitStorage();
         parent::tearDown();
         ob_end_clean();
     }
@@ -53,5 +55,22 @@ class AppTestCase extends TestCase
         ]);
 
         return $response->get('tokens');
+    }
+
+    private function clearRateLimitStorage(): void
+    {
+        $rateLimitDir = PROJECT_ROOT . DS . 'cache' . DS . 'data';
+
+        if (!is_dir($rateLimitDir)) {
+            return;
+        }
+
+        foreach (glob($rateLimitDir . DS . '*.rate') ?: [] as $file) {
+            @unlink($file);
+        }
+
+        foreach (glob($rateLimitDir . DS . '*.lock') ?: [] as $file) {
+            @unlink($file);
+        }
     }
 }
