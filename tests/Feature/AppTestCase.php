@@ -25,6 +25,7 @@ class AppTestCase extends TestCase
         parent::setUp();
         ob_start();
 
+        $this->ensureRateLimitStorageExists();
         self::$app = createApp(AppType::WEB, PROJECT_ROOT);
         $this->clearRateLimitStorage();
     }
@@ -76,6 +77,21 @@ class AppTestCase extends TestCase
             if (!unlink($file)) {
                 throw new RuntimeException('Failed to remove rate limit file: ' . $file);
             }
+        }
+    }
+
+    private function ensureRateLimitStorageExists(): void
+    {
+        $rateLimitDir = PROJECT_ROOT . DS . 'cache' . DS . 'data';
+
+        if (is_dir($rateLimitDir)) {
+            return;
+        }
+
+        $created = mkdir($rateLimitDir, 0777, true);
+
+        if (!$created && !is_dir($rateLimitDir)) {
+            throw new RuntimeException('Failed to create rate limit storage directory: ' . $rateLimitDir);
         }
     }
 }

@@ -10,7 +10,6 @@ class RateLimitTest extends AppTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ensureRateLimitStorageExists();
         $this->clearRateLimitStorage();
     }
 
@@ -75,13 +74,4 @@ class RateLimitTest extends AppTestCase
         }
     }
 
-    private function ensureRateLimitStorageExists(): void
-    {
-        $rateLimitDir = PROJECT_ROOT . DS . 'cache' . DS . 'data';
-
-        if (!is_dir($rateLimitDir)) {
-            $created = mkdir($rateLimitDir, 0777, true);
-            $this->assertTrue($created || is_dir($rateLimitDir), 'Failed to create rate limit storage directory: ' . $rateLimitDir);
-        }
-    }
 }
