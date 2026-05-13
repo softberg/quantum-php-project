@@ -48,6 +48,7 @@ class RateLimitTest extends AppTestCase
         response()->flush();
 
         $postsResponse = $this->request('get', '/api/en/posts');
+        $this->assertSame('success', $postsResponse->get('status'));
         $this->assertNotSame(429, $postsResponse->getStatusCode());
     }
 
@@ -79,7 +80,8 @@ class RateLimitTest extends AppTestCase
         $rateLimitDir = PROJECT_ROOT . DS . 'cache' . DS . 'data';
 
         if (!is_dir($rateLimitDir)) {
-            mkdir($rateLimitDir, 0777, true);
+            $created = mkdir($rateLimitDir, 0777, true);
+            $this->assertTrue($created || is_dir($rateLimitDir), 'Failed to create rate limit storage directory: ' . $rateLimitDir);
         }
     }
 }

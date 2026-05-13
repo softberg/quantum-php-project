@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Quantum\App\Enums\AppType;
 use Quantum\Http\Response;
 use Quantum\App\App;
+use RuntimeException;
 
 class AppTestCase extends TestCase
 {
@@ -66,11 +67,15 @@ class AppTestCase extends TestCase
         }
 
         foreach (glob($rateLimitDir . DS . '*.rate') ?: [] as $file) {
-            @unlink($file);
+            if (!unlink($file)) {
+                throw new RuntimeException('Failed to remove rate limit file: ' . $file);
+            }
         }
 
         foreach (glob($rateLimitDir . DS . '*.lock') ?: [] as $file) {
-            @unlink($file);
+            if (!unlink($file)) {
+                throw new RuntimeException('Failed to remove rate limit file: ' . $file);
+            }
         }
     }
 }
